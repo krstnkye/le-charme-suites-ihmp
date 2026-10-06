@@ -183,6 +183,8 @@
                 @include('owner.partials.checkin-records')
             @elseif ($activePage === 'checkout-records')
                 @include('owner.partials.checkout-records')
+            @elseif ($activePage === 'billing')
+                @include('owner.partials.billing')
             @elseif ($activePage === 'room-availability')
                 @include('owner.partials.room-availability')
             @elseif ($activePage === 'room-status')
@@ -215,8 +217,8 @@
             </section>
             @endif
 
-            @if ($activePage === 'billing' || $activePage === 'reports')
-                <x-owner-panel id="{{ $activePage === 'billing' ? 'billing-records' : 'records' }}" title="{{ $activePage === 'billing' ? 'Billing & Transaction Records' : 'Reports & Records' }}" subtitle="Owner visibility into revenue and transaction records, without posting or settlement controls.">
+            @if ($activePage === 'reports')
+                <x-owner-panel id="records" title="Reports & Records" subtitle="Owner visibility into revenue and transaction records, without posting or settlement controls.">
                     <x-owner-table :headers="['Date', 'Type', 'Guest', 'Room', 'Amount', 'Status']">
                         @foreach ($transactions as $transaction)
                             <tr class="border-b border-line"><td class="px-4 py-3 font-mono text-xs">{{ $transaction->transaction_date?->format('M d, Y h:i A') }}</td><td class="px-4 py-3 font-bold">{{ str_replace('_', ' ', ucfirst($transaction->transaction_type)) }}</td><td class="px-4 py-3">{{ $transaction->guest?->full_name ?? 'N/A' }}</td><td class="px-4 py-3">{{ $transaction->room?->room_number ?? 'N/A' }}</td><td class="px-4 py-3">PHP {{ number_format($transaction->amount, 2) }}</td><td class="px-4 py-3"><span class="rounded bg-surface-mid px-2 py-1 text-xs font-bold capitalize">{{ $transaction->status }}</span></td></tr>

@@ -42,7 +42,7 @@ class OwnerController extends Controller
             'reservations' => Reservation::with(['guest', 'room'])->latest()->take(8)->get(),
             'checkIns' => CheckIn::with(['guest', 'room', 'reservation'])->latest('checked_in_at')->take(50)->get(),
             'checkOuts' => CheckOut::with(['guest', 'room', 'checkIn.reservation'])->latest('checked_out_at')->take(50)->get(),
-            'transactions' => HotelTransaction::with(['guest', 'room'])->latest('transaction_date')->take(8)->get(),
+            'transactions' => HotelTransaction::with(['guest', 'room'])->latest('transaction_date')->take(50)->get(),
             'housekeepingLogs' => RoomStatusLog::with('room')->latest('changed_at')->take(8)->get(),
         ]);
     }
