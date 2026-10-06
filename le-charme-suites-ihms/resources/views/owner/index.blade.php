@@ -161,6 +161,9 @@
         </header>
 
         <main class="mx-auto w-full max-w-[1700px] space-y-6 p-5 lg:p-8">
+            @if ($activePage === 'dashboard')
+                @include('owner.partials.dashboard')
+            @else
             <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
                 <div class="pointer-events-none absolute -bottom-20 -right-16 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
                 <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
@@ -184,30 +187,6 @@
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Reservations</span><span class="material-symbols-outlined text-secondary">calendar_month</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $activeReservations }}</p><p class="mt-1 text-sm text-slate-500">{{ $arrivalsToday }} arrivals today</p></div>
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Billing & Transactions</span><span class="material-symbols-outlined text-secondary">payments</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($collectedToday, 2) }}</p><p class="mt-1 text-sm text-slate-500">{{ $settledToday }} settled today</p></div>
             </section>
-
-            @if ($activePage === 'dashboard')
-                <section class="grid gap-6 xl:grid-cols-2">
-                    <x-owner-panel title="Owner Access Matrix" subtitle="These are the approved visibility boundaries for this role.">
-                        <div class="grid gap-3 sm:grid-cols-2">
-                            @foreach ($ownerNav as $item)
-                                <a href="{{ $item['href'] }}" class="rounded-lg border border-line bg-white p-4 transition hover:border-secondary hover:bg-surface-low">
-                                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">{{ $item['icon'] }}</span><span class="font-bold">{{ $item['label'] }}</span></div>
-                                    <p class="mt-2 text-xs font-semibold text-emerald-700">{{ $item['mode'] }} access enabled</p>
-                                </a>
-                            @endforeach
-                            <div class="rounded-lg border border-rose-200 bg-rose-50 p-4"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-rose-700">group</span><span class="font-bold">User Management</span></div><p class="mt-2 text-xs font-semibold text-rose-700">No access - admin only</p></div>
-                            <div class="rounded-lg border border-rose-200 bg-rose-50 p-4"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-rose-700">settings</span><span class="font-bold">System Settings</span></div><p class="mt-2 text-xs font-semibold text-rose-700">No access - admin only</p></div>
-                        </div>
-                    </x-owner-panel>
-                    <x-owner-panel title="Operational Movement" subtitle="Read-only snapshot of arrivals, departures, and room states.">
-                        <div class="grid gap-3 sm:grid-cols-2">
-                            <div class="rounded-lg bg-surface-low p-4"><p class="text-xs font-bold uppercase text-slate-500">Arrivals Today</p><p class="mt-2 font-serif text-3xl font-bold">{{ $arrivalsToday }}</p></div>
-                            <div class="rounded-lg bg-surface-low p-4"><p class="text-xs font-bold uppercase text-slate-500">Departures Today</p><p class="mt-2 font-serif text-3xl font-bold">{{ $departuresToday }}</p></div>
-                            <div class="rounded-lg bg-surface-low p-4"><p class="text-xs font-bold uppercase text-slate-500">Housekeeping Queue</p><p class="mt-2 font-serif text-3xl font-bold">{{ $maintenanceRooms }}</p></div>
-                            <div class="rounded-lg bg-surface-low p-4"><p class="text-xs font-bold uppercase text-slate-500">Reserved Rooms</p><p class="mt-2 font-serif text-3xl font-bold">{{ $reservedRooms }}</p></div>
-                        </div>
-                    </x-owner-panel>
-                </section>
             @endif
 
             @if ($activePage === 'guests')
