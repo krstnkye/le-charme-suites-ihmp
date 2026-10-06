@@ -19,7 +19,7 @@
     $reportRows = [
         ['title' => 'Shift Cashier Balance Report', 'code' => 'LCS-BIL-SHFT-01', 'category' => 'Financial', 'cadence' => 'End of shift', 'status' => 'Ready', 'formats' => ['PDF', 'XLSX']],
         ['title' => 'Daily Revenue Z-Reading', 'code' => 'LCS-BIL-ZREAD-02', 'category' => 'Revenue', 'cadence' => 'Daily close', 'status' => 'Scheduled', 'formats' => ['PDF']],
-        ['title' => 'Folio Settlement Exceptions', 'code' => 'LCS-BIL-EXC-03', 'category' => 'Audit', 'cadence' => 'Live review', 'status' => $balancedCount === $postedCount ? 'Balanced' : 'Review', 'formats' => ['PDF', 'CSV']],
+        ['title' => 'Guest Bill Settlement Exceptions', 'code' => 'LCS-BIL-EXC-03', 'category' => 'Audit', 'cadence' => 'Live review', 'status' => $balancedCount === $postedCount ? 'Balanced' : 'Review', 'formats' => ['PDF', 'CSV']],
         ['title' => 'Room & Reservation Revenue Snapshot', 'code' => 'LCS-BIL-RMS-04', 'category' => 'Rooms', 'cadence' => 'Hourly', 'status' => 'Synced', 'formats' => ['PDF', 'XLSX']],
     ];
 @endphp
@@ -123,7 +123,7 @@
                         <h2 class="font-serif text-4xl font-bold leading-tight">Shift Financial &amp; Cashier Reports</h2>
                         <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-secondary">Shift A • 06:00 - 14:30</span>
                     </div>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Generate, review, and export billing department financial reports using live folio transactions, room inventory, and reservation ledger data.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Generate, review, and export billing department financial reports using live guest bill transactions, room inventory, and reservation ledger data.</p>
                 </div>
                 <div class="no-print flex flex-wrap items-center gap-3">
                     <button type="button" onclick="document.getElementById('standard-report-directory').scrollIntoView({ behavior: 'smooth' })" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900"><span class="material-symbols-outlined text-secondary-fixed">play_arrow</span>Run Shift Balance Report</button>
@@ -138,7 +138,7 @@
                     <div>
                         <span class="rounded border border-secondary-fixed/30 bg-secondary/30 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Authorized Revenue Terminal</span>
                         <h3 class="mt-3 font-serif text-4xl font-bold leading-tight">Financial Reporting Command Console</h3>
-                        <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">Consolidated cashier reports for daily collections, folio settlements, room revenue, reservation movements, and audit reconciliation.</p>
+                        <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">Consolidated cashier reports for daily collections, guest bill settlements, room revenue, reservation movements, and audit reconciliation.</p>
                     </div>
                     <div class="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-white/10 p-4">
                         <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Today Collections</p><p class="mt-1 font-serif text-2xl font-bold">PHP {{ number_format($todayLedgerAmount, 2) }}</p></div>
@@ -175,7 +175,7 @@
                     </div>
                     <div class="mt-4 grid gap-3 rounded-lg border border-line bg-surface-low p-4 sm:grid-cols-2 lg:grid-cols-4">
                         <label class="inline-flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked class="rounded border-line text-primary focus:ring-secondary">Departmental splits</label>
-                        <label class="inline-flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked class="rounded border-line text-primary focus:ring-secondary">Include voided folios</label>
+                        <label class="inline-flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked class="rounded border-line text-primary focus:ring-secondary">Include voided guest bills</label>
                         <label class="inline-flex items-center gap-2 text-sm font-bold"><input type="checkbox" class="rounded border-line text-primary focus:ring-secondary">SBMA tax breakdown</label>
                         <label class="inline-flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked class="rounded border-line text-primary focus:ring-secondary">Manager signature seal</label>
                     </div>

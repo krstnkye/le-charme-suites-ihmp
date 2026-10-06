@@ -34,12 +34,12 @@
         'cashier' => [
             'label' => 'Cashier',
             'tier' => 'Tier 2',
-            'department' => 'Finance & Folios',
-            'scope' => 'Payment handling, folio settlement, transaction records, and cashier reports.',
+            'department' => 'Finance & Billing',
+            'scope' => 'Payment handling, guest bill settlement, transaction records, and cashier reports.',
             'icon' => 'payments',
             'accent' => 'border-[#c5a36a] bg-[#fff8ea]',
             'badge' => 'bg-[#8a6420] text-white',
-            'modules' => ['Transactions', 'Folios', 'Reports', 'Check-out billing'],
+            'modules' => ['Transactions', 'Guest Bills', 'Reports', 'Check-out billing'],
         ],
         'housekeeping' => [
             'label' => 'Housekeeping',

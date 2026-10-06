@@ -331,7 +331,7 @@
                         </div>
 
                         <div class="space-y-2 pt-4">
-                            <span class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Folio & Financial Summary</span>
+                            <span class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Guest Bill & Financial Summary</span>
                             <div class="flex justify-between text-sm">
                                 <span>Room Accommodations ({{ $nights }} {{ $nights === 1 ? 'Night' : 'Nights' }} @ PHP {{ number_format($room?->rate ?? 0, 2) }})</span>
                                 <span class="font-semibold">PHP {{ number_format($roomTotal, 2) }}</span>
@@ -352,7 +352,7 @@
                                 <span class="font-bold text-primary">- PHP {{ number_format($deposit, 2) }}</span>
                             </div>
                             <div class="flex items-center justify-between pt-2 text-lg font-bold text-secondary">
-                                <span>Remaining Folio Balance</span>
+                                <span>Remaining Guest Bill Balance</span>
                                 <span>PHP {{ number_format($balance, 2) }}</span>
                             </div>
                         </div>

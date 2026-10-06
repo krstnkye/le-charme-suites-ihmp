@@ -4,7 +4,7 @@
         'admin' => ['label' => 'System Admin', 'tier' => 'Tier 1', 'department' => 'IT Infrastructure', 'terminal' => 'Primary Host', 'mfa' => 'Hardware Key', 'icon' => 'admin_panel_settings', 'badge' => 'bg-primary/10 text-primary'],
         'owner' => ['label' => 'Hotel Owner', 'tier' => 'Executive', 'department' => 'Executive Office', 'terminal' => 'Executive Console', 'mfa' => 'Dual Approval', 'icon' => 'hotel_class', 'badge' => 'bg-secondary-fixed/60 text-secondary'],
         'receptionist' => ['label' => 'Front Desk', 'tier' => 'Tier 2', 'department' => 'Front Office', 'terminal' => 'Front Desk Terminal', 'mfa' => 'Authenticator App', 'icon' => 'concierge', 'badge' => 'bg-secondary-container/50 text-secondary'],
-        'cashier' => ['label' => 'Cashier', 'tier' => 'Tier 2', 'department' => 'Finance & Folios', 'terminal' => 'Cashier Terminal', 'mfa' => 'POS PIN + OTP', 'icon' => 'payments', 'badge' => 'bg-secondary-container/50 text-secondary'],
+        'cashier' => ['label' => 'Cashier', 'tier' => 'Tier 2', 'department' => 'Finance & Billing', 'terminal' => 'Cashier Terminal', 'mfa' => 'POS PIN + OTP', 'icon' => 'payments', 'badge' => 'bg-secondary-container/50 text-secondary'],
         'housekeeping' => ['label' => 'Housekeeping', 'tier' => 'Tier 4', 'department' => 'Rooms & Facilities', 'terminal' => 'Mobile Tablet', 'mfa' => 'SMS OTP', 'icon' => 'cleaning_services', 'badge' => 'bg-surface-container text-slate-700'],
     ];
     $roleOrder = ['admin', 'owner', 'receptionist', 'cashier', 'housekeeping'];
@@ -271,10 +271,10 @@
 
                         <div class="space-y-3.5">
                             @foreach ([
-                                ['edit_calendar', 'Reservation Creation & Modification', 'Permits room blocking, VIP tags, and folio initiation.', true, false],
+                                ['edit_calendar', 'Reservation Creation & Modification', 'Permits room blocking, VIP tags, and guest bill initiation.', true, false],
                                 ['percent', 'Room Rate Discount Override', 'Maximum authority cap: 15% without manager signoff.', true, false],
                                 ['nfc', 'RFID Encoder Interface', 'Permits writing guest keys and front entrance passes.', true, false],
-                                ['price_change', 'Folio Zero-Balance / Refund', 'Restricted to cashier or executive approval.', false, true],
+                                ['price_change', 'Guest Bill Zero-Balance / Refund', 'Restricted to cashier or executive approval.', false, true],
                                 ['fact_check', 'Housekeeping Turnover Sign-off', 'Authority to transition room status to inspected ready.', true, false],
                                 ['download_for_offline', 'Audit Log Export', 'Exports raw transaction and staff session trails.', false, false],
                             ] as [$icon, $label, $description, $enabled, $restricted])

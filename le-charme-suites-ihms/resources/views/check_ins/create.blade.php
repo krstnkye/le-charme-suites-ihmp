@@ -354,7 +354,7 @@
 
                                 <div class="space-y-3 p-5">
                                     <div class="flex items-center justify-between">
-                                        <p class="text-xs font-bold uppercase tracking-wider">Folio & Deposit Preview</p>
+                                        <p class="text-xs font-bold uppercase tracking-wider">Guest Bill & Deposit Preview</p>
                                         <span class="rounded border border-emerald-200 bg-emerald-100 px-2 py-1 text-xs font-bold text-emerald-800">Guaranteed</span>
                                     </div>
                                     <div class="flex justify-between text-sm">

@@ -282,7 +282,7 @@
                             @foreach ([
                                 ['key', 'Saflok Quantum RFID Server', '192.168.10.45:8080 TCP Socket', 'Connected'],
                                 ['point_of_sale', 'BDO Merchant POS Terminals', 'Ethernet direct hook / auto-settlement', 'Ethernet Synced'],
-                                ['print', 'Epson TM-T88VI Thermal Folio Printers', 'Front Desk Terminals 1, 2 and Concierge', 'Online & Ready'],
+                                ['print', 'Epson TM-T88VI Thermal Billing Printers', 'Front Desk Terminals 1, 2 and Concierge', 'Online & Ready'],
                             ] as [$icon, $name, $description, $status])
                                 <div class="flex items-center justify-between gap-4 rounded-lg border border-surface-container-highest p-3 transition hover:border-secondary">
                                     <div class="flex items-center gap-3">

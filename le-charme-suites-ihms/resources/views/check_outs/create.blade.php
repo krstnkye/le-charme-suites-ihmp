@@ -47,7 +47,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Billing Folio Ledger - Le Charmé Suites IHMS</title>
+    <title>Billing Guest Bill Ledger - Le Charmé Suites IHMS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Serif:wght@500;600;700&display=swap" rel="stylesheet">
@@ -117,7 +117,7 @@
     <div class="flex min-h-screen flex-col lg:ml-72">
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
             <div>
-                <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"><span>Billing Operations</span><span>/</span><span class="text-secondary">Folio Ledger</span></div>
+                <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"><span>Billing Operations</span><span>/</span><span class="text-secondary">Guest Bill Ledger</span></div>
                 <h1 class="mt-1 font-serif text-xl font-bold text-primary">Billing &amp; Cashier Terminal <span class="font-sans text-sm font-semibold text-slate-500">| Subic Freeport Zone</span></h1>
             </div>
             <div class="flex flex-wrap items-center justify-end gap-3">
@@ -140,11 +140,11 @@
                 <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
                     <div class="max-w-4xl">
                         <div class="mb-2 flex flex-wrap items-center gap-2"><span class="rounded border border-secondary-fixed/30 bg-secondary/30 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Executive Grandeur IHMS</span><span class="text-xs font-semibold text-blue-100/70">Front Desk &amp; Night Audit Certified</span></div>
-                        <h2 class="font-serif text-4xl font-bold leading-tight">Guest Folio Ledger &amp; Invoicing Management</h2>
-                        <p class="mt-2 text-sm leading-6 text-blue-100">Consolidated active folios, incidental room routing, statutory revenue accounting, and final settlement processing for Billing department staff.</p>
+                        <h2 class="font-serif text-4xl font-bold leading-tight">Guest Bill Ledger &amp; Invoicing Management</h2>
+                        <p class="mt-2 text-sm leading-6 text-blue-100">Consolidated active guest bills, incidental room routing, statutory revenue accounting, and final settlement processing for Billing department staff.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
-                        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">layers</span>Batch Folio Invoicing</button>
+                        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">layers</span>Batch Guest Bill Invoicing</button>
                         <button type="button" onclick="document.getElementById('settlementForm')?.scrollIntoView({ behavior: 'smooth', block: 'center' })" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">price_check</span>Settle Selected Balance</button>
                         <a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-2 rounded-lg bg-secondary-fixed px-4 py-2.5 text-sm font-bold text-primary shadow-md transition hover:bg-secondary-container"><span class="material-symbols-outlined">add_card</span>Open POS Terminal</a>
                     </div>
@@ -152,7 +152,7 @@
             </section>
 
             <section class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-                <div class="rounded-xl border border-line bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Active In-House Folios</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-primary">hotel</span></div><div class="mt-3 flex items-baseline gap-2"><span class="font-serif text-3xl font-bold">{{ $activeCheckIns->count() }}</span><span class="text-sm font-semibold text-secondary">Suites Occupied</span></div><p class="mt-1 text-sm text-slate-500">Outstanding: <strong class="text-primary">PHP {{ number_format($activeBalance, 2) }}</strong></p></div>
+                <div class="rounded-xl border border-line bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Active In-House Guest Bills</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-primary">hotel</span></div><div class="mt-3 flex items-baseline gap-2"><span class="font-serif text-3xl font-bold">{{ $activeCheckIns->count() }}</span><span class="text-sm font-semibold text-secondary">Suites Occupied</span></div><p class="mt-1 text-sm text-slate-500">Outstanding: <strong class="text-primary">PHP {{ number_format($activeBalance, 2) }}</strong></p></div>
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Ready for Settlement</span><span class="material-symbols-outlined rounded-lg bg-secondary-container/40 p-2 text-secondary">luggage</span></div><div class="mt-3 flex items-baseline gap-2"><span class="font-serif text-3xl font-bold">{{ $activeCheckIns->count() }}</span><span class="rounded-full bg-secondary-fixed px-2 py-0.5 text-xs font-bold text-primary">Today</span></div><p class="mt-1 text-sm text-slate-500">Pending checkout bill clearing</p></div>
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Room Debit Exposure</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-primary">corporate_fare</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($roomDebitTotal, 2) }}</p><p class="mt-1 text-sm text-slate-500">Calculated from active room rates</p></div>
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Unbilled Charges</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-secondary">room_service</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($incidentalsTotal, 2) }}</p><p class="mt-1 text-sm text-slate-500">Estimated incidentals and service charges</p></div>
@@ -162,15 +162,15 @@
                 <section class="rounded-xl border border-line bg-white shadow-sm xl:col-span-8">
                     <div class="border-b border-line p-5">
                         <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                            <div><h3 class="font-serif text-2xl font-bold">Folio Accounting Ledger</h3><p class="text-sm text-slate-500">Review live room debits, verify pre-authorizations, and dispatch official invoices.</p></div>
-                            <div class="flex flex-wrap items-center gap-2"><button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-base">print</span>Print Master Folio</button><a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-base">tune</span>Full Transaction Filter</a></div>
+                            <div><h3 class="font-serif text-2xl font-bold">Guest Bill Accounting Ledger</h3><p class="text-sm text-slate-500">Review live room debits, verify pre-authorizations, and dispatch official invoices.</p></div>
+                            <div class="flex flex-wrap items-center gap-2"><button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-base">print</span>Print Master Bill</button><a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-base">tune</span>Full Transaction Filter</a></div>
                         </div>
                     </div>
 
                     <div class="custom-scroll overflow-x-auto">
                         <table class="w-full min-w-[980px] text-left text-sm">
                             <thead class="border-b border-line bg-surface-mid text-xs font-bold uppercase tracking-wider text-slate-600">
-                                <tr><th class="px-4 py-3">Folio / Reference</th><th class="px-4 py-3">Guest &amp; Room</th><th class="px-3 py-3 text-right">Room Debit</th><th class="px-3 py-3 text-right">Incidentals</th><th class="px-3 py-3 text-right">SBMA Tax</th><th class="px-3 py-3 text-right">Deposits</th><th class="px-4 py-3 text-right">Balance Due</th><th class="px-3 py-3 text-center">Status</th><th class="px-4 py-3 text-center">Actions</th></tr>
+                                <tr><th class="px-4 py-3">Bill / Reference</th><th class="px-4 py-3">Guest &amp; Room</th><th class="px-3 py-3 text-right">Room Debit</th><th class="px-3 py-3 text-right">Incidentals</th><th class="px-3 py-3 text-right">SBMA Tax</th><th class="px-3 py-3 text-right">Deposits</th><th class="px-4 py-3 text-right">Balance Due</th><th class="px-3 py-3 text-center">Status</th><th class="px-4 py-3 text-center">Actions</th></tr>
                             </thead>
                             <tbody class="divide-y divide-line">
                                 @forelse ($activeCheckIns as $stay)
@@ -183,10 +183,10 @@
                                         <td class="px-3 py-3.5 text-right font-mono font-semibold text-emerald-800">-PHP {{ number_format($stay['deposit'], 2) }}</td>
                                         <td class="px-4 py-3.5 text-right"><div class="font-mono text-base font-bold text-primary">PHP {{ number_format($stay['balance'], 2) }}</div><span class="text-[10px] font-bold uppercase text-secondary">Pending Settlement</span></td>
                                         <td class="px-3 py-3.5 text-center"><span class="rounded-full bg-secondary-fixed px-2 py-1 text-xs font-bold text-primary">Pre-Auth</span></td>
-                                        <td class="px-4 py-3.5 text-center"><div class="flex items-center justify-center gap-1 text-slate-500"><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-primary" data-stay-id="{{ $stay['id'] }}" title="View detailed folio"><span class="material-symbols-outlined text-base">visibility</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-secondary" data-stay-id="{{ $stay['id'] }}" title="Post payment"><span class="material-symbols-outlined text-base">payments</span></button><button type="button" onclick="window.print()" class="rounded p-1 hover:bg-surface-mid hover:text-primary" title="Print invoice"><span class="material-symbols-outlined text-base">print</span></button></div></td>
+                                        <td class="px-4 py-3.5 text-center"><div class="flex items-center justify-center gap-1 text-slate-500"><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-primary" data-stay-id="{{ $stay['id'] }}" title="View detailed guest bill"><span class="material-symbols-outlined text-base">visibility</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-secondary" data-stay-id="{{ $stay['id'] }}" title="Post payment"><span class="material-symbols-outlined text-base">payments</span></button><button type="button" onclick="window.print()" class="rounded p-1 hover:bg-surface-mid hover:text-primary" title="Print invoice"><span class="material-symbols-outlined text-base">print</span></button></div></td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="9" class="px-4 py-12 text-center font-semibold text-slate-500">No active guest folios are waiting for Billing right now.</td></tr>
+                                    <tr><td colspan="9" class="px-4 py-12 text-center font-semibold text-slate-500">No active guest bills are waiting for Billing right now.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -196,11 +196,11 @@
                 <aside class="space-y-6 xl:col-span-4">
                     <form id="settlementForm" method="POST" action="{{ route('check-outs.store') }}" class="rounded-xl border border-line bg-white p-5 shadow-sm">
                         @csrf
-                        <div class="mb-4 flex items-start justify-between border-b border-line pb-4"><div><span class="text-xs font-bold uppercase tracking-wider text-secondary">Selected Folio Detail</span><h3 id="guestPreview" class="mt-1 font-serif text-2xl font-bold">No guest selected</h3><p id="emailPreview" class="text-sm text-slate-500">Choose a ledger row to view folio details.</p></div><span id="roomPreview" class="rounded bg-surface-low px-2.5 py-1 text-xs font-bold text-primary">--</span></div>
+                        <div class="mb-4 flex items-start justify-between border-b border-line pb-4"><div><span class="text-xs font-bold uppercase tracking-wider text-secondary">Selected Guest Bill Detail</span><h3 id="guestPreview" class="mt-1 font-serif text-2xl font-bold">No guest selected</h3><p id="emailPreview" class="text-sm text-slate-500">Choose a ledger row to view guest bill details.</p></div><span id="roomPreview" class="rounded bg-surface-low px-2.5 py-1 text-xs font-bold text-primary">--</span></div>
 
-                        <label for="check_in_id" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Active folio <span class="text-error">*</span></label>
+                        <label for="check_in_id" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Active guest bill <span class="text-error">*</span></label>
                         <select id="check_in_id" name="check_in_id" class="mb-4 w-full rounded-lg border-line bg-surface-low py-2.5 text-sm font-semibold focus:border-secondary focus:ring-secondary" required>
-                            <option value="">Select active guest folio</option>
+                            <option value="">Select active guest bill</option>
                             @foreach ($activeCheckIns as $stay)
                                 <option value="{{ $stay['id'] }}" @selected(old('check_in_id') == $stay['id'])>Room {{ $stay['room'] }} - {{ $stay['guest'] }} ({{ $stay['folio'] }})</option>
                             @endforeach
@@ -209,7 +209,7 @@
                         <div class="mb-4 grid grid-cols-2 gap-3 text-sm">
                             <div class="rounded-lg bg-surface-low p-3"><span class="block text-xs font-bold uppercase text-slate-500">Check-in</span><span id="checkInPreview" class="mt-1 block font-bold">Not selected</span></div>
                             <div class="rounded-lg bg-surface-low p-3"><span class="block text-xs font-bold uppercase text-slate-500">Check-out</span><span id="checkOutPreview" class="mt-1 block font-bold">Not selected</span></div>
-                            <div class="rounded-lg bg-surface-low p-3"><span class="block text-xs font-bold uppercase text-slate-500">Folio</span><span id="folioPreview" class="mt-1 block font-mono text-xs font-bold">--</span></div>
+                            <div class="rounded-lg bg-surface-low p-3"><span class="block text-xs font-bold uppercase text-slate-500">Guest Bill</span><span id="folioPreview" class="mt-1 block font-mono text-xs font-bold">--</span></div>
                             <div class="rounded-lg bg-surface-low p-3"><span class="block text-xs font-bold uppercase text-slate-500">Stay</span><span id="nightsPreview" class="mt-1 block font-bold">0 nights</span></div>
                         </div>
 
@@ -221,14 +221,14 @@
                         </div>
 
                         <div class="grid gap-4 sm:grid-cols-2">
-                            <div><label for="amount_paid" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Amount paid <span class="text-error">*</span></label><div class="relative"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-secondary">PHP</span><input id="amount_paid" name="amount_paid" type="number" step="0.01" min="0" value="{{ old('amount_paid', 0) }}" class="w-full rounded-lg border-line bg-white py-2.5 pl-14 text-sm font-semibold focus:border-secondary focus:ring-secondary"></div><button id="payInFullButton" type="button" class="mt-2 text-xs font-bold text-secondary hover:underline">Pay selected folio in full</button></div>
+                            <div><label for="amount_paid" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Amount paid <span class="text-error">*</span></label><div class="relative"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-secondary">PHP</span><input id="amount_paid" name="amount_paid" type="number" step="0.01" min="0" value="{{ old('amount_paid', 0) }}" class="w-full rounded-lg border-line bg-white py-2.5 pl-14 text-sm font-semibold focus:border-secondary focus:ring-secondary"></div><button id="payInFullButton" type="button" class="mt-2 text-xs font-bold text-secondary hover:underline">Pay selected guest bill in full</button></div>
                             <div><label for="payment_status" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Payment status <span class="text-error">*</span></label><select id="payment_status" name="payment_status" class="w-full rounded-lg border-line bg-white py-2.5 text-sm font-semibold focus:border-secondary focus:ring-secondary" required><option value="unpaid" @selected(old('payment_status') === 'unpaid')>Unpaid</option><option value="partial" @selected(old('payment_status') === 'partial')>Partial</option><option value="paid" @selected(old('payment_status') === 'paid')>Paid</option></select></div>
                         </div>
 
                         <div class="mt-4"><label for="notes" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Billing notes</label><textarea id="notes" name="notes" rows="3" class="w-full rounded-lg border-line bg-white p-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="Payment details, invoice remarks, room turnover notes...">{{ old('notes') }}</textarea></div>
 
                         <div class="mt-5 flex flex-wrap gap-3 border-t border-line pt-4">
-                            <button class="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900" @disabled($activeCheckIns->isEmpty())><span class="material-symbols-outlined text-secondary-fixed">price_check</span>Settle Folio / Checkout</button>
+                            <button class="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900" @disabled($activeCheckIns->isEmpty())><span class="material-symbols-outlined text-secondary-fixed">price_check</span>Settle Guest Bill / Checkout</button>
                             <button id="openFolioButton" type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-3 text-sm font-bold text-primary shadow-sm transition hover:border-secondary"><span class="material-symbols-outlined">receipt_long</span>Receipt</button>
                         </div>
                     </form>
@@ -241,10 +241,10 @@
 
     <div id="folioModal" class="no-print fixed inset-0 z-50 hidden items-center justify-center bg-primary/70 px-4 py-8">
         <div class="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl">
-            <div class="flex items-center justify-between border-b border-line px-6 py-4"><div><p class="text-xs font-bold uppercase tracking-[0.2em] text-secondary">Folio Receipt Preview</p><h2 class="mt-1 font-serif text-2xl font-bold">Guest Settlement Receipt</h2></div><button id="closeFolioButton" type="button" class="rounded-lg p-2 text-slate-500 transition hover:bg-surface-low hover:text-primary" aria-label="Close receipt preview"><span class="material-symbols-outlined">close</span></button></div>
+            <div class="flex items-center justify-between border-b border-line px-6 py-4"><div><p class="text-xs font-bold uppercase tracking-[0.2em] text-secondary">Guest Bill Receipt Preview</p><h2 class="mt-1 font-serif text-2xl font-bold">Guest Settlement Receipt</h2></div><button id="closeFolioButton" type="button" class="rounded-lg p-2 text-slate-500 transition hover:bg-surface-low hover:text-primary" aria-label="Close receipt preview"><span class="material-symbols-outlined">close</span></button></div>
             <div id="folioReceipt" class="bg-white p-6 text-primary">
-                <div class="border-b border-line pb-5 text-center"><p class="font-serif text-3xl font-bold">Le Charmé Suites</p><p class="mt-1 text-xs font-bold uppercase tracking-[0.24em] text-secondary">Subic Bay Philippines</p><p class="mt-3 text-sm text-slate-500">Official guest folio prepared by Billing</p></div>
-                <div class="grid gap-4 border-b border-line py-5 sm:grid-cols-2"><div><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Guest</p><p id="receiptGuest" class="mt-1 text-lg font-bold">No guest selected</p><p id="receiptEmail" class="text-sm text-slate-500">--</p></div><div class="sm:text-right"><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Folio Number</p><p id="receiptFolio" class="mt-1 font-mono text-lg font-bold">--</p><p class="text-sm text-slate-500">{{ now(config('app.timezone'))->format('M d, Y - h:i A') }}</p></div></div>
+                <div class="border-b border-line pb-5 text-center"><p class="font-serif text-3xl font-bold">Le Charmé Suites</p><p class="mt-1 text-xs font-bold uppercase tracking-[0.24em] text-secondary">Subic Bay Philippines</p><p class="mt-3 text-sm text-slate-500">Official guest bill prepared by Billing</p></div>
+                <div class="grid gap-4 border-b border-line py-5 sm:grid-cols-2"><div><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Guest</p><p id="receiptGuest" class="mt-1 text-lg font-bold">No guest selected</p><p id="receiptEmail" class="text-sm text-slate-500">--</p></div><div class="sm:text-right"><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Bill Number</p><p id="receiptFolio" class="mt-1 font-mono text-lg font-bold">--</p><p class="text-sm text-slate-500">{{ now(config('app.timezone'))->format('M d, Y - h:i A') }}</p></div></div>
                 <div class="space-y-3 py-5"><div class="flex justify-between text-sm"><span>Room charges</span><span id="receiptRoomCharges" class="font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Incidentals</span><span id="receiptIncidentals" class="font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Tax</span><span id="receiptTax" class="font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Amount paid</span><span id="receiptAmountPaid" class="font-bold">PHP 0.00</span></div><div class="flex justify-between border-t border-line pt-4 text-lg"><span class="font-bold">Remaining balance</span><span id="receiptBalance" class="font-serif text-2xl font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Payment status</span><span id="receiptPaymentStatus" class="font-bold uppercase">Unpaid</span></div></div>
                 <div class="rounded-lg border border-line bg-surface-low p-4"><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Billing Notes</p><p id="receiptNotes" class="mt-2 text-sm leading-6 text-slate-700">No notes entered.</p></div>
             </div>
@@ -264,7 +264,7 @@
         const selectedStay = () => activeCheckIns.find((stay) => String(stay.id) === String(checkInSelect.value));
 
         function renderStay(stay) {
-            const data = stay || { guest:'No guest selected', email:'Choose a ledger row to view folio details.', room:'--', check_in:'Not selected', check_out:'Not selected', folio:'--', nights:0, room_total:0, incidentals:0, tax:0, balance:0 };
+            const data = stay || { guest:'No guest selected', email:'Choose a ledger row to view guest bill details.', room:'--', check_in:'Not selected', check_out:'Not selected', folio:'--', nights:0, room_total:0, incidentals:0, tax:0, balance:0 };
             document.getElementById('guestPreview').textContent = data.guest;
             document.getElementById('emailPreview').textContent = data.email;
             document.getElementById('roomPreview').textContent = data.room === '--' ? '--' : `Room ${data.room}`;
@@ -323,7 +323,7 @@
 
         openFolioButton.addEventListener('click', () => {
             const stay = selectedStay();
-            if (!stay) return showFolioMessage('Please select an active guest folio first before printing a receipt.');
+            if (!stay) return showFolioMessage('Please select an active guest bill first before printing a receipt.');
             document.getElementById('folioActionMessage')?.remove();
             updateReceipt(stay);
             folioModal.classList.remove('hidden');

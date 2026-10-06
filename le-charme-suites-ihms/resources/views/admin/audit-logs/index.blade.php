@@ -108,7 +108,7 @@
                         <span class="text-secondary">Security & Audit Logs</span>
                     </div>
                     <h2 class="font-serif text-4xl font-semibold tracking-tight">Security & Audit Logs Command Console</h2>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Monitor role access, privileged changes, folio events, room updates, active sessions, and compliance proof records for the IHMS portal.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Monitor role access, privileged changes, guest bill events, room updates, active sessions, and compliance proof records for the IHMS portal.</p>
                 </div>
                 <span class="inline-flex w-fit items-center gap-2 rounded-full border border-secondary/30 bg-secondary-fixed/40 px-3 py-1.5 text-xs font-bold text-secondary">
                     <span class="material-symbols-outlined text-sm">lock</span>
@@ -145,7 +145,7 @@
                         <select class="rounded-lg border-outline-variant bg-surface-container-low text-sm focus:border-secondary focus:ring-secondary/20">
                             <option>All Modules</option>
                             <option>User Management</option>
-                            <option>Transactions / Folios</option>
+                            <option>Transactions / Billing</option>
                             <option>Room Status</option>
                             <option>System Settings</option>
                         </select>
@@ -270,7 +270,7 @@
                         <div class="rounded-lg border border-surface-container-highest bg-surface-container-low p-4">
                             <p class="text-xs font-bold text-slate-500">Inactivity Timeout</p>
                             <p class="mt-1 font-serif text-2xl font-bold">15 Minutes</p>
-                            <p class="mt-1 text-xs text-slate-500">Auto-locks sensitive folio screens.</p>
+                            <p class="mt-1 text-xs text-slate-500">Auto-locks sensitive guest bill screens.</p>
                         </div>
                         <div class="rounded-lg border border-surface-container-highest bg-surface-container-low p-4">
                             <p class="text-xs font-bold text-slate-500">Override Validation</p>

@@ -49,7 +49,7 @@
                 <a href="{{ route('admin.operations.index', ['module' => 'check-ins']) }}" class="{{ $navBase }} {{ request()->routeIs('admin.operations.index') && $activeModule === 'check-ins' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">login</span>Check-in</a>
                 <a href="{{ route('admin.operations.index', ['module' => 'check-outs']) }}" class="{{ $navBase }} {{ request()->routeIs('admin.operations.index') && $activeModule === 'check-outs' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">logout</span>Check-out</a>
                 <a href="{{ route('admin.operations.index', ['module' => 'housekeeping']) }}" class="{{ $navBase }} {{ request()->routeIs('admin.operations.index') && $activeModule === 'housekeeping' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">cleaning_services</span>Housekeeping</a>
-                <a href="{{ route('admin.operations.index', ['module' => 'transactions']) }}" class="{{ $navBase }} {{ request()->routeIs('admin.operations.index') && $activeModule === 'transactions' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">receipt_long</span>Transactions / Folios</a>
+                <a href="{{ route('admin.operations.index', ['module' => 'transactions']) }}" class="{{ $navBase }} {{ request()->routeIs('admin.operations.index') && $activeModule === 'transactions' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">receipt_long</span>Transactions / Billing</a>
             </div>
 
             <div class="space-y-1">

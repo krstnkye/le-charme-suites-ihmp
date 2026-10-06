@@ -37,7 +37,7 @@ class RoleAccessTest extends TestCase
             ->assertSee('Room Inventory')
             ->assertSee('Room Types')
             ->assertSee('Room Rates')
-            ->assertSee('Transactions / Folios')
+            ->assertSee('Transactions / Billing')
             ->assertSee('Reports')
             ->assertSee('Audit Logs')
             ->assertSee('System Settings')
@@ -189,7 +189,7 @@ class RoleAccessTest extends TestCase
                 ->assertOk()
                 ->assertSee('User &amp; Role Management', false)
                 ->assertSee('Guest Management')
-                ->assertSee('Transactions / Folios')
+                ->assertSee('Transactions / Billing')
                 ->assertSee('Room Inventory')
                 ->assertSee('Room Types')
                 ->assertSee('Room Rates')
@@ -339,7 +339,7 @@ class RoleAccessTest extends TestCase
             ->assertOk()
             ->assertSee('Administrative Guest Registry')
             ->assertSee('Master Guest Registry')
-            ->assertSee('Lifetime Folio')
+            ->assertSee('Lifetime Billing')
             ->assertSee('Admin Guest');
     }
 
@@ -751,7 +751,7 @@ class RoleAccessTest extends TestCase
             ->assertOk()
             ->assertSee('Cashier & Billing Operations Console', false)
             ->assertSee('Billing Department Access')
-            ->assertSee('Active Departures & Folio Settlement Queue', false)
+            ->assertSee('Active Departures & Guest Bill Settlement Queue', false)
             ->assertSee('Live Transaction Stream')
             ->assertSee('Dashboard')
             ->assertSee('Billing')

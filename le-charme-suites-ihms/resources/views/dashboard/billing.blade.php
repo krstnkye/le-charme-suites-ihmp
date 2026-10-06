@@ -150,7 +150,7 @@
                 </div>
                 <a href="{{ route('check-outs.create') }}" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex">
                     <span class="material-symbols-outlined text-secondary-fixed">post_add</span>
-                    New Charge / Folio Post
+                    New Charge / Bill Post
                 </a>
             </div>
         </header>
@@ -171,12 +171,12 @@
                             <span class="text-xs font-semibold text-blue-100/70">SBMA Act 7227 Compliant</span>
                         </div>
                         <h2 class="font-serif text-4xl font-bold leading-tight">Cashier & Billing Operations Console</h2>
-                        <p class="mt-2 text-sm leading-6 text-blue-100">Real-time guest folios, settlement verification, point-of-sale charging, and statutory revenue ledger monitoring for the Billing department.</p>
+                        <p class="mt-2 text-sm leading-6 text-blue-100">Real-time guest bills, settlement verification, point-of-sale charging, and statutory revenue ledger monitoring for the Billing department.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <a href="{{ route('check-outs.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-amber-700">
                             <span class="material-symbols-outlined">payments</span>
-                            Settle Folio / Checkout
+                            Settle Guest Bill / Checkout
                         </a>
                         <a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20">
                             <span class="material-symbols-outlined text-secondary-fixed">receipt_long</span>
@@ -212,8 +212,8 @@
 
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
                     <div class="mb-2 flex items-center justify-between"><span class="rounded-lg bg-surface-mid p-2 text-primary"><span class="material-symbols-outlined">folder_shared</span></span><span class="rounded bg-surface-mid px-2 py-1 text-xs text-slate-600">In-House</span></div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Active Guest Folios</p>
-                    <p class="mt-2 font-serif text-2xl font-bold text-primary">{{ $pendingDepartures }} Active Folios</p>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Active Guest Bills</p>
+                    <p class="mt-2 font-serif text-2xl font-bold text-primary">{{ $pendingDepartures }} Active Guest Bills</p>
                     <p class="mt-3 border-t border-line pt-3 text-xs text-slate-500">Outstanding: <strong class="text-secondary">PHP {{ number_format($totalOpenExposure, 2) }}</strong></p>
                 </div>
 
@@ -238,10 +238,10 @@
                         <div class="flex flex-col justify-between gap-4 border-b border-line bg-surface-low/60 p-5 sm:flex-row sm:items-center">
                             <div>
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <h3 class="font-serif text-2xl font-bold text-primary">Active Departures & Folio Settlement Queue</h3>
+                                    <h3 class="font-serif text-2xl font-bold text-primary">Active Departures & Guest Bill Settlement Queue</h3>
                                     <span class="rounded-full bg-secondary-fixed px-2 py-1 text-xs font-bold text-primary">{{ $settlementQueue->count() }} Today</span>
                                 </div>
-                                <p class="mt-1 text-sm text-slate-600">Pre-cleared room folios pending tender presentation, invoice issuance, or tax reconciliation.</p>
+                                <p class="mt-1 text-sm text-slate-600">Pre-cleared room guest bills pending tender presentation, invoice issuance, or tax reconciliation.</p>
                             </div>
                             <a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-sm font-bold text-primary transition hover:border-secondary">
                                 <span class="material-symbols-outlined text-base text-secondary">filter_list</span>
@@ -289,7 +289,7 @@
                                         <div class="rounded border border-emerald-200 bg-emerald-50 p-2"><span class="block text-xs text-emerald-800">Deposit paid</span><strong class="text-emerald-700">- PHP {{ number_format($deposit, 2) }}</strong></div>
                                     </div>
                                     <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
-                                        <div class="flex items-center gap-2 text-xs font-semibold text-secondary"><span class="h-2 w-2 rounded-full bg-amber-500"></span>Folio pending Billing review</div>
+                                        <div class="flex items-center gap-2 text-xs font-semibold text-secondary"><span class="h-2 w-2 rounded-full bg-amber-500"></span>Guest Bill pending Billing review</div>
                                         <div class="flex flex-wrap gap-2">
                                             <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 rounded border border-line bg-white px-3 py-1.5 text-xs font-bold text-primary transition hover:border-secondary"><span class="material-symbols-outlined text-sm">print</span>Print Itemized Bill</button>
                                             <a href="{{ route('check-outs.create') }}" class="inline-flex items-center gap-1.5 rounded bg-primary px-4 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900"><span class="material-symbols-outlined text-sm text-secondary-fixed">payments</span>Process Payment</a>
@@ -297,7 +297,7 @@
                                     </div>
                                 </div>
                             @empty
-                                <div class="p-10 text-center font-semibold text-slate-500">No active folios are waiting for Billing right now.</div>
+                                <div class="p-10 text-center font-semibold text-slate-500">No active guest bills are waiting for Billing right now.</div>
                             @endforelse
                         </div>
                     </div>
@@ -306,7 +306,7 @@
                         <div class="mb-4 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-secondary">add_shopping_cart</span>
-                                <h3 class="text-base font-bold text-primary">Direct Folio Charge / POS Incidentals</h3>
+                                <h3 class="text-base font-bold text-primary">Direct Guest Bill Charge / POS Incidentals</h3>
                             </div>
                             <span class="text-xs font-semibold text-slate-500">Fast-entry terminal</span>
                         </div>
@@ -332,7 +332,7 @@
                             <div class="flex items-end">
                                 <button class="flex w-full items-center justify-center gap-1 rounded bg-primary-container px-3 py-2.5 text-sm font-bold text-white transition hover:bg-primary" type="submit">
                                     <span class="material-symbols-outlined text-sm text-secondary-fixed">search</span>
-                                    Find Folio
+                                    Find Guest Bill
                                 </button>
                             </div>
                         </form>

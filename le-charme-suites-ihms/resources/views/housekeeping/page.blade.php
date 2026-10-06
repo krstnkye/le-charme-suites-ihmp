@@ -1128,7 +1128,7 @@
                         <p class="mt-1 text-sm text-slate-500">Recent room updates are used as the housekeeping confirmation ledger until request records are separated into their own table.</p>
                     </div>
                     <div class="flex gap-2">
-                        <button type="button" class="rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">Export Folio CSV</button>
+                        <button type="button" class="rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">Export Billing CSV</button>
                         <button type="button" class="rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">Columns</button>
                     </div>
                 </div>
@@ -3425,7 +3425,7 @@
                     </div>
                     <div class="flex items-center justify-between border-t border-line bg-[#f6f3ed] px-4 py-3 text-xs text-slate-500">
                         <span>{{ max(2, $activeRequests) }} dispatches logged today - 100% on-time turnaround rate</span>
-                        <a href="{{ route('housekeeping.page', 'guest-requests') }}" class="font-bold text-secondary hover:underline">View Past 24h Delivered Folio</a>
+                        <a href="{{ route('housekeeping.page', 'guest-requests') }}" class="font-bold text-secondary hover:underline">View Past 24h Delivered Guest Bill</a>
                     </div>
                 </section>
 

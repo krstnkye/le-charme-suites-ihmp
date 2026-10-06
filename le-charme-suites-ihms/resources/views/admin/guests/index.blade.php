@@ -181,7 +181,7 @@
                                 <th class="px-4 py-3">Contact</th>
                                 <th class="px-4 py-3">Identity / Compliance</th>
                                 <th class="px-4 py-3 text-center">Stay History</th>
-                                <th class="px-4 py-3 text-right">Lifetime Folio</th>
+                                <th class="px-4 py-3 text-right">Lifetime Billing</th>
                                 <th class="px-4 py-3 text-right">Admin Actions</th>
                             </tr>
                         </thead>
@@ -225,7 +225,7 @@
                                     </td>
                                     <td class="px-4 py-4 text-right">
                                         <p class="font-serif text-lg font-bold">PHP {{ number_format((float) ($guest->lifetime_value ?? 0), 2) }}</p>
-                                        <p class="text-xs text-slate-500">Posted folio value</p>
+                                        <p class="text-xs text-slate-500">Posted billing value</p>
                                     </td>
                                     <td class="px-4 py-4">
                                         <div class="flex justify-end gap-2">
@@ -267,7 +267,7 @@
                 return;
             }
 
-            const csvRows = [['Guest Profile', 'Contact', 'Identity / Compliance', 'Stay History', 'Lifetime Folio']];
+            const csvRows = [['Guest Profile', 'Contact', 'Identity / Compliance', 'Stay History', 'Lifetime Billing']];
             rows.forEach((row) => {
                 const cells = Array.from(row.querySelectorAll('td')).slice(0, 5).map((cell) => cell.innerText.replace(/\s+/g, ' ').trim());
                 csvRows.push(cells);

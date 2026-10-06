@@ -312,7 +312,7 @@
                             </div>
                             <p class="mt-4 text-sm leading-6 text-slate-600">The following operational modules are available under administrator access.</p>
                             <div class="mt-4 flex flex-wrap gap-2">
-                                @foreach (['All Module Governance', 'Audit Logs', 'Database Reports', 'Room Management', 'Folio Oversight', 'System Settings'] as $grant)
+                                @foreach (['All Module Governance', 'Audit Logs', 'Database Reports', 'Room Management', 'Guest Bill Oversight', 'System Settings'] as $grant)
                                     <span class="inline-flex items-center gap-1.5 rounded-lg border border-outline-variant/30 bg-surface-container-high px-2.5 py-1 text-xs font-bold text-primary"><span class="material-symbols-outlined text-sm text-secondary">check_circle</span>{{ $grant }}</span>
                                 @endforeach
                             </div>

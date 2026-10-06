@@ -110,7 +110,7 @@
                             <span class="inline-flex items-center gap-1 text-xs font-semibold text-blue-100/70"><span class="material-symbols-outlined text-sm text-secondary-fixed">lock</span>SHA-256 Ledger Security Active</span>
                         </div>
                         <h2 class="font-serif text-4xl font-bold leading-tight">Historical Transactions &amp; Cryptographic Audit Ledger</h2>
-                        <p class="mt-2 text-sm leading-6 text-blue-100">Immutable front-desk transaction journal for settled folios, terminal batches, and room-charge receipts. Every record is presented for shift audit, taxation review, and cashier reconciliation.</p>
+                        <p class="mt-2 text-sm leading-6 text-blue-100">Immutable front-desk transaction journal for settled guest bills, terminal batches, and room-charge receipts. Every record is presented for shift audit, taxation review, and cashier reconciliation.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg bg-secondary-fixed px-4 py-2.5 text-sm font-bold text-primary shadow-sm transition hover:bg-secondary-container"><span class="material-symbols-outlined">download</span>Export Audit Ledger</button>
@@ -130,7 +130,7 @@
                 <div class="grid gap-3 md:grid-cols-12">
                     <div class="md:col-span-7">
                         <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Search audit ledger</label>
-                        <div class="relative"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-base text-slate-400">search</span><input name="search" value="{{ $search }}" class="w-full rounded-lg border-line bg-surface-low py-2.5 pl-10 text-sm focus:border-secondary focus:ring-secondary" placeholder="Search folio reference, guest, room, email, or phone"></div>
+                        <div class="relative"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-base text-slate-400">search</span><input name="search" value="{{ $search }}" class="w-full rounded-lg border-line bg-surface-low py-2.5 pl-10 text-sm focus:border-secondary focus:ring-secondary" placeholder="Search bill reference, guest, room, email, or phone"></div>
                     </div>
                     <div class="md:col-span-3">
                         <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Settlement status</label>
@@ -150,7 +150,7 @@
             <div class="grid gap-6 xl:grid-cols-12">
                 <section class="overflow-hidden rounded-xl border border-line bg-white shadow-sm xl:col-span-8">
                     <div class="flex flex-col justify-between gap-3 border-b border-line bg-surface-low p-5 sm:flex-row sm:items-center">
-                        <div><h3 class="font-serif text-2xl font-bold">Transaction Audit Register</h3><p class="text-sm text-slate-500">Completed folio settlements with cashier reference, payment status, and retained receipt amount.</p></div>
+                        <div><h3 class="font-serif text-2xl font-bold">Transaction Audit Register</h3><p class="text-sm text-slate-500">Completed guest bill settlements with cashier reference, payment status, and retained receipt amount.</p></div>
                         <span class="rounded-full bg-surface-mid px-3 py-1 text-xs font-bold text-primary">{{ $checkOuts->total() }} matched records</span>
                     </div>
                     <div class="custom-scrollbar overflow-x-auto">
@@ -194,7 +194,7 @@
                         <div class="space-y-3">
                             @forelse ($ledgerTransactions as $transaction)
                                 <div class="rounded-lg border border-line bg-surface-low p-3">
-                                    <div class="flex items-start justify-between gap-3"><div><p class="font-bold">{{ $transaction->room ? 'Room ' . $transaction->room->room_number : 'Folio Entry' }}</p><p class="text-xs text-slate-500">{{ $transaction->description ?: str_replace('_', ' ', ucfirst($transaction->transaction_type)) }}</p></div><span class="font-mono text-xs font-bold text-secondary">PHP {{ number_format($transaction->amount, 2) }}</span></div>
+                                    <div class="flex items-start justify-between gap-3"><div><p class="font-bold">{{ $transaction->room ? 'Room ' . $transaction->room->room_number : 'Guest Bill Entry' }}</p><p class="text-xs text-slate-500">{{ $transaction->description ?: str_replace('_', ' ', ucfirst($transaction->transaction_type)) }}</p></div><span class="font-mono text-xs font-bold text-secondary">PHP {{ number_format($transaction->amount, 2) }}</span></div>
                                     <p class="mt-2 text-[11px] text-slate-500">{{ $transaction->transaction_date?->format('M d, Y h:i A') ?? 'No timestamp' }}</p>
                                 </div>
                             @empty

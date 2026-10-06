@@ -112,7 +112,7 @@
                             <span class="text-xs font-bold uppercase tracking-wider">Subic Bay IHMS Master Telemetry - Live Operations</span>
                         </div>
                         <h2 class="mt-2 font-serif text-4xl font-bold">Property Systems Integrity & Control</h2>
-                        <p class="mt-2 text-sm leading-6 text-[#b4c8e5]">Primary hotel operations, folios, room inventory, and role access are monitored from this administrator workspace.</p>
+                        <p class="mt-2 text-sm leading-6 text-[#b4c8e5]">Primary hotel operations, guest bills, room inventory, and role access are monitored from this administrator workspace.</p>
                     </div>
                     <div class="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-primary-container/80 p-3 sm:grid-cols-4">
                         <div class="px-3 py-1.5">
@@ -217,7 +217,7 @@
 
                     <div class="command-card rounded-xl p-6">
                         <div class="flex items-start justify-between gap-4">
-                            <div class="flex items-center gap-3"><span class="flex h-11 w-11 items-center justify-center rounded-lg border border-outline-variant bg-surface-container text-primary"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span></span><div><h3 class="text-lg font-bold">Financial Ledger & Audit Control</h3><p class="text-sm text-slate-500">Transactions, folios, and reports</p></div></div>
+                            <div class="flex items-center gap-3"><span class="flex h-11 w-11 items-center justify-center rounded-lg border border-outline-variant bg-surface-container text-primary"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span></span><div><h3 class="text-lg font-bold">Financial Ledger & Audit Control</h3><p class="text-sm text-slate-500">Transactions, guest bills, and reports</p></div></div>
                             <span class="rounded-full bg-secondary-fixed/40 px-2.5 py-1 text-xs font-bold text-secondary">Live Ledger</span>
                         </div>
                         <div class="my-5 space-y-2 border-y border-surface-container py-3 text-sm">

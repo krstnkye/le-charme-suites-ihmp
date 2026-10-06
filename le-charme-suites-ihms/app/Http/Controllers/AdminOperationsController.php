@@ -91,7 +91,7 @@ class AdminOperationsController extends Controller
         $records = HotelTransaction::with(['guest', 'room'])->latest('transaction_date')->limit(25)->get();
 
         return [
-            'title' => 'Transactions & Folios Administration', 'subtitle' => 'Inspect hotel charges, settlements, folios, and financial activity across all departments.', 'icon' => 'receipt_long',
+            'title' => 'Transactions & Billing Administration', 'subtitle' => 'Inspect hotel charges, settlements, guest bills, and financial activity across all departments.', 'icon' => 'receipt_long',
             'stats' => [['label' => 'Recorded transactions', 'value' => HotelTransaction::count()], ['label' => 'Collected amount', 'value' => 'PHP ' . number_format((float) HotelTransaction::sum('amount'), 2)], ['label' => 'Reservation entries', 'value' => HotelTransaction::where('transaction_type', 'reservation')->count()], ['label' => 'Check-out entries', 'value' => HotelTransaction::where('transaction_type', 'check_out')->count()]],
             'records' => $records->map(fn ($record) => [$record->id, $record->guest?->full_name ?? 'Unknown guest', ucfirst(str_replace('_', ' ', $record->transaction_type)), 'PHP ' . number_format((float) $record->amount, 2), optional($record->transaction_date)->format('M d, Y h:i A')]),
             'headers' => ['Transaction', 'Guest', 'Type', 'Amount', 'Date'],

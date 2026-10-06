@@ -23,7 +23,7 @@ class AdminAuditLogController extends Controller
                 'role' => 'System Recorded',
                 'event' => strtoupper((string) str_replace(' ', '_', $transaction->transaction_type)),
                 'icon' => 'receipt_long',
-                'target' => 'Folio #' . str_pad((string) $transaction->id, 5, '0', STR_PAD_LEFT),
+                'target' => 'Guest Bill #' . str_pad((string) $transaction->id, 5, '0', STR_PAD_LEFT),
                 'context' => 'Room ' . ($transaction->room?->room_number ?? 'N/A'),
                 'terminal' => 'IHMS Ledger',
                 'ip' => '127.0.0.1',

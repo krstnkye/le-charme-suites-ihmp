@@ -218,14 +218,14 @@
                                 <span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-secondary">key</span>
                                 <div>
                                     <h3 class="font-serif text-2xl font-bold">POS Terminal Security</h3>
-                                    <p class="text-sm text-slate-500">Cash drawer, folio settlement, and audit access bound to the cashier identity.</p>
+                                    <p class="text-sm text-slate-500">Cash drawer, guest bill settlement, and audit access bound to the cashier identity.</p>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-4 grid gap-3 md:grid-cols-3">
                             @foreach ([
                                 ['icon' => 'point_of_sale', 'title' => 'Cash Drawer', 'meta' => 'Access logged per shift'],
-                                ['icon' => 'receipt_long', 'title' => 'Folio Settlement', 'meta' => 'Manager override required'],
+                                ['icon' => 'receipt_long', 'title' => 'Guest Bill Settlement', 'meta' => 'Manager override required'],
                                 ['icon' => 'fact_check', 'title' => 'Audit Exports', 'meta' => 'End-of-shift sealed'],
                             ] as $item)
                                 <div class="rounded-lg border border-line bg-surface-low p-4">
@@ -251,7 +251,7 @@
                             @foreach ([
                                 ['icon' => 'point_of_sale', 'title' => 'POS-REG-02', 'meta' => 'Subic Central billing station', 'state' => 'This Terminal', 'active' => true],
                                 ['icon' => 'computer', 'title' => 'Back Office Cashier Console', 'meta' => 'Revenue review station', 'state' => 'Idle', 'active' => false],
-                                ['icon' => 'tablet_mac', 'title' => 'Mobile Folio Tablet', 'meta' => 'Supervisor checkout assist', 'state' => 'Standby', 'active' => false],
+                                ['icon' => 'tablet_mac', 'title' => 'Mobile Billing Tablet', 'meta' => 'Supervisor checkout assist', 'state' => 'Standby', 'active' => false],
                             ] as $terminal)
                                 <div class="rounded-xl border {{ $terminal['active'] ? 'border-2 border-secondary-fixed bg-surface-low' : 'border-line bg-white' }} p-3.5">
                                     <div class="flex items-start justify-between gap-3">
@@ -295,7 +295,7 @@
                             <div><h3 class="font-serif text-xl font-bold">Billing Access Scope</h3><p class="text-sm text-blue-100">Current cashier permissions are active.</p></div>
                         </div>
                         <div class="mt-4 flex flex-wrap gap-2">
-                            @foreach (['Folio settlement', 'Transaction posting', 'Cash drawer audit', 'Reports center'] as $grant)
+                            @foreach (['Guest Bill settlement', 'Transaction posting', 'Cash drawer audit', 'Reports center'] as $grant)
                                 <span class="rounded border border-white/10 bg-white/10 px-2.5 py-1 text-xs font-bold text-blue-50">{{ $grant }}</span>
                             @endforeach
                         </div>

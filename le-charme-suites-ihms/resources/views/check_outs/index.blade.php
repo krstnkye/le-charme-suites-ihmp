@@ -150,7 +150,7 @@
                 <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
                     <span>Operations</span>
                     <span>/</span>
-                    <span>Folio Ledger</span>
+                    <span>Guest Bill Ledger</span>
                     <span>/</span>
                     <span class="text-secondary">Terminal 02 Active</span>
                 </div>
@@ -196,7 +196,7 @@
                     </div>
                     <a href="{{ route('check-outs.create') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-amber-700">
                         <span class="material-symbols-outlined">add_circle</span>
-                        New Direct Folio Charge
+                        New Direct Guest Bill Charge
                     </a>
                 </div>
             </section>
@@ -206,13 +206,13 @@
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-secondary">bolt</span>
                         <span class="font-bold text-primary">Rapid Charge Posting Bar</span>
-                        <span class="text-sm text-slate-500">Search existing folios and transactions</span>
+                        <span class="text-sm text-slate-500">Search existing guest bills and transactions</span>
                     </div>
                     <span class="rounded border border-line bg-surface-low px-2 py-1 text-[11px] font-bold text-secondary">ALT + ENTER routes to transaction search</span>
                 </div>
                 <div class="grid gap-3 md:grid-cols-12">
                     <div class="md:col-span-4">
-                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Guest / Room / Folio Reference</label>
+                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Guest / Room / Guest Bill Reference</label>
                         <div class="relative">
                             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-base text-slate-400">meeting_room</span>
                             <input name="search" value="{{ $search }}" class="w-full rounded-lg border-line bg-surface-low py-2.5 pl-10 text-sm focus:border-secondary focus:ring-secondary" placeholder="Room 101, guest name, email, or checkout ref">
@@ -228,8 +228,8 @@
                         </select>
                     </div>
                     <div class="md:col-span-3">
-                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Active Folio Snapshot</label>
-                        <input readonly class="w-full rounded-lg border-line bg-surface-low py-2.5 text-sm font-semibold text-primary" value="{{ $activeCheckIn ? 'Room ' . $room?->room_number . ' - ' . ($guest?->full_name ?? 'Guest') : 'No active folio waiting' }}">
+                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Active Guest Bill Snapshot</label>
+                        <input readonly class="w-full rounded-lg border-line bg-surface-low py-2.5 text-sm font-semibold text-primary" value="{{ $activeCheckIn ? 'Room ' . $room?->room_number . ' - ' . ($guest?->full_name ?? 'Guest') : 'No active guest bill waiting' }}">
                     </div>
                     <div class="flex items-end gap-2 md:col-span-2">
                         <button class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900">
@@ -250,7 +250,7 @@
                         <span class="font-serif text-3xl font-bold">{{ $todayPostedCount }}</span>
                         <span class="text-sm font-bold text-secondary">PHP {{ number_format($todayPostedAmount, 2) }}</span>
                     </div>
-                    <p class="mt-1 text-xs text-slate-500">Latest POS and folio transaction records</p>
+                    <p class="mt-1 text-xs text-slate-500">Latest POS and guest bill transaction records</p>
                 </div>
                 <div class="rounded-xl border border-line bg-white p-4 shadow-sm">
                     <div class="flex items-center justify-between">
@@ -316,7 +316,7 @@
                                             <span class="block text-[11px] text-slate-500">{{ $transaction->transaction_date?->format('M d, Y') ?? 'No date' }}</span>
                                         </td>
                                         <td class="px-4 py-3">
-                                            <div class="font-bold text-primary">{{ $transaction->room ? 'Room ' . $transaction->room->room_number : 'Walk-in / Folio' }}</div>
+                                            <div class="font-bold text-primary">{{ $transaction->room ? 'Room ' . $transaction->room->room_number : 'Walk-in / Guest Bill' }}</div>
                                             <div class="max-w-[150px] truncate text-xs text-slate-500">{{ $transaction->guest?->full_name ?? 'Guest not linked' }}</div>
                                         </td>
                                         <td class="px-4 py-3">
@@ -344,7 +344,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="px-4 py-12 text-center font-semibold text-slate-500">No folio transactions have been posted yet.</td>
+                                        <td colspan="7" class="px-4 py-12 text-center font-semibold text-slate-500">No guest bill transactions have been posted yet.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -356,8 +356,8 @@
                     <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
                         <div class="mb-4 flex items-start justify-between border-b border-line pb-4">
                             <div>
-                                <span class="text-xs font-bold uppercase tracking-wider text-secondary">Active Folio Terminal</span>
-                                <h3 class="mt-1 font-serif text-2xl font-bold">{{ $activeCheckIn ? ($guest?->full_name ?? 'In-House Guest') : 'No Active Folio' }}</h3>
+                                <span class="text-xs font-bold uppercase tracking-wider text-secondary">Active Guest Bill Terminal</span>
+                                <h3 class="mt-1 font-serif text-2xl font-bold">{{ $activeCheckIn ? ($guest?->full_name ?? 'In-House Guest') : 'No Active Guest Bill' }}</h3>
                             </div>
                             <span class="rounded bg-surface-low px-2.5 py-1 text-xs font-bold text-primary">{{ $activeCheckIn ? 'Room ' . $room?->room_number : 'Idle' }}</span>
                         </div>
@@ -387,12 +387,12 @@
                             </div>
                             <a href="{{ route('check-outs.create') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900">
                                 <span class="material-symbols-outlined text-secondary-fixed">payments</span>
-                                Settle Folio / Check Out
+                                Settle Guest Bill / Check Out
                             </a>
                         @else
                             <div class="rounded-lg border border-dashed border-line p-8 text-center">
                                 <span class="material-symbols-outlined text-4xl text-slate-300">person_search</span>
-                                <p class="mt-3 text-sm font-semibold text-slate-500">Checked-in guest folios will appear here for billing review.</p>
+                                <p class="mt-3 text-sm font-semibold text-slate-500">Checked-in guest bills will appear here for billing review.</p>
                             </div>
                         @endif
                     </div>
@@ -432,7 +432,7 @@
                 <div class="flex flex-col justify-between gap-3 border-b border-line p-5 sm:flex-row sm:items-center">
                     <div>
                         <h3 class="font-serif text-2xl font-bold">Transaction History</h3>
-                        <p class="text-sm text-slate-500">Completed check-outs and recorded folio payments from the shared hotel database.</p>
+                        <p class="text-sm text-slate-500">Completed check-outs and recorded guest bill payments from the shared hotel database.</p>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="rounded-full bg-surface-mid px-3 py-1 text-xs font-bold text-primary">{{ $checkOuts->total() }} records</span>
