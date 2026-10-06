@@ -1,0 +1,155 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Room;
+use App\Models\RoomStatusLog;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class RoomController extends Controller
+{
+    public function index(Request $request): View
+    {
+        $status = (string) $request->string('status');
+        $type = (string) $request->string('type');
+        $search = (string) $request->string('search');
+
+        $rooms = Room::query()
+            ->when($status !== '', fn ($query) => $query->where('status', $status))
+            ->when($type !== '', fn ($query) => $query->where('room_type', $type))
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('room_number', 'like', '%' . $search . '%')
+                        ->orWhere('room_type', 'like', '%' . $search . '%')
+                        ->orWhere('description', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderBy('room_number')
+            ->paginate(12)
+            ->withQueryString();
+
+        $allRooms = Room::orderBy('room_number')->get();
+
+        $view = $request->user()?->role === 'housekeeping'
+            ? 'rooms.housekeeping-index'
+            : 'rooms.index';
+
+        return view($view, [
+            'rooms' => $rooms,
+            'status' => $status,
+            'type' => $type,
+            'search' => $search,
+            'roomTypes' => Room::select('room_type')->distinct()->orderBy('room_type')->pluck('room_type'),
+            'statusCounts' => Room::selectRaw('status, count(*) as total')->groupBy('status')->pluck('total', 'status'),
+            'totalRooms' => $allRooms->count(),
+            'availableRooms' => $allRooms->where('status', 'available')->count(),
+            'reservedRooms' => $allRooms->where('status', 'reserved')->count(),
+            'occupiedRooms' => $allRooms->where('status', 'occupied')->count(),
+            'maintenanceRooms' => $allRooms->whereIn('status', ['maintenance', 'cleaning'])->count(),
+            'availableRecommendations' => $allRooms->where('status', 'available')->take(3),
+            'roomMatrix' => $allRooms->groupBy(fn (Room $room) => substr($room->room_number, 0, 1)),
+        ]);
+    }
+
+    public function create(): View
+    {
+        return view('rooms.create', [
+            'roomTypes' => Room::select('room_type')->distinct()->orderBy('room_type')->pluck('room_type'),
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $room = Room::create($this->validatedData($request));
+        $this->recordStatus($room, $room->status, 'Initial room status');
+
+        $redirectTo = (string) $request->string('redirect_to');
+
+        if ($redirectTo === 'admin.room-types') {
+            return redirect()
+                ->route('admin.operations.index', ['module' => 'room-types'])
+                ->with('status', "Room {$room->room_number} was created under the {$room->room_type} type.");
+        }
+
+        if ($redirectTo === 'admin.room-rates') {
+            return redirect()
+                ->route('admin.operations.index', ['module' => 'room-rates'])
+                ->with('status', "Room {$room->room_number} was created and is now reflected in room rates.");
+        }
+
+        if ($request->user()?->role === 'admin') {
+            return redirect()
+                ->route('admin.operations.index', ['module' => 'room-inventory'])
+                ->with('status', "Room {$room->room_number} was created.");
+        }
+
+        return redirect()->route('rooms.index')->with('status', 'Room created.');
+    }
+
+    public function show(Room $room): View
+    {
+        $room->load(['reservations.guest', 'statusLogs' => fn ($query) => $query->latest('changed_at')]);
+
+        if (request()->user()?->role === 'housekeeping') {
+            return view('rooms.housekeeping-show', compact('room'));
+        }
+
+        return view('rooms.show', compact('room'));
+    }
+
+    public function edit(Room $room): View
+    {
+        if (request()->user()?->role === 'housekeeping') {
+            return view('rooms.housekeeping-edit', compact('room'));
+        }
+
+        return view('rooms.edit', compact('room'));
+    }
+
+    public function update(Request $request, Room $room): RedirectResponse
+    {
+        $data = $this->validatedData($request, $room);
+        $oldStatus = $room->status;
+
+        $room->update($data);
+
+        if ($oldStatus !== $room->status) {
+            $this->recordStatus($room, $room->status, 'Manual room status update');
+        }
+
+        return redirect()->route('rooms.index')->with('status', 'Room updated.');
+    }
+
+    public function destroy(Room $room): RedirectResponse
+    {
+        $room->delete();
+
+        return redirect()->route('rooms.index')->with('status', 'Room deleted.');
+    }
+
+    private function validatedData(Request $request, ?Room $room = null): array
+    {
+        $roomId = $room?->id ?? 'NULL';
+
+        return $request->validate([
+            'room_number' => ['required', 'string', 'max:50', 'unique:rooms,room_number,' . $roomId],
+            'room_type' => ['required', 'string', 'max:100'],
+            'rate' => ['required', 'numeric', 'min:0'],
+            'capacity' => ['required', 'integer', 'min:1'],
+            'status' => ['required', 'in:available,reserved,occupied,cleaning,maintenance'],
+            'description' => ['nullable', 'string'],
+        ]);
+    }
+
+    private function recordStatus(Room $room, string $status, string $notes): void
+    {
+        RoomStatusLog::create([
+            'room_id' => $room->id,
+            'status' => $status,
+            'notes' => $notes,
+            'changed_at' => now(),
+        ]);
+    }
+}
