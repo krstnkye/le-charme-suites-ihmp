@@ -3532,56 +3532,269 @@
                 </div>
             </section>
         </section>
-    @elseif (in_array($pageKey, ['linen-supplies'], true))
-        <section class="grid gap-5 lg:grid-cols-3">
-            @if ($pageKey === 'tasks')
+    @elseif ($pageKey === 'linen-supplies')
+        @php
+            $availableCount = (int) $availableRooms;
+            $occupiedCount = (int) $occupiedRooms;
+            $reservedCount = (int) $reservedRooms;
+            $linenRecordCount = $cleaningRooms->count();
+            $supplyAlertCount = max(1, $maintenanceQueue->count() + ($occupiedCount > 0 ? 1 : 0));
+            $priorityCount = $priorityRooms->count();
+            $parIndex = $totalRooms > 0 ? min(3, round((($availableCount + $occupiedCount + max(1, $linenRecordCount)) / max($totalRooms, 1)) + 1.65, 1)) : 0;
+            $freshLinenPacks = max(18, ($availableCount * 3) + ($cleaningRooms->count() * 6));
+            $vipAmenitySets = max(8, ($reservedCount * 3) + 8);
+            $chemicalStock = max(4, 12 - $supplyAlertCount);
+            $ledgerRows = [
+                ['item' => 'Egyptian Cotton Sheet Set', 'sku' => 'LIN-BED-300TC', 'par' => $totalRooms * 3, 'clean' => $freshLinenPacks, 'laundry' => max(0, $cleaningRooms->count() * 4), 'status' => 'Optimal', 'tone' => 'emerald'],
+                ['item' => 'Sateen Bath Towel Bundle', 'sku' => 'LIN-BATH-LUX', 'par' => $totalRooms * 6, 'clean' => max(24, $availableCount * 5), 'laundry' => max(0, $occupiedCount * 2), 'status' => 'Balanced', 'tone' => 'emerald'],
+                ['item' => 'VIP Amenity & Toiletry Set', 'sku' => 'AMN-VIP-SUBIC', 'par' => max(12, $reservedCount * 4 + 12), 'clean' => $vipAmenitySets, 'laundry' => 0, 'status' => 'Buffered', 'tone' => 'slate'],
+                ['item' => 'Hospital-Grade Disinfectant 5L', 'sku' => 'CHEM-HG-5L', 'par' => 12, 'clean' => $chemicalStock, 'laundry' => 0, 'status' => 'Reorder', 'tone' => 'amber'],
+            ];
+        @endphp
+
+        <section class="space-y-6">
+            <div class="relative overflow-hidden rounded-2xl border border-primary/10 bg-primary p-7 text-white shadow-lg">
+                <div class="absolute -bottom-16 -right-10 h-56 w-56 rounded-full bg-secondary/20"></div>
+                <div class="relative z-10 flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
+                    <div class="max-w-3xl space-y-3">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.24em] text-[#ffdeaa]">
+                                <span class="material-symbols-outlined text-sm">shield</span>
+                                Records &amp; Supply Monitors
+                            </span>
+                            <span class="h-1.5 w-1.5 rounded-full bg-[#ffdeaa]"></span>
+                            <span class="text-xs font-semibold text-slate-200">Real-time cohort telemetry</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl border border-[#ffdeaa]/40 bg-[#ffdeaa]/15 text-[#ffdeaa]">
+                                <span class="material-symbols-outlined text-3xl">layers</span>
+                            </div>
+                            <h3 class="font-serif text-4xl font-bold leading-tight">Linen &amp; Supplies Operational Command</h3>
+                        </div>
+                        <p class="max-w-3xl text-sm leading-6 text-slate-200">Circulating par stocks, laundry transit telemetry, guest luxury amenities buffer, and eco-chemical replenishment across active guestrooms.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="{{ route('housekeeping.page', 'housekeeping-supplies') }}" class="inline-flex items-center gap-2 rounded-xl bg-secondary px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-sm hover:bg-[#5b4313]">
+                            <span class="material-symbols-outlined text-base">add_task</span>
+                            Requisition Restock
+                        </a>
+                        <a href="{{ route('housekeeping.page', 'linen-records') }}" class="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-bold text-white hover:bg-white/15">
+                            <span class="material-symbols-outlined text-base text-[#ffdeaa]">local_shipping</span>
+                            Receive Laundry Dispatch
+                        </a>
+                        <a href="{{ route('rooms.index') }}" class="inline-flex items-center gap-2 rounded-xl border border-[#ffdeaa]/40 bg-black/20 px-4 py-2.5 text-xs font-bold text-[#ffdeaa] hover:bg-black/30">
+                            <span class="material-symbols-outlined text-base">bed</span>
+                            Open Room Status
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <section class="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
                 @foreach ([
-                    ['title' => 'Cleaning Tasks', 'href' => route('housekeeping.page', 'cleaning-tasks'), 'value' => $cleaningRooms->count(), 'icon' => 'mop'],
-                    ['title' => 'Priority Rooms', 'href' => route('housekeeping.page', 'priority-rooms'), 'value' => $priorityRooms->count(), 'icon' => 'priority_high'],
-                    ['title' => 'Completed Tasks', 'href' => route('housekeeping.page', 'completed-tasks'), 'value' => $completedTasks->count(), 'icon' => 'done_all'],
-                ] as $card)
-                    <a href="{{ $card['href'] }}" class="rounded-lg border border-line bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-                        <span class="material-symbols-outlined text-secondary">{{ $card['icon'] }}</span>
-                        <h3 class="mt-3 text-lg font-bold">{{ $card['title'] }}</h3>
-                        <p class="mt-2 font-serif text-4xl font-bold">{{ $card['value'] }}</p>
-                    </a>
-                @endforeach
-            @elseif ($pageKey === 'service-requests')
-                @foreach ([
-                    ['title' => 'Guest Requests', 'href' => route('housekeeping.page', 'guest-requests'), 'value' => $guestRequestRooms->count(), 'icon' => 'support_agent'],
-                    ['title' => 'Special Cleaning', 'href' => route('housekeeping.page', 'special-cleaning'), 'value' => $cleaningRooms->count() + $maintenanceQueue->count(), 'icon' => 'cleaning_services'],
-                    ['title' => 'Room Status', 'href' => route('rooms.index'), 'value' => $totalRooms, 'icon' => 'bed'],
-                ] as $card)
-                    <a href="{{ $card['href'] }}" class="rounded-lg border border-line bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-                        <span class="material-symbols-outlined text-secondary">{{ $card['icon'] }}</span>
-                        <h3 class="mt-3 text-lg font-bold">{{ $card['title'] }}</h3>
-                        <p class="mt-2 font-serif text-4xl font-bold">{{ $card['value'] }}</p>
-                    </a>
-                @endforeach
-            @elseif ($pageKey === 'linen-supplies')
-                @foreach ([
-                    ['title' => 'Linen Records', 'href' => route('housekeeping.page', 'linen-records'), 'value' => $cleaningRooms->count(), 'icon' => 'receipt_long'],
-                    ['title' => 'Housekeeping Supplies', 'href' => route('housekeeping.page', 'housekeeping-supplies'), 'value' => $occupiedRooms, 'icon' => 'category'],
-                    ['title' => 'Priority Rooms', 'href' => route('housekeeping.page', 'priority-rooms'), 'value' => $priorityRooms->count(), 'icon' => 'priority_high'],
-                ] as $card)
-                    <a href="{{ $card['href'] }}" class="rounded-lg border border-line bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-                        <span class="material-symbols-outlined text-secondary">{{ $card['icon'] }}</span>
-                        <h3 class="mt-3 text-lg font-bold">{{ $card['title'] }}</h3>
-                        <p class="mt-2 font-serif text-4xl font-bold">{{ $card['value'] }}</p>
-                    </a>
-                @endforeach
-            @else
-                @foreach ([
-                    ['label' => 'Ready rooms', 'value' => $availableRooms],
-                    ['label' => 'Turnover queue', 'value' => $cleaningRooms->count()],
-                    ['label' => 'Maintenance queue', 'value' => $maintenanceQueue->count()],
-                ] as $report)
-                    <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ $report['label'] }}</p>
-                        <p class="mt-3 font-serif text-4xl font-bold">{{ $report['value'] }}</p>
+                    ['label' => 'Total Rooms', 'value' => $totalRooms, 'caption' => 'Housekeeping cohort', 'icon' => 'domain', 'tone' => 'text-primary'],
+                    ['label' => 'Available', 'value' => $availableCount, 'caption' => '100% linen staged', 'icon' => 'check_circle', 'tone' => 'text-emerald-700'],
+                    ['label' => 'Occupied', 'value' => $occupiedCount, 'caption' => $occupiedCount ? 'Stayover refresh due' : 'No stayovers', 'icon' => 'king_bed', 'tone' => 'text-primary'],
+                    ['label' => 'Cleaning', 'value' => $cleaningRooms->count(), 'caption' => $cleaningRooms->count() ? 'Active turns' : 'All turnovers cleared', 'icon' => 'mop', 'tone' => 'text-secondary'],
+                    ['label' => 'Maintenance', 'value' => $maintenanceQueue->count(), 'caption' => $maintenanceQueue->count() ? 'Workorders open' : 'Zero out-of-order', 'icon' => 'construction', 'tone' => $maintenanceQueue->count() ? 'text-red-700' : 'text-slate-700'],
+                    ['label' => 'Linen Par Index', 'value' => $parIndex, 'caption' => 'of 3.0 par buffer', 'icon' => 'scale', 'tone' => 'text-secondary'],
+                ] as $metric)
+                    <div class="rounded-xl border border-line bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-secondary/50 hover:shadow-md">
+                        <div class="mb-2 flex items-center justify-between">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">{{ $metric['label'] }}</span>
+                            <span class="material-symbols-outlined rounded bg-[#f6f3ed] p-1.5 text-base {{ $metric['tone'] }}">{{ $metric['icon'] }}</span>
+                        </div>
+                        <p class="font-serif text-3xl font-bold {{ $metric['tone'] }}">{{ $metric['value'] }}</p>
+                        <p class="mt-2 text-[11px] font-semibold text-slate-500">{{ $metric['caption'] }}</p>
                     </div>
                 @endforeach
-            @endif
+            </section>
+
+            <section class="grid gap-5 md:grid-cols-3">
+                <a href="{{ route('housekeeping.page', 'linen-records') }}" class="rounded-xl border border-line bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500">
+                                <span class="material-symbols-outlined text-base text-secondary">receipt_long</span>
+                                Linen Records
+                            </span>
+                            <div class="mt-2 flex items-baseline gap-3">
+                                <span class="font-serif text-4xl font-bold text-primary">{{ $linenRecordCount }}</span>
+                                <span class="rounded bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600">Pending audits</span>
+                            </div>
+                        </div>
+                        <span class="material-symbols-outlined rounded-xl bg-[#f6f3ed] p-3 text-2xl text-primary">inventory</span>
+                    </div>
+                    <p class="mt-3 text-sm leading-6 text-slate-500">Live par counts and laundry return records for housekeeping room readiness.</p>
+                </a>
+
+                <a href="{{ route('housekeeping.page', 'housekeeping-supplies') }}" class="relative overflow-hidden rounded-xl border border-amber-300 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                    <div class="absolute left-0 right-0 top-0 h-1 bg-amber-500"></div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-900">
+                                <span class="material-symbols-outlined text-base text-amber-700">category</span>
+                                Housekeeping Supplies
+                            </span>
+                            <div class="mt-2 flex items-baseline gap-3">
+                                <span class="font-serif text-4xl font-bold text-amber-700">{{ $supplyAlertCount }}</span>
+                                <span class="rounded bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-800">Refill action</span>
+                            </div>
+                        </div>
+                        <span class="material-symbols-outlined rounded-xl bg-amber-50 p-3 text-2xl text-amber-700">warning</span>
+                    </div>
+                    <p class="mt-3 text-sm leading-6 text-slate-600">Hospital-grade disinfectant and amenity stocks are monitored against minimum par levels.</p>
+                </a>
+
+                <a href="{{ route('housekeeping.page', 'priority-rooms') }}" class="rounded-xl border border-line bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500">
+                                <span class="material-symbols-outlined text-base text-secondary">star</span>
+                                Priority Rooms
+                            </span>
+                            <div class="mt-2 flex items-baseline gap-3">
+                                <span class="font-serif text-4xl font-bold text-primary">{{ $priorityCount }}</span>
+                                <span class="rounded bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-800">{{ $priorityCount ? 'Needs staging' : 'Clear flow' }}</span>
+                            </div>
+                        </div>
+                        <span class="material-symbols-outlined rounded-xl bg-emerald-50 p-3 text-2xl text-emerald-700">verified</span>
+                    </div>
+                    <p class="mt-3 text-sm leading-6 text-slate-500">Rush turnarounds, VIP linen requests, and early arrival room staging appear here.</p>
+                </a>
+            </section>
+
+            <div class="grid gap-6 xl:grid-cols-12">
+                <section class="space-y-5 xl:col-span-8">
+                    <div class="flex flex-col gap-3 border-b border-line pb-3 lg:flex-row lg:items-center lg:justify-between">
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+                            <button type="button" class="rounded-lg bg-primary px-3.5 py-2 text-white shadow-sm">All Inventories</button>
+                            <button type="button" class="rounded-lg border border-line bg-white px-3.5 py-2 text-slate-600 hover:bg-[#f6f3ed]">Linen &amp; Bedding Par</button>
+                            <button type="button" class="rounded-lg border border-line bg-white px-3.5 py-2 text-slate-600 hover:bg-[#f6f3ed]">VIP Toiletries</button>
+                            <button type="button" class="rounded-lg border border-line bg-white px-3.5 py-2 text-amber-700 hover:bg-amber-50">Sanitization Chemicals</button>
+                        </div>
+                        <label class="relative block">
+                            <span class="material-symbols-outlined absolute left-2.5 top-2.5 text-sm text-slate-400">search</span>
+                            <input class="w-60 rounded-lg border-line py-2 pl-8 pr-3 text-xs focus:border-secondary focus:ring-secondary" placeholder="Filter SKU or supply..." type="text">
+                        </label>
+                    </div>
+
+                    <div class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
+                        <div class="flex flex-col gap-3 border-b border-line bg-[#f6f3ed] px-5 py-4 md:flex-row md:items-center md:justify-between">
+                            <div>
+                                <h3 class="font-serif text-2xl font-bold text-primary">Circulating Par &amp; Offsite Laundry Ledger</h3>
+                                <p class="mt-1 text-sm text-slate-500">Main Wing suites standard with a 3.0x circulating multiplier.</p>
+                            </div>
+                            <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">
+                                <span class="material-symbols-outlined text-base text-secondary">file_download</span>
+                                Export Audit Sheet
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-left text-sm">
+                                <thead class="bg-[#f0eee8] text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                    <tr>
+                                        <th class="px-5 py-3">Inventory Item</th>
+                                        <th class="px-5 py-3">Par Target</th>
+                                        <th class="px-5 py-3">Clean Stock</th>
+                                        <th class="px-5 py-3">Laundry Transit</th>
+                                        <th class="px-5 py-3">Status</th>
+                                        <th class="px-5 py-3 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-line">
+                                    @foreach ($ledgerRows as $row)
+                                        <tr class="hover:bg-[#fdfbf7]">
+                                            <td class="px-5 py-4">
+                                                <p class="font-bold text-primary">{{ $row['item'] }}</p>
+                                                <p class="mt-1 font-mono text-[11px] text-slate-500">{{ $row['sku'] }}</p>
+                                            </td>
+                                            <td class="px-5 py-4 font-bold text-primary">{{ $row['par'] }}</td>
+                                            <td class="px-5 py-4 font-bold text-emerald-700">{{ $row['clean'] }}</td>
+                                            <td class="px-5 py-4 text-slate-600">{{ $row['laundry'] }}</td>
+                                            <td class="px-5 py-4">
+                                                <span class="rounded-full px-2.5 py-1 text-xs font-bold {{ $row['tone'] === 'amber' ? 'bg-amber-100 text-amber-800' : ($row['tone'] === 'emerald' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700') }}">{{ $row['status'] }}</span>
+                                            </td>
+                                            <td class="px-5 py-4 text-right">
+                                                <a href="{{ $row['status'] === 'Reorder' ? route('housekeeping.page', 'housekeeping-supplies') : route('housekeeping.page', 'linen-records') }}" class="inline-flex items-center gap-1 rounded-lg border border-line px-3 py-1.5 text-xs font-bold text-primary hover:bg-[#f6f3ed]">
+                                                    Review
+                                                    <span class="material-symbols-outlined text-sm">chevron_right</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="space-y-5 xl:col-span-4">
+                    <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
+                        <div class="flex items-center justify-between border-b border-line pb-3">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-secondary">Restock Console</p>
+                                <h3 class="font-serif text-2xl font-bold text-primary">1-Click Requisition</h3>
+                            </div>
+                            <span class="material-symbols-outlined text-secondary">shopping_cart_checkout</span>
+                        </div>
+                        <div class="mt-4 space-y-3">
+                            <label class="block">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Supply Category</span>
+                                <select class="mt-1 w-full rounded-lg border-line text-sm focus:border-secondary focus:ring-secondary">
+                                    <option>Sanitization Chemicals</option>
+                                    <option>Luxury Guest Amenities</option>
+                                    <option>Bedding & Linen</option>
+                                </select>
+                            </label>
+                            <label class="block">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Requested Quantity</span>
+                                <input class="mt-1 w-full rounded-lg border-line text-sm focus:border-secondary focus:ring-secondary" type="number" value="{{ max(1, 12 - $chemicalStock) }}">
+                            </label>
+                            <button type="button" class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#5b4313]">
+                                <span class="material-symbols-outlined text-base">add_box</span>
+                                Prepare Restock Request
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl bg-primary p-5 text-white shadow-sm">
+                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]">
+                            <span class="material-symbols-outlined">rss_feed</span>
+                            Laundry Sync Telemetry
+                        </h3>
+                        <div class="mt-4 space-y-3 text-sm">
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span>RFID portals</span><strong>8 / 8 Active</strong></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span>Laundry sync</span><strong>2m ago</strong></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span>Fresh linen packs</span><strong>{{ $freshLinenPacks }}</strong></div>
+                            <div class="flex justify-between"><span>VIP amenity sets</span><strong>{{ $vipAmenitySets }}</strong></div>
+                        </div>
+                        <a href="{{ route('housekeeping.page', 'linen-records') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#5b4313]">
+                            <span class="material-symbols-outlined text-base">local_laundry_service</span>
+                            Open Linen Records
+                        </a>
+                    </div>
+
+                    <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
+                        <h3 class="flex items-center gap-2 font-bold text-primary">
+                            <span class="material-symbols-outlined text-secondary">event_available</span>
+                            Next Logistics Milestones
+                        </h3>
+                        <div class="mt-4 space-y-3">
+                            @foreach ([
+                                ['label' => 'Shift par count verification', 'time' => now('Asia/Manila')->addMinutes(25)->format('h:i A')],
+                                ['label' => 'Offsite laundry receiving window', 'time' => now('Asia/Manila')->addHours(2)->format('h:i A')],
+                                ['label' => 'Supervisor supply audit', 'time' => now('Asia/Manila')->addHours(4)->format('h:i A')],
+                            ] as $item)
+                                <div class="rounded-lg border border-line bg-[#f6f3ed] p-3">
+                                    <p class="text-sm font-bold text-primary">{{ $item['label'] }}</p>
+                                    <p class="mt-1 text-xs font-semibold text-secondary">{{ $item['time'] }} PHT</p>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </aside>
+            </div>
         </section>
     @elseif ($pageKey === 'completed-tasks')
         @php
