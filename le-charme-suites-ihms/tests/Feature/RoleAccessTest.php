@@ -731,7 +731,14 @@ class RoleAccessTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'cashier']);
 
-        $this->actingAs($user)->get('/reports')->assertOk();
+        $this->actingAs($user)
+            ->get('/reports')
+            ->assertOk()
+            ->assertSee('Shift Financial &amp; Cashier Reports', false)
+            ->assertSee('Standard Cashier Report Directory')
+            ->assertSee('Billing Department Access')
+            ->assertSee('Run Shift Balance Report');
+
         $this->actingAs($user)->get('/reservations')->assertForbidden();
     }
 
