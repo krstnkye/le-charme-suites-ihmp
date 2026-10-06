@@ -163,6 +163,8 @@
         <main class="mx-auto w-full max-w-[1700px] space-y-6 p-5 lg:p-8">
             @if ($activePage === 'dashboard')
                 @include('owner.partials.dashboard')
+            @elseif ($activePage === 'guests')
+                @include('owner.partials.guests')
             @else
             <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
                 <div class="pointer-events-none absolute -bottom-20 -right-16 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
@@ -187,16 +189,6 @@
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Reservations</span><span class="material-symbols-outlined text-secondary">calendar_month</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $activeReservations }}</p><p class="mt-1 text-sm text-slate-500">{{ $arrivalsToday }} arrivals today</p></div>
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Billing & Transactions</span><span class="material-symbols-outlined text-secondary">payments</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($collectedToday, 2) }}</p><p class="mt-1 text-sm text-slate-500">{{ $settledToday }} settled today</p></div>
             </section>
-            @endif
-
-            @if ($activePage === 'guests')
-                <x-owner-panel title="Guest Registry Preview" subtitle="Latest registered guests. Owner can view but cannot create, update, or delete accounts.">
-                    <x-owner-table :headers="['Guest', 'Contact', 'Stays', 'Access']">
-                        @foreach ($guests as $guest)
-                            <tr class="border-b border-line"><td class="px-4 py-3 font-bold">{{ $guest->full_name }}</td><td class="px-4 py-3 text-slate-600">{{ $guest->email ?? $guest->phone ?? 'Not recorded' }}</td><td class="px-4 py-3">{{ $guest->reservations_count }}</td><td class="px-4 py-3"><span class="rounded bg-surface-mid px-2 py-1 text-xs font-bold">View only</span></td></tr>
-                        @endforeach
-                    </x-owner-table>
-                </x-owner-panel>
             @endif
 
             @if ($activePage === 'rooms')
