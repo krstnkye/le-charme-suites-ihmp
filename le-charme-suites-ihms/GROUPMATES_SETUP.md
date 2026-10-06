@@ -1,6 +1,6 @@
 # Le Charme Suites IHMS - Group Setup
 
-This is a Laravel project. Open the `vibe-app` folder in Visual Studio Code.
+This is a Laravel project. Open the `le-charme-suites-ihms` folder in Visual Studio Code.
 
 ## Requirements
 
@@ -11,7 +11,7 @@ This is a Laravel project. Open the `vibe-app` folder in Visual Studio Code.
 
 ## First-Time Setup
 
-Run these commands in the VS Code terminal from inside the `vibe-app` folder:
+Run these commands in the VS Code terminal from inside the `le-charme-suites-ihms` folder:
 
 ```bash
 composer install
