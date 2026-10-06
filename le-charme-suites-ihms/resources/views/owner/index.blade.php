@@ -169,7 +169,9 @@
                 @include('owner.partials.dashboard')
             @elseif ($activePage === 'guests')
                 @include('owner.partials.guests')
-            @elseif (in_array($activePage, ['rooms', 'room-inventory', 'room-availability', 'room-status'], true))
+            @elseif ($activePage === 'room-availability')
+                @include('owner.partials.room-availability')
+            @elseif (in_array($activePage, ['rooms', 'room-inventory', 'room-status'], true))
                 @include('owner.partials.rooms')
             @else
             <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
