@@ -58,7 +58,7 @@
         'rooms' => ['Room Management Overview', 'Room inventory, occupancy, and maintenance readiness visibility.'],
         'reservations' => ['Reservations Overview', 'Booking pipeline and reservation status monitoring.'],
         'checkins' => ['Check-in / Check-out Overview', 'Arrival, in-house, and departure movement visibility.'],
-        'billing' => ['Billing / Transactions Overview', 'Revenue, settlement, and transaction monitoring.'],
+        'billing' => ['Billing & Transactions Overview', 'Revenue, settlement, and transaction monitoring.'],
         'housekeeping' => ['Housekeeping Monitor', 'Room readiness and housekeeping activity oversight.'],
         'reports' => ['Reports & Records Overview', 'Executive reporting shortcuts and operational records summary.'],
     ];
@@ -98,7 +98,7 @@
                 <div class="flex items-center gap-3">
                     <span class="flex h-12 w-12 items-center justify-center rounded-lg border border-secondary-fixed/40 bg-white/10 text-secondary-fixed"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">workspace_premium</span></span>
                     <div>
-                        <div class="font-serif text-xl font-bold leading-tight">Le Charmé Suites</div>
+                        <div class="font-serif text-xl font-bold uppercase leading-tight tracking-wide">LE CHARMÉ SUITES</div>
                         <div class="mt-1 text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Owner / Management</div>
                     </div>
                 </div>

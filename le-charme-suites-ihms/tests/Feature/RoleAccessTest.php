@@ -839,7 +839,7 @@ class RoleAccessTest extends TestCase
             'rooms' => 'Room Management Overview',
             'reservations' => 'Reservations Overview',
             'checkins' => 'Check-in / Check-out Overview',
-            'billing' => 'Billing / Transactions Overview',
+            'billing' => 'Billing &amp; Transactions Overview',
             'housekeeping' => 'Housekeeping Monitor',
             'reports' => 'Reports &amp; Records Overview',
         ] as $page => $heading) {
