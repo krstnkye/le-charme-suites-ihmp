@@ -837,6 +837,9 @@ class RoleAccessTest extends TestCase
         foreach ([
             'guests' => 'Guest Management Overview',
             'rooms' => 'Room Management Overview',
+            'room-inventory' => 'Room Inventory Overview',
+            'room-availability' => 'Room Availability Overview',
+            'room-status' => 'Room Status Overview',
             'reservations' => 'Reservations Overview',
             'checkins' => 'Check-in / Check-out Overview',
             'billing' => 'Billing &amp; Transactions Overview',

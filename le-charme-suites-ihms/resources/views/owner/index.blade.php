@@ -6,6 +6,7 @@
         ->map(fn ($part) => strtoupper(substr($part, 0, 1)))
         ->join('') ?: 'O';
     $activePage = $page ?? 'dashboard';
+    $activeNavKey = in_array($activePage, ['room-inventory', 'room-availability', 'room-status'], true) ? 'rooms' : $activePage;
     $occupancyRate = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) : 0;
     $ownerNav = [
         ['key' => 'dashboard', 'label' => 'Dashboard', 'icon' => 'dashboard', 'href' => route('dashboard'), 'mode' => 'View'],
@@ -24,9 +25,9 @@
         ]],
         ['items' => [
             ['key' => 'rooms', 'label' => 'Rooms', 'icon' => 'bed', 'href' => route('owner.page', ['page' => 'rooms']), 'children' => [
-                ['label' => 'Room Inventory', 'href' => route('owner.page', ['page' => 'rooms']).'#room-inventory'],
-                ['label' => 'Room Availability', 'href' => route('owner.page', ['page' => 'rooms']).'#room-availability'],
-                ['label' => 'Room Status', 'href' => route('owner.page', ['page' => 'rooms']).'#room-status'],
+                ['key' => 'room-inventory', 'label' => 'Room Inventory', 'href' => route('owner.page', ['page' => 'room-inventory'])],
+                ['key' => 'room-availability', 'label' => 'Room Availability', 'href' => route('owner.page', ['page' => 'room-availability'])],
+                ['key' => 'room-status', 'label' => 'Room Status', 'href' => route('owner.page', ['page' => 'room-status'])],
             ]],
             ['key' => 'reservations', 'label' => 'Reservations', 'icon' => 'calendar_month', 'href' => route('owner.page', ['page' => 'reservations'])],
         ]],
@@ -56,6 +57,9 @@
         'dashboard' => ['Executive Owner Dashboard', 'View-only property command overview for Le Charmé Suites.'],
         'guests' => ['Guest Management Overview', 'Read-only guest registry and stay relationship monitoring.'],
         'rooms' => ['Room Management Overview', 'Room inventory, occupancy, and maintenance readiness visibility.'],
+        'room-inventory' => ['Room Inventory Overview', 'Read-only room asset registry and inventory readiness visibility.'],
+        'room-availability' => ['Room Availability Overview', 'Read-only availability and capacity monitoring across room types.'],
+        'room-status' => ['Room Status Overview', 'Read-only occupancy, maintenance, and readiness status monitoring.'],
         'reservations' => ['Reservations Overview', 'Booking pipeline and reservation status monitoring.'],
         'checkins' => ['Check-in / Check-out Overview', 'Arrival, in-house, and departure movement visibility.'],
         'billing' => ['Billing & Transactions Overview', 'Revenue, settlement, and transaction monitoring.'],
@@ -117,14 +121,14 @@
                 @foreach ($ownerNavGroups as $group)
                     <div class="space-y-1">
                         @foreach ($group['items'] as $item)
-                            <a href="{{ $item['href'] }}" @class(['flex items-center gap-3 rounded-r-lg border-l-[3px] px-4 py-3 transition', 'border-secondary-fixed bg-primary/60 text-white' => $activePage === $item['key'], 'border-transparent text-blue-100/70 hover:bg-primary/40 hover:text-white' => $activePage !== $item['key']])>
-                                <span @class(['material-symbols-outlined text-xl', 'text-secondary-fixed' => $activePage === $item['key']])>{{ $item['icon'] }}</span>
+                            <a href="{{ $item['href'] }}" @class(['flex items-center gap-3 rounded-r-lg border-l-[3px] px-4 py-3 transition', 'border-secondary-fixed bg-primary/60 text-white' => $activeNavKey === $item['key'], 'border-transparent text-blue-100/70 hover:bg-primary/40 hover:text-white' => $activeNavKey !== $item['key']])>
+                                <span @class(['material-symbols-outlined text-xl', 'text-secondary-fixed' => $activeNavKey === $item['key']])>{{ $item['icon'] }}</span>
                                 <span class="flex-1">{{ $item['label'] }}</span>
                             </a>
                             @if (! empty($item['children']))
                                 <div class="ml-12 space-y-1 pb-1">
                                     @foreach ($item['children'] as $child)
-                                        <a href="{{ $child['href'] }}" class="block rounded px-2 py-1.5 text-xs font-semibold text-blue-100/60 transition hover:bg-primary/35 hover:text-white">{{ $child['label'] }}</a>
+                                        <a href="{{ $child['href'] }}" @class(['block rounded px-2 py-1.5 text-xs font-semibold transition', 'bg-secondary-fixed/15 text-secondary-fixed' => ($child['key'] ?? null) === $activePage, 'text-blue-100/60 hover:bg-primary/35 hover:text-white' => ($child['key'] ?? null) !== $activePage])>{{ $child['label'] }}</a>
                                     @endforeach
                                 </div>
                             @endif
@@ -165,7 +169,7 @@
                 @include('owner.partials.dashboard')
             @elseif ($activePage === 'guests')
                 @include('owner.partials.guests')
-            @elseif ($activePage === 'rooms')
+            @elseif (in_array($activePage, ['rooms', 'room-inventory', 'room-availability', 'room-status'], true))
                 @include('owner.partials.rooms')
             @else
             <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">

@@ -7,6 +7,13 @@
     $averageRate = $rooms->avg('rate') ?? 0;
     $highestCapacity = $rooms->max('capacity') ?? 0;
     $roomTypes = $rooms->groupBy('room_type');
+    $roomPageCopy = [
+        'rooms' => ['Room Management Overview', 'Room inventory, occupancy, availability, and maintenance readiness visibility across all Le Charmé Suites rooms.'],
+        'room-inventory' => ['Room Inventory Overview', 'Detailed read-only room asset registry with nightly rates, capacity, and operational owner ledger status.'],
+        'room-availability' => ['Room Availability Overview', 'Executive availability monitoring across room types, capacity, and booking readiness segments.'],
+        'room-status' => ['Room Status Overview', 'Read-only occupancy, reserved, cleaning, and maintenance status monitoring for owner review.'],
+    ];
+    [$roomHeroTitle, $roomHeroSubtitle] = $roomPageCopy[$activePage] ?? $roomPageCopy['rooms'];
     $statusBadge = [
         'available' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
         'occupied' => 'bg-rose-50 text-rose-700 border-rose-200',
@@ -33,9 +40,9 @@
                 <span class="h-1.5 w-1.5 rounded-full bg-secondary-fixed"></span>
                 Executive Monitoring
             </div>
-            <h2 class="font-serif text-4xl font-extrabold leading-tight">Room Management Overview</h2>
+            <h2 class="font-serif text-4xl font-extrabold leading-tight">{{ $roomHeroTitle }}</h2>
             <p class="text-sm leading-6 text-slate-300">
-                Room inventory, occupancy, availability, and maintenance readiness visibility across all Le Charmé Suites rooms. Owner access remains read-only.
+                {{ $roomHeroSubtitle }} Owner access remains read-only.
             </p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-5 rounded-xl border border-white/10 bg-primary-container/70 p-5 shadow-inner sm:grid-cols-4">

@@ -15,7 +15,7 @@ class OwnerController extends Controller
 {
     public function __invoke(string $page = 'dashboard'): View
     {
-        $allowedPages = ['dashboard', 'guests', 'rooms', 'reservations', 'checkins', 'billing', 'housekeeping', 'reports'];
+        $allowedPages = ['dashboard', 'guests', 'rooms', 'room-inventory', 'room-availability', 'room-status', 'reservations', 'checkins', 'billing', 'housekeeping', 'reports'];
         abort_unless(in_array($page, $allowedPages, true), 404);
 
         $today = now(config('app.timezone'))->toDateString();
