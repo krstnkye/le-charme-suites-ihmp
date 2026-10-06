@@ -18,6 +18,8 @@
         ['label' => 'Corporate Direct Contracts', 'amount' => $pipelineRevenue * .30, 'percent' => 30, 'class' => 'bg-secondary'],
         ['label' => 'OTA / Web Channels', 'amount' => $pipelineRevenue * .25, 'percent' => 25, 'class' => 'bg-slate-400'],
     ];
+    $filterStart = now('Asia/Manila')->toDateString();
+    $filterEnd = now('Asia/Manila')->addDays(14)->toDateString();
 @endphp
 
 <section class="relative overflow-hidden rounded-2xl border border-secondary-fixed/20 bg-primary-container p-7 text-white shadow-xl">
@@ -102,21 +104,26 @@
                 <h3 class="font-serif text-2xl font-bold text-primary">Reservation Pipeline</h3>
                 <p class="mt-1 text-xs text-slate-500">Recent reservations and their current state. Forward bookings synchronized from Subic Bay Central concierge and distribution channels.</p>
             </div>
-            <div class="flex flex-wrap items-center gap-1.5 rounded-lg bg-surface-mid p-1 text-xs font-bold">
-                <span class="rounded bg-white px-3 py-1.5 text-primary shadow-sm">All ({{ $reservations->count() }})</span>
-                <span class="px-3 py-1.5 text-slate-600">Confirmed ({{ $confirmedReservations }})</span>
-                <span class="px-3 py-1.5 text-slate-600">Pending ({{ $pendingReservations }})</span>
-                <span class="px-3 py-1.5 text-slate-600">Occupied ({{ $inHouseReservations }})</span>
+            <div class="flex flex-wrap items-center gap-1.5 rounded-lg bg-surface-mid p-1 text-xs font-bold" aria-label="Reservation status filters">
+                <button type="button" class="rounded bg-white px-3 py-1.5 text-primary shadow-sm" data-reservation-filter="all">All (<span id="reservation-count-all">{{ $reservations->count() }}</span>)</button>
+                <button type="button" class="px-3 py-1.5 text-slate-600 transition hover:text-primary" data-reservation-filter="confirmed">Confirmed (<span id="reservation-count-confirmed">{{ $confirmedReservations }}</span>)</button>
+                <button type="button" class="px-3 py-1.5 text-slate-600 transition hover:text-primary" data-reservation-filter="pending">Pending (<span id="reservation-count-pending">{{ $pendingReservations }}</span>)</button>
+                <button type="button" class="px-3 py-1.5 text-slate-600 transition hover:text-primary" data-reservation-filter="occupied">Occupied (<span id="reservation-count-occupied">{{ $inHouseReservations }}</span>)</button>
             </div>
         </div>
         <div class="mt-5 flex flex-col items-center gap-3 sm:flex-row">
             <div class="relative w-full flex-1">
                 <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                <input class="w-full rounded border border-line bg-surface py-2 pl-10 pr-4 text-sm text-primary placeholder:text-slate-400 focus:border-secondary focus:ring-secondary/30" placeholder="Search reservation #, guest name, contact, or booking record..." type="text" readonly>
+                <input id="ownerReservationSearch" class="w-full rounded border border-line bg-surface py-2 pl-10 pr-4 text-sm text-primary placeholder:text-slate-400 focus:border-secondary focus:ring-secondary/30" placeholder="Search reservation #, guest name, contact, or booking record..." type="search" autocomplete="off">
             </div>
             <div class="flex w-full items-center gap-2 sm:w-auto">
-                <span class="inline-flex items-center rounded border border-line bg-surface px-3 py-2 text-xs text-slate-600"><span class="material-symbols-outlined mr-1.5 text-sm text-secondary">date_range</span>{{ now('Asia/Manila')->format('M d') }} - {{ now('Asia/Manila')->addDays(14)->format('M d, Y') }}</span>
-                <span class="inline-flex items-center rounded border border-line bg-surface px-3 py-2 text-xs font-semibold text-slate-600"><span class="material-symbols-outlined mr-1 text-sm">filter_list</span>Filters</span>
+                <label class="inline-flex items-center gap-2 rounded border border-line bg-surface px-3 py-1.5 text-xs text-slate-600">
+                    <span class="material-symbols-outlined text-sm text-secondary">date_range</span>
+                    <input id="ownerReservationStart" class="w-32 border-0 bg-transparent p-0 text-xs focus:ring-0" type="date" value="{{ $filterStart }}">
+                    <span>-</span>
+                    <input id="ownerReservationEnd" class="w-32 border-0 bg-transparent p-0 text-xs focus:ring-0" type="date" value="{{ $filterEnd }}">
+                </label>
+                <button id="ownerReservationReset" type="button" class="inline-flex items-center rounded border border-line bg-surface px-3 py-2 text-xs font-semibold text-slate-600 transition hover:border-secondary hover:text-primary"><span class="material-symbols-outlined mr-1 text-sm">restart_alt</span>Reset</button>
             </div>
         </div>
     </div>
@@ -141,7 +148,31 @@
                         $total = ($reservation->room?->rate ?? 0) * $nights;
                         $status = strtolower($reservation->status);
                     @endphp
-                    <tr @class(['transition hover:bg-surface-low', 'bg-secondary-fixed/10' => $status === 'checked_in'])>
+                    @php
+                        $statusGroup = match (true) {
+                            in_array($status, ['reserved', 'confirmed'], true) => 'confirmed',
+                            in_array($status, ['pending', 'awaiting_guarantee'], true) => 'pending',
+                            $status === 'checked_in' => 'occupied',
+                            default => $status,
+                        };
+                        $searchText = implode(' ', [
+                            'RES-'.str_pad((string) $reservation->id, 5, '0', STR_PAD_LEFT),
+                            'Booking Record '.$reservation->id,
+                            $reservation->guest?->full_name,
+                            $reservation->guest?->email,
+                            $reservation->room?->room_number,
+                            $reservation->room?->room_type,
+                            $reservation->status,
+                        ]);
+                    @endphp
+                    <tr
+                        @class(['transition hover:bg-surface-low', 'bg-secondary-fixed/10' => $status === 'checked_in'])
+                        data-reservation-row
+                        data-search="{{ e(strtolower($searchText)) }}"
+                        data-status="{{ $statusGroup }}"
+                        data-check-in="{{ $reservation->check_in_date?->toDateString() }}"
+                        data-total="{{ $total }}"
+                    >
                         <td class="px-5 py-3.5">
                             <div class="font-mono text-xs font-bold text-primary">#RES-{{ str_pad((string) $reservation->id, 5, '0', STR_PAD_LEFT) }}</div>
                             <div class="text-[11px] text-slate-400">Booking Record #{{ $reservation->id }}</div>
@@ -185,12 +216,17 @@
                         <td colspan="8" class="px-6 py-12 text-center text-sm text-slate-500">No reservation records are waiting in the owner pipeline right now.</td>
                     </tr>
                 @endforelse
+                @if ($reservations->isNotEmpty())
+                    <tr id="reservationNoMatches" class="hidden">
+                        <td colspan="8" class="px-6 py-12 text-center text-sm text-slate-500">No reservation records match the current owner filters.</td>
+                    </tr>
+                @endif
             </tbody>
         </table>
     </div>
     <div class="flex flex-col items-center justify-between gap-3 border-t border-line bg-surface px-5 py-4 text-xs text-slate-500 sm:flex-row">
-        <span>Showing <strong>{{ $reservations->count() }}</strong> active forward reservations</span>
-        <span>Total Guaranteed Pipeline: <strong class="text-primary">PHP {{ number_format($pipelineRevenue, 2) }}</strong></span>
+        <span>Showing <strong id="reservationVisibleCount">{{ $reservations->count() }}</strong> active forward reservations</span>
+        <span>Total Guaranteed Pipeline: <strong id="reservationVisibleTotal" class="text-primary">PHP {{ number_format($pipelineRevenue, 2) }}</strong></span>
     </div>
 </section>
 
@@ -232,3 +268,100 @@
         </div>
     </div>
 </section>
+
+<script>
+    (() => {
+        const rows = Array.from(document.querySelectorAll('[data-reservation-row]'));
+        if (!rows.length) {
+            return;
+        }
+
+        const searchInput = document.getElementById('ownerReservationSearch');
+        const startInput = document.getElementById('ownerReservationStart');
+        const endInput = document.getElementById('ownerReservationEnd');
+        const resetButton = document.getElementById('ownerReservationReset');
+        const filterButtons = Array.from(document.querySelectorAll('[data-reservation-filter]'));
+        const visibleCount = document.getElementById('reservationVisibleCount');
+        const visibleTotal = document.getElementById('reservationVisibleTotal');
+        const noMatches = document.getElementById('reservationNoMatches');
+        let activeStatus = 'all';
+
+        const peso = new Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency: 'PHP',
+            minimumFractionDigits: 2,
+        });
+
+        const setActiveButton = () => {
+            filterButtons.forEach((button) => {
+                const active = button.dataset.reservationFilter === activeStatus;
+                button.classList.toggle('bg-white', active);
+                button.classList.toggle('text-primary', active);
+                button.classList.toggle('shadow-sm', active);
+                button.classList.toggle('text-slate-600', !active);
+            });
+        };
+
+        const applyFilters = () => {
+            const query = (searchInput?.value || '').trim().toLowerCase();
+            const start = startInput?.value || '';
+            const end = endInput?.value || '';
+            let count = 0;
+            let total = 0;
+
+            rows.forEach((row) => {
+                const textMatch = !query || row.dataset.search.includes(query);
+                const statusMatch = activeStatus === 'all' || row.dataset.status === activeStatus;
+                const checkIn = row.dataset.checkIn || '';
+                const startMatch = !start || !checkIn || checkIn >= start;
+                const endMatch = !end || !checkIn || checkIn <= end;
+                const show = textMatch && statusMatch && startMatch && endMatch;
+
+                row.classList.toggle('hidden', !show);
+                if (show) {
+                    count += 1;
+                    total += Number(row.dataset.total || 0);
+                }
+            });
+
+            if (visibleCount) {
+                visibleCount.textContent = String(count);
+            }
+
+            if (visibleTotal) {
+                visibleTotal.textContent = peso.format(total).replace('PHP', 'PHP ');
+            }
+
+            noMatches?.classList.toggle('hidden', count !== 0);
+            setActiveButton();
+        };
+
+        filterButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                activeStatus = button.dataset.reservationFilter || 'all';
+                applyFilters();
+            });
+        });
+
+        [searchInput, startInput, endInput].forEach((control) => {
+            control?.addEventListener('input', applyFilters);
+            control?.addEventListener('change', applyFilters);
+        });
+
+        resetButton?.addEventListener('click', () => {
+            activeStatus = 'all';
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            if (startInput) {
+                startInput.value = '{{ $filterStart }}';
+            }
+            if (endInput) {
+                endInput.value = '{{ $filterEnd }}';
+            }
+            applyFilters();
+        });
+
+        applyFilters();
+    })();
+</script>
