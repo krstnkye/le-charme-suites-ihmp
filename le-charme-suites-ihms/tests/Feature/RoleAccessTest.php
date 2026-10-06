@@ -762,6 +762,6 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get('/check-outs')
             ->assertOk()
-            ->assertSee('Daily Check-Outs & Departures Console');
+            ->assertSee('POS Incidentals &amp; Direct Charge Terminal', false);
     }
 }

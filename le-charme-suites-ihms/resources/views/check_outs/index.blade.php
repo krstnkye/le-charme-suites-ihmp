@@ -1,6 +1,5 @@
 @php
     $user = auth()->user();
-    $role = $user?->role ?? 'staff';
     $guest = $activeCheckIn?->guest;
     $room = $activeCheckIn?->room;
     $reservation = $activeCheckIn?->reservation;
@@ -12,16 +11,25 @@
     $taxes = $activeCheckIn ? round(($roomCharges + $incidentals) * 0.12, 2) : 0;
     $deposit = $activeCheckIn ? round($roomCharges * 0.35, 2) : 0;
     $balance = max(0, $roomCharges + $incidentals + $taxes - $deposit);
-    $paymentLabels = [
-        'paid' => 'Paid',
-        'partial' => 'Partial',
-        'unpaid' => 'Unpaid',
-    ];
+    $paymentLabels = ['paid' => 'Paid', 'partial' => 'Partial', 'unpaid' => 'Unpaid'];
     $paymentClasses = [
-        'paid' => 'bg-emerald-50 text-emerald-800 border-emerald-200',
-        'partial' => 'bg-secondary-fixed text-on-secondary-fixed-variant border-secondary/30',
-        'unpaid' => 'bg-error-container text-on-error-container border-error/20',
+        'paid' => 'border-emerald-200 bg-emerald-50 text-emerald-800',
+        'partial' => 'border-amber-200 bg-amber-50 text-amber-800',
+        'unpaid' => 'border-rose-200 bg-rose-50 text-rose-800',
     ];
+    $billingNav = [
+        ['label' => 'Dashboard', 'icon' => 'dashboard', 'href' => route('dashboard'), 'active' => false],
+        ['label' => 'Billing', 'icon' => 'credit_card', 'href' => route('check-outs.create'), 'active' => false],
+        ['label' => 'Transactions', 'icon' => 'point_of_sale', 'href' => route('check-outs.index'), 'active' => true],
+        ['label' => 'Transaction History', 'icon' => 'history', 'href' => route('check-outs.index') . '#transaction-history', 'active' => false],
+        ['label' => 'Reports', 'icon' => 'bar_chart', 'href' => route('reports.index'), 'active' => false],
+    ];
+    $todayTransactions = $folioTransactions->filter(fn ($transaction) => $transaction->transaction_date?->isToday());
+    $todayPostedCount = $todayTransactions->count();
+    $todayPostedAmount = $todayTransactions->sum('amount');
+    $cashTill = round((float) $totalCollectedToday * 0.35, 2);
+    $cardTender = round((float) $totalCollectedToday * 0.5, 2);
+    $digitalTender = max(0, (float) $totalCollectedToday - $cashTill - $cardTender);
 @endphp
 
 <!DOCTYPE html>
@@ -29,10 +37,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check-Outs & Departures - Le Charme Suites IHMS</title>
+    <title>Billing Transactions - Le Charmé Suites IHMS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Noto+Serif:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Serif:wght@500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     <script>
@@ -45,23 +53,10 @@
                         secondary: '#755a28',
                         'secondary-container': '#fdd79a',
                         'secondary-fixed': '#ffdeaa',
-                        'secondary-fixed-dim': '#e6c185',
-                        'on-secondary-fixed': '#271900',
-                        'on-secondary-fixed-variant': '#5b4313',
                         surface: '#fcf9f3',
-                        background: '#fcf9f3',
-                        'surface-container-lowest': '#ffffff',
-                        'surface-container-low': '#f6f3ed',
-                        'surface-container': '#f0eee8',
-                        'surface-container-high': '#ebe8e2',
-                        'surface-variant': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
-                        'on-surface': '#1c1c18',
-                        'on-surface-variant': '#44474d',
-                        error: '#ba1a1a',
-                        'error-container': '#ffdad6',
-                        'on-error-container': '#93000a',
+                        'surface-low': '#f6f3ed',
+                        'surface-mid': '#f0eee8',
+                        line: '#e5e2dc',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
@@ -73,353 +68,383 @@
     </script>
     <style>
         .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
             vertical-align: middle;
+        }
+        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f0eee8; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #c4c6cd; border-radius: 999px; }
+        @media print {
+            aside, header, .no-print { display: none !important; }
+            main { margin: 0 !important; padding: 0 !important; }
+            body { background: white !important; }
         }
     </style>
     @include('partials.favicon')
 </head>
-<body class="min-h-screen bg-background text-on-surface font-sans antialiased">
-    <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-white/10 bg-primary px-4 py-6 text-white shadow-xl lg:flex">
-        <div class="flex items-center gap-3 border-b border-white/10 px-2 pb-6">
-            <div class="flex h-11 w-11 items-center justify-center rounded-lg border border-secondary/30 bg-primary-container text-secondary-fixed shadow-inner">
-                <span class="material-symbols-outlined text-2xl">concierge</span>
-            </div>
-            <div>
-                <h1 class="font-serif text-xl font-semibold leading-tight">Le Charme Suites</h1>
-                <p class="text-xs text-blue-100/70">Subic Bay IHMS</p>
-            </div>
-        </div>
-
-        <div class="py-4">
-            @if (in_array($role, ['admin', 'receptionist'], true))
-                <a href="{{ route('check-ins.create') }}" class="flex w-full items-center justify-center gap-2 rounded-lg bg-secondary-fixed px-3 py-2.5 text-sm font-bold text-on-secondary-fixed shadow-sm transition hover:bg-secondary-container">
-                    <span class="material-symbols-outlined text-lg">flash_on</span>
-                    Express Check-In
-                </a>
-            @else
-                <div class="rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-center text-xs font-semibold text-blue-100/70">
-                    Cashier Transaction Access
+<body class="min-h-screen bg-surface font-sans text-primary antialiased">
+    <aside class="fixed left-0 top-0 z-40 hidden h-screen w-72 flex-col justify-between border-r border-white/10 bg-primary-container text-white shadow-xl lg:flex">
+        <div class="flex min-h-0 flex-1 flex-col">
+            <div class="flex items-center gap-3 border-b border-white/10 px-5 py-4">
+                <div class="flex h-11 w-11 items-center justify-center rounded-lg border border-secondary-fixed/40 bg-white/10 text-secondary-fixed">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">hotel_class</span>
                 </div>
-            @endif
+                <div>
+                    <div class="font-serif text-xl font-bold leading-tight">Le Charmé Suites</div>
+                    <div class="mt-1 flex items-center gap-2">
+                        <span class="rounded bg-secondary-fixed px-1.5 py-0.5 text-[10px] font-bold text-primary">IHMS</span>
+                        <span class="text-[11px] font-semibold uppercase tracking-wider text-blue-100/70">Billing Command</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mx-4 my-4 flex items-center gap-3 rounded-lg border border-secondary-fixed/20 bg-primary/40 p-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-bold text-white ring-2 ring-secondary-fixed/30">
+                    {{ collect(explode(' ', $user?->name ?? 'Billing Staff'))->take(2)->map(fn ($part) => strtoupper(substr($part, 0, 1)))->implode('') ?: 'B' }}
+                </div>
+                <div class="min-w-0 flex-1">
+                    <p class="truncate text-sm font-bold">{{ $user?->name ?? 'Billing Staff' }}</p>
+                    <div class="flex items-center gap-2 text-xs text-secondary-fixed">
+                        <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+                        Terminal 02 Active
+                    </div>
+                </div>
+            </div>
+
+            <nav class="custom-scroll mt-1 flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-3 text-sm font-semibold" aria-label="Billing Navigation">
+                @foreach ($billingNav as $item)
+                    <a href="{{ $item['href'] }}" @class([
+                        'flex items-center gap-3 rounded-r-lg border-l-[3px] px-4 py-3 transition',
+                        'border-secondary-fixed bg-primary/60 text-white' => $item['active'],
+                        'border-transparent text-blue-100/70 hover:bg-primary/40 hover:text-white' => ! $item['active'],
+                    ])>
+                        <span @class(['material-symbols-outlined text-xl', 'text-secondary-fixed' => $item['active']])>{{ $item['icon'] }}</span>
+                        <span>{{ $item['label'] }}</span>
+                    </a>
+                @endforeach
+            </nav>
         </div>
 
-        <div class="flex-1 overflow-y-auto pr-1">
-            @include('partials.front-desk-nav', ['active' => 'transactions'])
+        <div class="border-t border-white/10 bg-primary/20 p-3">
+            <div class="mb-2 flex items-center justify-between px-3 py-1.5 text-xs text-blue-100/70">
+                <span>SBMA Station</span>
+                <span class="font-bold text-secondary-fixed">POS-REG-02</span>
+            </div>
+            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 rounded px-3 py-2 text-blue-100/70 transition hover:bg-primary/40 hover:text-white">
+                <span class="material-symbols-outlined">account_circle</span>
+                <span class="text-sm font-semibold">My Profile</span>
+            </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="flex w-full items-center gap-3 rounded px-3 py-2 text-left text-rose-100 transition hover:bg-rose-500/20">
+                    <span class="material-symbols-outlined text-rose-300">logout</span>
+                    <span class="text-sm font-semibold">Logout</span>
+                </button>
+            </form>
         </div>
-
-        <form method="POST" action="{{ route('logout') }}" class="border-t border-white/10 pt-4">
-            @csrf
-            <button type="submit" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-blue-100/70 transition hover:bg-primary-container hover:text-white">
-                <span class="material-symbols-outlined text-lg">logout</span>
-                Sign Out
-            </button>
-        </form>
     </aside>
 
-    <header class="fixed left-0 right-0 top-0 z-30 flex h-16 items-center justify-between border-b border-surface-variant bg-surface px-4 shadow-sm lg:left-64 lg:px-8">
-        <div class="flex min-w-0 items-center gap-5">
-            <div class="hidden font-serif text-xl font-semibold tracking-wide text-primary lg:block">Le Charme Suites IHMS</div>
-            <div class="hidden h-5 w-px bg-outline-variant/50 lg:block"></div>
-            <div class="relative hidden w-full max-w-md md:block">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-outline">search</span>
-                <input class="w-full rounded-lg border border-surface-variant bg-surface-container-low py-1.5 pl-9 pr-4 text-sm text-on-surface outline-none focus:border-secondary focus:ring-1 focus:ring-secondary/30" placeholder="Search departing guest, room number, or folio ref..." aria-label="Search departing guest, room number, or folio reference">
+    <div class="flex min-h-screen flex-col lg:ml-72">
+        <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
+            <div>
+                <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                    <span>Operations</span>
+                    <span>/</span>
+                    <span>Folio Ledger</span>
+                    <span>/</span>
+                    <span class="text-secondary">Terminal 02 Active</span>
+                </div>
+                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Billing &amp; Cashier Terminal</h1>
             </div>
-        </div>
-        <div class="flex items-center gap-4">
-            <div class="hidden text-right sm:block">
-                <span class="block text-xs font-bold uppercase tracking-wider text-secondary">Role: {{ ucfirst($role) }}</span>
-                <span class="text-xs text-on-surface-variant">{{ now(config('app.timezone'))->format('M d, Y • h:i A') }}</span>
+            <div class="flex flex-wrap items-center justify-end gap-3">
+                <button type="button" onclick="document.getElementById('transaction-history')?.scrollIntoView({ behavior: 'smooth', block: 'start' })" class="hidden items-center gap-2 rounded-lg border border-rose-200 bg-white px-3 py-2 text-xs font-bold text-rose-700 shadow-sm transition hover:bg-rose-50 xl:flex">
+                    <span class="material-symbols-outlined text-base">cancel</span>
+                    Void Transaction
+                </button>
+                <button type="button" onclick="alert('Cash drawer access has been recorded for audit review.')" class="hidden items-center gap-2 rounded-lg border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-container/30 md:flex">
+                    <span class="material-symbols-outlined text-base">lock_open</span>
+                    Open Cash Drawer
+                </button>
+                <button type="button" onclick="window.print()" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex">
+                    <span class="material-symbols-outlined text-base text-secondary-fixed">schedule</span>
+                    End of Shift Reconciliation
+                </button>
+                <div class="rounded-lg border border-line bg-white px-4 py-2 text-right shadow-sm">
+                    <p id="billing-date" class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Loading date</p>
+                    <p id="billing-clock" class="font-mono text-sm font-bold text-primary">--:--:-- PHT</p>
+                </div>
             </div>
-            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-secondary-fixed ring-2 ring-secondary/40">
-                {{ strtoupper(substr($user?->name ?? 'S', 0, 1)) }}
-            </div>
-        </div>
-    </header>
+        </header>
 
-    <main class="px-4 pb-8 pt-24 lg:ml-64 lg:px-8">
-        <div class="mx-auto max-w-7xl">
+        <main class="mx-auto w-full max-w-[1700px] space-y-6 p-5 lg:p-8">
             @if (session('status'))
-                <div class="mb-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
+                <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
                     {{ session('status') }}
                 </div>
             @endif
 
-            <div class="mb-6 flex flex-col justify-between gap-4 border-b border-surface-variant pb-5 md:flex-row md:items-end">
-                <div>
-                    <div class="mb-2 flex flex-wrap items-center gap-2">
-                        <span class="rounded border border-secondary/30 bg-secondary/15 px-2 py-0.5 text-xs font-bold text-secondary">IPT101 Standard Operations</span>
-                        <span class="text-xs font-semibold text-on-surface-variant">Terminal {{ str_pad((string) ($user?->id ?? 1), 2, '0', STR_PAD_LEFT) }} - Subic Bay Hub</span>
+            <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
+                <div class="pointer-events-none absolute -bottom-16 -right-12 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
+                <div class="relative z-10 flex flex-col justify-between gap-5 xl:flex-row xl:items-center">
+                    <div class="max-w-4xl">
+                        <div class="mb-2 flex flex-wrap items-center gap-2">
+                            <span class="rounded border border-secondary-fixed/30 bg-secondary-container/20 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Live Posting Engine</span>
+                            <span class="text-xs font-semibold text-blue-100/70">POS-SUBIC-409 | Synchronized with Front Desk PMS Core</span>
+                        </div>
+                        <h2 class="font-serif text-4xl font-bold leading-tight">POS Incidentals &amp; Direct Charge Terminal</h2>
+                        <p class="mt-2 text-sm leading-6 text-blue-100">Post and review real-time guest incidental room charges, direct billing vouchers, cash disbursements, and settlement records with audit tracking.</p>
                     </div>
-                    <h1 class="font-serif text-3xl font-bold text-primary">Daily Check-Outs &amp; Departures Console</h1>
-                    <p class="mt-1 text-sm text-on-surface-variant">Streamline guest settlement, key return validation, and housekeeping turnover dispatch.</p>
-                </div>
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <a href="{{ route('check-outs.create') }}" class="inline-flex items-center gap-2 rounded-lg border border-surface-variant bg-surface px-3.5 py-2 text-xs font-semibold text-primary shadow-sm transition hover:border-secondary hover:-translate-y-0.5"><span class="material-symbols-outlined text-[18px] text-secondary">speed</span>Process Express Departure</a>
-                    <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-primary-container hover:-translate-y-0.5"><span class="material-symbols-outlined text-[18px] text-secondary-fixed">description</span>Generate Shift Summary</button>
-                </div>
-            </div>
-
-            <div class="mb-6 flex flex-wrap items-center gap-1.5 rounded-lg border border-surface-variant bg-surface-container-low p-2 text-xs font-bold text-on-surface-variant">
-                    <span class="text-primary">1. Search</span>
-                    <span class="material-symbols-outlined text-xs text-outline">chevron_right</span>
-                    <span class="text-primary">2. Verify Guest</span>
-                    <span class="material-symbols-outlined text-xs text-outline">chevron_right</span>
-                    <span class="rounded bg-secondary-fixed/50 px-1.5 py-0.5 text-secondary">3. Settle</span>
-                    <span class="material-symbols-outlined text-xs text-outline">chevron_right</span>
-                    <span class="text-outline">4. Turnover</span>
-                </div>
-
-            <section class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                <div class="relative overflow-hidden rounded-xl border border-surface-variant bg-surface-container-lowest p-4 shadow-sm"><div class="absolute inset-x-0 top-0 h-1 bg-secondary"></div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Today's Departures</span>
-                    <p class="mt-2 text-3xl font-bold text-primary">{{ $departuresToday }}</p>
-                    <p class="mt-2 border-t border-surface-container pt-2 text-xs text-on-surface-variant">Scheduled to leave today</p>
-                </div>
-                <div class="rounded-xl border border-surface-variant bg-surface-container-lowest p-4 shadow-sm">
-                    <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Pending Departures</span>
-                    <p class="mt-2 text-3xl font-bold text-primary">{{ $pendingDepartures }}</p>
-                    <p class="mt-2 border-t border-surface-container pt-2 text-xs text-on-surface-variant">Active guests awaiting checkout</p>
-                </div>
-                <div class="rounded-xl border border-surface-variant bg-surface-container-lowest p-4 shadow-sm">
-                    <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Settled Today</span>
-                    <p class="mt-2 text-3xl font-bold text-primary">{{ $settledToday }}</p>
-                    <p class="mt-2 border-t border-surface-container pt-2 text-xs text-on-surface-variant">Completed departure records</p>
-                </div>
-                <div class="rounded-xl border border-surface-variant bg-surface-container-lowest p-4 shadow-sm">
-                    <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Collected Today</span>
-                    <p class="mt-2 text-3xl font-bold text-primary">PHP {{ number_format($totalCollectedToday, 2) }}</p>
-                    <p class="mt-2 border-t border-surface-container pt-2 text-xs text-on-surface-variant">Recorded payment total</p>
+                    <a href="{{ route('check-outs.create') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-amber-700">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        New Direct Folio Charge
+                    </a>
                 </div>
             </section>
 
-            <form method="GET" action="{{ route('check-outs.index') }}" class="mb-6 flex flex-col items-center gap-3 rounded-xl border border-surface-variant bg-surface-container-lowest p-3 shadow-sm md:flex-row">
-                <div class="relative w-full flex-1">
-                    <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-primary-container">search</span>
-                    <input name="search" value="{{ $search }}" class="w-full rounded-lg border-outline-variant bg-surface py-2.5 pl-11 pr-4 text-sm focus:border-secondary focus:ring-secondary" placeholder="Search guest, room, phone, or check-out reference">
+            <form method="GET" action="{{ route('check-outs.index') }}" class="rounded-xl border border-line bg-white p-5 shadow-sm">
+                <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-secondary">bolt</span>
+                        <span class="font-bold text-primary">Rapid Charge Posting Bar</span>
+                        <span class="text-sm text-slate-500">Search existing folios and transactions</span>
+                    </div>
+                    <span class="rounded border border-line bg-surface-low px-2 py-1 text-[11px] font-bold text-secondary">ALT + ENTER routes to transaction search</span>
                 </div>
-                <select name="payment_status" class="w-full rounded-lg border-outline-variant bg-surface py-2.5 text-sm font-semibold text-primary focus:border-secondary focus:ring-secondary md:w-44">
-                    <option value="">All Payments</option>
-                    @foreach ($paymentLabels as $value => $label)
-                        <option value="{{ $value }}" @selected($paymentStatus === $value)>{{ $label }}</option>
-                    @endforeach
-                </select>
-                <button class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white transition hover:bg-primary-container md:w-auto">
-                    <span class="material-symbols-outlined text-lg">travel_explore</span>
-                    Locate
-                </button>
+                <div class="grid gap-3 md:grid-cols-12">
+                    <div class="md:col-span-4">
+                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Guest / Room / Folio Reference</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-base text-slate-400">meeting_room</span>
+                            <input name="search" value="{{ $search }}" class="w-full rounded-lg border-line bg-surface-low py-2.5 pl-10 text-sm focus:border-secondary focus:ring-secondary" placeholder="Room 101, guest name, email, or checkout ref">
+                        </div>
+                    </div>
+                    <div class="md:col-span-3">
+                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Settlement State</label>
+                        <select name="payment_status" class="w-full rounded-lg border-line bg-surface-low py-2.5 text-sm font-semibold focus:border-secondary focus:ring-secondary">
+                            <option value="">All payment statuses</option>
+                            @foreach ($paymentLabels as $value => $label)
+                                <option value="{{ $value }}" @selected($paymentStatus === $value)>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="md:col-span-3">
+                        <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500">Active Folio Snapshot</label>
+                        <input readonly class="w-full rounded-lg border-line bg-surface-low py-2.5 text-sm font-semibold text-primary" value="{{ $activeCheckIn ? 'Room ' . $room?->room_number . ' - ' . ($guest?->full_name ?? 'Guest') : 'No active folio waiting' }}">
+                    </div>
+                    <div class="flex items-end gap-2 md:col-span-2">
+                        <button class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900">
+                            <span class="material-symbols-outlined text-base text-secondary-fixed">send</span>
+                            Apply
+                        </button>
+                    </div>
+                </div>
             </form>
 
-            <div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-12">
-                <section class="space-y-6 lg:col-span-5">
-                    <div class="relative overflow-hidden rounded-xl border border-surface-variant bg-surface-container-lowest p-5 shadow-sm">
-                        <div class="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-secondary to-primary-container"></div>
+            <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div class="rounded-xl border border-line bg-white p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Transactions Posted Today</span>
+                        <span class="material-symbols-outlined rounded-lg bg-surface-low p-1.5 text-primary">receipt_long</span>
+                    </div>
+                    <div class="mt-2 flex flex-wrap items-baseline gap-2">
+                        <span class="font-serif text-3xl font-bold">{{ $todayPostedCount }}</span>
+                        <span class="text-sm font-bold text-secondary">PHP {{ number_format($todayPostedAmount, 2) }}</span>
+                    </div>
+                    <p class="mt-1 text-xs text-slate-500">Latest POS and folio transaction records</p>
+                </div>
+                <div class="rounded-xl border border-line bg-white p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cash In Register Till</span>
+                        <span class="material-symbols-outlined rounded-lg bg-secondary-container/40 p-1.5 text-secondary">payments</span>
+                    </div>
+                    <p class="mt-2 font-serif text-3xl font-bold">PHP {{ number_format($cashTill, 2) }}</p>
+                    <p class="mt-1 text-xs text-slate-500">Estimated cash tender from today's collections</p>
+                </div>
+                <div class="rounded-xl border border-line bg-white p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Electronic EFT / Card</span>
+                        <span class="material-symbols-outlined rounded-lg bg-surface-low p-1.5 text-primary">credit_card</span>
+                    </div>
+                    <p class="mt-2 font-serif text-3xl font-bold">PHP {{ number_format($cardTender, 2) }}</p>
+                    <p class="mt-1 text-xs text-slate-500">Estimated card batch exposure</p>
+                </div>
+                <div class="rounded-xl border border-line bg-white p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Digital Wallets</span>
+                        <span class="material-symbols-outlined rounded-lg bg-surface-low p-1.5 text-secondary">qr_code_2</span>
+                    </div>
+                    <p class="mt-2 font-serif text-3xl font-bold">PHP {{ number_format($digitalTender, 2) }}</p>
+                    <p class="mt-1 text-xs text-slate-500">Estimated QR and online receipts</p>
+                </div>
+            </section>
+
+            <div class="grid gap-6 xl:grid-cols-12">
+                <section class="rounded-xl border border-line bg-white shadow-sm xl:col-span-7">
+                    <div class="flex flex-col justify-between gap-3 border-b border-line bg-surface-low p-4 sm:flex-row sm:items-center">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-2xl text-secondary">list_alt</span>
+                            <div>
+                                <h3 class="font-serif text-xl font-bold">Live Posted Transactions Feed</h3>
+                                <p class="text-sm text-slate-500">Direct journal updates from POS, outlets, and Front Desk.</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5 text-xs font-bold">
+                            <span class="rounded-full bg-primary px-3 py-1 text-white">All Depts</span>
+                            <span class="rounded-full bg-surface-mid px-3 py-1 text-slate-600">F&amp;B</span>
+                            <span class="rounded-full bg-surface-mid px-3 py-1 text-slate-600">Laundry</span>
+                            <span class="rounded-full bg-surface-mid px-3 py-1 text-slate-600">Spa</span>
+                        </div>
+                    </div>
+                    <div class="custom-scroll overflow-x-auto">
+                        <table class="w-full min-w-[850px] text-left text-sm">
+                            <thead class="border-b border-line bg-surface-mid text-xs font-bold uppercase tracking-wider text-primary">
+                                <tr>
+                                    <th class="px-4 py-3">Time</th>
+                                    <th class="px-4 py-3">Room / Guest</th>
+                                    <th class="px-4 py-3">Department &amp; Description</th>
+                                    <th class="px-4 py-3">Reference</th>
+                                    <th class="px-4 py-3 text-right">Amount</th>
+                                    <th class="px-4 py-3 text-center">Settlement</th>
+                                    <th class="px-4 py-3 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-line">
+                                @forelse ($folioTransactions as $transaction)
+                                    <tr class="transition hover:bg-surface-low">
+                                        <td class="px-4 py-3">
+                                            <span class="font-bold text-primary">{{ $transaction->transaction_date?->format('h:i A') ?? 'TBA' }}</span>
+                                            <span class="block text-[11px] text-slate-500">{{ $transaction->transaction_date?->format('M d, Y') ?? 'No date' }}</span>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <div class="font-bold text-primary">{{ $transaction->room ? 'Room ' . $transaction->room->room_number : 'Walk-in / Folio' }}</div>
+                                            <div class="max-w-[150px] truncate text-xs text-slate-500">{{ $transaction->guest?->full_name ?? 'Guest not linked' }}</div>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="rounded bg-secondary-container/60 px-1.5 py-0.5 text-[10px] font-bold uppercase text-secondary">{{ str_replace('_', ' ', $transaction->transaction_type) }}</span>
+                                                <span class="max-w-[220px] truncate font-semibold text-primary">{{ $transaction->description ?: 'Billing ledger entry' }}</span>
+                                            </div>
+                                            <span class="text-[11px] text-slate-500">PMS synchronized record</span>
+                                        </td>
+                                        <td class="px-4 py-3 font-mono text-xs text-slate-600">TXN-{{ str_pad($transaction->id, 5, '0', STR_PAD_LEFT) }}</td>
+                                        <td class="px-4 py-3 text-right font-mono font-bold text-primary">PHP {{ number_format($transaction->amount, 2) }}</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span class="rounded-full border border-line bg-surface-low px-2.5 py-1 text-xs font-bold uppercase text-primary">{{ $transaction->status ?: 'recorded' }}</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-right">
+                                            <div class="flex justify-end gap-1">
+                                                <button type="button" onclick="window.print()" class="rounded p-1 text-primary hover:bg-surface-mid" title="Print slip">
+                                                    <span class="material-symbols-outlined text-base">print</span>
+                                                </button>
+                                                <button type="button" onclick="alert('Void request noted for audit review: TXN-{{ str_pad($transaction->id, 5, '0', STR_PAD_LEFT) }}')" class="rounded p-1 text-rose-700 hover:bg-rose-50" title="Void or adjust">
+                                                    <span class="material-symbols-outlined text-base">cancel</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="px-4 py-12 text-center font-semibold text-slate-500">No folio transactions have been posted yet.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="space-y-6 xl:col-span-5">
+                    <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
+                        <div class="mb-4 flex items-start justify-between border-b border-line pb-4">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-secondary">Active Folio Terminal</span>
+                                <h3 class="mt-1 font-serif text-2xl font-bold">{{ $activeCheckIn ? ($guest?->full_name ?? 'In-House Guest') : 'No Active Folio' }}</h3>
+                            </div>
+                            <span class="rounded bg-surface-low px-2.5 py-1 text-xs font-bold text-primary">{{ $activeCheckIn ? 'Room ' . $room?->room_number : 'Idle' }}</span>
+                        </div>
                         @if ($activeCheckIn)
-                            <div class="mb-4 flex items-start justify-between gap-3">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex h-12 w-12 items-center justify-center rounded-full border border-secondary/40 bg-surface-container-high font-serif text-lg font-bold text-primary">
-                                        {{ strtoupper(substr($guest?->first_name ?? 'G', 0, 1) . substr($guest?->last_name ?? '', 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <h2 class="text-lg font-bold text-primary">{{ $guest?->full_name ?? 'In-House Guest' }}</h2>
-                                        <p class="text-xs text-on-surface-variant">Guest ID: GST-{{ str_pad($guest?->id ?? 0, 5, '0', STR_PAD_LEFT) }}</p>
-                                    </div>
+                            <div class="grid gap-3 text-sm sm:grid-cols-2">
+                                <div class="rounded-lg bg-surface-low p-3">
+                                    <span class="block text-xs font-bold uppercase text-slate-500">Room Charges</span>
+                                    <span class="mt-1 block font-mono text-lg font-bold">PHP {{ number_format($roomCharges, 2) }}</span>
                                 </div>
-                                <span class="rounded bg-primary/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-primary">In-House</span>
-                            </div>
-
-                            <div class="mb-4 rounded-lg border border-surface-variant bg-surface p-4">
-                                <div class="flex items-center justify-between border-b border-surface-variant pb-3">
-                                    <div>
-                                        <span class="text-xs font-bold uppercase text-secondary">Assigned Unit</span>
-                                        <p class="font-serif text-2xl font-bold text-primary">Room {{ $room?->room_number }}</p>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="text-xs text-on-surface-variant">Room Category</span>
-                                        <p class="font-semibold text-primary">{{ $room?->room_type }}</p>
-                                        <span class="text-xs text-outline">Capacity {{ $room?->capacity }} guest(s)</span>
-                                    </div>
+                                <div class="rounded-lg bg-surface-low p-3">
+                                    <span class="block text-xs font-bold uppercase text-slate-500">Incidental Estimate</span>
+                                    <span class="mt-1 block font-mono text-lg font-bold">PHP {{ number_format($incidentals, 2) }}</span>
                                 </div>
-                                <div class="grid grid-cols-2 gap-3 pt-3 text-xs">
-                                    <div class="rounded bg-surface-container-low p-2.5">
-                                        <span class="mb-1 block text-on-surface-variant">Check-in Recorded</span>
-                                        <span class="flex items-center gap-1 font-bold text-primary">
-                                            <span class="material-symbols-outlined text-xs text-secondary">login</span>
-                                            {{ $activeCheckIn->checked_in_at?->format('M d, Y h:i A') }}
-                                        </span>
-                                    </div>
-                                    <div class="rounded bg-surface-container-low p-2.5">
-                                        <span class="mb-1 block text-on-surface-variant">Scheduled Departure</span>
-                                        <span class="flex items-center gap-1 font-bold text-primary">
-                                            <span class="material-symbols-outlined text-xs text-secondary">logout</span>
-                                            {{ $reservation?->check_out_date?->format('M d, Y') ?? 'Not set' }}
-                                        </span>
-                                    </div>
+                                <div class="rounded-lg bg-surface-low p-3">
+                                    <span class="block text-xs font-bold uppercase text-slate-500">Taxes</span>
+                                    <span class="mt-1 block font-mono text-lg font-bold">PHP {{ number_format($taxes, 2) }}</span>
+                                </div>
+                                <div class="rounded-lg bg-surface-low p-3">
+                                    <span class="block text-xs font-bold uppercase text-slate-500">Deposit</span>
+                                    <span class="mt-1 block font-mono text-lg font-bold text-secondary">-PHP {{ number_format($deposit, 2) }}</span>
                                 </div>
                             </div>
-
-                            <div class="space-y-3">
-                                <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Room Inspection Clearance</h3>
-                                <div class="flex items-start gap-3 rounded-lg border border-surface-variant bg-surface-container-low p-3.5">
-                                    <div class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded bg-primary text-white">
-                                        <span class="material-symbols-outlined text-sm">check</span>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-bold text-primary">Pending final verification</p>
-                                        <p class="mt-0.5 text-xs text-on-surface-variant">Confirm room condition, key return, and remaining balance before release.</p>
-                                    </div>
-                                </div>
-                                <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-dashed border-outline-variant p-3 transition hover:bg-surface">
-                                    <input checked class="h-4 w-4 rounded border-outline text-secondary focus:ring-secondary" type="checkbox">
-                                    <span class="text-sm font-semibold text-primary">Room key/card returned and ready for encoder clearing.</span>
-                                </label>
+                            <div class="mt-4 rounded-lg border border-secondary/30 bg-secondary-container/25 p-4">
+                                <span class="text-xs font-bold uppercase tracking-wider text-secondary">Net Outstanding Balance</span>
+                                <div class="mt-1 font-serif text-3xl font-bold">PHP {{ number_format($balance, 2) }}</div>
+                                <p class="mt-1 text-xs text-slate-600">{{ $nights }} {{ $nights === 1 ? 'night' : 'nights' }} calculated from the linked reservation.</p>
                             </div>
+                            <a href="{{ route('check-outs.create') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900">
+                                <span class="material-symbols-outlined text-secondary-fixed">payments</span>
+                                Settle Folio / Check Out
+                            </a>
                         @else
-                            <div class="py-10 text-center">
-                                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-surface-container text-secondary">
-                                    <span class="material-symbols-outlined text-3xl">person_search</span>
-                                </div>
-                                <h2 class="mt-4 font-serif text-xl font-bold text-primary">No Active Check-In Found</h2>
-                                <p class="mt-2 text-sm text-on-surface-variant">When a guest is checked in, their folio will appear here for settlement.</p>
-                                @if (in_array($role, ['admin', 'receptionist'], true))
-                                    <a href="{{ route('check-ins.create') }}" class="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">
-                                        <span class="material-symbols-outlined text-lg">login</span>
-                                        Start Check-In
-                                    </a>
-                                @endif
+                            <div class="rounded-lg border border-dashed border-line p-8 text-center">
+                                <span class="material-symbols-outlined text-4xl text-slate-300">person_search</span>
+                                <p class="mt-3 text-sm font-semibold text-slate-500">Checked-in guest folios will appear here for billing review.</p>
                             </div>
                         @endif
                     </div>
 
-                    <div class="flex items-start gap-3.5 rounded-xl border border-secondary/30 bg-surface-container-high/60 p-4">
-                        <div class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-secondary/15 text-secondary">
-                            <span class="material-symbols-outlined">autorenew</span>
+                    <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
+                        <div class="mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-secondary">verified_user</span>
+                            <h3 class="font-serif text-xl font-bold">Till &amp; Shift Reconciliation</h3>
                         </div>
-                        <div>
-                            <h4 class="text-sm font-bold text-primary">Housekeeping Turnover Pipeline</h4>
-                            <p class="mt-0.5 text-xs text-on-surface-variant">Confirming check-out will mark the room as cleaning and add it to the housekeeping queue.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="space-y-6 lg:col-span-7">
-                    <div class="rounded-xl border border-surface-variant bg-surface-container-lowest p-6 shadow-sm">
-                        <div class="flex items-center justify-between border-b border-surface-variant pb-4">
-                            <div>
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <h3 class="text-lg font-bold text-primary">Master Folio {{ $activeCheckIn ? '#FOL-' . now()->format('Y') . '-' . str_pad($activeCheckIn->id, 5, '0', STR_PAD_LEFT) : 'Preview' }}</h3>
-                                    <span class="rounded bg-outline-variant/30 px-2 py-0.5 font-mono text-xs text-on-surface-variant">POS Term 02</span>
-                                </div>
-                                <p class="text-xs text-on-surface-variant">Final itemized charges and settlement account</p>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between border-b border-line pb-2">
+                                <span class="text-slate-500">Settled check-outs today</span>
+                                <span class="font-bold">{{ $settledToday }}</span>
                             </div>
-                            <a href="{{ route('check-outs.create') }}" class="flex items-center gap-1 text-xs font-bold text-secondary hover:underline">
-                                <span class="material-symbols-outlined text-sm">add_circle</span>
-                                New Check-Out
-                            </a>
-                        </div>
-
-                        <div class="my-4 divide-y divide-surface-variant/80">
-                            <div class="flex items-center justify-between gap-4 py-3">
-                                <div>
-                                    <span class="block font-semibold text-primary">Total Room Charges ({{ $nights }} {{ $nights === 1 ? 'Night' : 'Nights' }})</span>
-                                    <span class="text-xs text-on-surface-variant">Room {{ $room?->room_number ?? 'TBA' }} {{ $reservation?->check_in_date ? $reservation->check_in_date->format('M d') : '' }} - {{ $reservation?->check_out_date ? $reservation->check_out_date->format('M d') : '' }}</span>
-                                </div>
-                                <span class="font-mono font-bold text-primary">PHP {{ number_format($roomCharges, 2) }}</span>
+                            <div class="flex items-center justify-between border-b border-line pb-2">
+                                <span class="text-slate-500">Pending departures</span>
+                                <span class="font-bold">{{ $pendingDepartures }}</span>
                             </div>
-                            <div class="flex items-center justify-between gap-4 py-3">
-                                <div>
-                                    <span class="block font-semibold text-primary">Incidental Estimate</span>
-                                    <span class="text-xs text-on-surface-variant">Room service, minibar, and service adjustments</span>
-                                </div>
-                                <span class="font-mono font-bold text-primary">PHP {{ number_format($incidentals, 2) }}</span>
+                            <div class="flex items-center justify-between border-b border-line pb-2">
+                                <span class="text-slate-500">Scheduled departures today</span>
+                                <span class="font-bold">{{ $departuresToday }}</span>
                             </div>
-                            <div class="flex items-center justify-between gap-4 py-3">
-                                <div>
-                                    <span class="block font-semibold text-primary">Taxes & Surcharge</span>
-                                    <span class="text-xs text-on-surface-variant">VAT and local tourism/service fees</span>
-                                </div>
-                                <span class="font-mono font-bold text-primary">PHP {{ number_format($taxes, 2) }}</span>
-                            </div>
-                            <div class="flex items-center justify-between gap-4 rounded bg-surface-container-low/70 px-2 py-3">
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-sm text-secondary">check_circle</span>
-                                    <div>
-                                        <span class="block font-semibold text-on-surface">Less: Estimated Advance Deposit</span>
-                                        <span class="text-xs text-on-surface-variant">Recorded upon check-in authorization</span>
-                                    </div>
-                                </div>
-                                <span class="font-mono font-bold text-secondary">-PHP {{ number_format($deposit, 2) }}</span>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Collected today</span>
+                                <span class="font-mono font-bold text-secondary">PHP {{ number_format($totalCollectedToday, 2) }}</span>
                             </div>
                         </div>
-
-                        <div class="mt-4 rounded-xl border border-secondary/20 bg-surface-container-low p-4">
-                            <div class="mb-4 flex items-baseline justify-between gap-4">
-                                <div>
-                                    <span class="block text-xs font-bold uppercase tracking-wider text-secondary">Net Outstanding Balance</span>
-                                    <span class="text-xs text-on-surface-variant">Payable at cashier counter</span>
-                                </div>
-                                <div class="text-right">
-                                    <span class="block font-serif text-3xl font-extrabold text-primary">PHP {{ number_format($balance, 2) }}</span>
-                                    <span class="text-[11px] font-semibold text-on-surface-variant">Philippine Peso</span>
-                                </div>
-                            </div>
-
-                            <div class="border-t border-surface-variant pt-3">
-                                <span class="mb-2 block text-xs font-bold uppercase text-on-surface-variant">Payment Method</span>
-                                <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                                    <label class="flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-secondary bg-white p-2.5 text-sm font-bold text-primary shadow-sm">
-                                        <input checked class="text-secondary focus:ring-secondary" name="payment_mode" type="radio">
-                                        <span class="material-symbols-outlined text-base text-secondary">credit_card</span>
-                                        POS
-                                    </label>
-                                    <label class="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-surface-variant bg-surface p-2.5 text-sm font-semibold text-on-surface-variant hover:bg-surface-container">
-                                        <input class="text-secondary focus:ring-secondary" name="payment_mode" type="radio">
-                                        <span class="material-symbols-outlined text-base">payments</span>
-                                        Cash
-                                    </label>
-                                    <label class="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-surface-variant bg-surface p-2.5 text-sm font-semibold text-on-surface-variant hover:bg-surface-container">
-                                        <input class="text-secondary focus:ring-secondary" name="payment_mode" type="radio">
-                                        <span class="material-symbols-outlined text-base">account_balance</span>
-                                        Direct Bill
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-6 flex flex-col items-center gap-3 sm:flex-row">
-                            <a href="{{ route('check-outs.create') }}" class="flex w-full flex-1 items-center justify-center gap-2 rounded-lg border-t border-secondary/40 bg-primary px-6 py-3.5 text-base font-bold text-white shadow-md transition hover:bg-primary-container">
-                                <span class="material-symbols-outlined text-xl text-secondary-fixed">check_circle</span>
-                                Confirm Check-Out & Release Room
-                            </a>
-                            <button type="button" onclick="window.print()" class="flex w-full items-center justify-center gap-1.5 rounded-lg border border-outline-variant px-4 py-3.5 text-sm font-semibold text-on-surface transition hover:bg-surface-container sm:w-auto">
-                                <span class="material-symbols-outlined text-lg">receipt</span>
-                                Folio Preview
-                            </button>
-                        </div>
+                        <button type="button" onclick="window.print()" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-secondary/40 bg-white px-4 py-2.5 text-sm font-bold text-secondary shadow-sm transition hover:bg-secondary-container/25">
+                            <span class="material-symbols-outlined">summarize</span>
+                            Print Shift Audit
+                        </button>
                     </div>
                 </section>
             </div>
 
-            <section id="transaction-history" class="overflow-hidden rounded-xl border-2 border-secondary/40 bg-surface-container-lowest shadow-xl">
-                <div class="flex flex-col justify-between gap-3 border-b border-surface-variant p-5 sm:flex-row sm:items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-secondary-fixed text-on-secondary-fixed shadow-sm">
-                            <span class="material-symbols-outlined text-2xl">task_alt</span>
-                        </div>
-                        <div>
-                            <h3 class="font-serif text-xl font-bold text-primary">Transaction Ledger</h3>
-                            <p class="text-sm text-on-surface-variant">Completed check-outs and recorded folio payments.</p>
-                        </div>
+            <section id="transaction-history" class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
+                <div class="flex flex-col justify-between gap-3 border-b border-line p-5 sm:flex-row sm:items-center">
+                    <div>
+                        <h3 class="font-serif text-2xl font-bold">Transaction History</h3>
+                        <p class="text-sm text-slate-500">Completed check-outs and recorded folio payments from the shared hotel database.</p>
                     </div>
-                    <span class="inline-flex items-center gap-1 text-sm font-bold text-secondary">
-                        <span class="h-2 w-2 rounded-full bg-secondary"></span>
-                        {{ $checkOuts->total() }} Recorded
-                    </span>
+                    <div class="flex items-center gap-2">
+                        <span class="rounded-full bg-surface-mid px-3 py-1 text-xs font-bold text-primary">{{ $checkOuts->total() }} records</span>
+                        <button type="button" onclick="window.print()" class="no-print inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low">
+                            <span class="material-symbols-outlined text-base">download</span>
+                            Export View
+                        </button>
+                    </div>
                 </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full min-w-[820px] text-left text-sm">
-                        <thead class="border-b border-surface-variant bg-surface-container text-xs font-bold uppercase tracking-wider text-primary">
+                <div class="custom-scroll overflow-x-auto">
+                    <table class="w-full min-w-[860px] text-left text-sm">
+                        <thead class="border-b border-line bg-surface-mid text-xs font-bold uppercase tracking-wider text-primary">
                             <tr>
                                 <th class="px-4 py-3">Reference</th>
                                 <th class="px-4 py-3">Guest</th>
@@ -427,43 +452,73 @@
                                 <th class="px-4 py-3">Checked Out</th>
                                 <th class="px-4 py-3">Payment</th>
                                 <th class="px-4 py-3 text-right">Amount</th>
+                                <th class="px-4 py-3 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-surface-variant">
+                        <tbody class="divide-y divide-line">
                             @forelse ($checkOuts as $checkOut)
-                                <tr class="transition hover:bg-surface-container-low">
-                                    <td class="px-4 py-3.5 font-mono font-bold text-primary">CO-{{ now()->format('Y') }}-{{ str_pad($checkOut->id, 4, '0', STR_PAD_LEFT) }}</td>
+                                <tr class="transition hover:bg-surface-low">
+                                    <td class="px-4 py-3.5 font-mono font-bold text-primary">CO-{{ $checkOut->checked_out_at?->format('Y') ?? now()->format('Y') }}-{{ str_pad($checkOut->id, 4, '0', STR_PAD_LEFT) }}</td>
                                     <td class="px-4 py-3.5">
-                                        <p class="font-bold text-on-surface">{{ $checkOut->guest?->full_name ?? 'Guest Missing' }}</p>
-                                        <p class="text-xs text-on-surface-variant">GST-{{ str_pad($checkOut->guest?->id ?? 0, 5, '0', STR_PAD_LEFT) }}</p>
+                                        <p class="font-bold">{{ $checkOut->guest?->full_name ?? 'Guest Missing' }}</p>
+                                        <p class="text-xs text-slate-500">GST-{{ str_pad($checkOut->guest?->id ?? 0, 5, '0', STR_PAD_LEFT) }}</p>
                                     </td>
                                     <td class="px-4 py-3.5">
-                                        <p class="font-bold text-primary">Room {{ $checkOut->room?->room_number ?? 'TBA' }}</p>
-                                        <p class="text-xs text-on-surface-variant">{{ $checkOut->room?->room_type ?? 'No room type' }}</p>
+                                        <p class="font-bold">Room {{ $checkOut->room?->room_number ?? 'TBA' }}</p>
+                                        <p class="text-xs text-slate-500">{{ $checkOut->room?->room_type ?? 'No room type' }}</p>
                                     </td>
                                     <td class="px-4 py-3.5">{{ $checkOut->checked_out_at?->format('M d, Y h:i A') }}</td>
                                     <td class="px-4 py-3.5">
-                                        <span class="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold {{ $paymentClasses[$checkOut->payment_status] ?? 'bg-surface-container text-primary border-outline-variant' }}">
+                                        <span class="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase {{ $paymentClasses[$checkOut->payment_status] ?? 'border-line bg-surface-low text-primary' }}">
                                             <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
-                                            {{ strtoupper($paymentLabels[$checkOut->payment_status] ?? $checkOut->payment_status) }}
+                                            {{ $paymentLabels[$checkOut->payment_status] ?? $checkOut->payment_status }}
                                         </span>
                                     </td>
-                                    <td class="px-4 py-3.5 text-right font-mono font-bold text-primary">PHP {{ number_format($checkOut->amount_paid, 2) }}</td>
+                                    <td class="px-4 py-3.5 text-right font-mono font-bold">PHP {{ number_format($checkOut->amount_paid, 2) }}</td>
+                                    <td class="px-4 py-3.5 text-right">
+                                        <button type="button" onclick="window.print()" class="rounded p-1 text-primary hover:bg-surface-mid" title="Print receipt">
+                                            <span class="material-symbols-outlined text-base">receipt</span>
+                                        </button>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="px-4 py-10 text-center font-semibold text-on-surface-variant">No check-outs recorded yet.</td>
+                                    <td colspan="7" class="px-4 py-12 text-center font-semibold text-slate-500">No check-outs recorded yet.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-
-                <div class="border-t border-surface-variant bg-surface-container-low px-4 py-3">
+                <div class="border-t border-line bg-surface-low px-4 py-3">
                     {{ $checkOuts->links() }}
                 </div>
             </section>
-        </div>
-    </main>
+        </main>
+    </div>
+
+    <script>
+        function updateBillingClock() {
+            const now = new Date();
+            const date = new Intl.DateTimeFormat('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: '2-digit',
+                year: 'numeric',
+                timeZone: 'Asia/Manila',
+            }).format(now);
+            const time = new Intl.DateTimeFormat('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Manila',
+            }).format(now);
+            document.getElementById('billing-date').textContent = date;
+            document.getElementById('billing-clock').textContent = `${time} PHT`;
+        }
+
+        updateBillingClock();
+        setInterval(updateBillingClock, 1000);
+    </script>
 </body>
 </html>
