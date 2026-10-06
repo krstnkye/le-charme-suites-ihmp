@@ -781,4 +781,22 @@ class RoleAccessTest extends TestCase
             ->assertOk()
             ->assertSee('Historical Transactions &amp; Cryptographic Audit Ledger', false);
     }
+
+    public function test_cashier_profile_uses_billing_department_workspace(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'Billing Staff',
+            'role' => 'cashier',
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('profile.edit'))
+            ->assertOk()
+            ->assertSee('Cashier Profile &amp; Terminal Credentials', false)
+            ->assertSee('Billing Identity Vault')
+            ->assertSee('Billing Department Access')
+            ->assertSee('Authorized Billing Terminals')
+            ->assertSee('Billing Alerts')
+            ->assertSee('Billing Staff');
+    }
 }

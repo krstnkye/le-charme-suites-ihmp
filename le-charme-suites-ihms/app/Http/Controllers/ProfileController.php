@@ -12,9 +12,11 @@ class ProfileController extends Controller
 {
     public function edit(Request $request): View
     {
-        $view = $request->user()?->role === 'housekeeping'
-            ? 'profile.housekeeping-edit'
-            : 'profile.edit';
+        $view = match ($request->user()?->role) {
+            'housekeeping' => 'profile.housekeeping-edit',
+            'cashier' => 'profile.billing-edit',
+            default => 'profile.edit',
+        };
 
         return view($view, [
             'user' => $request->user(),
