@@ -6,7 +6,11 @@
         ->map(fn ($part) => strtoupper(substr($part, 0, 1)))
         ->join('') ?: 'O';
     $activePage = $page ?? 'dashboard';
-    $activeNavKey = in_array($activePage, ['room-inventory', 'room-availability', 'room-status'], true) ? 'rooms' : $activePage;
+    $activeNavKey = match (true) {
+        in_array($activePage, ['room-inventory', 'room-availability', 'room-status'], true) => 'rooms',
+        in_array($activePage, ['checkin-records'], true) => 'checkins',
+        default => $activePage,
+    };
     $occupancyRate = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) : 0;
     $ownerNav = [
         ['key' => 'dashboard', 'label' => 'Dashboard', 'icon' => 'dashboard', 'href' => route('dashboard'), 'mode' => 'View'],
@@ -33,7 +37,7 @@
         ]],
         ['items' => [
             ['key' => 'checkins', 'label' => 'Check-in / Check-out', 'icon' => 'login', 'href' => route('owner.page', ['page' => 'checkins']), 'children' => [
-                ['label' => 'Check-in Records', 'href' => route('owner.page', ['page' => 'checkins']).'#check-in-records'],
+                ['key' => 'checkin-records', 'label' => 'Check-in Records', 'href' => route('owner.page', ['page' => 'checkin-records'])],
                 ['label' => 'Check-out Records', 'href' => route('owner.page', ['page' => 'checkins']).'#check-out-records'],
             ]],
             ['key' => 'billing', 'label' => 'Billing & Transactions', 'icon' => 'payments', 'href' => route('owner.page', ['page' => 'billing']), 'children' => [
@@ -62,6 +66,7 @@
         'room-status' => ['Room Status Overview', 'Read-only occupancy, maintenance, and readiness status monitoring.'],
         'reservations' => ['Reservations Overview', 'Booking pipeline and reservation status monitoring.'],
         'checkins' => ['Check-in / Check-out Overview', 'Arrival, in-house, and departure movement visibility.'],
+        'checkin-records' => ['Check-in Records', 'Read-only registry of guest arrivals, active stays, and room key issuance.'],
         'billing' => ['Billing & Transactions Overview', 'Revenue, settlement, and transaction monitoring.'],
         'housekeeping' => ['Housekeeping Monitor', 'Room readiness and housekeeping activity oversight.'],
         'reports' => ['Reports & Records Overview', 'Executive reporting shortcuts and operational records summary.'],
@@ -173,6 +178,8 @@
                 @include('owner.partials.reservations')
             @elseif ($activePage === 'checkins')
                 @include('owner.partials.checkins')
+            @elseif ($activePage === 'checkin-records')
+                @include('owner.partials.checkin-records')
             @elseif ($activePage === 'room-availability')
                 @include('owner.partials.room-availability')
             @elseif ($activePage === 'room-status')
