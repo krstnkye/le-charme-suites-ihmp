@@ -38,7 +38,7 @@ class OwnerController extends Controller
             'guests' => Guest::withCount('reservations')->withSum('transactions', 'amount')->latest()->take(8)->get(),
             'guestSpendTotal' => HotelTransaction::sum('amount'),
             'identifiedGuests' => Guest::whereNotNull('identification_number')->count(),
-            'rooms' => Room::orderBy('room_number')->take(12)->get(),
+            'rooms' => Room::orderBy('room_number')->get(),
             'reservations' => Reservation::with(['guest', 'room'])->latest()->take(8)->get(),
             'checkIns' => CheckIn::with(['guest', 'room', 'reservation'])->latest('checked_in_at')->take(8)->get(),
             'checkOuts' => CheckOut::with(['guest', 'room'])->latest('checked_out_at')->take(8)->get(),

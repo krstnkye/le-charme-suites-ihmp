@@ -165,6 +165,8 @@
                 @include('owner.partials.dashboard')
             @elseif ($activePage === 'guests')
                 @include('owner.partials.guests')
+            @elseif ($activePage === 'rooms')
+                @include('owner.partials.rooms')
             @else
             <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
                 <div class="pointer-events-none absolute -bottom-20 -right-16 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
@@ -189,16 +191,6 @@
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Reservations</span><span class="material-symbols-outlined text-secondary">calendar_month</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $activeReservations }}</p><p class="mt-1 text-sm text-slate-500">{{ $arrivalsToday }} arrivals today</p></div>
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Billing & Transactions</span><span class="material-symbols-outlined text-secondary">payments</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($collectedToday, 2) }}</p><p class="mt-1 text-sm text-slate-500">{{ $settledToday }} settled today</p></div>
             </section>
-            @endif
-
-            @if ($activePage === 'rooms')
-                <x-owner-panel id="room-inventory" title="Room Inventory Preview" subtitle="Live room status monitoring without update controls.">
-                    <x-owner-table :headers="['Room', 'Type', 'Capacity', 'Rate', 'Status']">
-                        @foreach ($rooms as $room)
-                            <tr class="border-b border-line"><td class="px-4 py-3 font-bold">Room {{ $room->room_number }}</td><td class="px-4 py-3">{{ $room->room_type }}</td><td class="px-4 py-3">{{ $room->capacity }} guests</td><td class="px-4 py-3">PHP {{ number_format($room->rate, 2) }}</td><td class="px-4 py-3"><span class="rounded bg-surface-mid px-2 py-1 text-xs font-bold capitalize">{{ $room->status }}</span></td></tr>
-                        @endforeach
-                    </x-owner-table>
-                </x-owner-panel>
             @endif
 
             @if ($activePage === 'reservations')
