@@ -169,6 +169,8 @@
                 @include('owner.partials.dashboard')
             @elseif ($activePage === 'guests')
                 @include('owner.partials.guests')
+            @elseif ($activePage === 'reservations')
+                @include('owner.partials.reservations')
             @elseif ($activePage === 'room-availability')
                 @include('owner.partials.room-availability')
             @elseif ($activePage === 'room-status')
@@ -199,16 +201,6 @@
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Reservations</span><span class="material-symbols-outlined text-secondary">calendar_month</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $activeReservations }}</p><p class="mt-1 text-sm text-slate-500">{{ $arrivalsToday }} arrivals today</p></div>
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Billing & Transactions</span><span class="material-symbols-outlined text-secondary">payments</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($collectedToday, 2) }}</p><p class="mt-1 text-sm text-slate-500">{{ $settledToday }} settled today</p></div>
             </section>
-            @endif
-
-            @if ($activePage === 'reservations')
-                <x-owner-panel title="Reservation Pipeline" subtitle="Recent reservations and their current state.">
-                    <x-owner-table :headers="['Reservation', 'Guest', 'Room', 'Stay Dates', 'Status']">
-                        @foreach ($reservations as $reservation)
-                            <tr class="border-b border-line"><td class="px-4 py-3 font-mono font-bold">RES-{{ str_pad((string) $reservation->id, 5, '0', STR_PAD_LEFT) }}</td><td class="px-4 py-3">{{ $reservation->guest?->full_name ?? 'N/A' }}</td><td class="px-4 py-3">{{ $reservation->room?->room_number ?? 'N/A' }}</td><td class="px-4 py-3 text-slate-600">{{ $reservation->check_in_date?->format('M d') }} - {{ $reservation->check_out_date?->format('M d, Y') }}</td><td class="px-4 py-3"><span class="rounded bg-surface-mid px-2 py-1 text-xs font-bold capitalize">{{ str_replace('_', ' ', $reservation->status) }}</span></td></tr>
-                        @endforeach
-                    </x-owner-table>
-                </x-owner-panel>
             @endif
 
             @if ($activePage === 'checkins')
