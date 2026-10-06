@@ -171,6 +171,8 @@
                 @include('owner.partials.guests')
             @elseif ($activePage === 'reservations')
                 @include('owner.partials.reservations')
+            @elseif ($activePage === 'checkins')
+                @include('owner.partials.checkins')
             @elseif ($activePage === 'room-availability')
                 @include('owner.partials.room-availability')
             @elseif ($activePage === 'room-status')
@@ -201,25 +203,6 @@
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Reservations</span><span class="material-symbols-outlined text-secondary">calendar_month</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $activeReservations }}</p><p class="mt-1 text-sm text-slate-500">{{ $arrivalsToday }} arrivals today</p></div>
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Billing & Transactions</span><span class="material-symbols-outlined text-secondary">payments</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($collectedToday, 2) }}</p><p class="mt-1 text-sm text-slate-500">{{ $settledToday }} settled today</p></div>
             </section>
-            @endif
-
-            @if ($activePage === 'checkins')
-                <section class="grid gap-6 xl:grid-cols-2">
-                    <x-owner-panel id="check-in-records" title="Active Check-ins" subtitle="Currently active in-house stays.">
-                        <x-owner-table :headers="['Guest', 'Room', 'Checked In', 'Status']">
-                            @foreach ($checkIns as $checkIn)
-                                <tr class="border-b border-line"><td class="px-4 py-3 font-bold">{{ $checkIn->guest?->full_name ?? 'N/A' }}</td><td class="px-4 py-3">{{ $checkIn->room?->room_number ?? 'N/A' }}</td><td class="px-4 py-3">{{ $checkIn->checked_in_at?->format('M d, h:i A') }}</td><td class="px-4 py-3"><span class="rounded bg-surface-mid px-2 py-1 text-xs font-bold capitalize">{{ $checkIn->status }}</span></td></tr>
-                            @endforeach
-                        </x-owner-table>
-                    </x-owner-panel>
-                    <x-owner-panel id="check-out-records" title="Recent Check-outs" subtitle="Recently completed departures.">
-                        <x-owner-table :headers="['Guest', 'Room', 'Paid', 'Status']">
-                            @foreach ($checkOuts as $checkOut)
-                                <tr class="border-b border-line"><td class="px-4 py-3 font-bold">{{ $checkOut->guest?->full_name ?? 'N/A' }}</td><td class="px-4 py-3">{{ $checkOut->room?->room_number ?? 'N/A' }}</td><td class="px-4 py-3">PHP {{ number_format($checkOut->amount_paid, 2) }}</td><td class="px-4 py-3"><span class="rounded bg-surface-mid px-2 py-1 text-xs font-bold capitalize">{{ $checkOut->payment_status }}</span></td></tr>
-                            @endforeach
-                        </x-owner-table>
-                    </x-owner-panel>
-                </section>
             @endif
 
             @if ($activePage === 'billing' || $activePage === 'reports')
