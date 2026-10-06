@@ -735,6 +735,19 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)->get('/reservations')->assertForbidden();
     }
 
+    public function test_cashier_sees_billing_department_dashboard(): void
+    {
+        $user = User::factory()->create(['role' => 'cashier']);
+
+        $this->actingAs($user)
+            ->get('/dashboard')
+            ->assertOk()
+            ->assertSee('Billing Ledger, Settlements & Department Revenue Control', false)
+            ->assertSee('Billing Department Access')
+            ->assertSee('Folio Settlement Queue')
+            ->assertSee('Recent Billing Ledger Activity');
+    }
+
     public function test_cashier_can_view_transaction_console(): void
     {
         $user = User::factory()->create(['role' => 'cashier']);

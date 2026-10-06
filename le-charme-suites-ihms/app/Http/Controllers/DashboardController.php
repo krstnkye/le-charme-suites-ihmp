@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guest;
+use App\Models\CheckIn;
+use App\Models\CheckOut;
 use App\Models\HotelTransaction;
 use App\Models\Reservation;
 use App\Models\Room;
@@ -72,6 +74,39 @@ class DashboardController extends Controller
                     ->latest('changed_at')
                     ->take(10)
                     ->get(),
+            ]);
+        }
+
+        if (auth()->user()?->role === 'cashier') {
+            $today = now(config('app.timezone'))->toDateString();
+            $activeCheckIns = CheckIn::with(['guest', 'room', 'reservation'])
+                ->where('status', 'active')
+                ->latest('checked_in_at')
+                ->get();
+            $completedToday = CheckOut::with(['guest', 'room'])
+                ->whereDate('checked_out_at', $today)
+                ->latest('checked_out_at')
+                ->get();
+            $folioActivity = HotelTransaction::with(['guest', 'room', 'reservation'])
+                ->latest('transaction_date')
+                ->take(8)
+                ->get();
+
+            return view('dashboard.billing', [
+                ...$data,
+                'activeCheckIns' => $activeCheckIns,
+                'completedToday' => $completedToday,
+                'folioActivity' => $folioActivity,
+                'settlementQueue' => $activeCheckIns->take(6),
+                'pendingDepartures' => $activeCheckIns->count(),
+                'departuresToday' => $activeCheckIns
+                    ->filter(fn (CheckIn $checkIn) => $checkIn->reservation?->check_out_date?->toDateString() === $today)
+                    ->count(),
+                'settledToday' => $completedToday->count(),
+                'collectedToday' => $completedToday->sum('amount_paid'),
+                'recordedRevenue' => HotelTransaction::whereDate('transaction_date', $today)->sum('amount'),
+                'unpaidFolios' => CheckOut::where('payment_status', 'unpaid')->count(),
+                'partialFolios' => CheckOut::where('payment_status', 'partial')->count(),
             ]);
         }
 
