@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\CheckIn;
+use App\Models\CheckOut;
+use App\Models\Guest;
+use App\Models\HotelTransaction;
+use App\Models\Reservation;
+use App\Models\Room;
+use App\Models\RoomStatusLog;
+use Illuminate\View\View;
+
+class OwnerController extends Controller
+{
+    public function __invoke(string $page = 'dashboard'): View
+    {
+        $allowedPages = ['dashboard', 'guests', 'rooms', 'reservations', 'checkins', 'billing', 'housekeeping', 'reports'];
+        abort_unless(in_array($page, $allowedPages, true), 404);
+
+        $today = now(config('app.timezone'))->toDateString();
+
+        return view('owner.index', [
+            'page' => $page,
+            'totalRooms' => Room::count(),
+            'availableRooms' => Room::where('status', 'available')->count(),
+            'occupiedRooms' => Room::where('status', 'occupied')->count(),
+            'reservedRooms' => Room::where('status', 'reserved')->count(),
+            'maintenanceRooms' => Room::whereIn('status', ['maintenance', 'cleaning'])->count(),
+            'totalGuests' => Guest::count(),
+            'currentGuests' => Guest::whereHas('reservations', fn ($query) => $query->where('status', 'checked_in'))->count(),
+            'arrivalsToday' => Reservation::where('status', 'reserved')->whereDate('check_in_date', $today)->count(),
+            'departuresToday' => Reservation::where('status', 'checked_in')->whereDate('check_out_date', $today)->count(),
+            'activeReservations' => Reservation::whereIn('status', ['reserved', 'checked_in'])->count(),
+            'settledToday' => CheckOut::whereDate('checked_out_at', $today)->count(),
+            'collectedToday' => CheckOut::whereDate('checked_out_at', $today)->sum('amount_paid'),
+            'recordedRevenue' => HotelTransaction::whereDate('transaction_date', $today)->sum('amount'),
+            'guests' => Guest::withCount('reservations')->latest()->take(8)->get(),
+            'rooms' => Room::orderBy('room_number')->take(12)->get(),
+            'reservations' => Reservation::with(['guest', 'room'])->latest()->take(8)->get(),
+            'checkIns' => CheckIn::with(['guest', 'room', 'reservation'])->latest('checked_in_at')->take(8)->get(),
+            'checkOuts' => CheckOut::with(['guest', 'room'])->latest('checked_out_at')->take(8)->get(),
+            'transactions' => HotelTransaction::with(['guest', 'room'])->latest('transaction_date')->take(8)->get(),
+            'housekeepingLogs' => RoomStatusLog::with('room')->latest('changed_at')->take(8)->get(),
+        ]);
+    }
+}

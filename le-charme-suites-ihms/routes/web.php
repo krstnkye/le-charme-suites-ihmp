@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\HousekeepingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReservationController;
@@ -67,6 +68,10 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:housekeeping,owner')->group(function () {
         Route::get('/housekeeping/{page}', HousekeepingController::class)->name('housekeeping.page');
+    });
+
+    Route::middleware('role:owner')->group(function () {
+        Route::get('/owner/{page?}', OwnerController::class)->name('owner.page');
     });
 
     Route::middleware('role:receptionist,cashier')->group(function () {

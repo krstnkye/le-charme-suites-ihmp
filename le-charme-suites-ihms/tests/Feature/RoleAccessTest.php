@@ -799,4 +799,87 @@ class RoleAccessTest extends TestCase
             ->assertSee('Billing Alerts')
             ->assertSee('Billing Staff');
     }
+
+    public function test_owner_sees_view_only_executive_dashboard_and_modules(): void
+    {
+        $user = User::factory()->create(['role' => 'owner']);
+
+        $this->actingAs($user)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('Executive Owner Dashboard')
+            ->assertSee('Owner Access / View Only')
+            ->assertSee('Owner / Management')
+            ->assertSee('Dashboard')
+            ->assertSee('Guests')
+            ->assertSee('Rooms')
+            ->assertSee('Room Inventory')
+            ->assertSee('Room Availability')
+            ->assertSee('Room Status')
+            ->assertSee('Reservations')
+            ->assertSee('Check-in / Check-out')
+            ->assertSee('Check-in Records')
+            ->assertSee('Check-out Records')
+            ->assertSee('Billing &amp; Transactions', false)
+            ->assertSee('Billing Records')
+            ->assertSee('Transactions')
+            ->assertSee('Housekeeping')
+            ->assertSee('Housekeeping Requests')
+            ->assertSee('Reports &amp; Records', false)
+            ->assertSee('Operational Reports')
+            ->assertSee('Transaction Reports')
+            ->assertSee('Records')
+            ->assertSee('User Management')
+            ->assertSee('No access - admin only')
+            ->assertSee('System Settings')
+            ->assertSee('No record editing privileges');
+
+        foreach ([
+            'guests' => 'Guest Management Overview',
+            'rooms' => 'Room Management Overview',
+            'reservations' => 'Reservations Overview',
+            'checkins' => 'Check-in / Check-out Overview',
+            'billing' => 'Billing / Transactions Overview',
+            'housekeeping' => 'Housekeeping Monitor',
+            'reports' => 'Reports &amp; Records Overview',
+        ] as $page => $heading) {
+            $this->actingAs($user)
+                ->get(route('owner.page', ['page' => $page]))
+                ->assertOk()
+                ->assertSee($heading, false)
+                ->assertSee('Owner Access / View Only')
+                ->assertDontSee('Create User')
+                ->assertSee('User Management and System Settings are admin-only');
+        }
+    }
+
+    public function test_owner_cannot_access_admin_only_or_change_operational_records(): void
+    {
+        $owner = User::factory()->create(['role' => 'owner']);
+        $room = Room::create([
+            'room_number' => '801',
+            'room_type' => 'Suite',
+            'rate' => 4500,
+            'capacity' => 4,
+            'status' => 'available',
+        ]);
+
+        $this->actingAs($owner)->get(route('admin.users.index'))->assertForbidden();
+        $this->actingAs($owner)->get(route('admin.settings.index'))->assertForbidden();
+
+        $this->actingAs($owner)
+            ->patch(route('rooms.update', $room), [
+                'room_number' => '801',
+                'room_type' => 'Suite',
+                'rate' => 4500,
+                'capacity' => 4,
+                'status' => 'maintenance',
+            ])
+            ->assertForbidden();
+
+        $this->assertDatabaseHas('rooms', [
+            'id' => $room->id,
+            'status' => 'available',
+        ]);
+    }
 }

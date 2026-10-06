@@ -110,6 +110,24 @@ class DashboardController extends Controller
             ]);
         }
 
+        if (auth()->user()?->role === 'owner') {
+            return view('owner.index', [
+                ...$data,
+                'page' => 'dashboard',
+                'totalGuests' => Guest::count(),
+                'settledToday' => CheckOut::whereDate('checked_out_at', now(config('app.timezone'))->toDateString())->count(),
+                'collectedToday' => CheckOut::whereDate('checked_out_at', now(config('app.timezone'))->toDateString())->sum('amount_paid'),
+                'recordedRevenue' => HotelTransaction::whereDate('transaction_date', now(config('app.timezone'))->toDateString())->sum('amount'),
+                'guests' => Guest::withCount('reservations')->latest()->take(8)->get(),
+                'rooms' => Room::orderBy('room_number')->take(12)->get(),
+                'reservations' => Reservation::with(['guest', 'room'])->latest()->take(8)->get(),
+                'checkIns' => CheckIn::with(['guest', 'room', 'reservation'])->latest('checked_in_at')->take(8)->get(),
+                'checkOuts' => CheckOut::with(['guest', 'room'])->latest('checked_out_at')->take(8)->get(),
+                'transactions' => HotelTransaction::with(['guest', 'room'])->latest('transaction_date')->take(8)->get(),
+                'housekeepingLogs' => RoomStatusLog::with('room')->latest('changed_at')->take(8)->get(),
+            ]);
+        }
+
         return view('dashboard.index', $data);
     }
 }
