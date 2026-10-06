@@ -21,7 +21,7 @@
         ['label' => 'Dashboard', 'icon' => 'dashboard', 'href' => route('dashboard'), 'active' => false],
         ['label' => 'Billing', 'icon' => 'credit_card', 'href' => route('check-outs.create'), 'active' => false],
         ['label' => 'Transactions', 'icon' => 'point_of_sale', 'href' => route('check-outs.index'), 'active' => true],
-        ['label' => 'Transaction History', 'icon' => 'history', 'href' => route('check-outs.index') . '#transaction-history', 'active' => false],
+        ['label' => 'Transaction History', 'icon' => 'history', 'href' => route('check-outs.history'), 'active' => false],
         ['label' => 'Reports', 'icon' => 'bar_chart', 'href' => route('reports.index'), 'active' => false],
     ];
     $todayTransactions = $folioTransactions->filter(fn ($transaction) => $transaction->transaction_date?->isToday());

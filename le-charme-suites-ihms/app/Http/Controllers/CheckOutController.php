@@ -72,6 +72,49 @@ class CheckOutController extends Controller
         ]);
     }
 
+    public function history(Request $request): View
+    {
+        $search = (string) $request->string('search');
+        $paymentStatus = (string) $request->string('payment_status');
+
+        $checkOuts = CheckOut::with(['guest', 'room', 'checkIn'])
+            ->when($paymentStatus !== '', fn ($query) => $query->where('payment_status', $paymentStatus))
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('id', 'like', '%' . $search . '%')
+                        ->orWhereHas('guest', function ($query) use ($search) {
+                            $query->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%')
+                                ->orWhere('email', 'like', '%' . $search . '%')
+                                ->orWhere('phone', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('room', function ($query) use ($search) {
+                            $query->where('room_number', 'like', '%' . $search . '%')
+                                ->orWhere('room_type', 'like', '%' . $search . '%');
+                        });
+                });
+            })
+            ->latest('checked_out_at')
+            ->paginate(12)
+            ->withQueryString();
+
+        $ledgerTransactions = HotelTransaction::with(['guest', 'room'])
+            ->latest('transaction_date')
+            ->limit(8)
+            ->get();
+
+        return view('check_outs.history', [
+            'checkOuts' => $checkOuts,
+            'ledgerTransactions' => $ledgerTransactions,
+            'paymentStatus' => $paymentStatus,
+            'search' => $search,
+            'settledToday' => CheckOut::whereDate('checked_out_at', today())->count(),
+            'collectedToday' => CheckOut::whereDate('checked_out_at', today())->sum('amount_paid'),
+            'totalArchived' => CheckOut::count(),
+            'voidReviewCount' => HotelTransaction::where('status', 'void')->count(),
+        ]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([

@@ -764,4 +764,14 @@ class RoleAccessTest extends TestCase
             ->assertOk()
             ->assertSee('POS Incidentals &amp; Direct Charge Terminal', false);
     }
+
+    public function test_cashier_can_view_transaction_history_ledger(): void
+    {
+        $user = User::factory()->create(['role' => 'cashier']);
+
+        $this->actingAs($user)
+            ->get('/check-outs/history')
+            ->assertOk()
+            ->assertSee('Historical Transactions &amp; Cryptographic Audit Ledger', false);
+    }
 }

@@ -37,7 +37,7 @@
         ['label' => 'Dashboard', 'icon' => 'dashboard', 'href' => route('dashboard'), 'active' => false],
         ['label' => 'Billing', 'icon' => 'receipt_long', 'href' => route('check-outs.create'), 'active' => true],
         ['label' => 'Transactions', 'icon' => 'point_of_sale', 'href' => route('check-outs.index'), 'active' => false],
-        ['label' => 'Transaction History', 'icon' => 'history', 'href' => route('check-outs.index') . '#transaction-history', 'active' => false],
+        ['label' => 'Transaction History', 'icon' => 'history', 'href' => route('check-outs.history'), 'active' => false],
         ['label' => 'Reports', 'icon' => 'bar_chart', 'href' => route('reports.index'), 'active' => false],
     ];
 @endphp

@@ -4,7 +4,7 @@
         ['label' => 'Dashboard', 'icon' => 'dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard'), 'badge' => 'Live'],
         ['label' => 'Billing', 'icon' => 'credit_card', 'href' => route('check-outs.create'), 'active' => request()->routeIs('check-outs.create'), 'badge' => null],
         ['label' => 'Transactions', 'icon' => 'receipt_long', 'href' => route('check-outs.index'), 'active' => request()->routeIs('check-outs.index'), 'badge' => null],
-        ['label' => 'Transaction History', 'icon' => 'history', 'href' => route('check-outs.index') . '#transaction-history', 'active' => false, 'badge' => null],
+        ['label' => 'Transaction History', 'icon' => 'history', 'href' => route('check-outs.history'), 'active' => false, 'badge' => null],
         ['label' => 'Reports', 'icon' => 'bar_chart', 'href' => route('reports.index'), 'active' => request()->routeIs('reports.*'), 'badge' => null],
     ];
     $paymentClasses = [
@@ -369,7 +369,7 @@
                             @endforelse
                         </div>
                         <div class="border-t border-line bg-surface-low p-3 text-center">
-                            <a class="text-sm font-bold text-secondary hover:underline" href="{{ route('check-outs.index') }}#transaction-history">View Full Transaction Audit Stream</a>
+                            <a class="text-sm font-bold text-secondary hover:underline" href="{{ route('check-outs.history') }}">View Full Transaction Audit Stream</a>
                         </div>
                     </div>
 
