@@ -113,10 +113,10 @@
                         <span class="material-symbols-outlined mb-1 block text-lg">badge</span>
                         <span>Receptionist</span>
                     </button>
-                    <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-label="Cashier" type="button">
+                    <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-label="Billing" type="button">
                         <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
                         <span class="material-symbols-outlined mb-1 block text-lg">payments</span>
-                        <span>Cashier</span>
+                        <span>Billing</span>
                     </button>
                     <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-label="Housekeeping" type="button">
                         <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>

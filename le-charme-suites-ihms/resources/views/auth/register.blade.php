@@ -87,6 +87,16 @@
                 </div>
             @endif
 
+            @php
+                $roleLabels = [
+                    'receptionist' => 'Receptionist',
+                    'cashier' => 'Billing',
+                    'housekeeping' => 'Housekeeping',
+                    'owner' => 'Owner',
+                    'admin' => 'Admin',
+                ];
+            @endphp
+
             <form method="POST" action="{{ route('register.store') }}" class="space-y-5">
                 @csrf
 
@@ -94,13 +104,13 @@
                     <div class="mb-2 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
                         <span class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Hospitality Roles</span>
                         <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-primary">
-                            Selected Role: <span id="selected-role-label">{{ ucfirst(old('role', 'receptionist')) }}</span>
+                            Selected Role: <span id="selected-role-label">{{ $roleLabels[old('role', 'receptionist')] ?? ucfirst(old('role', 'receptionist')) }}</span>
                         </span>
                     </div>
                     <div class="grid gap-2 sm:grid-cols-5">
                         @foreach ([
                             'receptionist' => ['Receptionist', 'badge'],
-                            'cashier' => ['Cashier', 'payments'],
+                            'cashier' => ['Billing', 'payments'],
                             'housekeeping' => ['Housekeeping', 'cleaning_services'],
                             'owner' => ['Owner', 'workspace_premium'],
                             'admin' => ['Admin', 'admin_panel_settings'],
