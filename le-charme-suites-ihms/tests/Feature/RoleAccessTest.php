@@ -745,7 +745,14 @@ class RoleAccessTest extends TestCase
             ->assertSee('Billing Ledger, Settlements & Department Revenue Control', false)
             ->assertSee('Billing Department Access')
             ->assertSee('Folio Settlement Queue')
-            ->assertSee('Recent Billing Ledger Activity');
+            ->assertSee('Recent Billing Ledger Activity')
+            ->assertSee('Dashboard')
+            ->assertSee('Billing')
+            ->assertSee('Transactions')
+            ->assertSee('Transaction History')
+            ->assertSee('Reports')
+            ->assertSee('My Profile')
+            ->assertSee('Logout');
     }
 
     public function test_cashier_can_view_transaction_console(): void

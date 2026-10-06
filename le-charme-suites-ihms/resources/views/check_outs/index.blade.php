@@ -400,7 +400,7 @@
                 </section>
             </div>
 
-            <section class="overflow-hidden rounded-xl border-2 border-secondary/40 bg-surface-container-lowest shadow-xl">
+            <section id="transaction-history" class="overflow-hidden rounded-xl border-2 border-secondary/40 bg-surface-container-lowest shadow-xl">
                 <div class="flex flex-col justify-between gap-3 border-b border-surface-variant p-5 sm:flex-row sm:items-center">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-full bg-secondary-fixed text-on-secondary-fixed shadow-sm">

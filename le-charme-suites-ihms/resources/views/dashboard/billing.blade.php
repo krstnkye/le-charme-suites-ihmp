@@ -1,10 +1,11 @@
 @php
     $user = auth()->user();
     $billingNav = [
-        ['label' => 'Billing Dashboard', 'icon' => 'dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-        ['label' => 'Folio Settlement', 'icon' => 'receipt_long', 'href' => route('check-outs.index'), 'active' => request()->routeIs('check-outs.index')],
-        ['label' => 'Check-Out Billing', 'icon' => 'point_of_sale', 'href' => route('check-outs.create'), 'active' => request()->routeIs('check-outs.create')],
-        ['label' => 'Financial Reports', 'icon' => 'query_stats', 'href' => route('reports.index'), 'active' => request()->routeIs('reports.*')],
+        ['label' => 'Dashboard', 'icon' => 'home', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+        ['label' => 'Billing', 'icon' => 'payments', 'href' => route('check-outs.create'), 'active' => request()->routeIs('check-outs.create')],
+        ['label' => 'Transactions', 'icon' => 'receipt_long', 'href' => route('check-outs.index'), 'active' => request()->routeIs('check-outs.index')],
+        ['label' => 'Transaction History', 'icon' => 'list_alt', 'href' => route('check-outs.index') . '#transaction-history', 'active' => false],
+        ['label' => 'Reports', 'icon' => 'query_stats', 'href' => route('reports.index'), 'active' => request()->routeIs('reports.*')],
         ['label' => 'My Profile', 'icon' => 'manage_accounts', 'href' => route('profile.edit'), 'active' => request()->routeIs('profile.*')],
     ];
     $paymentClasses = [
@@ -62,9 +63,9 @@
                     <span class="material-symbols-outlined text-2xl">payments</span>
                 </div>
                 <div>
-                    <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-amber-200">Hotel Management</p>
-                    <h1 class="font-serif text-2xl font-bold leading-tight">Billing</h1>
-                    <p class="text-xs text-blue-100/70">Le Charme Suites IHMS</p>
+                    <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-amber-200">Le Charmé Suites</p>
+                    <h1 class="font-serif text-2xl font-bold leading-tight">IHMS</h1>
+                    <p class="text-xs text-blue-100/70">Billing Department</p>
                 </div>
             </div>
         </div>
@@ -77,7 +78,6 @@
         </div>
 
         <nav class="flex-1 space-y-2 overflow-y-auto px-4 pb-6 text-sm font-semibold" aria-label="Billing Navigation">
-            <p class="px-3 pb-1 text-[11px] font-bold uppercase tracking-[0.22em] text-amber-200">Department Console</p>
             @foreach ($billingNav as $item)
                 <a href="{{ $item['href'] }}" @class([
                     'flex items-center gap-3 rounded-r-lg border-l-4 px-3 py-3 transition',
@@ -88,6 +88,13 @@
                     {{ $item['label'] }}
                 </a>
             @endforeach
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="flex w-full items-center gap-3 rounded-r-lg border-l-4 border-transparent px-3 py-3 text-left text-blue-100/70 transition hover:bg-white/10 hover:text-white">
+                    <span class="material-symbols-outlined text-xl">logout</span>
+                    Logout
+                </button>
+            </form>
         </nav>
 
         <div class="border-t border-white/10 p-4">
@@ -95,13 +102,6 @@
                 <p class="text-sm font-bold">{{ $user?->name ?? 'Billing Staff' }}</p>
                 <p class="text-xs text-blue-100/70">Billing Department Access</p>
             </div>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-blue-100/70 transition hover:bg-white/10 hover:text-white">
-                    <span class="material-symbols-outlined text-lg">logout</span>
-                    Logout
-                </button>
-            </form>
         </div>
     </aside>
 
