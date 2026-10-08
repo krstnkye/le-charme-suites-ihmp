@@ -9,6 +9,7 @@
     $activeNavKey = match (true) {
         in_array($activePage, ['room-inventory', 'room-availability', 'room-status'], true) => 'rooms',
         in_array($activePage, ['checkin-records', 'checkout-records'], true) => 'checkins',
+        in_array($activePage, ['billing-records'], true) => 'billing',
         default => $activePage,
     };
     $occupancyRate = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) : 0;
@@ -41,8 +42,8 @@
                 ['key' => 'checkout-records', 'label' => 'Check-out Records', 'href' => route('owner.page', ['page' => 'checkout-records'])],
             ]],
             ['key' => 'billing', 'label' => 'Billing & Transactions', 'icon' => 'payments', 'href' => route('owner.page', ['page' => 'billing']), 'children' => [
-                ['label' => 'Billing Records', 'href' => route('owner.page', ['page' => 'billing']).'#billing-records'],
-                ['label' => 'Transactions', 'href' => route('owner.page', ['page' => 'billing']).'#transactions'],
+                ['key' => 'billing-records', 'label' => 'Billing Records', 'href' => route('owner.page', ['page' => 'billing-records'])],
+                ['key' => 'billing', 'label' => 'Transactions', 'href' => route('owner.page', ['page' => 'billing']).'#transactions'],
             ]],
         ]],
         ['items' => [
@@ -69,6 +70,7 @@
         'checkin-records' => ['Check-in Records', 'Read-only registry of guest arrivals, active stays, and room key issuance.'],
         'checkout-records' => ['Check-out Records', 'Audited departure archive, settlement status, and housekeeping turnover visibility.'],
         'billing' => ['Billing & Transactions Overview', 'Revenue, settlement, and transaction monitoring.'],
+        'billing-records' => ['Billing Records', 'Grouped guest billing accounts, invoice totals, settlement status, and audit visibility.'],
         'housekeeping' => ['Housekeeping Monitor', 'Room readiness and housekeeping activity oversight.'],
         'reports' => ['Reports & Records Overview', 'Executive reporting shortcuts and operational records summary.'],
     ];
@@ -183,6 +185,8 @@
                 @include('owner.partials.checkin-records')
             @elseif ($activePage === 'checkout-records')
                 @include('owner.partials.checkout-records')
+            @elseif ($activePage === 'billing-records')
+                @include('owner.partials.billing-records')
             @elseif ($activePage === 'billing')
                 @include('owner.partials.billing')
             @elseif ($activePage === 'room-availability')
