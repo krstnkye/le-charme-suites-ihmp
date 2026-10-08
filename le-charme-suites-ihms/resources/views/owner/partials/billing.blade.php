@@ -94,7 +94,7 @@
     </div>
 </section>
 
-<section class="owner-card overflow-hidden rounded-2xl" id="billing-records">
+<section class="owner-card scroll-mt-24 overflow-hidden rounded-2xl" id="billing-records">
     <div class="flex flex-col justify-between gap-4 border-b border-line bg-white p-6 md:flex-row md:items-center">
         <div>
             <div class="flex items-center gap-2">
@@ -128,7 +128,7 @@
         </div>
     </div>
 
-    <div class="owner-scroll overflow-x-auto">
+    <div id="transactions" class="owner-scroll overflow-x-auto scroll-mt-24">
         <table class="w-full min-w-[1040px] border-collapse text-left text-sm">
             <thead>
                 <tr class="border-b border-line bg-surface-mid text-[11px] font-bold uppercase tracking-wider text-slate-600">

@@ -123,7 +123,7 @@
                 </div>
             </div>
 
-            <nav class="owner-scroll flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-3 py-4 text-sm font-semibold" aria-label="Owner Navigation">
+            <nav id="ownerSidebarNav" class="owner-scroll flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-3 py-4 text-sm font-semibold" aria-label="Owner Navigation">
                 @foreach ($ownerNavGroups as $group)
                     <div class="space-y-1">
                         @foreach ($group['items'] as $item)
@@ -247,6 +247,31 @@
         }
         updateOwnerClock();
         setInterval(updateOwnerClock, 1000);
+
+        (() => {
+            const sidebar = document.getElementById('ownerSidebarNav');
+            if (!sidebar) {
+                return;
+            }
+
+            const storageKey = 'le-charme-owner-sidebar-scroll';
+            const savedScroll = Number.parseInt(sessionStorage.getItem(storageKey) || '0', 10);
+            if (!Number.isNaN(savedScroll)) {
+                requestAnimationFrame(() => {
+                    sidebar.scrollTop = savedScroll;
+                });
+            }
+
+            const rememberSidebarPosition = () => {
+                sessionStorage.setItem(storageKey, String(sidebar.scrollTop));
+            };
+
+            sidebar.addEventListener('scroll', rememberSidebarPosition, { passive: true });
+            sidebar.querySelectorAll('a[href]').forEach((link) => {
+                link.addEventListener('click', rememberSidebarPosition);
+            });
+            window.addEventListener('beforeunload', rememberSidebarPosition);
+        })();
     </script>
 </body>
 </html>
