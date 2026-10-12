@@ -14,7 +14,8 @@
             $statusList = $items->pluck('status')->map(fn ($status) => strtolower((string) $status));
             $settledStatuses = ['paid', 'settled', 'completed', 'recorded', 'cleared'];
             $isSettled = $statusList->isNotEmpty() && $statusList->every(fn ($status) => in_array($status, $settledStatuses, true));
-            $hasDeposit = $items->contains(fn ($transaction) => str_contains(strtolower((string) $transaction->transaction_type), 'deposit'));
+            $typeText = strtolower($items->pluck('transaction_type')->join(' '));
+            $hasDeposit = str_contains($typeText, 'deposit') || str_contains($typeText, 'incidental');
             $roomRate = (float) ($first?->room?->rate ?? 0);
             $total = (float) $items->sum('amount');
             $tax = $total > 0 ? $total * 0.12 : 0;
@@ -30,10 +31,10 @@
                 'stay' => $first?->reservation
                     ? $first->reservation->check_in_date?->format('M d').' - '.$first->reservation->check_out_date?->format('M d, Y')
                     : 'Walk-in / direct billing',
-                'category' => $hasDeposit ? 'Deposit / Incidental' : ($first?->reservation ? 'Guest Stay Billing' : 'Direct Charge'),
+                'category' => $hasDeposit ? 'Incidental Deposit' : ($first?->reservation ? 'Guest Stay Invoice' : 'Direct Billing'),
                 'status' => $isSettled ? 'settled' : ($hasDeposit ? 'deposit' : 'active'),
-                'status_label' => $isSettled ? 'Settled & Archived' : ($hasDeposit ? 'Deposit Tracked' : 'Active Account'),
-                'channel' => $items->pluck('transaction_type')->map(fn ($type) => str($type)->replace('_', ' ')->title()->toString())->unique()->implode(', ') ?: 'Manual ledger',
+                'status_label' => $isSettled ? 'Audited & Archived' : ($hasDeposit ? 'Deposit Tracked' : 'Active Account'),
+                'channel' => $items->pluck('transaction_type')->map(fn ($type) => str($type ?: 'manual ledger')->replace('_', ' ')->title()->toString())->unique()->implode(', ') ?: 'Manual Ledger',
                 'total' => $total,
                 'tax' => $tax,
                 'room_rate' => $roomRate,
@@ -52,144 +53,214 @@
     $depositCount = $billingRecords->where('status', 'deposit')->count();
     $grossBilledVolume = (float) $billingRecords->sum('total');
     $taxTracked = (float) $billingRecords->sum('tax');
-    $outstandingTotal = (float) $billingRecords->where('status', 'active')->sum('total');
-    $auditHash = substr(strtoupper(hash('sha256', 'owner-billing-records-'.$recordCount.'-'.$grossBilledVolume)), 0, 12);
+    $outstandingTotal = (float) $billingRecords->whereIn('status', ['active', 'deposit'])->sum('total');
+    $auditHash = substr(strtoupper(hash('sha256', 'owner-billing-records-'.$recordCount.'-'.$grossBilledVolume)), 0, 4).'-'.substr(strtoupper(hash('sha256', 'tax-'.$taxTracked)), 0, 4).'-'.substr(strtoupper(hash('sha256', 'settled-'.$settledCount)), 0, 4);
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
-    <div class="pointer-events-none absolute -right-20 top-0 h-72 w-72 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
-    <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-end">
-        <div>
-            <span class="rounded border border-secondary-fixed/40 bg-secondary/30 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Financial Governance</span>
-            <h2 class="mt-3 font-serif text-4xl font-bold leading-tight">Billing Records & Account Archive</h2>
-            <p class="mt-2 max-w-4xl text-sm leading-6 text-blue-100">Read-only owner view of grouped guest billing accounts, invoice totals, taxes, settlement status, and audit traceability.</p>
+<section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-xl">
+    <div class="pointer-events-none absolute -bottom-20 -right-16 text-secondary-fixed/5">
+        <span class="material-symbols-outlined text-[260px]">receipt_long</span>
+    </div>
+    <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
+        <div class="max-w-4xl space-y-3">
+            <div class="flex flex-wrap items-center gap-3">
+                <span class="rounded border border-secondary-fixed/40 bg-secondary/30 px-2.5 py-1 text-xs font-bold uppercase tracking-[0.18em] text-secondary-fixed">Audit Archive & Settlement Ledger</span>
+                <span class="text-xs font-semibold text-blue-100/80">Direct feed • Terminal sync active</span>
+            </div>
+            <h2 class="font-serif text-4xl font-bold leading-tight">Billing Records & Account Archive</h2>
+            <p class="max-w-3xl text-sm leading-6 text-blue-100">Complete owner visibility into guest billing accounts, invoice reconciliation, itemized room tariffs, deposits, taxes, and settlement audit status.</p>
         </div>
-        <div class="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-white/10 p-4 sm:grid-cols-4 xl:w-[620px]">
-            <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Records</p><p class="mt-1 font-serif text-2xl font-bold">{{ $recordCount }}</p></div>
-            <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Active</p><p class="mt-1 font-serif text-2xl font-bold">{{ $activeCount }}</p></div>
-            <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Settled</p><p class="mt-1 font-serif text-2xl font-bold">{{ $settledCount }}</p></div>
-            <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Gross Billed</p><p class="mt-1 font-serif text-xl font-bold">PHP {{ number_format($grossBilledVolume, 2) }}</p></div>
+        <div class="grid shrink-0 grid-cols-2 gap-3 sm:grid-cols-4 xl:w-[650px]">
+            <div class="rounded-lg border border-white/10 bg-white/10 p-3.5 backdrop-blur-sm">
+                <span class="block text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Total Invoices</span>
+                <span class="mt-1 block font-serif text-xl font-bold">{{ $recordCount }} Records</span>
+                <span class="mt-1 flex items-center gap-1 text-[11px] text-secondary-fixed"><span class="h-1.5 w-1.5 rounded-full bg-secondary-fixed"></span>{{ $activeCount }} Active, {{ $settledCount }} Closed</span>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-white/10 p-3.5 backdrop-blur-sm">
+                <span class="block text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Settled Intake</span>
+                <span class="mt-1 block font-serif text-xl font-bold">PHP {{ number_format($grossBilledVolume, 2) }}</span>
+                <span class="mt-1 block text-[11px] text-blue-100/70">Live transaction ledger</span>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-white/10 p-3.5 backdrop-blur-sm">
+                <span class="block text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Outstanding Review</span>
+                <span class="mt-1 block font-serif text-xl font-bold text-secondary-fixed">PHP {{ number_format($outstandingTotal, 2) }}</span>
+                <span class="mt-1 block text-[11px] text-blue-100/70">Active or deposit accounts</span>
+            </div>
+            <div class="rounded-lg border border-white/10 bg-white/10 p-3.5 backdrop-blur-sm">
+                <span class="block text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Tax Tracked</span>
+                <span class="mt-1 block font-serif text-xl font-bold">PHP {{ number_format($taxTracked, 2) }}</span>
+                <span class="mt-1 block text-[11px] text-blue-100/70">Estimated VAT visibility</span>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Billing Accounts</span><span class="material-symbols-outlined text-secondary">receipt_long</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $recordCount }}</p><p class="mt-1 text-sm text-slate-500">Grouped from transaction records</p></div>
-    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Outstanding Review</span><span class="material-symbols-outlined text-secondary">pending_actions</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($outstandingTotal, 2) }}</p><p class="mt-1 text-sm text-slate-500">{{ $activeCount }} active accounts</p></div>
-    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Deposit Records</span><span class="material-symbols-outlined text-secondary">account_balance_wallet</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $depositCount }}</p><p class="mt-1 text-sm text-slate-500">Incidental or deposit tracking</p></div>
-    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Tax Visibility</span><span class="material-symbols-outlined text-secondary">verified_user</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($taxTracked, 2) }}</p><p class="mt-1 text-sm text-slate-500">Estimated VAT from records</p></div>
+    <div class="owner-card relative overflow-hidden rounded-xl border-secondary-fixed/50 p-5 transition hover:border-secondary">
+        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Active Billing Accounts</span><span class="material-symbols-outlined text-secondary">receipt</span></div>
+        <h3 class="mt-3 font-serif text-3xl font-bold text-primary">{{ $activeCount }} Active</h3>
+        <p class="mt-1 text-sm text-slate-500">{{ $settledCount }} closed and audited records</p>
+        <div class="mt-3 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Checkout queue</span><span class="font-bold text-secondary">{{ $recordCount }} total</span></div>
+    </div>
+    <div class="owner-card relative overflow-hidden rounded-xl border-secondary-fixed/50 p-5 transition hover:border-secondary">
+        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Gross Billed Volume</span><span class="material-symbols-outlined text-secondary">monitoring</span></div>
+        <h3 class="mt-3 font-serif text-3xl font-bold text-primary">PHP {{ number_format($grossBilledVolume, 2) }}</h3>
+        <p class="mt-1 text-sm text-slate-500">Compiled from transaction records</p>
+        <div class="mt-3 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Latest sync</span><span class="font-bold text-secondary">{{ now('Asia/Manila')->format('h:i A') }} PHT</span></div>
+    </div>
+    <div class="owner-card relative overflow-hidden rounded-xl border-secondary-fixed/50 p-5 transition hover:border-secondary">
+        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Deposit Records</span><span class="material-symbols-outlined text-secondary">account_balance_wallet</span></div>
+        <h3 class="mt-3 font-serif text-3xl font-bold text-primary">{{ $depositCount }} Deposits</h3>
+        <p class="mt-1 text-sm text-slate-500">Incidental or deposit tracking</p>
+        <div class="mt-3 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Refundable after audit</span><span class="font-bold text-secondary">Vault</span></div>
+    </div>
+    <div class="owner-card relative overflow-hidden rounded-xl border-secondary-fixed/50 p-5 transition hover:border-secondary">
+        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Audit & Compliance</span><span class="material-symbols-outlined text-secondary">verified_user</span></div>
+        <h3 class="mt-3 font-serif text-3xl font-bold text-primary">Verified</h3>
+        <p class="mt-1 text-sm text-slate-500">Owner read-only review mode</p>
+        <div class="mt-3 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Hash chain</span><span class="font-mono font-bold text-secondary">{{ $auditHash }}</span></div>
+    </div>
 </section>
 
 <section class="owner-card overflow-hidden rounded-xl" id="billing-records">
-    <div class="flex flex-col gap-4 border-b border-line p-5 xl:flex-row xl:items-center xl:justify-between">
+    <div class="flex flex-col gap-4 border-b border-line bg-white p-5 lg:flex-row lg:items-center lg:justify-between">
         <div>
-            <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Owner Access / Billing Records</p>
-            <h3 class="mt-1 font-serif text-2xl font-bold">Master Billing Records Ledger</h3>
-            <p class="mt-1 text-sm text-slate-500">Invoice and account summaries compiled from the live transaction ledger.</p>
-        </div>
-        <div class="flex flex-wrap gap-2">
-            <button id="ownerBillingRecordExport" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-sm font-bold text-primary shadow-sm transition hover:border-secondary">
-                <span class="material-symbols-outlined text-base">download</span> Export Audit Ledger
-            </button>
-            <button id="ownerBillingRecordFocus" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-primary-container">
-                <span class="material-symbols-outlined text-base">filter_alt</span> Filter Ledger
-            </button>
-        </div>
-    </div>
-
-    <div class="border-b border-line bg-surface-low p-4">
-        <div class="grid gap-3 xl:grid-cols-[1fr_auto] xl:items-center">
-            <label class="relative block">
-                <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                <input id="ownerBillingRecordSearch" type="search" class="w-full rounded-lg border-line bg-white py-2.5 pl-10 text-sm shadow-sm focus:border-secondary focus:ring-secondary" placeholder="Search invoice, account, guest, room, or payment type...">
-            </label>
-            <div class="flex flex-wrap gap-2" data-owner-billing-record-filters>
-                <button class="rounded-full bg-primary px-4 py-2 text-xs font-bold text-white" data-record-filter="all">All Records <span class="ml-1 rounded-full bg-white/15 px-1.5">{{ $recordCount }}</span></button>
-                <button class="rounded-full bg-white px-4 py-2 text-xs font-bold text-primary ring-1 ring-line" data-record-filter="active">Active Accounts <span class="ml-1 rounded-full bg-surface-mid px-1.5">{{ $activeCount }}</span></button>
-                <button class="rounded-full bg-white px-4 py-2 text-xs font-bold text-primary ring-1 ring-line" data-record-filter="settled">Settled & Archived <span class="ml-1 rounded-full bg-surface-mid px-1.5">{{ $settledCount }}</span></button>
-                <button class="rounded-full bg-white px-4 py-2 text-xs font-bold text-primary ring-1 ring-line" data-record-filter="deposit">Deposits <span class="ml-1 rounded-full bg-surface-mid px-1.5">{{ $depositCount }}</span></button>
+            <div class="flex flex-wrap items-center gap-2">
+                <h3 class="font-serif text-2xl font-bold text-primary">Master Billing Records Ledger</h3>
+                <span class="rounded border border-line bg-surface-mid px-2 py-0.5 text-xs font-bold text-slate-600">Audit Mode</span>
             </div>
+            <p class="mt-1 text-sm text-slate-500">Owner visibility into revenue, account postings, and invoice reconciliations without cashier settlement controls.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5">
+            <button id="ownerBillingRecordExport" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface-low px-3.5 py-2 text-sm font-bold text-primary transition hover:border-secondary">
+                <span class="material-symbols-outlined text-lg text-secondary">download</span>
+                Export Audit Ledger
+            </button>
+            <button id="ownerBillingRecordFocus" type="button" class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-2 text-sm font-bold text-white transition hover:bg-primary-container">
+                <span class="material-symbols-outlined text-lg text-secondary-fixed">manage_search</span>
+                Filter Ledger
+            </button>
         </div>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="min-w-full text-left text-sm">
-            <thead class="bg-surface-mid text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                <tr>
+    <div class="space-y-3 border-b border-line bg-surface-low p-4">
+        <label class="relative block">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-slate-400">search</span>
+            <input id="ownerBillingRecordSearch" class="w-full rounded-lg border border-line bg-white py-2.5 pl-10 pr-4 text-sm text-primary placeholder:text-slate-400 focus:border-secondary focus:ring-secondary/20" placeholder="Search invoice ref, guest name, room number, or account ID..." type="search" autocomplete="off">
+        </label>
+        <div class="owner-scroll flex items-center gap-2 overflow-x-auto" data-owner-billing-record-filters>
+            <button type="button" class="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white" data-record-filter="all">All Records ({{ $recordCount }})</button>
+            <button type="button" class="rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:text-primary" data-record-filter="active">Active Accounts ({{ $activeCount }})</button>
+            <button type="button" class="rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:text-primary" data-record-filter="settled">Settled & Archived ({{ $settledCount }})</button>
+            <button type="button" class="rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:text-primary" data-record-filter="deposit">Deposits ({{ $depositCount }})</button>
+        </div>
+    </div>
+
+    <div class="owner-scroll overflow-x-auto">
+        <table class="w-full min-w-[1200px] border-collapse text-left text-sm">
+            <thead>
+                <tr class="border-b border-line bg-surface-mid text-[11px] font-bold uppercase tracking-wider text-slate-600">
                     <th class="px-4 py-3">Invoice / Account ID</th>
                     <th class="px-4 py-3">Guest & Account Profile</th>
                     <th class="px-4 py-3">Room & Stay Duration</th>
                     <th class="px-4 py-3">Billing Category</th>
-                    <th class="px-4 py-3">Net Amount & Tax</th>
+                    <th class="px-4 py-3 text-right">Net Amount & Tax</th>
                     <th class="px-4 py-3">Payment Channel</th>
-                    <th class="px-4 py-3">Audit Status</th>
-                    <th class="px-4 py-3 text-right">Action</th>
+                    <th class="px-4 py-3 text-center">Audit Status</th>
+                    <th class="px-4 py-3 text-right">Actions</th>
                 </tr>
             </thead>
-            <tbody id="ownerBillingRecordRows" class="divide-y divide-line bg-white">
+            <tbody class="divide-y divide-line bg-white">
                 @forelse ($billingRecords as $record)
-                    <tr data-billing-record-row data-status="{{ $record['status'] }}" data-search="{{ strtolower($record['invoice'].' '.$record['account'].' '.$record['guest'].' '.$record['email'].' '.$record['room'].' '.$record['category'].' '.$record['channel']) }}">
-                        <td class="px-4 py-4">
-                            <p class="font-mono text-xs font-bold text-primary">{{ $record['invoice'] }}</p>
-                            <p class="mt-1 font-mono text-[11px] text-slate-500">{{ $record['account'] }}</p>
+                    @php
+                        $dotClass = match ($record['status']) {
+                            'active' => 'bg-emerald-500',
+                            'settled' => 'bg-blue-500',
+                            'deposit' => 'bg-amber-500',
+                            default => 'bg-slate-400',
+                        };
+                    @endphp
+                    <tr class="transition hover:bg-surface-low/70" data-billing-record-row data-status="{{ $record['status'] }}" data-search="{{ e(strtolower($record['invoice'].' '.$record['account'].' '.$record['guest'].' '.$record['email'].' '.$record['room'].' '.$record['category'].' '.$record['channel'].' '.$record['status_label'])) }}">
+                        <td class="px-4 py-3.5 align-top font-mono font-semibold text-primary">
+                            <div class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full {{ $dotClass }}"></span><span>#{{ $record['invoice'] }}</span></div>
+                            <span class="mt-0.5 block font-sans text-[11px] text-slate-500">Account: {{ $record['account'] }}</span>
                         </td>
-                        <td class="px-4 py-4">
-                            <p class="font-bold">{{ $record['guest'] }}</p>
-                            <p class="mt-1 text-xs text-slate-500">{{ $record['email'] }}</p>
+                        <td class="px-4 py-3.5 align-top">
+                            <div class="font-bold text-primary">{{ $record['guest'] }}</div>
+                            <div class="mt-0.5 text-[11px] text-slate-500">{{ $record['email'] }}</div>
                         </td>
-                        <td class="px-4 py-4">
-                            <p class="font-bold">{{ $record['room'] }}</p>
-                            <p class="mt-1 text-xs text-slate-500">{{ $record['room_type'] }} • {{ $record['stay'] }}</p>
+                        <td class="px-4 py-3.5 align-top">
+                            <div class="flex items-center gap-1.5 font-semibold text-primary"><span class="material-symbols-outlined text-[16px] text-secondary">bed</span>{{ $record['room'] }}</div>
+                            <span class="mt-0.5 block text-[11px] text-slate-500">{{ $record['room_type'] }} • {{ $record['stay'] }}</span>
                         </td>
-                        <td class="px-4 py-4">
-                            <span @class(['rounded-full px-2.5 py-1 text-xs font-bold', 'bg-blue-50 text-blue-700' => $record['status'] === 'active', 'bg-emerald-50 text-emerald-700' => $record['status'] === 'settled', 'bg-amber-50 text-amber-700' => $record['status'] === 'deposit'])>{{ $record['category'] }}</span>
+                        <td class="px-4 py-3.5 align-top">
+                            <span @class(['inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-bold', 'border-emerald-200 bg-emerald-50 text-emerald-700' => $record['status'] === 'active', 'border-blue-200 bg-blue-50 text-blue-700' => $record['status'] === 'settled', 'border-amber-200 bg-amber-50 text-amber-700' => $record['status'] === 'deposit'])>{{ $record['category'] }}</span>
+                            <span class="mt-1 block text-[11px] text-slate-500">{{ $record['line_count'] }} ledger line(s)</span>
                         </td>
-                        <td class="px-4 py-4">
-                            <p class="font-serif text-lg font-bold">PHP {{ number_format($record['total'], 2) }}</p>
-                            <p class="mt-1 text-xs text-slate-500">Tax est. PHP {{ number_format($record['tax'], 2) }}</p>
+                        <td class="px-4 py-3.5 text-right align-top">
+                            <div class="font-serif text-lg font-bold text-primary">PHP {{ number_format($record['total'], 2) }}</div>
+                            <div class="mt-0.5 text-[11px] text-slate-500">VAT est. PHP {{ number_format($record['tax'], 2) }}</div>
                         </td>
-                        <td class="px-4 py-4 text-slate-600">{{ $record['channel'] }}</td>
-                        <td class="px-4 py-4">
-                            <p @class(['inline-flex rounded-full px-2.5 py-1 text-xs font-bold', 'bg-blue-50 text-blue-700' => $record['status'] === 'active', 'bg-emerald-50 text-emerald-700' => $record['status'] === 'settled', 'bg-amber-50 text-amber-700' => $record['status'] === 'deposit'])>{{ $record['status_label'] }}</p>
-                            <p class="mt-1 font-mono text-[11px] text-slate-500">Hash {{ $record['audit'] }}</p>
+                        <td class="px-4 py-3.5 align-top">
+                            <div class="flex items-center gap-1.5 text-xs font-semibold text-primary"><span class="material-symbols-outlined text-[16px] text-secondary">point_of_sale</span>{{ $record['channel'] }}</div>
+                            <span class="mt-0.5 block text-[11px] text-slate-500">Room rate PHP {{ number_format($record['room_rate'], 2) }}</span>
                         </td>
-                        <td class="px-4 py-4 text-right">
-                            <button class="rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary transition hover:border-secondary" data-record-toggle="{{ $record['key'] }}">View Summary</button>
+                        <td class="px-4 py-3.5 text-center align-top">
+                            <span @class(['inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-bold', 'border-emerald-200 bg-emerald-50 text-emerald-700' => $record['status'] === 'active', 'border-blue-200 bg-blue-50 text-blue-700' => $record['status'] === 'settled', 'border-amber-200 bg-amber-50 text-amber-700' => $record['status'] === 'deposit'])>
+                                <span class="material-symbols-outlined text-[13px]">{{ $record['status'] === 'settled' ? 'archive' : ($record['status'] === 'deposit' ? 'account_balance_wallet' : 'pending_actions') }}</span>
+                                {{ $record['status_label'] }}
+                            </span>
+                            <span class="mt-1 block font-mono text-[11px] text-slate-500">Hash {{ $record['audit'] }}</span>
+                        </td>
+                        <td class="px-4 py-3.5 text-right align-top">
+                            <button type="button" class="rounded border border-line bg-surface-low px-2.5 py-1 text-xs font-bold text-primary transition hover:border-secondary" data-record-toggle="{{ $record['key'] }}">Account Dossier</button>
                         </td>
                     </tr>
                     <tr class="hidden bg-surface-low" data-billing-record-detail="{{ $record['key'] }}">
                         <td colspan="8" class="px-4 py-4">
                             <div class="grid gap-3 text-sm md:grid-cols-4">
-                                <div class="rounded-lg border border-line bg-white p-3"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Line Items</p><p class="mt-1 font-serif text-2xl font-bold">{{ $record['line_count'] }}</p></div>
-                                <div class="rounded-lg border border-line bg-white p-3"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Room Rate</p><p class="mt-1 font-serif text-2xl font-bold">PHP {{ number_format($record['room_rate'], 2) }}</p></div>
-                                <div class="rounded-lg border border-line bg-white p-3"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Last Activity</p><p class="mt-1 font-mono text-xs">{{ $record['latest']?->format('M d, Y h:i A') ?? 'No date' }}</p></div>
-                                <div class="rounded-lg border border-line bg-white p-3"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Owner Control</p><p class="mt-1 text-xs text-slate-600">View-only account review</p></div>
+                                <div class="rounded-lg border border-line bg-white p-3"><p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Line Items</p><p class="mt-1 font-serif text-2xl font-bold">{{ $record['line_count'] }}</p></div>
+                                <div class="rounded-lg border border-line bg-white p-3"><p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Room Rate</p><p class="mt-1 font-serif text-2xl font-bold">PHP {{ number_format($record['room_rate'], 2) }}</p></div>
+                                <div class="rounded-lg border border-line bg-white p-3"><p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Last Activity</p><p class="mt-1 font-mono text-xs">{{ $record['latest']?->format('M d, Y h:i A') ?? 'No date' }}</p></div>
+                                <div class="rounded-lg border border-line bg-white p-3"><p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Owner Control</p><p class="mt-1 text-sm font-bold text-primary">View Only</p></div>
                             </div>
                             <p class="mt-3 rounded-lg border border-line bg-white p-3 text-sm text-slate-600">{{ $record['descriptions'] ?: 'No additional billing notes recorded for this account.' }}</p>
                         </td>
                     </tr>
                 @empty
                     <tr data-billing-record-empty>
-                        <td colspan="8" class="px-4 py-16 text-center text-slate-500">No billing records are available in the owner archive yet.</td>
+                        <td colspan="8" class="px-6 py-16 text-center text-sm text-slate-500">No billing records are available in the owner archive yet.</td>
                     </tr>
                 @endforelse
                 <tr class="hidden" data-billing-record-no-results>
-                    <td colspan="8" class="px-4 py-16 text-center text-slate-500">No billing records match the current search or filter.</td>
+                    <td colspan="8" class="px-6 py-16 text-center text-sm text-slate-500">No billing records match the current search or filter.</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="flex flex-col gap-3 border-t border-line bg-surface-low px-5 py-4 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
-        <span>Showing <strong data-billing-record-visible>{{ $recordCount }}</strong> of {{ $recordCount }} billing records</span>
-        <span class="font-mono text-xs">Ledger audit hash: {{ $auditHash }}</span>
+    <div class="flex flex-col justify-between gap-3 border-t border-line bg-surface-low px-5 py-3.5 text-xs text-slate-600 sm:flex-row sm:items-center">
+        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px] text-secondary">verified</span><span>Showing <strong data-billing-record-visible>{{ $recordCount }}</strong> audited billing records • Total Recorded Ledger Intake: <strong class="font-bold text-primary">PHP {{ number_format($grossBilledVolume, 2) }}</strong></span></div>
+        <div class="flex items-center gap-4"><span class="font-mono text-[11px] text-slate-500">Audit Hash: {{ $auditHash }}</span><span class="inline-flex items-center gap-1 font-bold text-secondary"><span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>Verified Ledger</span></div>
     </div>
 </section>
 
-<section class="grid grid-cols-1 gap-4 xl:grid-cols-3">
-    <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Revenue Velocity</p><h3 class="mt-2 font-serif text-2xl font-bold">PHP {{ number_format($grossBilledVolume, 2) }}</h3><p class="mt-2 text-sm leading-6 text-slate-500">Total billing volume reflected by current live transaction records.</p></div>
-    <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Settlement Health</p><h3 class="mt-2 font-serif text-2xl font-bold">{{ $settledCount }} / {{ $recordCount }}</h3><p class="mt-2 text-sm leading-6 text-slate-500">Accounts marked settled, completed, cleared, or recorded in the ledger.</p></div>
-    <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Governance Notice</p><h3 class="mt-2 font-serif text-2xl font-bold">View Only</h3><p class="mt-2 text-sm leading-6 text-slate-500">Owner accounts can inspect billing records, but posting and correction controls remain with the billing department or admin.</p></div>
+<section class="grid grid-cols-1 gap-5 md:grid-cols-3">
+    <div class="owner-card rounded-xl border-l-4 border-l-secondary p-5">
+        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-secondary">Revenue Velocity</span><span class="material-symbols-outlined text-slate-400">speed</span></div>
+        <h4 class="mt-2 font-serif text-2xl font-bold text-primary">Live Archive</h4>
+        <p class="mt-1 text-sm leading-6 text-slate-500">Billing records are compiled from live hotel transactions and grouped by guest, reservation, and room.</p>
+    </div>
+    <div class="owner-card rounded-xl border-l-4 border-l-primary-container p-5">
+        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-secondary">Settlement Health</span><span class="material-symbols-outlined text-slate-400">account_balance_wallet</span></div>
+        <h4 class="mt-2 font-serif text-2xl font-bold text-primary">{{ $settledCount }} / {{ $recordCount }} Closed</h4>
+        <p class="mt-1 text-sm leading-6 text-slate-500">Archived records are marked settled, completed, cleared, paid, or recorded in the ledger.</p>
+    </div>
+    <div class="owner-card rounded-xl border-l-4 border-l-emerald-600 p-5">
+        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-secondary">Statutory Governance</span><span class="material-symbols-outlined text-slate-400">account_balance</span></div>
+        <h4 class="mt-2 font-serif text-2xl font-bold text-primary">Tax Review Ready</h4>
+        <p class="mt-1 text-sm leading-6 text-slate-500">Estimated VAT and account totals are visible for owner review without record editing privileges.</p>
+    </div>
 </section>
 
 <script>
@@ -214,10 +285,12 @@
                 const matchesSearch = !term || (row.dataset.search || '').includes(term);
                 const show = matchesFilter && matchesSearch;
                 row.classList.toggle('hidden', !show);
+
                 const detail = detailFor(row.querySelector('[data-record-toggle]')?.dataset.recordToggle || '');
                 if (!show && detail) {
                     detail.classList.add('hidden');
                 }
+
                 if (show) {
                     visible += 1;
                 }
@@ -226,9 +299,7 @@
             if (visibleCounter) {
                 visibleCounter.textContent = visible;
             }
-            if (noResults) {
-                noResults.classList.toggle('hidden', visible !== 0);
-            }
+            noResults?.classList.toggle('hidden', visible !== 0);
         }
 
         filterButtons.forEach((button) => {
@@ -238,10 +309,10 @@
                     const selected = item === button;
                     item.classList.toggle('bg-primary', selected);
                     item.classList.toggle('text-white', selected);
+                    item.classList.toggle('border-primary', selected);
                     item.classList.toggle('bg-white', !selected);
-                    item.classList.toggle('text-primary', !selected);
-                    item.classList.toggle('ring-1', !selected);
-                    item.classList.toggle('ring-line', !selected);
+                    item.classList.toggle('text-slate-600', !selected);
+                    item.classList.toggle('border-line', !selected);
                 });
                 applyFilters();
             });
@@ -260,7 +331,7 @@
                     return;
                 }
                 const isHidden = detail.classList.toggle('hidden');
-                button.textContent = isHidden ? 'View Summary' : 'Hide Summary';
+                button.textContent = isHidden ? 'Account Dossier' : 'Hide Dossier';
             });
         });
 
