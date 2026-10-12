@@ -11,6 +11,7 @@
         in_array($activePage, ['checkin-records', 'checkout-records'], true) => 'checkins',
         in_array($activePage, ['billing-records'], true) => 'billing',
         in_array($activePage, ['housekeeping-requests'], true) => 'housekeeping',
+        in_array($activePage, ['operational-reports'], true) => 'reports',
         default => $activePage,
     };
     $occupancyRate = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) : 0;
@@ -53,7 +54,7 @@
                 ['key' => 'housekeeping-requests', 'label' => 'Housekeeping Requests', 'href' => route('owner.page', ['page' => 'housekeeping-requests'])],
             ]],
             ['key' => 'reports', 'label' => 'Reports & Records', 'icon' => 'query_stats', 'href' => route('owner.page', ['page' => 'reports']), 'children' => [
-                ['label' => 'Operational Reports', 'href' => route('owner.page', ['page' => 'reports']).'#operational-reports'],
+                ['key' => 'operational-reports', 'label' => 'Operational Reports', 'href' => route('owner.page', ['page' => 'operational-reports'])],
                 ['label' => 'Transaction Reports', 'href' => route('owner.page', ['page' => 'reports']).'#transaction-reports'],
                 ['label' => 'Records', 'href' => route('owner.page', ['page' => 'reports']).'#records'],
             ]],
@@ -75,6 +76,7 @@
         'housekeeping' => ['Housekeeping Monitor', 'Room readiness and housekeeping activity oversight.'],
         'housekeeping-requests' => ['Housekeeping Requests', 'Guest service, amenity, cleaning, and maintenance request monitoring.'],
         'reports' => ['Reports & Records Overview', 'Executive reporting shortcuts and operational records summary.'],
+        'operational-reports' => ['Operational Reports', 'Departmental telemetry, room readiness, occupancy, and workflow pacing.'],
     ];
     [$pageTitle, $pageSubtitle] = $titles[$activePage] ?? $titles['dashboard'];
 @endphp
@@ -203,6 +205,8 @@
                 @include('owner.partials.rooms')
             @elseif ($activePage === 'reports')
                 @include('owner.partials.reports')
+            @elseif ($activePage === 'operational-reports')
+                @include('owner.partials.operational-reports')
             @else
             <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
                 <div class="pointer-events-none absolute -bottom-20 -right-16 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
