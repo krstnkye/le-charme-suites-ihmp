@@ -10,6 +10,7 @@
         in_array($activePage, ['room-inventory', 'room-availability', 'room-status'], true) => 'rooms',
         in_array($activePage, ['checkin-records', 'checkout-records'], true) => 'checkins',
         in_array($activePage, ['billing-records'], true) => 'billing',
+        in_array($activePage, ['housekeeping-requests'], true) => 'housekeeping',
         default => $activePage,
     };
     $occupancyRate = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) : 0;
@@ -48,8 +49,8 @@
         ]],
         ['items' => [
             ['key' => 'housekeeping', 'label' => 'Housekeeping', 'icon' => 'cleaning_services', 'href' => route('owner.page', ['page' => 'housekeeping']), 'children' => [
-                ['label' => 'Room Status', 'href' => route('owner.page', ['page' => 'housekeeping']).'#housekeeping-room-status'],
-                ['label' => 'Housekeeping Requests', 'href' => route('owner.page', ['page' => 'housekeeping']).'#housekeeping-requests'],
+                ['key' => 'room-status', 'label' => 'Room Status', 'href' => route('owner.page', ['page' => 'room-status'])],
+                ['key' => 'housekeeping-requests', 'label' => 'Housekeeping Requests', 'href' => route('owner.page', ['page' => 'housekeeping-requests'])],
             ]],
             ['key' => 'reports', 'label' => 'Reports & Records', 'icon' => 'query_stats', 'href' => route('owner.page', ['page' => 'reports']), 'children' => [
                 ['label' => 'Operational Reports', 'href' => route('owner.page', ['page' => 'reports']).'#operational-reports'],
@@ -72,6 +73,7 @@
         'billing' => ['Billing & Transactions Overview', 'Revenue, settlement, and transaction monitoring.'],
         'billing-records' => ['Billing Records', 'Grouped guest billing accounts, invoice totals, settlement status, and audit visibility.'],
         'housekeeping' => ['Housekeeping Monitor', 'Room readiness and housekeeping activity oversight.'],
+        'housekeeping-requests' => ['Housekeeping Requests', 'Guest service, amenity, cleaning, and maintenance request monitoring.'],
         'reports' => ['Reports & Records Overview', 'Executive reporting shortcuts and operational records summary.'],
     ];
     [$pageTitle, $pageSubtitle] = $titles[$activePage] ?? $titles['dashboard'];
@@ -191,6 +193,8 @@
                 @include('owner.partials.billing')
             @elseif ($activePage === 'housekeeping')
                 @include('owner.partials.housekeeping')
+            @elseif ($activePage === 'housekeeping-requests')
+                @include('owner.partials.housekeeping-requests')
             @elseif ($activePage === 'room-availability')
                 @include('owner.partials.room-availability')
             @elseif ($activePage === 'room-status')
