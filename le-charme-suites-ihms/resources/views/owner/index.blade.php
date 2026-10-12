@@ -189,6 +189,8 @@
                 @include('owner.partials.billing-records')
             @elseif ($activePage === 'billing')
                 @include('owner.partials.billing')
+            @elseif ($activePage === 'housekeeping')
+                @include('owner.partials.housekeeping')
             @elseif ($activePage === 'room-availability')
                 @include('owner.partials.room-availability')
             @elseif ($activePage === 'room-status')
@@ -226,16 +228,6 @@
                     <x-owner-table :headers="['Date', 'Type', 'Guest', 'Room', 'Amount', 'Status']">
                         @foreach ($transactions as $transaction)
                             <tr class="border-b border-line"><td class="px-4 py-3 font-mono text-xs">{{ $transaction->transaction_date?->format('M d, Y h:i A') }}</td><td class="px-4 py-3 font-bold">{{ str_replace('_', ' ', ucfirst($transaction->transaction_type)) }}</td><td class="px-4 py-3">{{ $transaction->guest?->full_name ?? 'N/A' }}</td><td class="px-4 py-3">{{ $transaction->room?->room_number ?? 'N/A' }}</td><td class="px-4 py-3">PHP {{ number_format($transaction->amount, 2) }}</td><td class="px-4 py-3"><span class="rounded bg-surface-mid px-2 py-1 text-xs font-bold capitalize">{{ $transaction->status }}</span></td></tr>
-                        @endforeach
-                    </x-owner-table>
-                </x-owner-panel>
-            @endif
-
-            @if ($activePage === 'housekeeping')
-                <x-owner-panel id="housekeeping-requests" title="Housekeeping Activity Monitor" subtitle="Room readiness and maintenance events from housekeeping activity logs.">
-                    <x-owner-table :headers="['Room', 'Status', 'Notes', 'Changed At']">
-                        @foreach ($housekeepingLogs as $log)
-                            <tr class="border-b border-line"><td class="px-4 py-3 font-bold">Room {{ $log->room?->room_number ?? 'N/A' }}</td><td class="px-4 py-3"><span class="rounded bg-surface-mid px-2 py-1 text-xs font-bold capitalize">{{ $log->status }}</span></td><td class="px-4 py-3 text-slate-600">{{ $log->notes ?? 'No notes recorded' }}</td><td class="px-4 py-3 font-mono text-xs">{{ $log->changed_at?->format('M d, Y h:i A') }}</td></tr>
                         @endforeach
                     </x-owner-table>
                 </x-owner-panel>
