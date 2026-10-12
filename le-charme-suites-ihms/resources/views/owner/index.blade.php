@@ -201,6 +201,8 @@
                 @include('owner.partials.room-status')
             @elseif (in_array($activePage, ['rooms', 'room-inventory'], true))
                 @include('owner.partials.rooms')
+            @elseif ($activePage === 'reports')
+                @include('owner.partials.reports')
             @else
             <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
                 <div class="pointer-events-none absolute -bottom-20 -right-16 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
@@ -225,16 +227,6 @@
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Reservations</span><span class="material-symbols-outlined text-secondary">calendar_month</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $activeReservations }}</p><p class="mt-1 text-sm text-slate-500">{{ $arrivalsToday }} arrivals today</p></div>
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Billing & Transactions</span><span class="material-symbols-outlined text-secondary">payments</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($collectedToday, 2) }}</p><p class="mt-1 text-sm text-slate-500">{{ $settledToday }} settled today</p></div>
             </section>
-            @endif
-
-            @if ($activePage === 'reports')
-                <x-owner-panel id="records" title="Reports & Records" subtitle="Owner visibility into revenue and transaction records, without posting or settlement controls.">
-                    <x-owner-table :headers="['Date', 'Type', 'Guest', 'Room', 'Amount', 'Status']">
-                        @foreach ($transactions as $transaction)
-                            <tr class="border-b border-line"><td class="px-4 py-3 font-mono text-xs">{{ $transaction->transaction_date?->format('M d, Y h:i A') }}</td><td class="px-4 py-3 font-bold">{{ str_replace('_', ' ', ucfirst($transaction->transaction_type)) }}</td><td class="px-4 py-3">{{ $transaction->guest?->full_name ?? 'N/A' }}</td><td class="px-4 py-3">{{ $transaction->room?->room_number ?? 'N/A' }}</td><td class="px-4 py-3">PHP {{ number_format($transaction->amount, 2) }}</td><td class="px-4 py-3"><span class="rounded bg-surface-mid px-2 py-1 text-xs font-bold capitalize">{{ $transaction->status }}</span></td></tr>
-                        @endforeach
-                    </x-owner-table>
-                </x-owner-panel>
             @endif
         </main>
     </div>
