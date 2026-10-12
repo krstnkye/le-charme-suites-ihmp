@@ -79,6 +79,7 @@
         'operational-reports' => ['Operational Reports', 'Departmental telemetry, room readiness, occupancy, and workflow pacing.'],
         'transaction-reports' => ['Transaction Reports', 'Settlement reports, payment channel totals, taxes, and financial audit exports.'],
         'records' => ['Records Archive', 'Immutable owner-view archive of guests, stays, billing, rooms, and housekeeping records.'],
+        'profile' => ['Owner My Profile', 'Executive credentials, security posture, notification preferences, and access logs.'],
     ];
     [$pageTitle, $pageSubtitle] = $titles[$activePage] ?? $titles['dashboard'];
 @endphp
@@ -158,7 +159,7 @@
         </div>
 
         <div class="border-t border-white/10 bg-primary/20 p-3">
-            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 rounded px-3 py-2 text-blue-100/70 transition hover:bg-primary/40 hover:text-white"><span class="material-symbols-outlined">account_circle</span><span class="text-sm font-semibold">My Profile</span></a>
+            <a href="{{ route('owner.page', ['page' => 'profile']) }}" @class(['flex items-center gap-3 rounded px-3 py-2 transition', 'bg-primary/60 text-white' => $activePage === 'profile', 'text-blue-100/70 hover:bg-primary/40 hover:text-white' => $activePage !== 'profile'])><span @class(['material-symbols-outlined', 'text-secondary-fixed' => $activePage === 'profile'])>account_circle</span><span class="text-sm font-semibold">My Profile</span></a>
             <form method="POST" action="{{ route('logout') }}">@csrf<button class="flex w-full items-center gap-3 rounded px-3 py-2 text-left text-rose-100 transition hover:bg-rose-500/20"><span class="material-symbols-outlined text-rose-300">logout</span><span class="text-sm font-semibold">Logout</span></button></form>
         </div>
     </aside>
@@ -213,6 +214,8 @@
                 @include('owner.partials.transaction-reports')
             @elseif ($activePage === 'records')
                 @include('owner.partials.records')
+            @elseif ($activePage === 'profile')
+                @include('owner.partials.profile')
             @else
             <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
                 <div class="pointer-events-none absolute -bottom-20 -right-16 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
