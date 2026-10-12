@@ -1,0 +1,270 @@
+<mxfile host="app.diagrams.net" modified="2026-10-12T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="use-case-overview" name="1. Use Case Overview">
+    <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title-usecase" value="Le Charme Suites IHMS - Complete UML: Use Case Overview" style="text;html=1;strokeColor=none;fillColor=none;fontSize=26;fontStyle=1;fontColor=#01162d;align=center;" vertex="1" parent="1">
+          <mxGeometry x="250" y="20" width="1100" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="system-boundary" value="Integrated Hotel Management System (IHMS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fcf9f3;strokeColor=#755a28;strokeWidth=2;fontSize=16;fontStyle=1;fontColor=#01162d;verticalAlign=top;spacingTop=12;" vertex="1" parent="1">
+          <mxGeometry x="260" y="90" width="1060" height="970" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor-admin" value="Administrator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#01162d;strokeColor=#01162d;fontColor=#01162d;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="150" width="90" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor-receptionist" value="Receptionist / Front Desk" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeColor=#01162d;fontColor=#01162d;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="130" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor-billing" value="Billing Staff" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeColor=#01162d;fontColor=#01162d;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="620" width="90" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor-housekeeping" value="Housekeeping Staff" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeColor=#01162d;fontColor=#01162d;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="850" width="130" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="actor-owner" value="Owner / Management" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeColor=#01162d;fontColor=#01162d;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="380" width="130" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-auth" value="Authenticate / Register / Logout" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fdd79a;strokeColor=#755a28;fontColor=#01162d;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="260" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-dashboard" value="Open Role-Based Dashboard" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fdd79a;strokeColor=#755a28;fontColor=#01162d;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="120" width="250" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-users" value="Manage Users, Roles, Permissions" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e5e2dc;strokeColor=#01162d;fontColor=#01162d;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="230" width="260" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-admin-ops" value="Admin Operations: Rooms, Audit Logs, Settings" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e5e2dc;strokeColor=#01162d;fontColor=#01162d;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="230" width="310" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-guest" value="Manage Guest Profiles" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="330" y="390" width="230" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-reservation" value="Create / Update Reservations" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="620" y="390" width="250" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-checkin" value="Check In Guest" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="930" y="390" width="220" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-checkout" value="Check Out Guest / Settle Account" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff7e8;strokeColor=#755a28;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="430" y="610" width="280" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-transactions" value="Record Billing Transactions" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff7e8;strokeColor=#755a28;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="790" y="610" width="260" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-room-status" value="Update Room Status" style="ellipse;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#4d6079;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="360" y="820" width="230" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-housekeeping" value="Housekeeping Tasks, Requests, Supplies, Reports" style="ellipse;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#4d6079;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="680" y="820" width="330" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-owner-view" value="View Owner Dashboard Modules" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;fontColor=#01162d;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="290" width="260" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="uc-owner-reports" value="View / Export Reports and Records" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;fontColor=#01162d;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="500" width="270" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="note-owner" value="Owner is view-only: can monitor and export, but cannot mutate operational records, users, permissions, or system settings." style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff7e8;strokeColor=#755a28;fontSize=13;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="690" width="270" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="e-admin-auth" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-admin" target="uc-auth"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-rec-auth" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-receptionist" target="uc-auth"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-bill-auth" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-billing" target="uc-auth"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-house-auth" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-housekeeping" target="uc-auth"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-owner-auth" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-owner" target="uc-auth"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-admin-users" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-admin" target="uc-users"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-admin-ops" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-admin" target="uc-admin-ops"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-rec-guest" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-receptionist" target="uc-guest"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-rec-res" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-receptionist" target="uc-reservation"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-rec-checkin" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-receptionist" target="uc-checkin"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-bill-checkout" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-billing" target="uc-checkout"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-bill-transactions" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-billing" target="uc-transactions"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-house-status" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-housekeeping" target="uc-room-status"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-house-tasks" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-housekeeping" target="uc-housekeeping"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-owner-view" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-owner" target="uc-owner-view"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-owner-reports" style="endArrow=none;html=1;strokeColor=#01162d;" edge="1" parent="1" source="actor-owner" target="uc-owner-reports"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-all-dashboard" style="endArrow=open;html=1;dashed=1;strokeColor=#755a28;" edge="1" parent="1" source="uc-auth" target="uc-dashboard"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="domain-class-erd" name="2. Domain Class and ERD">
+    <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title-erd" value="Le Charme Suites IHMS - Domain Class Diagram / Database ERD" style="text;html=1;strokeColor=none;fillColor=none;fontSize=26;fontStyle=1;fontColor=#01162d;align=center;" vertex="1" parent="1">
+          <mxGeometry x="250" y="20" width="1200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-user" value="User&#xa;-----------------------------&#xa;+ id: bigint PK&#xa;+ name: string&#xa;+ email: string unique&#xa;+ role: enum(admin, receptionist, billing, housekeeping, owner)&#xa;+ email_verified_at: timestamp nullable&#xa;+ password: hashed string&#xa;+ remember_token: string nullable&#xa;+ created_at / updated_at&#xa;-----------------------------&#xa;+ casts(): array" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fdd79a;strokeColor=#755a28;fontColor=#01162d;align=left;spacing=10;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="110" width="340" height="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-guest" value="Guest&#xa;-----------------------------&#xa;+ id: bigint PK&#xa;+ first_name: string&#xa;+ last_name: string&#xa;+ email: string nullable&#xa;+ phone: string nullable&#xa;+ address: text nullable&#xa;+ identification_type: string nullable&#xa;+ identification_number: string nullable&#xa;+ notes: text nullable&#xa;+ created_at / updated_at&#xa;-----------------------------&#xa;+ getFullNameAttribute(): string&#xa;+ reservations(): HasMany&#xa;+ transactions(): HasMany" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;fontColor=#01162d;align=left;spacing=10;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="480" y="110" width="360" height="310" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-room" value="Room&#xa;-----------------------------&#xa;+ id: bigint PK&#xa;+ room_number: string unique&#xa;+ room_type: string&#xa;+ rate: decimal(10,2)&#xa;+ capacity: unsigned int&#xa;+ status: string&#xa;+ description: text nullable&#xa;+ created_at / updated_at&#xa;-----------------------------&#xa;+ reservations(): HasMany&#xa;+ statusLogs(): HasMany" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;fontColor=#01162d;align=left;spacing=10;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="930" y="110" width="340" height="270" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-reservation" value="Reservation&#xa;-----------------------------&#xa;+ id: bigint PK&#xa;+ guest_id: FK guests.id cascadeOnDelete&#xa;+ room_id: FK rooms.id restrictOnDelete&#xa;+ check_in_date: date&#xa;+ check_out_date: date&#xa;+ number_of_guests: unsigned int&#xa;+ status: string&#xa;+ notes: text nullable&#xa;+ created_at / updated_at&#xa;-----------------------------&#xa;+ guest(): BelongsTo&#xa;+ room(): BelongsTo&#xa;+ checkIn(): HasOne" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;fontColor=#01162d;align=left;spacing=10;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="480" y="520" width="360" height="310" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-checkin" value="CheckIn&#xa;-----------------------------&#xa;+ id: bigint PK&#xa;+ reservation_id: FK reservations.id cascadeOnDelete&#xa;+ guest_id: FK guests.id cascadeOnDelete&#xa;+ room_id: FK rooms.id restrictOnDelete&#xa;+ checked_in_at: timestamp&#xa;+ status: string&#xa;+ notes: text nullable&#xa;+ created_at / updated_at&#xa;-----------------------------&#xa;+ reservation(): BelongsTo&#xa;+ guest(): BelongsTo&#xa;+ room(): BelongsTo&#xa;+ checkOut(): HasOne" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#4d6079;fontColor=#01162d;align=left;spacing=10;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="920" width="390" height="310" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-checkout" value="CheckOut&#xa;-----------------------------&#xa;+ id: bigint PK&#xa;+ check_in_id: FK check_ins.id cascadeOnDelete&#xa;+ reservation_id: FK reservations.id cascadeOnDelete&#xa;+ guest_id: FK guests.id cascadeOnDelete&#xa;+ room_id: FK rooms.id restrictOnDelete&#xa;+ checked_out_at: timestamp&#xa;+ amount_paid: decimal(10,2)&#xa;+ payment_status: string&#xa;+ notes: text nullable&#xa;+ created_at / updated_at&#xa;-----------------------------&#xa;+ checkIn(): BelongsTo&#xa;+ guest(): BelongsTo&#xa;+ room(): BelongsTo" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff7e8;strokeColor=#755a28;fontColor=#01162d;align=left;spacing=10;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="520" y="920" width="400" height="340" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-transaction" value="HotelTransaction&#xa;-----------------------------&#xa;+ id: bigint PK&#xa;+ guest_id: FK guests.id nullable nullOnDelete&#xa;+ reservation_id: FK reservations.id nullable nullOnDelete&#xa;+ room_id: FK rooms.id nullable nullOnDelete&#xa;+ transaction_type: string&#xa;+ amount: decimal(10,2)&#xa;+ status: string&#xa;+ transaction_date: timestamp&#xa;+ description: text nullable&#xa;+ created_at / updated_at&#xa;-----------------------------&#xa;+ guest(): BelongsTo&#xa;+ reservation(): BelongsTo&#xa;+ room(): BelongsTo" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff7e8;strokeColor=#755a28;fontColor=#01162d;align=left;spacing=10;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="520" width="420" height="330" as="geometry"/>
+        </mxCell>
+        <mxCell id="class-roomlog" value="RoomStatusLog&#xa;-----------------------------&#xa;+ id: bigint PK&#xa;+ room_id: FK rooms.id cascadeOnDelete&#xa;+ status: string&#xa;+ notes: text nullable&#xa;+ changed_at: timestamp&#xa;+ created_at / updated_at&#xa;-----------------------------&#xa;+ room(): BelongsTo" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#4d6079;fontColor=#01162d;align=left;spacing=10;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="940" width="340" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="note-status" value="Important status values used by workflows:&#xa;Room.status = available, occupied, reserved, cleaning, maintenance&#xa;Reservation.status = reserved, checked_in, checked_out / cancelled&#xa;CheckIn.status = active / completed&#xa;CheckOut.payment_status = unpaid, partial, paid&#xa;HotelTransaction.status = recorded, paid, settled, cleared" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;fontSize=13;fontColor=#01162d;align=left;" vertex="1" parent="1">
+          <mxGeometry x="60" y="480" width="340" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel-guest-reservation" value="1 to many" style="endArrow=open;startArrow=none;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="class-guest" target="class-reservation"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-room-reservation" value="1 to many" style="endArrow=open;startArrow=none;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="class-room" target="class-reservation"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-res-checkin" value="1 to 0..1" style="endArrow=open;startArrow=none;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="class-reservation" target="class-checkin"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-checkin-checkout" value="1 to 0..1" style="endArrow=open;startArrow=none;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="class-checkin" target="class-checkout"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-guest-checkin" value="1 to many" style="endArrow=open;startArrow=none;html=1;dashed=1;strokeColor=#4d6079;fontSize=12;" edge="1" parent="1" source="class-guest" target="class-checkin"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-room-checkin" value="1 to many" style="endArrow=open;startArrow=none;html=1;dashed=1;strokeColor=#4d6079;fontSize=12;" edge="1" parent="1" source="class-room" target="class-checkin"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-guest-checkout" value="1 to many" style="endArrow=open;startArrow=none;html=1;dashed=1;strokeColor=#755a28;fontSize=12;" edge="1" parent="1" source="class-guest" target="class-checkout"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-room-checkout" value="1 to many" style="endArrow=open;startArrow=none;html=1;dashed=1;strokeColor=#755a28;fontSize=12;" edge="1" parent="1" source="class-room" target="class-checkout"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-guest-transaction" value="1 to many nullable" style="endArrow=open;startArrow=none;html=1;strokeColor=#755a28;fontSize=12;" edge="1" parent="1" source="class-guest" target="class-transaction"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-res-transaction" value="1 to many nullable" style="endArrow=open;startArrow=none;html=1;strokeColor=#755a28;fontSize=12;" edge="1" parent="1" source="class-reservation" target="class-transaction"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-room-transaction" value="1 to many nullable" style="endArrow=open;startArrow=none;html=1;strokeColor=#755a28;fontSize=12;" edge="1" parent="1" source="class-room" target="class-transaction"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="rel-room-log" value="1 to many" style="endArrow=open;startArrow=none;html=1;strokeColor=#4d6079;fontSize=12;" edge="1" parent="1" source="class-room" target="class-roomlog"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="workflow-activity" name="3. Activity Workflows">
+    <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title-workflow" value="Le Charme Suites IHMS - Main Activity Workflows" style="text;html=1;strokeColor=none;fillColor=none;fontSize=26;fontStyle=1;fontColor=#01162d;align=center;" vertex="1" parent="1">
+          <mxGeometry x="250" y="20" width="1200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="swim-auth" value="Authentication and Role Routing" style="swimlane;html=1;startSize=34;fillColor=#fdd79a;strokeColor=#755a28;fontStyle=1;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="50" y="90" width="1550" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="auth-start" value="" style="ellipse;html=1;shape=startState;fillColor=#01162d;strokeColor=#01162d;" vertex="1" parent="swim-auth"><mxGeometry x="30" y="70" width="30" height="30" as="geometry"/></mxCell>
+        <mxCell id="auth-login" value="User opens login/register page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;" vertex="1" parent="swim-auth"><mxGeometry x="110" y="50" width="190" height="70" as="geometry"/></mxCell>
+        <mxCell id="auth-validate" value="AuthController validates credentials or registration data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;" vertex="1" parent="swim-auth"><mxGeometry x="350" y="50" width="260" height="70" as="geometry"/></mxCell>
+        <mxCell id="auth-role" value="DashboardController reads auth user role" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;" vertex="1" parent="swim-auth"><mxGeometry x="670" y="45" width="170" height="80" as="geometry"/></mxCell>
+        <mxCell id="auth-dash" value="Return matching dashboard: admin, receptionist, billing, housekeeping, owner" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;" vertex="1" parent="swim-auth"><mxGeometry x="920" y="50" width="310" height="70" as="geometry"/></mxCell>
+        <mxCell id="auth-middleware" value="EnsureUserRole blocks unauthorized module routes with 403" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7e8;strokeColor=#755a28;" vertex="1" parent="swim-auth"><mxGeometry x="1300" y="50" width="210" height="70" as="geometry"/></mxCell>
+        <mxCell id="ea1" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-auth" source="auth-start" target="auth-login"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea2" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-auth" source="auth-login" target="auth-validate"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea3" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-auth" source="auth-validate" target="auth-role"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea4" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-auth" source="auth-role" target="auth-dash"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea5" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-auth" source="auth-dash" target="auth-middleware"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="swim-res" value="Reservation to Check-In Workflow" style="swimlane;html=1;startSize=34;fillColor=#ffffff;strokeColor=#4d6079;fontStyle=1;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="50" y="300" width="1550" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="res-guest" value="Receptionist creates or selects Guest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;" vertex="1" parent="swim-res"><mxGeometry x="40" y="70" width="220" height="70" as="geometry"/></mxCell>
+        <mxCell id="res-room" value="Select available Room and stay dates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;" vertex="1" parent="swim-res"><mxGeometry x="320" y="70" width="220" height="70" as="geometry"/></mxCell>
+        <mxCell id="res-save" value="ReservationController stores Reservation(status=reserved)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;" vertex="1" parent="swim-res"><mxGeometry x="600" y="70" width="260" height="70" as="geometry"/></mxCell>
+        <mxCell id="res-checkin" value="CheckInController converts reservation to active CheckIn" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#4d6079;" vertex="1" parent="swim-res"><mxGeometry x="930" y="70" width="280" height="70" as="geometry"/></mxCell>
+        <mxCell id="res-roomstatus" value="Room.status becomes occupied and reservation status becomes checked_in" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#4d6079;" vertex="1" parent="swim-res"><mxGeometry x="1280" y="70" width="230" height="80" as="geometry"/></mxCell>
+        <mxCell id="er1" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-res" source="res-guest" target="res-room"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="er2" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-res" source="res-room" target="res-save"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="er3" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-res" source="res-save" target="res-checkin"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="er4" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-res" source="res-checkin" target="res-roomstatus"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="swim-bill" value="Checkout, Billing, and Transaction Workflow" style="swimlane;html=1;startSize=34;fillColor=#fff7e8;strokeColor=#755a28;fontStyle=1;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="50" y="560" width="1550" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="bill-active" value="Cashier/Billing opens active CheckIn queue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#755a28;" vertex="1" parent="swim-bill"><mxGeometry x="40" y="70" width="240" height="70" as="geometry"/></mxCell>
+        <mxCell id="bill-calc" value="Calculate amount due, payment status, and notes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#755a28;" vertex="1" parent="swim-bill"><mxGeometry x="350" y="70" width="250" height="70" as="geometry"/></mxCell>
+        <mxCell id="bill-save" value="CheckOutController stores CheckOut" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;" vertex="1" parent="swim-bill"><mxGeometry x="670" y="70" width="230" height="70" as="geometry"/></mxCell>
+        <mxCell id="bill-trans" value="HotelTransaction records ledger entry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;" vertex="1" parent="swim-bill"><mxGeometry x="970" y="70" width="240" height="70" as="geometry"/></mxCell>
+        <mxCell id="bill-room" value="Room released for cleaning/available; reports update automatically" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#755a28;" vertex="1" parent="swim-bill"><mxGeometry x="1280" y="70" width="230" height="80" as="geometry"/></mxCell>
+        <mxCell id="eb1" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-bill" source="bill-active" target="bill-calc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eb2" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-bill" source="bill-calc" target="bill-save"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eb3" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-bill" source="bill-save" target="bill-trans"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eb4" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-bill" source="bill-trans" target="bill-room"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="swim-house" value="Housekeeping and Owner Monitoring Workflow" style="swimlane;html=1;startSize=34;fillColor=#eff6ff;strokeColor=#4d6079;fontStyle=1;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="50" y="820" width="1550" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="house-dashboard" value="Housekeeping dashboard shows rooms, tasks, requests, reports" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;" vertex="1" parent="swim-house"><mxGeometry x="40" y="80" width="280" height="70" as="geometry"/></mxCell>
+        <mxCell id="house-update" value="Room status update creates RoomStatusLog" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;" vertex="1" parent="swim-house"><mxGeometry x="390" y="80" width="260" height="70" as="geometry"/></mxCell>
+        <mxCell id="house-owner" value="Owner dashboard reads same data in view-only mode" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;" vertex="1" parent="swim-house"><mxGeometry x="720" y="80" width="280" height="70" as="geometry"/></mxCell>
+        <mxCell id="house-export" value="Owner pages export filtered CSV reports without editing source records" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;" vertex="1" parent="swim-house"><mxGeometry x="1070" y="80" width="310" height="70" as="geometry"/></mxCell>
+        <mxCell id="eh1" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-house" source="house-dashboard" target="house-update"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eh2" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-house" source="house-update" target="house-owner"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eh3" style="endArrow=block;html=1;strokeColor=#01162d;" edge="1" parent="swim-house" source="house-owner" target="house-export"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="component-deployment" name="4. Component and Deployment">
+    <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title-component" value="Le Charme Suites IHMS - Component / Deployment Diagram" style="text;html=1;strokeColor=none;fillColor=none;fontSize=26;fontStyle=1;fontColor=#01162d;align=center;" vertex="1" parent="1">
+          <mxGeometry x="250" y="20" width="1200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="browser" value="User Browser&#xa;Chrome / Edge&#xa;Local URL: http://127.0.0.1:8000" style="shape=mxgraph.aws4.client;whiteSpace=wrap;html=1;fillColor=#fdd79a;strokeColor=#755a28;fontColor=#01162d;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="130" width="220" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="laravel" value="Laravel Application Server&#xa;php artisan serve&#xa;MVC Web App" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#01162d;strokeColor=#01162d;fontColor=#ffffff;fontStyle=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="420" y="120" width="330" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="routes" value="routes/web.php&#xa;Public routes: /, /login, /register&#xa;Auth routes: /dashboard, /profile&#xa;Role routes: /admin, /owner, /housekeeping, /reports" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;fontColor=#01162d;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="900" y="90" width="360" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="middleware" value="EnsureUserRole Middleware&#xa;Admin bypass allowed&#xa;Other roles must match route role list&#xa;Otherwise aborts with 403" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7e8;strokeColor=#755a28;fontColor=#01162d;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="90" width="300" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="controllers" value="Controllers Layer&#xa;AuthController&#xa;DashboardController&#xa;OwnerController&#xa;Admin* Controllers&#xa;Guest / Reservation / Room&#xa;CheckIn / CheckOut&#xa;Housekeeping / Report" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#755a28;fontColor=#01162d;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="170" y="390" width="300" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="views" value="Blade Views Layer&#xa;auth/*&#xa;dashboard/*&#xa;admin/*&#xa;housekeeping/*&#xa;owner/index + owner/partials/*&#xa;profile/*&#xa;rooms, guests, reservations, reports" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;fontColor=#01162d;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="390" width="330" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="models" value="Eloquent Models Layer&#xa;User, Guest, Room&#xa;Reservation, CheckIn, CheckOut&#xa;HotelTransaction&#xa;RoomStatusLog" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#4d6079;fontColor=#01162d;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="970" y="390" width="290" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="database" value="Relational Database&#xa;users, guests, rooms&#xa;reservations, check_ins, check_outs&#xa;hotel_transactions, room_status_logs&#xa;sessions, cache, jobs" style="shape=cylinder3d;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fdd79a;strokeColor=#755a28;fontColor=#01162d;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="390" width="250" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="github" value="GitHub Repository&#xa;krstnkye/le-charme-suites-ihms&#xa;Commits pushed from local project" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f6f3ed;strokeColor=#01162d;fontColor=#01162d;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="790" width="330" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="vscode" value="Developer Tools&#xa;Visual Studio Code&#xa;Draw.io extension for .drawio file&#xa;Terminal: composer, npm, artisan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4d6079;fontColor=#01162d;" vertex="1" parent="1">
+          <mxGeometry x="500" y="760" width="330" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="artifacts" value="Project Artifacts&#xa;Laravel source code&#xa;Blade dashboards&#xa;SQLite/MySQL database via migrations&#xa;UML file: docs/le-charme-ihms-complete-uml.drawio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7e8;strokeColor=#755a28;fontColor=#01162d;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="960" y="760" width="430" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="c-browser-laravel" value="HTTP requests" style="endArrow=block;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="browser" target="laravel"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c-laravel-routes" value="dispatch" style="endArrow=block;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="laravel" target="routes"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c-routes-middleware" value="auth and role checks" style="endArrow=block;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="routes" target="middleware"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c-routes-controllers" value="controller actions" style="endArrow=block;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="routes" target="controllers"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c-controllers-views" value="return Blade views" style="endArrow=block;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="controllers" target="views"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c-controllers-models" value="query/update" style="endArrow=block;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="controllers" target="models"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c-models-db" value="ORM persistence" style="endArrow=block;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="models" target="database"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c-views-browser" value="HTML / CSS / JS response" style="endArrow=block;html=1;strokeColor=#755a28;fontSize=12;" edge="1" parent="1" source="views" target="browser"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c-vscode-github" value="commit and push" style="endArrow=block;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="vscode" target="github"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c-vscode-artifacts" value="edit files" style="endArrow=block;html=1;strokeColor=#01162d;fontSize=12;" edge="1" parent="1" source="vscode" target="artifacts"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="access-matrix" name="5. Role Access Matrix">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title-access" value="Le Charme Suites IHMS - Role Access Matrix" style="text;html=1;strokeColor=none;fillColor=none;fontSize=26;fontStyle=1;fontColor=#01162d;align=center;" vertex="1" parent="1">
+          <mxGeometry x="180" y="20" width="1100" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="matrix" value="Module / Dashboard | Admin | Receptionist | Billing | Housekeeping | Owner&#xa;Authentication and Profile | Full | Own account | Own account | Own account | Own account&#xa;Main Dashboard | Full | View | View | View | View only&#xa;Guest Management | Full | Create/View/Edit | No | No | View only&#xa;Room Management | Full | View/Edit room status | No | View/Edit room status | View only&#xa;Reservations | Full | Create/View/Edit | No | No | View only&#xa;Check-in | Full | Create/View | No | No | View only&#xa;Check-out | Full | View/Create with billing | Create/View | No | View only&#xa;Billing / Transactions | Full | Limited checkout view | Create/View | No | View only&#xa;Housekeeping | Full | No | No | Tasks and room status | View/Monitor&#xa;Reports and Records | Full | Limited reports | Billing reports | Housekeeping reports | View/Export only&#xa;User Management | Full | No | No | No | No&#xa;System Settings | Full | No | No | No | No" style="shape=table;html=1;whiteSpace=wrap;startSize=40;container=0;collapsible=0;childLayout=tableLayout;fillColor=#fcf9f3;strokeColor=#755a28;fontColor=#01162d;fontSize=14;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="100" width="1340" height="640" as="geometry"/>
+        </mxCell>
+        <mxCell id="access-note" value="Panel discussion note: Owner access intentionally follows the professor-facing rule: owner can view and export operational, room, reservation, billing, housekeeping, and records pages, but cannot modify users, system settings, or departmental operational records." style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff7e8;strokeColor=#755a28;fontSize=15;fontColor=#01162d;align=left;" vertex="1" parent="1">
+          <mxGeometry x="180" y="790" width="1140" height="110" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
