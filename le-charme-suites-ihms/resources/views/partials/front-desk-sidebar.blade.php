@@ -6,6 +6,7 @@
         request()->routeIs('check-outs.*') => 'transactions',
         request()->routeIs('rooms.*') => 'room-status',
         request()->routeIs('guests.*') => 'guests',
+        request()->routeIs('messages.*') => 'messages',
         request()->routeIs('profile.*') => 'profile',
         default => 'front-desk',
     };

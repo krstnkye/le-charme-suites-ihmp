@@ -83,3 +83,21 @@ Sign in as an administrator, open **Audit Logs** under **Control**, then choose
 failed login attempts, and logouts with date, time, email, IP address, and
 browser information. Login history begins after the access-log migration is
 installed; older accounts still appear as account-provisioning records.
+
+## Integration, Messaging, and Offline Operation
+
+- **Department Messages** is available from every department sidebar. Messages,
+  timestamps, and read acknowledgements are stored in the shared database.
+- Administrators can open **Integration Center** to check database/runtime
+  health, export approved datasets, inspect checksums, and download the transfer
+  history report.
+- **System Flipbook** opens the locally embedded operating manual. It remains
+  available without internet after setup.
+- The system remains autonomous: hotel operations use the local shared database
+  and do not depend on a third-party cloud service or API.
+- Optional read-only integration endpoints are under `/api/v1`. Set a private
+  `IHMS_API_KEY` in `.env` to enable them. When the value is blank, external API
+  access is safely disabled.
+
+The implementation and presentation traceability report is in
+[`docs/DEVELOPMENT_PHASE_INTEGRATION_AND_RELIABILITY.md`](docs/DEVELOPMENT_PHASE_INTEGRATION_AND_RELIABILITY.md).

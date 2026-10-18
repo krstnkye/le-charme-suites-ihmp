@@ -9,16 +9,21 @@ use App\Models\HotelTransaction;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Models\RoomStatusLog;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class OwnerController extends Controller
 {
-    public function __invoke(string $page = 'dashboard'): View
+    public function __invoke(Request $request, string $page = 'dashboard'): View
     {
-        $allowedPages = ['dashboard', 'guests', 'rooms', 'room-inventory', 'room-availability', 'room-status', 'reservations', 'checkins', 'checkin-records', 'checkout-records', 'billing', 'billing-records', 'housekeeping', 'housekeeping-requests', 'reports', 'operational-reports', 'transaction-reports', 'records', 'profile'];
+        $allowedPages = ['dashboard', 'guests', 'rooms', 'room-inventory', 'room-availability', 'room-status', 'reservations', 'checkins', 'checkin-records', 'checkout-records', 'billing', 'billing-records', 'housekeeping', 'housekeeping-requests', 'reports', 'operational-reports', 'transaction-reports', 'records', 'messages', 'profile'];
         abort_unless(in_array($page, $allowedPages, true), 404);
 
         $today = now(config('app.timezone'))->toDateString();
+
+        $messageData = $page === 'messages'
+            ? app(DepartmentMessageController::class)->inboxData($request)
+            : [];
 
         return view('owner.index', [
             'page' => $page,
@@ -44,6 +49,7 @@ class OwnerController extends Controller
             'checkOuts' => CheckOut::with(['guest', 'room', 'checkIn.reservation'])->latest('checked_out_at')->take(50)->get(),
             'transactions' => HotelTransaction::with(['guest', 'room', 'reservation'])->latest('transaction_date')->take(50)->get(),
             'housekeepingLogs' => RoomStatusLog::with('room')->latest('changed_at')->take(8)->get(),
+            ...$messageData,
         ]);
     }
 }

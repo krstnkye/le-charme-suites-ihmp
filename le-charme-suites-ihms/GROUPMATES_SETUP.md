@@ -56,6 +56,46 @@ All users then read and write the host laptop's single SQLite database. Running
 separate cloned copies creates separate databases and does not synchronize
 records automatically.
 
+This is the recommended intranet setup for a demonstration or small deployment.
+It uses one host as the application and database server, so department laptops
+share the same guests, rooms, reservations, transactions, housekeeping records,
+messages, and history. Internet is optional; the private LAN connection to the
+host is required while other laptops are using it.
+
+## New Reliability and Integration Features
+
+After pulling the latest version, always run `php artisan migrate --seed` so the
+message, preference, and integration-history tables are created.
+
+1. Open **Department Messages** from any department sidebar to send a persistent
+   internal message. Opening a message saves a per-user read acknowledgement.
+2. Sign in as Administrator and open **Integration Center** to inspect shared
+   database health, PHP memory usage, operating mode, and transfer history.
+3. Use the export buttons for approved CSV or JSON transfer files. Each export
+   is recorded with date, actor, record count, format, status, and SHA-256
+   checksum so the receiving copy can be verified.
+4. Open **System Flipbook** from the top-right interface settings menu or the
+   Integration Center. The manual is embedded locally and works offline.
+5. Use the interface settings button to save comfortable/compact density,
+   standard/large text, and the default sidebar state for the signed-in account.
+
+### Optional API Exchange
+
+The application does not require an API for normal hotel operation. To enable
+the read-only integration API, add a long private key to the host computer's
+`.env` file:
+
+```env
+IHMS_API_KEY=replace-this-with-a-long-random-private-key
+IHMS_MAX_EXPORT_RECORDS=200
+```
+
+Restart the server after changing `.env`. Approved clients can call
+`/api/v1/status` or `/api/v1/datasets/rooms` with either an
+`Authorization: Bearer YOUR_KEY` header or an `X-IHMS-Key` header. Never commit
+the real key to GitHub. Leave `IHMS_API_KEY` blank when no external connection is
+needed; the endpoints then return a disabled response.
+
 ## Viewing Signup and Login History
 
 1. Sign in with `admin@lecharmehotel.com`.

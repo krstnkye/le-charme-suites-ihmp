@@ -58,6 +58,7 @@
                 ['key' => 'transaction-reports', 'label' => 'Transaction Reports', 'href' => route('owner.page', ['page' => 'transaction-reports'])],
                 ['key' => 'records', 'label' => 'Records', 'href' => route('owner.page', ['page' => 'records'])],
             ]],
+            ['key' => 'messages', 'label' => 'Department Messages', 'icon' => 'forum', 'href' => route('owner.page', ['page' => 'messages'])],
         ]],
     ];
     $titles = [
@@ -79,6 +80,7 @@
         'operational-reports' => ['Operational Reports', 'Departmental telemetry, room readiness, occupancy, and workflow pacing.'],
         'transaction-reports' => ['Transaction Reports', 'Settlement reports, payment channel totals, taxes, and financial audit exports.'],
         'records' => ['Records Archive', 'Immutable owner-view archive of guests, stays, billing, rooms, and housekeeping records.'],
+        'messages' => ['Department Messages', 'Persistent interdepartment communication and management notices.'],
         'profile' => ['Owner My Profile', 'Executive credentials, security posture, notification preferences, and access logs.'],
     ];
     [$pageTitle, $pageSubtitle] = $titles[$activePage] ?? $titles['dashboard'];
@@ -159,6 +161,8 @@
                 @include('owner.partials.transaction-reports')
             @elseif ($activePage === 'records')
                 @include('owner.partials.records')
+            @elseif ($activePage === 'messages')
+                @include('messages.panel')
             @elseif ($activePage === 'profile')
                 @include('owner.partials.profile')
             @else

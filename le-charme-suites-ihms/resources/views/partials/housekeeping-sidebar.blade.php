@@ -69,6 +69,7 @@
             <a href="{{ route('housekeeping.page', 'housekeeping-supplies') }}" class="{{ $subBase }} {{ $active === 'housekeeping-supplies' ? $subActive : $subIdle }}">Housekeeping Supplies</a>
             <a href="{{ route('housekeeping.page', 'reports') }}" class="{{ $navBase }} {{ $active === 'reports' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">monitoring</span>Reports</a>
             <a href="{{ route('housekeeping.page', 'notifications') }}" class="{{ $navBase }} {{ $active === 'notifications' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">notifications</span>Notifications</a>
+            <a href="{{ route('messages.index') }}" class="{{ $navBase }} {{ request()->routeIs('messages.*') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">forum</span>Department Messages</a>
         </div>
     </nav>
 

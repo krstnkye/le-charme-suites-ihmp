@@ -6,6 +6,7 @@
         request()->routeIs('check-outs.history') => 'history',
         request()->routeIs('check-outs.index') => 'transactions',
         request()->routeIs('reports.*') => 'reports',
+        request()->routeIs('messages.*') => 'messages',
         request()->routeIs('profile.*') => 'profile',
         default => '',
     };
@@ -20,6 +21,7 @@
         ['key' => 'transactions', 'label' => 'Transactions', 'icon' => 'receipt_long', 'href' => route('check-outs.index')],
         ['key' => 'history', 'label' => 'Transaction History', 'icon' => 'history', 'href' => route('check-outs.history')],
         ['key' => 'reports', 'label' => 'Reports', 'icon' => 'bar_chart', 'href' => route('reports.index')],
+        ['key' => 'messages', 'label' => 'Messages', 'icon' => 'forum', 'href' => route('messages.index')],
     ];
 @endphp
 

@@ -59,6 +59,8 @@
                 <p class="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[#b4c8e5]">Control</p>
                 <a href="{{ route('admin.operations.index', ['module' => 'reports']) }}" class="{{ $navBase }} {{ request()->routeIs('admin.operations.index') && $activeModule === 'reports' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">monitoring</span>Reports</a>
                 <a href="{{ route('admin.audit-logs.index') }}" class="{{ $navBase }} {{ request()->routeIs('admin.audit-logs.index') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">shield</span>Audit Logs</a>
+                <a href="{{ route('messages.index') }}" class="{{ $navBase }} {{ request()->routeIs('messages.*') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">forum</span>Department Messages</a>
+                <a href="{{ route('admin.integration.index') }}" class="{{ $navBase }} {{ request()->routeIs('admin.integration.*') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">hub</span>Integration Center</a>
                 <a href="{{ route('admin.settings.index') }}" class="{{ $navBase }} {{ request()->routeIs('admin.settings.index') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">settings</span>System Settings</a>
                 <a href="{{ route('profile.edit') }}" class="{{ $navBase }} {{ request()->routeIs('profile.edit') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">account_circle</span>My Profile</a>
             </div>

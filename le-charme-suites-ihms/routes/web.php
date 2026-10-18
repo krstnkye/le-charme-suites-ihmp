@@ -6,9 +6,11 @@ use App\Http\Controllers\AdminGuestController;
 use App\Http\Controllers\AdminUserRoleController;
 use App\Http\Controllers\AdminOperationsController;
 use App\Http\Controllers\AdminSystemSettingsController;
+use App\Http\Controllers\AdminIntegrationCenterController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartmentMessageController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\HousekeepingController;
 use App\Http\Controllers\HomeController;
@@ -17,6 +19,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\SystemManualController;
+use App\Http\Controllers\UiPreferenceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -34,6 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/messages', [DepartmentMessageController::class, 'index'])->name('messages.index');
+    Route::post('/messages', [DepartmentMessageController::class, 'store'])->name('messages.store');
+    Route::post('/messages/{message}/read', [DepartmentMessageController::class, 'markRead'])->name('messages.read');
+    Route::put('/ui-preferences', [UiPreferenceController::class, 'update'])->name('ui-preferences.update');
+    Route::get('/system-manual', SystemManualController::class)->name('system-manual');
 
     Route::middleware('role:receptionist')->group(function () {
         Route::resource('guests', GuestController::class);
@@ -56,6 +65,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/permissions/reset', [AdminUserRoleController::class, 'resetPermissions'])->name('admin.permissions.reset');
         Route::get('/admin/operations/{module}', [AdminOperationsController::class, 'index'])->name('admin.operations.index');
         Route::get('/admin/settings', [AdminSystemSettingsController::class, 'index'])->name('admin.settings.index');
+        Route::get('/admin/integration-center', [AdminIntegrationCenterController::class, 'index'])->name('admin.integration.index');
+        Route::get('/admin/integration-center/export/{dataset}/{format}', [AdminIntegrationCenterController::class, 'export'])->name('admin.integration.export');
+        Route::get('/admin/integration-center/transfer-report', [AdminIntegrationCenterController::class, 'transferReport'])->name('admin.integration.transfer-report');
         Route::resource('rooms', RoomController::class)->only(['create', 'store', 'destroy']);
     });
 
