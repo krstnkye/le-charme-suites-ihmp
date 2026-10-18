@@ -1,34 +1,12 @@
-<div class="grid gap-4 sm:grid-cols-2">
-    <div>
-        <label class="block text-sm font-medium">First name</label>
-        <input name="first_name" value="{{ old('first_name', $guest->first_name ?? '') }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2" required>
-    </div>
-    <div>
-        <label class="block text-sm font-medium">Last name</label>
-        <input name="last_name" value="{{ old('last_name', $guest->last_name ?? '') }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2" required>
-    </div>
-    <div>
-        <label class="block text-sm font-medium">Email</label>
-        <input name="email" type="email" value="{{ old('email', $guest->email ?? '') }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2">
-    </div>
-    <div>
-        <label class="block text-sm font-medium">Phone</label>
-        <input name="phone" value="{{ old('phone', $guest->phone ?? '') }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2">
-    </div>
-    <div>
-        <label class="block text-sm font-medium">Identification type</label>
-        <input name="identification_type" value="{{ old('identification_type', $guest->identification_type ?? '') }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2">
-    </div>
-    <div>
-        <label class="block text-sm font-medium">Identification number</label>
-        <input name="identification_number" value="{{ old('identification_number', $guest->identification_number ?? '') }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2">
-    </div>
+@php($fieldClass = 'mt-2 w-full rounded-lg border border-[#c4c6cd] bg-white px-4 py-3 text-sm text-[#01162d] shadow-sm outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20')
+@php($labelClass = 'block text-xs font-bold uppercase tracking-wider text-slate-600')
+<div class="grid gap-5 sm:grid-cols-2">
+    <div><label for="first_name" class="{{ $labelClass }}">First name <span class="text-red-600">*</span></label><input id="first_name" name="first_name" autocomplete="given-name" value="{{ old('first_name', $guest->first_name ?? '') }}" class="{{ $fieldClass }}" required></div>
+    <div><label for="last_name" class="{{ $labelClass }}">Last name <span class="text-red-600">*</span></label><input id="last_name" name="last_name" autocomplete="family-name" value="{{ old('last_name', $guest->last_name ?? '') }}" class="{{ $fieldClass }}" required></div>
+    <div><label for="email" class="{{ $labelClass }}">Email address</label><input id="email" name="email" type="email" autocomplete="email" value="{{ old('email', $guest->email ?? '') }}" class="{{ $fieldClass }}"></div>
+    <div><label for="phone" class="{{ $labelClass }}">Phone number</label><input id="phone" name="phone" type="tel" autocomplete="tel" value="{{ old('phone', $guest->phone ?? '') }}" class="{{ $fieldClass }}"></div>
+    <div><label for="identification_type" class="{{ $labelClass }}">Identification type</label><input id="identification_type" name="identification_type" placeholder="Passport, driver's license, national ID" value="{{ old('identification_type', $guest->identification_type ?? '') }}" class="{{ $fieldClass }}"></div>
+    <div><label for="identification_number" class="{{ $labelClass }}">Identification number</label><input id="identification_number" name="identification_number" value="{{ old('identification_number', $guest->identification_number ?? '') }}" class="{{ $fieldClass }}"></div>
 </div>
-<div class="mt-4">
-    <label class="block text-sm font-medium">Address</label>
-    <textarea name="address" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2">{{ old('address', $guest->address ?? '') }}</textarea>
-</div>
-<div class="mt-4">
-    <label class="block text-sm font-medium">Notes</label>
-    <textarea name="notes" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2">{{ old('notes', $guest->notes ?? '') }}</textarea>
-</div>
+<div class="mt-5"><label for="address" class="{{ $labelClass }}">Residential address</label><textarea id="address" name="address" rows="3" autocomplete="street-address" class="{{ $fieldClass }}">{{ old('address', $guest->address ?? '') }}</textarea></div>
+<div class="mt-5"><label for="notes" class="{{ $labelClass }}">Guest notes &amp; preferences</label><textarea id="notes" name="notes" rows="4" placeholder="Accessibility needs, preferences, or service notes" class="{{ $fieldClass }}">{{ old('notes', $guest->notes ?? '') }}</textarea></div>

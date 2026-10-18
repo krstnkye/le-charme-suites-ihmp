@@ -1,35 +1,10 @@
-<div class="grid gap-4 sm:grid-cols-2">
-    <div>
-        <label class="block text-sm font-medium">Room number</label>
-        <input name="room_number" value="{{ old('room_number', $room->room_number ?? '') }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2" required>
-    </div>
-    <div>
-        <label class="block text-sm font-medium">Room type</label>
-        <input name="room_type" list="official-room-types" value="{{ old('room_type', $room->room_type ?? '') }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2" required>
-        <datalist id="official-room-types">
-            @foreach (array_keys(config('hotel.room_types', [])) as $officialRoomType)
-                <option value="{{ $officialRoomType }}"></option>
-            @endforeach
-        </datalist>
-    </div>
-    <div>
-        <label class="block text-sm font-medium">Rate</label>
-        <input name="rate" type="number" step="0.01" min="0" value="{{ old('rate', $room->rate ?? 0) }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2" required>
-    </div>
-    <div>
-        <label class="block text-sm font-medium">Capacity</label>
-        <input name="capacity" type="number" min="1" value="{{ old('capacity', $room->capacity ?? 1) }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2" required>
-    </div>
-    <div>
-        <label class="block text-sm font-medium">Status</label>
-        <select name="status" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2" required>
-            @foreach (['available', 'reserved', 'occupied', 'cleaning', 'maintenance'] as $option)
-                <option value="{{ $option }}" @selected(old('status', $room->status ?? 'available') === $option)>{{ ucfirst($option) }}</option>
-            @endforeach
-        </select>
-    </div>
+@php($fieldClass = 'mt-2 w-full rounded-lg border border-[#c4c6cd] bg-white px-4 py-3 text-sm text-[#01162d] shadow-sm outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20')
+@php($labelClass = 'block text-xs font-bold uppercase tracking-wider text-slate-600')
+<div class="grid gap-5 sm:grid-cols-2">
+    <div><label for="room_number" class="{{ $labelClass }}">Room number <span class="text-red-600">*</span></label><input id="room_number" name="room_number" value="{{ old('room_number', $room->room_number ?? '') }}" class="{{ $fieldClass }}" required></div>
+    <div><label for="room_type" class="{{ $labelClass }}">Room type <span class="text-red-600">*</span></label><input id="room_type" name="room_type" list="official-room-types" value="{{ old('room_type', $room->room_type ?? '') }}" class="{{ $fieldClass }}" required><datalist id="official-room-types">@foreach (array_keys(config('hotel.room_types', [])) as $officialRoomType)<option value="{{ $officialRoomType }}"></option>@endforeach</datalist></div>
+    <div><label for="rate" class="{{ $labelClass }}">Nightly rate (PHP) <span class="text-red-600">*</span></label><input id="rate" name="rate" type="number" step="0.01" min="0" value="{{ old('rate', $room->rate ?? 0) }}" class="{{ $fieldClass }}" required></div>
+    <div><label for="capacity" class="{{ $labelClass }}">Maximum capacity <span class="text-red-600">*</span></label><input id="capacity" name="capacity" type="number" min="1" value="{{ old('capacity', $room->capacity ?? 1) }}" class="{{ $fieldClass }}" required></div>
+    <div class="sm:col-span-2"><label for="status" class="{{ $labelClass }}">Operational status <span class="text-red-600">*</span></label><select id="status" name="status" class="{{ $fieldClass }}" required>@foreach (['available', 'reserved', 'occupied', 'cleaning', 'maintenance'] as $option)<option value="{{ $option }}" @selected(old('status', $room->status ?? 'available') === $option)>{{ ucfirst($option) }}</option>@endforeach</select><p class="mt-2 text-xs text-slate-500">Status changes are recorded in the shared room activity history.</p></div>
 </div>
-<div class="mt-4">
-    <label class="block text-sm font-medium">Description</label>
-    <textarea name="description" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2">{{ old('description', $room->description ?? '') }}</textarea>
-</div>
+<div class="mt-5"><label for="description" class="{{ $labelClass }}">Room description or operational notes</label><textarea id="description" name="description" rows="4" class="{{ $fieldClass }}">{{ old('description', $room->description ?? '') }}</textarea></div>

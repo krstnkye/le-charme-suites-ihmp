@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Guest;
+use App\Models\Reservation;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -105,6 +108,48 @@ class UiDesignPlacementTest extends TestCase
                 ->assertOk()
                 ->assertSeeText($signature)
                 ->assertSee('aria-label="Owner Sidebar"', false);
+        }
+    }
+
+    public function test_front_desk_design_system_covers_operational_detail_and_edit_pages(): void
+    {
+        $receptionist = User::factory()->create(['role' => 'receptionist']);
+        $guest = Guest::create([
+            'first_name' => 'Maria',
+            'last_name' => 'Santos',
+            'email' => 'maria@example.test',
+        ]);
+        $room = Room::create([
+            'room_number' => '101',
+            'room_type' => 'Deluxe Twin',
+            'rate' => 15840,
+            'capacity' => 4,
+            'status' => 'available',
+        ]);
+        $reservation = Reservation::create([
+            'guest_id' => $guest->id,
+            'room_id' => $room->id,
+            'check_in_date' => now()->addDay()->toDateString(),
+            'check_out_date' => now()->addDays(2)->toDateString(),
+            'number_of_guests' => 2,
+            'status' => 'reserved',
+        ]);
+
+        $pages = [
+            route('guests.show', $guest) => 'Guest Profile & Stay History',
+            route('guests.edit', $guest) => 'Edit Guest Profile & Stay Preferences',
+            route('reservations.show', $reservation) => 'Reservation Details',
+            route('reservations.edit', $reservation) => 'Edit Reservation & Stay Assignment',
+            route('rooms.show', $room) => 'Room Operations & Availability Detail',
+            route('rooms.edit', $room) => 'Update Room Configuration & Status',
+        ];
+
+        foreach ($pages as $url => $signature) {
+            $this->actingAs($receptionist)
+                ->get($url)
+                ->assertOk()
+                ->assertSeeText($signature)
+                ->assertSee('aria-label="Front Desk Sidebar"', false);
         }
     }
 }
