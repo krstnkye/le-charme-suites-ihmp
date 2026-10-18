@@ -96,13 +96,13 @@
                     <div class="mb-2 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
                         <span class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Hospitality Roles</span>
                         <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-primary">
-                            Selected Role: <span id="selected-role-label">{{ $roleLabels[old('role', 'receptionist')] ?? ucfirst(old('role', 'receptionist')) }}</span>
+                            Selected Role: <span id="selected-role-label">{{ old('role') ? ($roleLabels[old('role')] ?? ucfirst(old('role'))) : 'None' }}</span>
                         </span>
                     </div>
                     <div class="grid gap-2 sm:grid-cols-5">
                         @foreach ($roleOptions as $value => $role)
                             <label class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-role-label="{{ $role['label'] }}">
-                                <input class="sr-only" type="radio" name="role" value="{{ $value }}" @checked(old('role', 'receptionist') === $value)>
+                                <input class="sr-only" type="radio" name="role" value="{{ $value }}" @checked(old('role') === $value) required>
                                 <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
                                 <span class="material-symbols-outlined mb-1 block text-lg">{{ $role['icon'] }}</span>
                                 <span>{{ $role['label'] }}</span>

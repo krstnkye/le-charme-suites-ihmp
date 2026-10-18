@@ -98,8 +98,8 @@
                     </span>
                 </div>
                 <div class="grid gap-2 sm:grid-cols-5">
-                    @foreach (config('hotel.staff_roles') as $role)
-                        <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-label="{{ $role['label'] }}" type="button">
+                    @foreach (config('hotel.staff_roles') as $value => $role)
+                        <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container {{ old('role') === $value ? 'is-selected' : '' }}" data-label="{{ $role['label'] }}" data-value="{{ $value }}" type="button" aria-pressed="{{ old('role') === $value ? 'true' : 'false' }}">
                             <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
                             <span class="material-symbols-outlined mb-1 block text-lg">{{ $role['icon'] }}</span>
                             <span>{{ $role['label'] }}</span>
@@ -124,6 +124,7 @@
 
             <form method="POST" action="{{ route('login.store') }}" class="space-y-4">
                 @csrf
+                <input id="selected-role" name="role" type="hidden" value="{{ old('role') }}">
 
                 <div>
                     <label class="mb-1 block font-label-md text-label-md font-semibold text-on-surface" for="email">Work Email Address</label>
@@ -195,10 +196,20 @@
         document.querySelectorAll('.role-card').forEach((button) => {
             button.addEventListener('click', () => {
                 document.getElementById('selected-role-label').textContent = button.dataset.label;
-                document.querySelectorAll('.role-card').forEach((item) => item.classList.remove('is-selected'));
+                document.getElementById('selected-role').value = button.dataset.value;
+                document.querySelectorAll('.role-card').forEach((item) => {
+                    item.classList.remove('is-selected');
+                    item.setAttribute('aria-pressed', 'false');
+                });
                 button.classList.add('is-selected');
+                button.setAttribute('aria-pressed', 'true');
             });
         });
+
+        const savedRoleButton = document.querySelector('.role-card.is-selected');
+        if (savedRoleButton) {
+            document.getElementById('selected-role-label').textContent = savedRoleButton.dataset.label;
+        }
 
         document.getElementById('toggle-password').addEventListener('click', () => {
             const password = document.getElementById('password');

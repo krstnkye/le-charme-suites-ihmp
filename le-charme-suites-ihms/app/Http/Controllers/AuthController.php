@@ -35,6 +35,7 @@ class AuthController extends Controller
             $credentials = $request->validate([
                 'email' => ['required', 'email', new WorkEmail],
                 'password' => ['required', 'string'],
+                'role' => ['required', 'in:admin,receptionist,cashier,housekeeping,owner'],
             ]);
         } catch (ValidationException $exception) {
             $this->recordActivity($request, 'LOGIN_FAILED', false, null, 'Login rejected during validation.');
@@ -51,9 +52,17 @@ class AuthController extends Controller
 
         $this->recordActivity($request, 'LOGIN_FAILED', false, null, 'Email and password did not match an account.');
 
+        $account = Auth::validate([
+            'email' => $credentials['email'],
+            'password' => $credentials['password'],
+        ]) ? User::where('email', $credentials['email'])->first() : null;
+        $message = $account && $account->role !== $credentials['role']
+            ? 'The selected department does not match this account. Choose '.config("hotel.staff_roles.{$account->role}.label", ucfirst($account->role)).' and try again.'
+            : 'The provided credentials do not match our records.';
+
         return back()
-            ->withErrors(['email' => 'The provided credentials do not match our records.'])
-            ->onlyInput('email');
+            ->withErrors(['email' => $message])
+            ->onlyInput('email', 'role');
     }
 
     public function register(Request $request): RedirectResponse

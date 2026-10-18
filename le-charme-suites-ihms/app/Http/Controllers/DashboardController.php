@@ -130,6 +130,6 @@ class DashboardController extends Controller
             ]);
         }
 
-        return view('dashboard.index', $data);
+        abort(403, 'This account does not have a recognized department dashboard. Contact the system administrator.');
     }
 }

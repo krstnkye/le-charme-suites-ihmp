@@ -69,11 +69,13 @@ class WorkEmailAuthenticationTest extends TestCase
         User::factory()->create([
             'email' => 'employee@lecharmehotel.com',
             'password' => 'password',
+            'role' => 'receptionist',
         ]);
 
         $response = $this->post(route('login.store'), [
             'email' => 'Employee@LeCharmeHotel.com',
             'password' => 'password',
+            'role' => 'receptionist',
         ]);
 
         $response->assertRedirect(route('dashboard'));
@@ -90,11 +92,13 @@ class WorkEmailAuthenticationTest extends TestCase
         User::factory()->create([
             'email' => 'employee@gmail.com',
             'password' => 'password',
+            'role' => 'receptionist',
         ]);
 
         $response = $this->from(route('login'))->post(route('login.store'), [
             'email' => 'employee@gmail.com',
             'password' => 'password',
+            'role' => 'receptionist',
         ]);
 
         $response->assertRedirect(route('login'));
@@ -114,11 +118,13 @@ class WorkEmailAuthenticationTest extends TestCase
         $user = User::factory()->create([
             'email' => 'employee@lecharmehotel.com',
             'password' => 'password',
+            'role' => 'receptionist',
         ]);
 
         $this->post(route('login.store'), [
             'email' => $user->email,
             'password' => 'wrong-password',
+            'role' => 'receptionist',
         ])->assertSessionHasErrors('email');
 
         $this->assertDatabaseHas('auth_activity_logs', [
@@ -133,5 +139,53 @@ class WorkEmailAuthenticationTest extends TestCase
             'event_type' => 'LOGOUT',
             'successful' => true,
         ]);
+    }
+
+    public function test_login_rejects_a_department_that_does_not_match_the_account(): void
+    {
+        User::factory()->create([
+            'email' => 'admin@lecharmehotel.com',
+            'password' => 'password',
+            'role' => 'admin',
+        ]);
+
+        $response = $this->from(route('login'))->post(route('login.store'), [
+            'email' => 'admin@lecharmehotel.com',
+            'password' => 'password',
+            'role' => 'receptionist',
+        ]);
+
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHasErrors([
+            'email' => 'The selected department does not match this account. Choose Admin and try again.',
+        ]);
+        $this->assertGuest();
+    }
+
+    public function test_every_registered_department_opens_its_own_dashboard(): void
+    {
+        $dashboards = [
+            'admin' => 'Property Systems Integrity & Control',
+            'receptionist' => 'Front Desk Operations Center',
+            'cashier' => 'Cashier & Billing Operations Console',
+            'housekeeping' => 'Daily Rooms Readiness & Turnover Control',
+            'owner' => 'Executive Owner Dashboard',
+        ];
+
+        foreach ($dashboards as $role => $signature) {
+            $email = "{$role}@lecharmehotel.com";
+
+            $this->post(route('register.store'), [
+                'name' => ucfirst($role).' Test User',
+                'email' => $email,
+                'role' => $role,
+                'password' => 'password',
+                'password_confirmation' => 'password',
+            ])->assertRedirect(route('dashboard'));
+
+            $this->assertDatabaseHas('users', ['email' => $email, 'role' => $role]);
+            $this->get(route('dashboard'))->assertOk()->assertSee($signature, false);
+            $this->post(route('logout'))->assertRedirect(route('login'));
+        }
     }
 }
