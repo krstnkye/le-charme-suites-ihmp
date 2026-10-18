@@ -14,5 +14,13 @@ For later GitHub updates, double-click `update-and-run.bat`. It pulls the latest
 `main` branch, installs changed PHP dependencies, updates the database, clears
 stale Laravel caches, and starts the local server.
 
+## Shared Offline / Local Network Use
+
+After completing setup, the system can run without internet because its
+database and interface assets are local. To let several laptops use one shared
+database on the same private Wi-Fi network, double-click
+`run-shared-lan-server.bat` on the host laptop and follow the address shown in
+the terminal. Keep that terminal and the host laptop running during use.
+
 Detailed setup and troubleshooting instructions are in
 [`le-charme-suites-ihms/GROUPMATES_SETUP.md`](le-charme-suites-ihms/GROUPMATES_SETUP.md).

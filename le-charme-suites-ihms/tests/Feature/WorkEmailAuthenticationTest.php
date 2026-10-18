@@ -22,6 +22,16 @@ class WorkEmailAuthenticationTest extends TestCase
 
         $response->assertRedirect(route('dashboard'));
         $this->assertDatabaseHas('users', ['email' => 'sample@lecharmehotel.com']);
+        $this->assertDatabaseHas('auth_activity_logs', [
+            'email' => 'sample@lecharmehotel.com',
+            'event_type' => 'ACCOUNT_REGISTERED',
+            'successful' => true,
+        ]);
+        $this->assertDatabaseHas('auth_activity_logs', [
+            'email' => 'sample@lecharmehotel.com',
+            'event_type' => 'LOGIN_SUCCESS',
+            'successful' => true,
+        ]);
     }
 
     public function test_registration_rejects_a_non_work_email(): void
@@ -55,6 +65,11 @@ class WorkEmailAuthenticationTest extends TestCase
 
         $response->assertRedirect(route('dashboard'));
         $this->assertAuthenticated();
+        $this->assertDatabaseHas('auth_activity_logs', [
+            'email' => 'employee@lecharmehotel.com',
+            'event_type' => 'LOGIN_SUCCESS',
+            'successful' => true,
+        ]);
     }
 
     public function test_login_rejects_a_non_work_email_before_authentication(): void
@@ -74,5 +89,36 @@ class WorkEmailAuthenticationTest extends TestCase
             'email' => 'Invalid email. Please use your work email ending in @lecharmehotel.com.',
         ]);
         $this->assertGuest();
+        $this->assertDatabaseHas('auth_activity_logs', [
+            'email' => 'employee@gmail.com',
+            'event_type' => 'LOGIN_FAILED',
+            'successful' => false,
+        ]);
+    }
+
+    public function test_failed_password_and_logout_are_recorded(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'employee@lecharmehotel.com',
+            'password' => 'password',
+        ]);
+
+        $this->post(route('login.store'), [
+            'email' => $user->email,
+            'password' => 'wrong-password',
+        ])->assertSessionHasErrors('email');
+
+        $this->assertDatabaseHas('auth_activity_logs', [
+            'email' => $user->email,
+            'event_type' => 'LOGIN_FAILED',
+            'successful' => false,
+        ]);
+
+        $this->actingAs($user)->post(route('logout'))->assertRedirect(route('login'));
+        $this->assertDatabaseHas('auth_activity_logs', [
+            'user_id' => $user->id,
+            'event_type' => 'LOGOUT',
+            'successful' => true,
+        ]);
     }
 }

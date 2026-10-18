@@ -7,7 +7,7 @@
 
     <title>Le Charme Suites IHMS</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    @include('partials.offline-assets')
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
     @include('partials.favicon')

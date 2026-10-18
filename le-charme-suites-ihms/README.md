@@ -11,8 +11,9 @@ It uses a local SQLite database by default, so XAMPP and MySQL are not required.
 - Git
 - Visual Studio Code or another code editor
 
-There is no Node.js build step. The interface loads its frontend libraries
-directly from the views.
+There is no Node.js build step. Tailwind, fonts, and interface icons are stored
+inside `public/vendor`, so the running system does not need an internet
+connection to render its interface.
 
 ## First-Time Setup
 
@@ -41,11 +42,11 @@ All seeded accounts use the password `password`.
 
 | Department | Email |
 | --- | --- |
-| Administrator | `admin@example.com` |
-| Receptionist | `receptionist@lecharme.test` |
-| Billing | `cashier@lecharme.test` |
-| Housekeeping | `housekeeping@lecharme.test` |
-| Owner / Management | `owner@lecharme.test` |
+| Administrator | `admin@lecharmehotel.com` |
+| Receptionist | `receptionist@lecharmehotel.com` |
+| Billing | `billing@lecharmehotel.com` |
+| Housekeeping | `housekeeping@lecharmehotel.com` |
+| Owner / Management | `owner@lecharmehotel.com` |
 
 Each account intentionally sees only the pages authorized for its role. For
 example, owner pages are view-only and housekeeping accounts cannot open guest
@@ -74,3 +75,11 @@ php artisan test
 
 The complete group setup and troubleshooting guide is in
 [`GROUPMATES_SETUP.md`](GROUPMATES_SETUP.md).
+
+## Account Access History
+
+Sign in as an administrator, open **Audit Logs** under **Control**, then choose
+**User Access**. The ledger records account registrations, successful logins,
+failed login attempts, and logouts with date, time, email, IP address, and
+browser information. Login history begins after the access-log migration is
+installed; older accounts still appear as account-provisioning records.

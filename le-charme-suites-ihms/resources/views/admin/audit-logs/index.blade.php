@@ -1,7 +1,5 @@
 @php
     $currentUser = auth()->user();
-    $criticalAlerts = 0;
-    $blockedAttempts = 1;
 @endphp
 
 <!DOCTYPE html>
@@ -10,11 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security & Audit Logs - Le Charme Suites IHMS</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Noto+Serif:wght@500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    @include('partials.offline-assets')
     <script>
         tailwind.config = {
             theme: {
@@ -120,51 +114,52 @@
                 <div class="audit-card rounded-xl border border-outline-variant/30 bg-white p-5">
                     <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Audit Events</span><span class="material-symbols-outlined text-primary">receipt_long</span></div>
                     <p class="mt-3 font-serif text-4xl font-bold">{{ number_format($totalAuditEvents) }}</p>
-                    <p class="mt-1 text-sm text-slate-500">Ledger events from users, room activity, and transactions.</p>
+                    <p class="mt-1 text-sm text-slate-500">Includes account registration, login, logout, room, and transaction events.</p>
                 </div>
                 <div class="audit-card rounded-xl border border-outline-variant/30 bg-white p-5">
                     <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Critical Alerts</span><span class="material-symbols-outlined text-error">gpp_maybe</span></div>
-                    <p class="mt-3 font-serif text-4xl font-bold">{{ $criticalAlerts }} Breaches</p>
-                    <p class="mt-1 text-sm text-slate-500">{{ $blockedAttempts }} blocked terminal attempt tracked for review.</p>
+                    <p class="mt-3 font-serif text-4xl font-bold">{{ $blockedAttempts }} Blocked</p>
+                    <p class="mt-1 text-sm text-slate-500">Failed login attempts preserved for administrator review.</p>
                 </div>
                 <div class="audit-card rounded-xl border border-outline-variant/30 bg-white p-5">
                     <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Privileged Actions</span><span class="material-symbols-outlined text-secondary">key</span></div>
-                    <p class="mt-3 font-serif text-4xl font-bold">{{ $privilegedActions }}</p>
-                    <p class="mt-1 text-sm text-slate-500">Admin and owner level accounts currently registered.</p>
+                    <p class="mt-3 font-serif text-4xl font-bold">{{ $registeredAccounts }}</p>
+                    <p class="mt-1 text-sm text-slate-500">Staff accounts created through the registration page.</p>
                 </div>
                 <div class="audit-card rounded-xl border border-outline-variant/30 bg-white p-5">
                     <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Active Sessions</span><span class="material-symbols-outlined text-primary">devices</span></div>
-                    <p class="mt-3 font-serif text-4xl font-bold">{{ $activeSessions->count() }}</p>
-                    <p class="mt-1 text-sm text-slate-500">Visible staff sessions in the local security monitor.</p>
+                    <p class="mt-3 font-serif text-4xl font-bold">{{ $successfulLogins }}</p>
+                    <p class="mt-1 text-sm text-slate-500">Successful sign-ins recorded in the local database.</p>
                 </div>
             </section>
 
             <section class="audit-card rounded-xl border border-outline-variant/30 bg-white p-4">
                 <div class="flex flex-col justify-between gap-3 xl:flex-row xl:items-center">
                     <div class="flex flex-wrap gap-2">
-                        <select class="rounded-lg border-outline-variant bg-surface-container-low text-sm focus:border-secondary focus:ring-secondary/20">
-                            <option>All Modules</option>
-                            <option>User Management</option>
-                            <option>Transactions / Billing</option>
-                            <option>Room Status</option>
-                            <option>System Settings</option>
+                        <select id="auditModuleFilter" class="rounded-lg border-outline-variant bg-surface-container-low text-sm focus:border-secondary focus:ring-secondary/20">
+                            <option value="">All Modules</option>
+                            <option value="access">User Access</option>
+                            <option value="account">User Management</option>
+                            <option value="billing">Transactions / Billing</option>
+                            <option value="room">Room Status</option>
                         </select>
-                        <select class="rounded-lg border-outline-variant bg-surface-container-low text-sm focus:border-secondary focus:ring-secondary/20">
-                            <option>All Levels</option>
-                            <option>Verified</option>
-                            <option>Review</option>
-                            <option>Privileged</option>
+                        <select id="auditLevelFilter" class="rounded-lg border-outline-variant bg-surface-container-low text-sm focus:border-secondary focus:ring-secondary/20">
+                            <option value="">All Levels</option>
+                            <option value="verified">Verified</option>
+                            <option value="blocked">Blocked</option>
+                            <option value="review">Review</option>
+                            <option value="privileged">Privileged</option>
                         </select>
-                        <select class="rounded-lg border-outline-variant bg-surface-container-low text-sm focus:border-secondary focus:ring-secondary/20">
-                            <option>All Operators</option>
+                        <select id="auditOperatorFilter" class="rounded-lg border-outline-variant bg-surface-container-low text-sm focus:border-secondary focus:ring-secondary/20">
+                            <option value="">All Operators</option>
                             @foreach ($activeSessions as $sessionUser)
-                                <option>{{ $sessionUser->name }}</option>
+                                <option value="{{ strtolower($sessionUser->name) }}">{{ $sessionUser->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="relative min-w-[280px]">
                         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-500">search</span>
-                        <input class="w-full rounded-lg border-outline-variant bg-surface-container-low py-2 pl-9 pr-3 text-sm focus:border-secondary focus:ring-secondary/20" placeholder="Search IP, record ID, actor, or SHA hash..." type="text">
+                        <input id="auditSearch" class="w-full rounded-lg border-outline-variant bg-surface-container-low py-2 pl-9 pr-3 text-sm focus:border-secondary focus:ring-secondary/20" placeholder="Search email, IP, record ID, or actor..." type="search">
                     </div>
                 </div>
             </section>
@@ -196,7 +191,12 @@
                         </thead>
                         <tbody class="divide-y divide-surface-container-highest/70 text-sm">
                             @forelse ($auditEvents as $event)
-                                <tr class="transition hover:bg-surface-container-low/70">
+                                @php
+                                    $eventModule = str_contains($event['event'], 'LOGIN') || in_array($event['event'], ['LOGOUT', 'ACCOUNT_REGISTERED'], true)
+                                        ? 'access'
+                                        : (str_contains($event['event'], 'USER_') ? 'account' : (str_contains($event['event'], 'ROOM_') ? 'room' : 'billing'));
+                                @endphp
+                                <tr data-audit-row data-module="{{ $eventModule }}" data-level="{{ strtolower($event['severity']) }}" data-operator="{{ strtolower($event['actor']) }}" class="transition hover:bg-surface-container-low/70">
                                     <td class="whitespace-nowrap px-4 py-3.5 font-mono text-xs">
                                         <div>{{ optional($event['timestamp'])->timezone(config('app.timezone'))->format('M d, Y') }}</div>
                                         <div class="text-[11px] text-slate-500">{{ optional($event['timestamp'])->timezone(config('app.timezone'))->format('H:i:s') }}</div>
@@ -245,7 +245,7 @@
                         <span>Current Merkle Root:</span>
                         <span class="truncate font-bold text-primary">{{ $ledgerRoot }}</span>
                     </div>
-                    <span class="rounded bg-white px-3 py-1 text-xs font-bold text-primary">Showing {{ $auditEvents->count() }} entries</span>
+                    <span id="auditVisibleCount" class="rounded bg-white px-3 py-1 text-xs font-bold text-primary">Showing {{ $auditEvents->count() }} entries</span>
                 </div>
             </section>
 
@@ -347,6 +347,33 @@
             if (confirm('Terminate all remote sessions in this admin simulation?')) {
                 alert('Remote session termination request recorded for administrator review.');
             }
+        });
+
+        const auditRows = Array.from(document.querySelectorAll('[data-audit-row]'));
+        const auditFilters = ['auditModuleFilter', 'auditLevelFilter', 'auditOperatorFilter', 'auditSearch'];
+        const applyAuditFilters = () => {
+            const module = document.getElementById('auditModuleFilter')?.value || '';
+            const level = document.getElementById('auditLevelFilter')?.value || '';
+            const operator = document.getElementById('auditOperatorFilter')?.value || '';
+            const search = (document.getElementById('auditSearch')?.value || '').trim().toLowerCase();
+            let visible = 0;
+
+            auditRows.forEach((row) => {
+                const matches = (!module || row.dataset.module === module)
+                    && (!level || row.dataset.level === level)
+                    && (!operator || row.dataset.operator === operator)
+                    && (!search || row.innerText.toLowerCase().includes(search));
+                row.hidden = !matches;
+                visible += matches ? 1 : 0;
+            });
+
+            const count = document.getElementById('auditVisibleCount');
+            if (count) count.textContent = `Showing ${visible} entries`;
+        };
+
+        auditFilters.forEach((id) => {
+            const element = document.getElementById(id);
+            element?.addEventListener(element.tagName === 'INPUT' ? 'input' : 'change', applyAuditFilters);
         });
     </script>
 </body>

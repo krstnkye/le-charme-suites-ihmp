@@ -31,6 +31,45 @@ XAMPP is optional and is not required by this project. The default database is
 SQLite. If XAMPP is installed, its PHP version must still be 8.3 or newer and
 the SQLite extensions must be enabled.
 
+## Working Without Internet
+
+The application database, Tailwind interface, fonts, icons, and hotel logo are
+stored locally. After the first setup is complete, an internet connection is
+not required for day-to-day use on the host computer.
+
+To let several laptops use one shared database without internet:
+
+1. Connect all laptops to the same private Wi-Fi router or local network. The
+   router does not need an active internet connection.
+2. On one laptop, open a terminal in the inner application folder and run
+   `php artisan serve --host=0.0.0.0 --port=8000`.
+3. On the host laptop, run `ipconfig` and find its **IPv4 Address**, such as
+   `192.168.1.25`.
+4. Allow PHP through Windows Defender Firewall on **Private networks** if
+   Windows asks.
+5. On every other laptop, open `http://HOST-IP:8000`, replacing `HOST-IP` with
+   the address from step 3, for example `http://192.168.1.25:8000`.
+6. Keep the host laptop, Laravel terminal, and local Wi-Fi router running while
+   the group is using the system.
+
+All users then read and write the host laptop's single SQLite database. Running
+separate cloned copies creates separate databases and does not synchronize
+records automatically.
+
+## Viewing Signup and Login History
+
+1. Sign in with `admin@lecharmehotel.com`.
+2. In the administrator sidebar, find **Control**.
+3. Open **Audit Logs**.
+4. Set the module filter to **User Access**.
+5. Use the level filter for **Verified** or **Blocked**, or search by employee
+   name, work email, IP address, or event type.
+
+The page stores `ACCOUNT_REGISTERED`, `LOGIN_SUCCESS`, `LOGIN_FAILED`, and
+`LOGOUT` events. Each record includes its timestamp, account, IP address, and
+browser terminal. The history is stored in SQLite and remains available
+offline.
+
 Recommended VS Code extensions:
 
 - PHP Intelephense

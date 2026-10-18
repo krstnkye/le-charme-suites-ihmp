@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuthActivityLog;
 use App\Models\HotelTransaction;
 use App\Models\RoomStatusLog;
 use App\Models\User;
@@ -13,6 +14,28 @@ class AdminAuditLogController extends Controller
 {
     public function index(): View
     {
+        $authEvents = AuthActivityLog::with('user')
+            ->latest('occurred_at')
+            ->limit(30)
+            ->get()
+            ->map(fn (AuthActivityLog $log): array => [
+                'timestamp' => $log->occurred_at,
+                'actor' => $log->user?->name ?? $log->email ?? 'Unknown account',
+                'role' => ucfirst((string) ($log->user?->role ?? 'Unauthenticated')),
+                'event' => $log->event_type,
+                'icon' => match ($log->event_type) {
+                    'ACCOUNT_REGISTERED' => 'person_add',
+                    'LOGOUT' => 'logout',
+                    default => $log->successful ? 'login' : 'gpp_bad',
+                },
+                'target' => $log->user_id ? 'EMP-' . str_pad((string) $log->user_id, 3, '0', STR_PAD_LEFT) : 'LOGIN ATTEMPT',
+                'context' => $log->email ?? 'No email supplied',
+                'terminal' => Str::limit($log->user_agent ?: 'Unknown browser', 42),
+                'ip' => $log->ip_address ?: 'Unknown IP',
+                'details' => $log->details ?: 'Authentication event recorded.',
+                'severity' => $log->successful ? 'Verified' : 'Blocked',
+            ]);
+
         $transactionEvents = HotelTransaction::with(['guest', 'room'])
             ->latest('transaction_date')
             ->limit(8)
@@ -69,15 +92,31 @@ class AdminAuditLogController extends Controller
         $auditEvents = $transactionEvents
             ->concat($roomEvents)
             ->concat($userEvents)
+            ->concat($authEvents)
             ->sortByDesc('timestamp')
-            ->take(10)
+            ->take(50)
+            ->values();
+
+        $activeSessions = AuthActivityLog::with('user')
+            ->whereNotNull('user_id')
+            ->where('occurred_at', '>=', now()->subMinutes((int) config('session.lifetime')))
+            ->latest('occurred_at')
+            ->get()
+            ->groupBy('user_id')
+            ->map->first()
+            ->filter(fn (AuthActivityLog $log): bool => $log->event_type === 'LOGIN_SUCCESS' && $log->successful)
+            ->pluck('user')
+            ->filter()
             ->values();
 
         return view('admin.audit-logs.index', [
             'auditEvents' => $auditEvents,
-            'activeSessions' => User::latest()->take(4)->get(),
-            'totalAuditEvents' => HotelTransaction::count() + RoomStatusLog::count() + User::count(),
+            'activeSessions' => $activeSessions,
+            'totalAuditEvents' => HotelTransaction::count() + RoomStatusLog::count() + User::count() + AuthActivityLog::count(),
             'privilegedActions' => User::whereIn('role', ['admin', 'owner'])->count(),
+            'registeredAccounts' => AuthActivityLog::where('event_type', 'ACCOUNT_REGISTERED')->count(),
+            'successfulLogins' => AuthActivityLog::where('event_type', 'LOGIN_SUCCESS')->where('successful', true)->count(),
+            'blockedAttempts' => AuthActivityLog::where('event_type', 'LOGIN_FAILED')->where('successful', false)->count(),
             'ledgerRoot' => hash('sha256', $auditEvents->map(fn (array $event): string => implode('|', [
                 optional($event['timestamp'])->toDateTimeString(),
                 $event['actor'],
