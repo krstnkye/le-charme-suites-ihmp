@@ -1,2 +1,3 @@
-<link rel="icon" href="{{ asset('favicon.svg') }}?v=le-charme-1" type="image/svg+xml">
-<link rel="shortcut icon" href="{{ asset('favicon.svg') }}?v=le-charme-1" type="image/svg+xml">
+<link rel="icon" href="{{ asset('images/le-charme-logo-white.png') }}?v=le-charme-logo-1" type="image/png">
+<link rel="shortcut icon" href="{{ asset('images/le-charme-logo-white.png') }}?v=le-charme-logo-1" type="image/png">
+<link rel="apple-touch-icon" href="{{ asset('images/le-charme-logo-white.png') }}?v=le-charme-logo-1">
