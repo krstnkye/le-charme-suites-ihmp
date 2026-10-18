@@ -1,59 +1,148 @@
-# Le Charme Suites IHMS - Group Setup
+# Le Charme Suites IHMS - Group Setup and Troubleshooting
 
-This is a Laravel project. Open the `le-charme-suites-ihms` folder in Visual Studio Code.
+## Important Folder Layout
 
-## Requirements
+After cloning GitHub, the repository contains this structure:
 
-- PHP 8.2 or newer
-- Composer
-- SQLite PHP extension enabled
-- Visual Studio Code
+```text
+le-charme-suites-ihms repository
+|-- setup-and-run.bat
+|-- update-and-run.bat
+`-- le-charme-suites-ihms
+    |-- artisan
+    |-- app
+    |-- database
+    |-- resources
+    `-- routes
+```
+
+The inner `le-charme-suites-ihms` folder is the Laravel application. Open the
+outer repository folder in VS Code, but run `php artisan ...` commands from the
+inner folder.
+
+## Required Software
+
+1. Git for Windows
+2. PHP 8.3 or newer
+3. Composer 2
+4. Visual Studio Code
+
+XAMPP is optional and is not required by this project. The default database is
+SQLite. If XAMPP is installed, its PHP version must still be 8.3 or newer and
+the SQLite extensions must be enabled.
+
+Recommended VS Code extensions:
+
+- PHP Intelephense
+- Laravel Blade Snippets
+- SQLite Viewer
+- GitHub Pull Requests and Issues
+
+Extensions improve editing but are not required to run the application.
 
 ## First-Time Setup
 
-Run these commands in the VS Code terminal from inside the `le-charme-suites-ihms` folder:
+1. Clone `https://github.com/krstnkye/le-charme-suites-ihms.git`.
+2. Open the cloned outer folder in VS Code.
+3. Run `setup-and-run.bat` from the outer folder.
+4. Wait for Composer and database setup to finish.
+5. Open <http://127.0.0.1:8000>.
 
-```bash
+The initial Composer install may take several minutes on Windows. Do not close
+the terminal while it says `Generating optimized autoload files`.
+
+## Updating an Existing Copy
+
+Before starting new work:
+
+1. Close the running Laravel terminal.
+2. Make sure personal code changes are committed or copied somewhere safe.
+3. Run `update-and-run.bat` from the outer repository folder.
+
+This pulls `main`, installs changed dependencies, runs migrations and seeders,
+clears stale route/view/config caches, and restarts the server.
+
+## If Pages Appear Missing
+
+Open a terminal in the inner application folder and run:
+
+```bat
+git status
+git pull --ff-only origin main
 composer install
-copy .env.example .env
-php artisan key:generate
 php artisan migrate --seed
+php artisan optimize:clear
+php artisan route:list
 php artisan serve --host=127.0.0.1 --port=8000
 ```
 
-Then open:
+Then sign in with the correct department account. Pages are intentionally
+filtered by role, so a housekeeping user will not see administrator or billing
+pages.
 
-```text
-http://127.0.0.1:8000
-```
+## Common Problems
 
-## If The Database File Is Missing
+### `php` is not recognized
 
-Create the SQLite database file, then migrate:
+Install PHP 8.3 or newer and add the PHP directory to the Windows `PATH`, then
+restart VS Code.
 
-```bash
-type nul > database\database.sqlite
+### `composer` is not recognized
+
+Install Composer for Windows and restart VS Code.
+
+### `vendor/autoload.php` is missing
+
+Run `composer install` inside the inner application folder and allow it to
+finish completely.
+
+### Database or table errors
+
+Run:
+
+```bat
 php artisan migrate --seed
 ```
 
-## Sharing On The Same Wi-Fi Network
+For a disposable local database that contains no important work, use:
 
-If one person wants to host it temporarily for nearby groupmates on the same Wi-Fi, run:
-
-```bash
-php artisan serve --host=0.0.0.0 --port=8000
+```bat
+php artisan migrate:fresh --seed
 ```
 
-Then the others can open:
+The second command deletes local records, so do not use it when local data must
+be preserved.
 
-```text
-http://YOUR-COMPUTER-IP:8000
+### Old page is still displayed
+
+Run:
+
+```bat
+php artisan optimize:clear
 ```
 
-Replace `YOUR-COMPUTER-IP` with the host computer's local IP address.
+Then refresh the browser with `Ctrl+F5`.
 
-## Notes
+### Port 8000 is already in use
 
-- Do not share the `.env` file publicly.
-- The `vendor` folder is not included in the share package. It is recreated by running `composer install`.
-- Use GitHub or Google Drive if you want everyone to edit and submit changes.
+Run the server on another port:
+
+```bat
+php artisan serve --host=127.0.0.1 --port=8001
+```
+
+Then open <http://127.0.0.1:8001>.
+
+## Before Pushing Group Changes
+
+Run:
+
+```bat
+php artisan test
+git status
+git add YOUR_CHANGED_FILES
+git commit -m "Describe the completed update"
+git push origin main
+```
+
+Never commit `.env`, `vendor`, or `database/database.sqlite`.
