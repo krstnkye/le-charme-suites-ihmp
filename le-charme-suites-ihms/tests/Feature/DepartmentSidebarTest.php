@@ -14,8 +14,12 @@ class DepartmentSidebarTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
+        $this->actingAs($admin)->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('data-sidebar-toggle', false)
+            ->assertDontSee('data-page-back', false);
+
         foreach ([
-            route('dashboard'),
             route('admin.users.index'),
             route('admin.roles.index'),
             route('admin.permissions.index'),
@@ -37,8 +41,12 @@ class DepartmentSidebarTest extends TestCase
     {
         $housekeeper = User::factory()->create(['role' => 'housekeeping']);
 
+        $this->actingAs($housekeeper)->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('data-sidebar-toggle', false)
+            ->assertDontSee('data-page-back', false);
+
         foreach ([
-            route('dashboard'),
             route('rooms.index'),
             route('housekeeping.page', ['page' => 'cleaning-tasks']),
             route('housekeeping.page', ['page' => 'guest-requests']),
@@ -60,8 +68,12 @@ class DepartmentSidebarTest extends TestCase
     {
         $cashier = User::factory()->create(['role' => 'cashier']);
 
+        $this->actingAs($cashier)->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('data-sidebar-toggle', false)
+            ->assertDontSee('data-page-back', false);
+
         foreach ([
-            route('dashboard'),
             route('check-outs.create'),
             route('check-outs.index'),
             route('check-outs.history'),
@@ -81,8 +93,12 @@ class DepartmentSidebarTest extends TestCase
     {
         $owner = User::factory()->create(['role' => 'owner']);
 
+        $this->actingAs($owner)->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('data-sidebar-toggle', false)
+            ->assertDontSee('data-page-back', false);
+
         foreach ([
-            route('dashboard'),
             route('owner.page', ['page' => 'rooms']),
             route('owner.page', ['page' => 'reservations']),
             route('owner.page', ['page' => 'billing-records']),

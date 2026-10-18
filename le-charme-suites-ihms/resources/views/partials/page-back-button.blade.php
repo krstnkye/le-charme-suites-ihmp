@@ -1,12 +1,17 @@
 @once
     @php
-        $showPageBack = ! request()->routeIs('dashboard');
+        $showPageBack = ! request()->routeIs('dashboard', 'home');
     @endphp
 
+    @if ($showPageBack)
     <style>
         [data-page-back-container] {
             display: flex;
             margin-bottom: 1rem;
+        }
+
+        [data-page-back-container][hidden] {
+            display: none !important;
         }
 
         [data-page-back] {
@@ -103,4 +108,5 @@
             }
         })();
     </script>
+    @endif
 @endonce
