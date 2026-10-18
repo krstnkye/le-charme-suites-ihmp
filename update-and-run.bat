@@ -27,3 +27,5 @@ echo those changes before trying again. Ask the group repository owner for help.
 pause
 exit /b 1
 
+:end
+
