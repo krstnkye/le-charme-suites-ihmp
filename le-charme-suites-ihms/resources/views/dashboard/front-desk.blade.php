@@ -19,14 +19,7 @@
     @include('partials.favicon')
 </head>
 <body class="min-h-screen bg-[#fcf9f3] text-[#1c1c18] antialiased">
-    <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col justify-between border-r border-white/10 bg-[#01162d] px-4 py-6 text-white lg:flex">
-        <div class="space-y-6">
-            <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">@include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[180px] object-contain'])<span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.15em] text-[#755a28]">Front Desk IHMS</span></a>
-            <a href="{{ route('check-ins.create') }}" class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#755a28] px-3 py-3 text-xs font-bold text-white shadow-sm hover:bg-[#5b4313]"><span class="material-symbols-outlined text-base">how_to_reg</span>Express Check-In</a>
-            @include('partials.front-desk-nav', ['active' => 'front-desk'])
-        </div>
-        <form method="POST" action="{{ route('logout') }}" class="border-t border-[#172b42] pt-4">@csrf<button class="flex w-full items-center gap-3 px-3 py-2 text-sm text-[#7f93ae] hover:text-white"><span class="material-symbols-outlined">power_settings_new</span>Sign Out</button></form>
-    </aside>
+    @include('partials.front-desk-sidebar', ['active' => 'front-desk'])
 
     <div class="lg:ml-64">
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-[#e5e2dc] bg-white px-5 py-3 shadow-sm sm:px-8"><div class="flex items-center gap-4"><span class="serif text-lg font-semibold text-[#01162d] sm:text-xl">Le Charmé Suites IHMS</span><div class="relative hidden w-72 md:block"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-lg">search</span><input class="w-full rounded-lg border border-[#c4c6cd] py-2 pl-9 pr-3 text-xs outline-none focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20" placeholder="Search guest, room, or reservation" aria-label="Search dashboard"></div></div><div class="flex items-center gap-3"><div class="hidden text-right sm:block"><div class="flex items-center justify-end gap-1.5 text-xs font-bold text-[#01162d]"><span class="h-2 w-2 rounded-full bg-emerald-600"></span>Shift 01 • Active</div><p id="dashboard-clock" class="text-[11px] text-slate-500" data-timezone="{{ config('app.timezone') }}">{{ now(config('app.timezone'))->format('M d, Y • h:i A') }}</p></div><span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#01162d] text-xs font-bold text-[#ffdeaa]">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</span></div></header>

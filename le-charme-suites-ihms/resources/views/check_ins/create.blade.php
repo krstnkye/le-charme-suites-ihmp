@@ -90,33 +90,9 @@
 </head>
 <body class="min-h-screen bg-background font-sans text-primary antialiased">
     <div class="flex min-h-screen">
-        <aside class="nav-shell fixed inset-y-0 left-0 z-40 flex w-64 flex-col justify-between border-r border-white/10 px-5 py-6 text-white">
-            <div class="space-y-8">
-                <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
-                    @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[180px] object-contain'])
-                    <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.15em] text-secondary">Front Desk IHMS</span>
-                </a>
+        @include('partials.front-desk-sidebar', ['active' => 'check-ins'])
 
-                <a href="{{ route('check-ins.create') }}" class="flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#5b4313]">
-                    <span class="material-symbols-outlined text-[18px]">bolt</span>
-                    Express Check-In
-                </a>
-
-                @include('partials.front-desk-nav', ['active' => 'check-ins'])
-            </div>
-
-            <div class="border-t border-primary-container pt-5">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button class="flex w-full items-center gap-3 rounded-r-lg border-l-4 border-transparent px-3 py-3 text-left text-sm text-[#7f93ae] transition hover:bg-primary-container hover:text-white">
-                        <span class="material-symbols-outlined">logout</span>
-                        Sign Out
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        <main class="ml-64 min-h-screen flex-1">
+        <main class="min-h-screen flex-1 lg:ml-64">
             <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-variant bg-surface-container-lowest px-8 shadow-sm">
                 <div class="flex items-center gap-4">
                     <h2 class="font-serif text-xl font-bold">Le Charme Suites IHMS</h2>

@@ -82,37 +82,9 @@
 </head>
 <body class="min-h-screen bg-surface text-on-surface antialiased">
     <div class="flex min-h-screen">
-        <aside class="hidden w-64 shrink-0 flex-col justify-between bg-primary px-4 py-6 text-white shadow-xl lg:flex">
-            <div class="space-y-6">
-                <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
-                    @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[180px] object-contain'])
-                    <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.15em] text-secondary">Front Desk IHMS</span>
-                </a>
+        @include('partials.front-desk-sidebar', ['active' => 'reservations'])
 
-                <a href="{{ route('check-ins.create') }}" class="flex w-full items-center justify-center gap-2 rounded-lg border border-secondary-fixed-dim/20 bg-secondary px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-secondary-fixed hover:text-on-secondary-fixed-variant">
-                    <span class="material-symbols-outlined text-[18px]">bolt</span>
-                    Express Check-In
-                </a>
-
-                @include('partials.front-desk-nav', ['active' => 'reservations'])
-            </div>
-
-            <div class="space-y-3 border-t border-white/10 pt-4">
-                <div class="rounded-lg border border-white/10 bg-white/5 px-3 py-2">
-                    <span class="block text-[10px] font-bold uppercase tracking-widest text-secondary-fixed">IPT101 Engine</span>
-                    <span class="text-xs text-blue-100/70">Reservation workflow module</span>
-                </div>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-blue-100/70 transition hover:bg-primary-container hover:text-white">
-                        <span class="material-symbols-outlined text-[18px]">logout</span>
-                        Sign Out
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        <div class="flex min-w-0 flex-1 flex-col">
+        <div class="flex min-w-0 flex-1 flex-col lg:ml-64">
             <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-variant bg-surface px-4 shadow-sm sm:px-6 lg:px-8">
                 <form method="GET" action="{{ route('reservations.index') }}" class="relative w-full max-w-lg">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-[18px]">search</span>

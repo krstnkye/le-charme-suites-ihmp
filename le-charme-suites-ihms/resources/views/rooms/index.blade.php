@@ -85,10 +85,7 @@
     @if ($role === 'housekeeping')
         @include('partials.housekeeping-sidebar', ['active' => 'room-status'])
     @else
-        <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-white/10 bg-primary px-4 py-6 text-surface shadow-md lg:flex">
-            <div class="flex-1 overflow-y-auto text-sm font-semibold">@include('partials.front-desk-nav', ['active' => 'room-status'])</div>
-            <form method="POST" action="{{ route('logout') }}" class="border-t border-primary-container pt-4">@csrf<button class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-semibold text-on-primary-container hover:bg-primary-container hover:text-surface"><span class="material-symbols-outlined">power_settings_new</span>Sign Out</button></form>
-        </aside>
+        @include('partials.front-desk-sidebar', ['active' => 'room-status'])
     @endif
 
     <div class="{{ $role === 'housekeeping' ? 'lg:pl-72' : 'lg:ml-64' }}">

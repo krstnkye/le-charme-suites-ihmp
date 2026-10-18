@@ -80,29 +80,7 @@
     @include('partials.favicon')
 </head>
 <body class="min-h-screen bg-background font-body text-on-surface antialiased">
-    <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col justify-between border-r border-white/10 bg-primary px-4 py-6 text-white shadow-md lg:flex">
-        <div class="space-y-6">
-            <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
-                @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[180px] object-contain'])
-                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.15em] text-secondary">Front Desk IHMS</span>
-            </a>
-
-            <a href="{{ route('check-ins.create', ['reservation_id' => $reservation->id]) }}" class="flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110">
-                <span class="material-symbols-outlined text-base">key</span>
-                Express Check-In
-            </a>
-
-            @include('partials.front-desk-nav', ['active' => 'reservations'])
-        </div>
-
-        <form method="POST" action="{{ route('logout') }}" class="border-t border-primary-container pt-4">
-            @csrf
-            <button class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-semibold text-on-primary-container hover:bg-primary-container hover:text-white">
-                <span class="material-symbols-outlined">power_settings_new</span>
-                Sign Out
-            </button>
-        </form>
-    </aside>
+    @include('partials.front-desk-sidebar', ['active' => 'reservations'])
 
     <div class="lg:ml-64">
         <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-variant bg-surface px-4 shadow-sm lg:px-7">

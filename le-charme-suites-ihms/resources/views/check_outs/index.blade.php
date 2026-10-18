@@ -83,6 +83,9 @@
     @include('partials.favicon')
 </head>
 <body class="min-h-screen bg-surface font-sans text-primary antialiased">
+    @if ($user?->role === 'receptionist')
+        @include('partials.front-desk-sidebar', ['active' => 'transactions'])
+    @else
     <aside class="fixed left-0 top-0 z-40 hidden h-screen w-72 flex-col justify-between border-r border-white/10 bg-primary-container text-white shadow-xl lg:flex">
         <div class="flex min-h-0 flex-1 flex-col">
             <div class="border-b border-white/10 px-5 py-4">
@@ -137,8 +140,9 @@
             </form>
         </div>
     </aside>
+    @endif
 
-    <div class="flex min-h-screen flex-col lg:ml-72">
+    <div class="flex min-h-screen flex-col {{ $user?->role === 'receptionist' ? 'lg:ml-64' : 'lg:ml-72' }}">
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
             <div>
                 <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">

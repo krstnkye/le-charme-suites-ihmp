@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Hotel Management System')</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -13,25 +14,14 @@
 <body class="bg-slate-100 text-slate-900">
     @php($role = auth()->user()?->role)
     <div class="min-h-screen">
+        @if ($role === 'receptionist')
+            @include('partials.front-desk-sidebar')
+        @else
         <aside class="fixed inset-y-0 left-0 hidden w-64 border-r border-slate-200 bg-white p-5 lg:block">
             <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white p-2 shadow-sm">
                 @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
                 <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-amber-800">Integrated Hotel Management System</span>
             </a>
-            @if ($role === 'receptionist')
-                @php($legacyNavLink = 'block rounded-md px-3 py-2 hover:bg-slate-100')
-                @php($legacyNavActive = 'block rounded-md bg-slate-100 px-3 py-2 font-semibold text-slate-950')
-                <nav class="mt-8 space-y-1 text-sm font-medium" aria-label="Front Desk Navigation">
-                    <a class="{{ request()->routeIs('dashboard') ? $legacyNavActive : $legacyNavLink }}" href="{{ route('dashboard') }}">Front Desk</a>
-                    <a class="{{ request()->routeIs('reservations.*') ? $legacyNavActive : $legacyNavLink }}" href="{{ route('reservations.index') }}">Reservations</a>
-                    <a class="{{ request()->routeIs('check-ins.*') ? $legacyNavActive : $legacyNavLink }}" href="{{ route('check-ins.index') }}">Check-ins</a>
-                    <a class="{{ request()->routeIs('check-outs.create') ? $legacyNavActive : $legacyNavLink }}" href="{{ route('check-outs.create') }}">Check-outs</a>
-                    <a class="{{ request()->routeIs('rooms.*') ? $legacyNavActive : $legacyNavLink }}" href="{{ route('rooms.index') }}">Room Status</a>
-                    <a class="{{ request()->routeIs('check-outs.index') ? $legacyNavActive : $legacyNavLink }}" href="{{ route('check-outs.index') }}">Transactions</a>
-                    <a class="{{ request()->routeIs('guests.*') ? $legacyNavActive : $legacyNavLink }}" href="{{ route('guests.index') }}">Guests</a>
-                    <a class="{{ request()->routeIs('profile.*') ? $legacyNavActive : $legacyNavLink }}" href="{{ route('profile.edit') }}">My Profile</a>
-                </nav>
-            @else
                 <nav class="mt-8 space-y-1 text-sm font-medium">
                     <a class="block rounded-md px-3 py-2 hover:bg-slate-100" href="{{ route('dashboard') }}">Dashboard</a>
                     @if (in_array($role, ['admin', 'receptionist'], true))
@@ -49,8 +39,8 @@
                         <a class="block rounded-md px-3 py-2 hover:bg-slate-100" href="{{ route('reports.index') }}">Reports</a>
                     @endif
                 </nav>
-            @endif
         </aside>
+        @endif
 
         <div class="lg:pl-64">
             <header class="border-b border-slate-200 bg-white px-6 py-4">

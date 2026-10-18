@@ -21,14 +21,7 @@
 </head>
 <body class="min-h-screen bg-[#fcf9f3] text-[#1c1c18] antialiased">
     @php($role = auth()->user()?->role)
-    <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col justify-between border-r border-white/10 bg-[#01162d] px-4 py-6 text-white lg:flex">
-        <div class="space-y-6">
-            <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">@include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[180px] object-contain'])<span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.15em] text-[#755a28]">Front Desk IHMS</span></a>
-            <a href="{{ route('check-ins.create') }}" class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#755a28] px-3 py-3 text-xs font-bold text-white shadow-sm hover:bg-[#5b4313]"><span class="material-symbols-outlined text-base">bolt</span>Express Check-In</a>
-            @include('partials.front-desk-nav', ['active' => 'reservations'])
-        </div>
-        <form method="POST" action="{{ route('logout') }}" class="border-t border-[#172b42] pt-4">@csrf<button class="flex w-full items-center gap-3 px-3 py-2 text-sm text-[#7f93ae] hover:text-white"><span class="material-symbols-outlined">logout</span>Sign Out</button></form>
-    </aside>
+    @include('partials.front-desk-sidebar', ['active' => 'reservations'])
 
     <div class="lg:ml-64">
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-[#e5e2dc] bg-white px-5 py-3 shadow-sm sm:px-8"><div class="flex items-center gap-3"><span class="serif text-lg font-semibold text-[#01162d] sm:text-xl">Le Charmé Suites IHMS</span><span class="hidden h-5 w-px bg-[#e5e2dc] sm:block"></span><span class="hidden text-xs font-semibold uppercase tracking-wider text-[#755a28] sm:block">Reservations</span></div><div class="flex items-center gap-3"><div class="text-right"><p class="text-xs font-bold text-[#01162d]">{{ ucwords(str_replace('_', ' ', $role ?? 'Staff')) }}</p><p id="reservation-clock" class="text-[11px] text-slate-500">{{ now(config('app.timezone'))->format('M d, Y • h:i A') }}</p></div><span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#fdd79a] text-xs font-bold text-[#271900]">{{ strtoupper(substr(auth()->user()?->name ?? 'ST', 0, 2)) }}</span></div></header>
