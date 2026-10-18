@@ -37,6 +37,8 @@ if errorlevel 1 php artisan key:generate
 if errorlevel 1 goto :failed
 
 echo [3/5] Creating and updating the local database...
+if not exist database\database.sqlite type nul > database\database.sqlite
+if not exist database\database.sqlite goto :database_failed
 php artisan migrate --seed --force
 if errorlevel 1 goto :failed
 
@@ -72,6 +74,11 @@ goto :help
 
 :missing_composer
 echo ERROR: Composer was not found. Install Composer and reopen the terminal.
+goto :help
+
+:database_failed
+echo ERROR: The local SQLite database could not be created.
+echo Check that the database folder is writable, then try again.
 goto :help
 
 :failed

@@ -137,7 +137,23 @@ finish completely.
 
 ### Database or table errors
 
-Run:
+If the error says `database/database.sqlite does not exist`, close the Laravel
+server and run `setup-and-run.bat` from the outer repository folder. The setup
+script creates the local SQLite file before applying the database migrations.
+
+To repair it manually, open PowerShell in the inner `le-charme-suites-ihms`
+application folder and run:
+
+```powershell
+if (!(Test-Path database\database.sqlite)) {
+    New-Item -ItemType File -Path database\database.sqlite
+}
+php artisan migrate --seed
+php artisan optimize:clear
+php artisan serve --host=127.0.0.1 --port=8000
+```
+
+For other database or table errors, run:
 
 ```bat
 php artisan migrate --seed
