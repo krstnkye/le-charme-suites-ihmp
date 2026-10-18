@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Rules\WorkEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -22,9 +24,11 @@ class AdminUserRoleController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')],
+            'email' => ['required', 'email', 'max:255', new WorkEmail, Rule::unique('users', 'email')],
             'role' => ['required', 'in:admin,owner,receptionist,cashier,housekeeping'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -36,9 +40,11 @@ class AdminUserRoleController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
+        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'email' => ['required', 'email', 'max:255', new WorkEmail, Rule::unique('users', 'email')->ignore($user->id)],
             'role' => ['required', 'in:admin,owner,receptionist,cashier,housekeeping'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);

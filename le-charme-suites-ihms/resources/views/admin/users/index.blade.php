@@ -327,8 +327,9 @@
                         <input name="name" class="mt-2 w-full rounded-lg border-outline-variant px-4 py-3 text-sm focus:border-secondary focus:ring-secondary" required>
                     </label>
                     <label class="block">
-                        <span class="text-xs font-bold uppercase tracking-wide text-slate-700">Email Address</span>
-                        <input name="email" type="email" class="mt-2 w-full rounded-lg border-outline-variant px-4 py-3 text-sm focus:border-secondary focus:ring-secondary" required>
+                        <span class="text-xs font-bold uppercase tracking-wide text-slate-700">Work Email Address</span>
+                        <input name="email" type="email" autocomplete="email" placeholder="sample@lecharmehotel.com" class="mt-2 w-full rounded-lg border-outline-variant px-4 py-3 text-sm focus:border-secondary focus:ring-secondary" required>
+                        <span class="mt-1 block text-xs text-slate-500">Must end in @lecharmehotel.com</span>
                     </label>
                     <label class="block sm:col-span-2">
                         <span class="text-xs font-bold uppercase tracking-wide text-slate-700">Role Access</span>
@@ -376,8 +377,9 @@
                         <input id="editUserName" name="name" class="mt-2 w-full rounded-lg border-outline-variant px-4 py-3 text-sm focus:border-secondary focus:ring-secondary" required>
                     </label>
                     <label class="block">
-                        <span class="text-xs font-bold uppercase tracking-wide text-slate-700">Email Address</span>
-                        <input id="editUserEmail" name="email" type="email" class="mt-2 w-full rounded-lg border-outline-variant px-4 py-3 text-sm focus:border-secondary focus:ring-secondary" required>
+                        <span class="text-xs font-bold uppercase tracking-wide text-slate-700">Work Email Address</span>
+                        <input id="editUserEmail" name="email" type="email" autocomplete="email" placeholder="sample@lecharmehotel.com" class="mt-2 w-full rounded-lg border-outline-variant px-4 py-3 text-sm focus:border-secondary focus:ring-secondary" required>
+                        <span class="mt-1 block text-xs text-slate-500">Must end in @lecharmehotel.com</span>
                     </label>
                     <label class="block sm:col-span-2">
                         <span class="text-xs font-bold uppercase tracking-wide text-slate-700">Role Access</span>

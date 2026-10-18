@@ -148,7 +148,7 @@
                 @csrf
 
                 <div>
-                    <label class="mb-1 block font-label-md text-label-md font-semibold text-on-surface" for="email">System Email / Employee Account</label>
+                    <label class="mb-1 block font-label-md text-label-md font-semibold text-on-surface" for="email">Work Email Address</label>
                     <div class="relative">
                         <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-secondary">
                             <span class="material-symbols-outlined text-lg">badge</span>
@@ -158,12 +158,14 @@
                             name="email"
                             type="email"
                             value="{{ old('email') }}"
-                            placeholder="Enter email or account identifier"
+                            placeholder="sample@lecharmehotel.com"
+                            autocomplete="email"
                             class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-3 font-body-md text-body-md text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary"
                             required
                             autofocus
                         >
                     </div>
+                    <p class="mt-1.5 text-xs text-on-surface-variant">Only <strong>@lecharmehotel.com</strong> work emails can sign in.</p>
                 </div>
 
                 <div>

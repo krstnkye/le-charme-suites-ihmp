@@ -6,6 +6,7 @@ return [
     'address' => 'Le Charmé Bldg. 1131 Palm St., Subic Bay Freeport Zone, PH 2200, Philippines',
     'phone' => '+63 (047) 250-3333',
     'email' => 'frontoffice@lecharmehotels.com',
+    'staff_email_domain' => 'lecharmehotel.com',
     'website' => 'https://lecharmehotels.com/',
     'check_in_time' => '2:00 PM',
     'check_out_time' => '12:00 PM',

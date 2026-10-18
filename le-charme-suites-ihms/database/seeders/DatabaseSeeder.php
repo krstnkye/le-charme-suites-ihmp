@@ -18,11 +18,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         foreach ([
-            ['Hotel Administrator', 'admin@example.com', 'admin'],
-            ['Front Desk Receptionist', 'receptionist@lecharme.test', 'receptionist'],
-            ['Cashier Staff', 'cashier@lecharme.test', 'cashier'],
-            ['Housekeeping Staff', 'housekeeping@lecharme.test', 'housekeeping'],
-            ['Hotel Owner', 'owner@lecharme.test', 'owner'],
+            ['Hotel Administrator', 'admin@lecharmehotel.com', 'admin'],
+            ['Front Desk Receptionist', 'receptionist@lecharmehotel.com', 'receptionist'],
+            ['Billing Staff', 'billing@lecharmehotel.com', 'cashier'],
+            ['Housekeeping Staff', 'housekeeping@lecharmehotel.com', 'housekeeping'],
+            ['Hotel Owner', 'owner@lecharmehotel.com', 'owner'],
         ] as [$name, $email, $role]) {
             User::updateOrCreate([
                 'email' => $email,

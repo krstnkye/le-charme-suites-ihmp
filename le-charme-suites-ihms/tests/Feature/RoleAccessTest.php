@@ -66,7 +66,7 @@ class RoleAccessTest extends TestCase
         $admin = User::factory()->create(['role' => 'admin']);
         $staff = User::factory()->create([
             'name' => 'Original Staff',
-            'email' => 'original.staff@example.com',
+            'email' => 'original.staff@lecharmehotel.com',
             'role' => 'receptionist',
         ]);
 
@@ -79,7 +79,7 @@ class RoleAccessTest extends TestCase
         $this->actingAs($admin)
             ->post(route('admin.users.store'), [
                 'name' => 'Provisioned Cashier',
-                'email' => 'provisioned.cashier@example.com',
+                'email' => 'provisioned.billing@lecharmehotel.com',
                 'role' => 'cashier',
                 'password' => 'password123',
                 'password_confirmation' => 'password123',
@@ -89,14 +89,14 @@ class RoleAccessTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'name' => 'Provisioned Cashier',
-            'email' => 'provisioned.cashier@example.com',
+            'email' => 'provisioned.billing@lecharmehotel.com',
             'role' => 'cashier',
         ]);
 
         $this->actingAs($admin)
             ->put(route('admin.users.update', $staff), [
                 'name' => 'Updated Staff',
-                'email' => 'updated.staff@example.com',
+                'email' => 'updated.staff@lecharmehotel.com',
                 'role' => 'cashier',
                 'password' => '',
                 'password_confirmation' => '',
@@ -107,7 +107,7 @@ class RoleAccessTest extends TestCase
         $this->assertDatabaseHas('users', [
             'id' => $staff->id,
             'name' => 'Updated Staff',
-            'email' => 'updated.staff@example.com',
+            'email' => 'updated.staff@lecharmehotel.com',
             'role' => 'cashier',
         ]);
 

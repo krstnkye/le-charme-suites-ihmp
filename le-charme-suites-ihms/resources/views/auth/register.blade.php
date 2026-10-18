@@ -136,13 +136,14 @@
                     </div>
 
                     <div class="sm:col-span-2">
-                        <label class="mb-1 block text-sm font-bold text-on-surface" for="email">System Email Address</label>
+                        <label class="mb-1 block text-sm font-bold text-on-surface" for="email">Work Email Address</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-secondary">
                                 <span class="material-symbols-outlined text-lg">mail</span>
                             </span>
-                            <input id="email" name="email" type="email" value="{{ old('email') }}" class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="staff@lecharme.test" required>
+                            <input id="email" name="email" type="email" value="{{ old('email') }}" autocomplete="email" class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="sample@lecharmehotel.com" required>
                         </div>
+                        <p class="mt-1.5 text-xs text-on-surface-variant">Use your assigned <strong>@lecharmehotel.com</strong> work email.</p>
                     </div>
 
                     <div>
