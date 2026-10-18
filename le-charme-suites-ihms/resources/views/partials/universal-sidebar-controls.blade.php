@@ -23,17 +23,18 @@
             align-items: center;
             background: #01162d;
             border: 1px solid rgba(255, 222, 170, .65);
-            border-radius: 8px;
+            border-radius: 0 8px 8px 0;
+            bottom: 20px;
             box-shadow: 0 5px 16px rgba(1, 22, 45, .24);
             color: #ffdeaa;
             display: flex;
-            height: 42px;
+            height: 48px;
             justify-content: center;
-            left: 14px;
+            left: 0;
             position: fixed;
-            top: 14px;
+            top: auto;
             transition: left 220ms ease, background-color 160ms ease;
-            width: 42px;
+            width: 34px;
             z-index: 60;
         }
 
@@ -47,7 +48,7 @@
         }
 
         body.sidebar-mobile-open [data-sidebar-toggle] {
-            left: calc(var(--universal-sidebar-width, 18rem) - 52px);
+            left: calc(var(--universal-sidebar-width, 18rem) - 17px);
         }
 
         body.sidebar-mobile-open [data-sidebar-toggle] .sidebar-close-icon {
@@ -66,12 +67,20 @@
         }
 
         @media (min-width: 1024px) {
+            body [class~="pl-72"],
+            body [class~="lg:pl-72"],
+            body [class~="lg:pl-64"],
+            body [class~="lg:ml-72"],
+            body [class~="lg:ml-64"] {
+                transition: margin-left 220ms ease, padding-left 220ms ease;
+            }
+
             [data-universal-sidebar] {
                 transform: translateX(0);
             }
 
             body:not(.sidebar-collapsed) [data-sidebar-toggle] {
-                left: calc(var(--universal-sidebar-width, 18rem) - 22px);
+                left: calc(var(--universal-sidebar-width, 18rem) - 17px);
             }
 
             body.sidebar-collapsed [data-universal-sidebar] {
@@ -79,7 +88,7 @@
             }
 
             body.sidebar-collapsed [data-sidebar-toggle] {
-                left: 14px;
+                left: 0;
             }
 
             body.sidebar-collapsed [data-sidebar-toggle] .sidebar-menu-icon {
@@ -105,7 +114,6 @@
             body.sidebar-collapsed [class~="lg:ml-64"] {
                 margin-left: 0 !important;
                 padding-left: 0 !important;
-                transition: margin-left 220ms ease, padding-left 220ms ease;
             }
         }
     </style>
