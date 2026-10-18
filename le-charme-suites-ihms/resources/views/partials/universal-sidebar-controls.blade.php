@@ -40,14 +40,14 @@
             align-items: center;
             background: #01162d;
             border: 1px solid rgba(255, 222, 170, .65);
-            border-radius: 0 8px 8px 0;
+            border-radius: 8px;
             bottom: auto;
             box-shadow: 0 5px 16px rgba(1, 22, 45, .24);
             color: #ffdeaa;
             display: flex;
             height: 48px;
             justify-content: center;
-            left: 0;
+            left: 12px;
             position: fixed;
             top: 20px;
             transition: left 220ms ease, background-color 160ms ease;
@@ -82,7 +82,7 @@
         }
 
         body.sidebar-mobile-open [data-sidebar-toggle] {
-            left: calc(var(--universal-sidebar-width, 18rem) - 17px);
+            left: calc(var(--universal-sidebar-width, 18rem) - 46px);
         }
 
         body.sidebar-mobile-open [data-sidebar-toggle] .sidebar-close-icon {
@@ -114,7 +114,7 @@
             }
 
             body:not(.sidebar-collapsed) [data-sidebar-toggle] {
-                left: calc(var(--universal-sidebar-width, 18rem) - 17px);
+                left: calc(var(--universal-sidebar-width, 18rem) - 46px);
             }
 
             body.sidebar-collapsed [data-universal-sidebar] {
@@ -122,7 +122,7 @@
             }
 
             body.sidebar-collapsed [data-sidebar-toggle] {
-                left: 0;
+                left: 12px;
             }
 
             body.sidebar-collapsed [data-sidebar-toggle] .sidebar-menu-icon {
@@ -297,4 +297,6 @@
             restore();
         })();
     </script>
+
+    @include('partials.page-back-button')
 @endonce

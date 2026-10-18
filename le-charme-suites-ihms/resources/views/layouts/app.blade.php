@@ -89,5 +89,6 @@
             });
         </script>
     @endif
+    @include('partials.page-back-button')
 </body>
 </html>

@@ -28,7 +28,8 @@ class DepartmentSidebarTest extends TestCase
                 ->assertOk()
                 ->assertSee('aria-label="Administrator Sidebar"', false)
                 ->assertSee('data-universal-sidebar', false)
-                ->assertSee('data-sidebar-toggle', false);
+                ->assertSee('data-sidebar-toggle', false)
+                ->assertSee('data-page-back', false);
         }
     }
 
@@ -50,7 +51,8 @@ class DepartmentSidebarTest extends TestCase
                 ->assertOk()
                 ->assertSee('aria-label="Housekeeping Sidebar"', false)
                 ->assertSee('data-universal-sidebar', false)
-                ->assertSee('data-sidebar-toggle', false);
+                ->assertSee('data-sidebar-toggle', false)
+                ->assertSee('data-page-back', false);
         }
     }
 
@@ -70,7 +72,8 @@ class DepartmentSidebarTest extends TestCase
                 ->assertOk()
                 ->assertSee('aria-label="Billing Sidebar"', false)
                 ->assertSee('data-universal-sidebar', false)
-                ->assertSee('data-sidebar-toggle', false);
+                ->assertSee('data-sidebar-toggle', false)
+                ->assertSee('data-page-back', false);
         }
     }
 
@@ -91,7 +94,8 @@ class DepartmentSidebarTest extends TestCase
                 ->assertOk()
                 ->assertSee('aria-label="Owner Sidebar"', false)
                 ->assertSee('data-universal-sidebar', false)
-                ->assertSee('data-sidebar-toggle', false);
+                ->assertSee('data-sidebar-toggle', false)
+                ->assertSee('data-page-back', false);
         }
     }
 }
