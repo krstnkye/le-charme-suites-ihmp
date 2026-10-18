@@ -11,7 +11,7 @@
     };
 @endphp
 
-<aside class="fixed inset-y-0 left-0 z-40 hidden h-screen w-64 flex-col border-r border-white/10 bg-[#01162d] px-4 py-6 text-white shadow-xl lg:flex" aria-label="Front Desk Sidebar">
+<aside data-universal-sidebar class="fixed inset-y-0 left-0 z-40 flex h-screen w-64 flex-col border-r border-white/10 bg-[#01162d] px-4 py-6 text-white shadow-xl" aria-label="Front Desk Sidebar">
     <div class="flex min-h-0 flex-1 flex-col gap-6">
         <a href="{{ route('dashboard') }}" class="block shrink-0 rounded-lg bg-white px-3 py-2 shadow-sm">
             @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[180px] object-contain'])
@@ -36,3 +36,5 @@
         </button>
     </form>
 </aside>
+
+@include('partials.universal-sidebar-controls')

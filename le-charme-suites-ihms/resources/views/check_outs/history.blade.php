@@ -6,13 +6,6 @@
         'partial' => 'border-amber-200 bg-amber-50 text-amber-800',
         'unpaid' => 'border-rose-200 bg-rose-50 text-rose-800',
     ];
-    $billingNav = [
-        ['label' => 'Dashboard', 'icon' => 'dashboard', 'href' => route('dashboard'), 'active' => false],
-        ['label' => 'Billing', 'icon' => 'receipt_long', 'href' => route('check-outs.create'), 'active' => false],
-        ['label' => 'Transactions', 'icon' => 'point_of_sale', 'href' => route('check-outs.index'), 'active' => false],
-        ['label' => 'Transaction History', 'icon' => 'history', 'href' => route('check-outs.history'), 'active' => true],
-        ['label' => 'Reports', 'icon' => 'bar_chart', 'href' => route('reports.index'), 'active' => false],
-    ];
     $hashSeed = substr(hash('sha256', $checkOuts->pluck('id')->join('|') . now()->toDateString()), 0, 12);
 @endphp
 
@@ -46,43 +39,7 @@
     @if ($user?->role === 'receptionist')
         @include('partials.front-desk-sidebar', ['active' => 'transactions'])
     @else
-    <aside class="fixed left-0 top-0 z-40 hidden h-screen w-72 flex-col justify-between border-r border-white/10 bg-primary-container text-white shadow-xl lg:flex">
-        <div class="flex min-h-0 flex-1 flex-col">
-            <div class="border-b border-white/10 px-5 py-4">
-                <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
-                    @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
-                    <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-secondary">IHMS Billing Command</span>
-                </a>
-            </div>
-
-            <div class="mx-4 my-4 flex items-center gap-3 rounded-lg border border-secondary-fixed/20 bg-primary/40 p-3">
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-bold text-white ring-2 ring-secondary-fixed/30">
-                    {{ collect(explode(' ', $user?->name ?? 'Billing Staff'))->take(2)->map(fn ($part) => strtoupper(substr($part, 0, 1)))->implode('') ?: 'B' }}
-                </div>
-                <div class="min-w-0 flex-1">
-                    <p class="truncate text-sm font-bold">{{ $user?->name ?? 'Billing Staff' }}</p>
-                    <div class="flex items-center gap-2 text-xs text-secondary-fixed"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Terminal 04 | Cashier A</div>
-                </div>
-            </div>
-
-            <nav class="custom-scrollbar mt-1 flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-3 text-sm font-semibold" aria-label="Billing Navigation">
-                @foreach ($billingNav as $item)
-                    <a href="{{ $item['href'] }}" @class(['flex items-center gap-3 rounded-r-lg border-l-[3px] px-4 py-3 transition', 'border-secondary-fixed bg-primary/60 text-white' => $item['active'], 'border-transparent text-blue-100/70 hover:bg-primary/40 hover:text-white' => ! $item['active']])>
-                        <span @class(['material-symbols-outlined text-xl', 'text-secondary-fixed' => $item['active']])>{{ $item['icon'] }}</span>
-                        <span>{{ $item['label'] }}</span>
-                    </a>
-                @endforeach
-            </nav>
-        </div>
-
-        <div class="border-t border-white/10 bg-primary/20 p-3">
-            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 rounded px-3 py-2 text-blue-100/70 transition hover:bg-primary/40 hover:text-white"><span class="material-symbols-outlined">account_circle</span><span class="text-sm font-semibold">My Profile</span></a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="flex w-full items-center gap-3 rounded px-3 py-2 text-left text-rose-100 transition hover:bg-rose-500/20"><span class="material-symbols-outlined text-rose-300">logout</span><span class="text-sm font-semibold">Logout</span></button>
-            </form>
-        </div>
-    </aside>
+        @include('partials.billing-sidebar', ['active' => 'history'])
     @endif
 
     <div class="flex min-h-screen flex-col {{ $user?->role === 'receptionist' ? 'lg:ml-64' : 'lg:ml-72' }}">

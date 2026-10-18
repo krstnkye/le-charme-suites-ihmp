@@ -8,7 +8,7 @@
     $subIdle = 'text-[#8fa4bd] hover:text-white';
 @endphp
 
-<aside class="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col bg-[#01162d] px-4 py-5 text-white shadow-xl lg:flex">
+<aside data-universal-sidebar class="fixed inset-y-0 left-0 z-40 flex w-72 flex-col bg-[#01162d] px-4 py-5 text-white shadow-xl" aria-label="Housekeeping Sidebar">
     <div class="border-b border-white/10 pb-5">
         <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
             @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
@@ -86,6 +86,8 @@
         </form>
     </div>
 </aside>
+
+@include('partials.universal-sidebar-controls')
 
 <script>
     (() => {

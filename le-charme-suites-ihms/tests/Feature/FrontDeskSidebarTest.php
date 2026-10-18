@@ -33,6 +33,8 @@ class FrontDeskSidebarTest extends TestCase
                 ->get($url)
                 ->assertOk()
                 ->assertSee('aria-label="Front Desk Sidebar"', false)
+                ->assertSee('data-universal-sidebar', false)
+                ->assertSee('data-sidebar-toggle', false)
                 ->assertSee('Front Desk IHMS')
                 ->assertSee('Express Check-In')
                 ->assertSee('Sign Out');
@@ -47,6 +49,7 @@ class FrontDeskSidebarTest extends TestCase
             ->get(route('check-outs.index'))
             ->assertOk()
             ->assertDontSee('aria-label="Front Desk Sidebar"', false)
-            ->assertSee('Billing Navigation');
+            ->assertSee('aria-label="Billing Sidebar"', false)
+            ->assertSee('data-sidebar-toggle', false);
     }
 }

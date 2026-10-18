@@ -8,7 +8,7 @@
     $navActive = 'border-secondary-fixed bg-primary/40 font-bold text-white';
 @endphp
 
-<aside data-admin-sidebar class="nav-shell fixed inset-y-0 left-0 z-40 flex w-72 flex-col justify-between overflow-y-auto border-r border-white/10 text-white shadow-md">
+<aside data-admin-sidebar data-universal-sidebar class="nav-shell fixed inset-y-0 left-0 z-40 flex w-72 flex-col justify-between overflow-y-auto border-r border-white/10 text-white shadow-md" aria-label="Administrator Sidebar">
     <div>
         <div class="border-b border-white/10 px-6 py-5">
             <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
@@ -73,6 +73,8 @@
         </button>
     </form>
 </aside>
+
+@include('partials.universal-sidebar-controls')
 
 <script>
     window.addEventListener('DOMContentLoaded', () => {
