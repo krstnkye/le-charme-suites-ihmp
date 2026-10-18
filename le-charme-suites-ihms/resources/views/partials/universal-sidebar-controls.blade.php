@@ -41,7 +41,7 @@
             background: #01162d;
             border: 1px solid rgba(255, 222, 170, .65);
             border-radius: 0 8px 8px 0;
-            bottom: 20px;
+            bottom: auto;
             box-shadow: 0 5px 16px rgba(1, 22, 45, .24);
             color: #ffdeaa;
             display: flex;
@@ -49,7 +49,7 @@
             justify-content: center;
             left: 0;
             position: fixed;
-            top: auto;
+            top: 20px;
             transition: left 220ms ease, background-color 160ms ease;
             width: 34px;
             z-index: 60;
