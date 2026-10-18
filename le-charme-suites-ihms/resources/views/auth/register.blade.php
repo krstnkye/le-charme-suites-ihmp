@@ -83,13 +83,10 @@
             @endif
 
             @php
-                $roleLabels = [
-                    'receptionist' => 'Receptionist',
-                    'cashier' => 'Billing',
-                    'housekeeping' => 'Housekeeping',
-                    'owner' => 'Owner',
-                    'admin' => 'Admin',
-                ];
+                $roleOptions = config('hotel.staff_roles');
+                $roleLabels = collect($roleOptions)
+                    ->mapWithKeys(fn ($role, $value) => [$value => $role['label']])
+                    ->all();
             @endphp
 
             <form method="POST" action="{{ route('register.store') }}" class="space-y-5">
@@ -103,18 +100,12 @@
                         </span>
                     </div>
                     <div class="grid gap-2 sm:grid-cols-5">
-                        @foreach ([
-                            'receptionist' => ['Receptionist', 'badge'],
-                            'cashier' => ['Billing', 'payments'],
-                            'housekeeping' => ['Housekeeping', 'cleaning_services'],
-                            'owner' => ['Owner', 'workspace_premium'],
-                            'admin' => ['Admin', 'admin_panel_settings'],
-                        ] as $value => [$label, $icon])
-                            <label class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-role-label="{{ $label }}">
+                        @foreach ($roleOptions as $value => $role)
+                            <label class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-role-label="{{ $role['label'] }}">
                                 <input class="sr-only" type="radio" name="role" value="{{ $value }}" @checked(old('role', 'receptionist') === $value)>
                                 <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
-                                <span class="material-symbols-outlined mb-1 block text-lg">{{ $icon }}</span>
-                                <span>{{ $label }}</span>
+                                <span class="material-symbols-outlined mb-1 block text-lg">{{ $role['icon'] }}</span>
+                                <span>{{ $role['label'] }}</span>
                             </label>
                         @endforeach
                     </div>

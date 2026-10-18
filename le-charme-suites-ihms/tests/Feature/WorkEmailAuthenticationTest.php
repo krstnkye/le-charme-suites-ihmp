@@ -10,6 +10,19 @@ class WorkEmailAuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_login_and_registration_show_roles_in_the_same_order(): void
+    {
+        $expectedOrder = ['Admin', 'Receptionist', 'Billing', 'Housekeeping', 'Owner'];
+
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSeeInOrder($expectedOrder);
+
+        $this->get(route('register'))
+            ->assertOk()
+            ->assertSeeInOrder($expectedOrder);
+    }
+
     public function test_registration_accepts_a_work_email(): void
     {
         $response = $this->post(route('register.store'), [

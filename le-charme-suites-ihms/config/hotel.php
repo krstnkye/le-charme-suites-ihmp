@@ -12,6 +12,13 @@ return [
     'check_out_time' => '12:00 PM',
     'extra_guest_rate' => 1165.00,
     'currency' => 'PHP',
+    'staff_roles' => [
+        'admin' => ['label' => 'Admin', 'icon' => 'admin_panel_settings'],
+        'receptionist' => ['label' => 'Receptionist', 'icon' => 'badge'],
+        'cashier' => ['label' => 'Billing', 'icon' => 'payments'],
+        'housekeeping' => ['label' => 'Housekeeping', 'icon' => 'cleaning_services'],
+        'owner' => ['label' => 'Owner', 'icon' => 'workspace_premium'],
+    ],
     'positioning' => 'European-inspired business and leisure hospitality in Subic Bay.',
     'highlights' => [
         'Free high-speed WiFi',

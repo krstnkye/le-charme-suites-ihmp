@@ -98,31 +98,13 @@
                     </span>
                 </div>
                 <div class="grid gap-2 sm:grid-cols-5">
-                    <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-label="Admin" type="button">
-                        <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
-                        <span class="material-symbols-outlined mb-1 block text-lg">admin_panel_settings</span>
-                        <span>Admin</span>
-                    </button>
-                    <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-label="Receptionist" type="button">
-                        <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
-                        <span class="material-symbols-outlined mb-1 block text-lg">badge</span>
-                        <span>Receptionist</span>
-                    </button>
-                    <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-label="Billing" type="button">
-                        <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
-                        <span class="material-symbols-outlined mb-1 block text-lg">payments</span>
-                        <span>Billing</span>
-                    </button>
-                    <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-label="Housekeeping" type="button">
-                        <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
-                        <span class="material-symbols-outlined mb-1 block text-lg">cleaning_services</span>
-                        <span>Housekeeping</span>
-                    </button>
-                    <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-label="Hotel Owner" type="button">
-                        <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
-                        <span class="material-symbols-outlined mb-1 block text-lg">workspace_premium</span>
-                        <span>Owner</span>
-                    </button>
+                    @foreach (config('hotel.staff_roles') as $role)
+                        <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-label="{{ $role['label'] }}" type="button">
+                            <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
+                            <span class="material-symbols-outlined mb-1 block text-lg">{{ $role['icon'] }}</span>
+                            <span>{{ $role['label'] }}</span>
+                        </button>
+                    @endforeach
                 </div>
             </div>
 
