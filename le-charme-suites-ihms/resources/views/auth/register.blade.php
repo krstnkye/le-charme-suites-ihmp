@@ -68,10 +68,9 @@
 
         <section class="relative w-full max-w-2xl rounded-xl border border-[#e6c185]/40 bg-surface-container-lowest p-8 shadow-2xl sm:p-10">
             <div class="mb-8 text-center">
-                <div class="mb-3 inline-flex h-16 w-16 items-center justify-center rounded-full border border-secondary/40 bg-primary text-secondary-fixed shadow-lg">
-                    <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">hotel_class</span>
+                <div class="mx-auto mb-4 max-w-sm overflow-hidden rounded-lg bg-white px-5 py-3">
+                    @include('partials.brand-logo', ['class' => 'h-auto w-full object-contain'])
                 </div>
-                <h1 class="font-headline text-3xl font-semibold tracking-wide text-primary">Le Charme Suites</h1>
                 <p class="mt-1 text-xs font-bold uppercase tracking-[0.24em] text-secondary">Subic Bay Philippines</p>
                 <div class="mx-auto my-3 h-0.5 w-12 bg-secondary opacity-60"></div>
                 <p class="text-sm font-medium text-on-surface-variant">Integrated Hotel Management System account registration</p>

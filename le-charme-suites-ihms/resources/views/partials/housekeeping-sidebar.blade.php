@@ -10,15 +10,10 @@
 
 <aside class="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col bg-[#01162d] px-4 py-5 text-white shadow-xl lg:flex">
     <div class="border-b border-white/10 pb-5">
-        <div class="flex items-center gap-3">
-            <div class="flex h-12 w-12 items-center justify-center rounded-lg border border-[#ffdeaa]/40 bg-[#ffdeaa]/10 text-[#ffdeaa]">
-                <span class="material-symbols-outlined text-3xl">cleaning_services</span>
-            </div>
-            <div>
-                <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-[#ffdeaa]">Hotel Management</p>
-                <h1 class="font-serif text-xl font-bold leading-tight">Housekeeping</h1>
-            </div>
-        </div>
+        <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
+            @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
+            <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.17em] text-[#755a28]">Housekeeping Department</span>
+        </a>
     </div>
 
     <nav id="housekeeping-sidebar-nav" class="mt-5 flex-1 space-y-5 overflow-y-auto pr-1" aria-label="Housekeeping Navigation">

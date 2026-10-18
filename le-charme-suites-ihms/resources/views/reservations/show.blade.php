@@ -82,15 +82,10 @@
 <body class="min-h-screen bg-background font-body text-on-surface antialiased">
     <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col justify-between border-r border-white/10 bg-primary px-4 py-6 text-white shadow-md lg:flex">
         <div class="space-y-6">
-            <div class="flex items-center gap-3 px-2">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg border border-secondary/40 bg-primary-container text-secondary-fixed shadow-sm">
-                    <span class="material-symbols-outlined text-2xl">concierge</span>
-                </div>
-                <div>
-                    <h1 class="font-headline text-xl font-medium">Le Charme Suites</h1>
-                    <p class="text-xs text-on-primary-container">Subic Bay - IHMS</p>
-                </div>
-            </div>
+            <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
+                @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[180px] object-contain'])
+                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.15em] text-secondary">Front Desk IHMS</span>
+            </a>
 
             <a href="{{ route('check-ins.create', ['reservation_id' => $reservation->id]) }}" class="flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110">
                 <span class="material-symbols-outlined text-base">key</span>

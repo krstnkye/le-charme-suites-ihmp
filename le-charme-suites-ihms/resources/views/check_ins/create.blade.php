@@ -92,15 +92,10 @@
     <div class="flex min-h-screen">
         <aside class="nav-shell fixed inset-y-0 left-0 z-40 flex w-64 flex-col justify-between border-r border-white/10 px-5 py-6 text-white">
             <div class="space-y-8">
-                <div class="flex items-center gap-3">
-                    <div class="flex h-11 w-11 items-center justify-center rounded-lg border border-secondary-fixed/40 bg-primary-container text-secondary-fixed">
-                        <span class="material-symbols-outlined text-[26px]">hotel_class</span>
-                    </div>
-                    <div>
-                        <h1 class="font-serif text-xl font-bold leading-tight">Le Charme Suites</h1>
-                        <p class="mt-1 text-xs font-medium text-[#7f93ae]">Subic Bay - IHMS</p>
-                    </div>
-                </div>
+                <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
+                    @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[180px] object-contain'])
+                    <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.15em] text-secondary">Front Desk IHMS</span>
+                </a>
 
                 <a href="{{ route('check-ins.create') }}" class="flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#5b4313]">
                     <span class="material-symbols-outlined text-[18px]">bolt</span>

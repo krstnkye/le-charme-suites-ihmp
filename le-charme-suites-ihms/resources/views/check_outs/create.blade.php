@@ -71,17 +71,11 @@
 <body class="min-h-screen bg-surface font-sans text-primary antialiased">
     <aside class="fixed left-0 top-0 z-40 hidden h-screen w-72 flex-col justify-between border-r border-white/10 bg-primary-container text-white shadow-xl lg:flex">
         <div class="flex min-h-0 flex-1 flex-col">
-            <div class="flex items-center gap-3 border-b border-white/10 px-5 py-4">
-                <div class="flex h-11 w-11 items-center justify-center rounded-lg border border-secondary-fixed/40 bg-white/10 text-secondary-fixed">
-                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">hotel_class</span>
-                </div>
-                <div>
-                    <div class="font-serif text-xl font-bold leading-tight">Le Charmé Suites</div>
-                    <div class="mt-1 flex items-center gap-2">
-                        <span class="rounded bg-secondary-fixed px-1.5 py-0.5 text-[10px] font-bold text-primary">IHMS</span>
-                        <span class="text-[11px] font-semibold uppercase tracking-wider text-blue-100/70">Billing Command</span>
-                    </div>
-                </div>
+            <div class="border-b border-white/10 px-5 py-4">
+                <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
+                    @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
+                    <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-secondary">IHMS Billing Command</span>
+                </a>
             </div>
 
             <div class="mx-4 my-4 flex items-center gap-3 rounded-lg border border-secondary-fixed/20 bg-primary/40 p-3">
@@ -243,7 +237,7 @@
         <div class="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl">
             <div class="flex items-center justify-between border-b border-line px-6 py-4"><div><p class="text-xs font-bold uppercase tracking-[0.2em] text-secondary">Guest Bill Receipt Preview</p><h2 class="mt-1 font-serif text-2xl font-bold">Guest Settlement Receipt</h2></div><button id="closeFolioButton" type="button" class="rounded-lg p-2 text-slate-500 transition hover:bg-surface-low hover:text-primary" aria-label="Close receipt preview"><span class="material-symbols-outlined">close</span></button></div>
             <div id="folioReceipt" class="bg-white p-6 text-primary">
-                <div class="border-b border-line pb-5 text-center"><p class="font-serif text-3xl font-bold">Le Charmé Suites</p><p class="mt-1 text-xs font-bold uppercase tracking-[0.24em] text-secondary">Subic Bay Philippines</p><p class="mt-3 text-sm text-slate-500">Official guest bill prepared by Billing</p></div>
+                <div class="border-b border-line pb-5 text-center"><div class="mx-auto max-w-xs">@include('partials.brand-logo', ['class' => 'h-auto w-full object-contain'])</div><p class="mt-1 text-xs font-bold uppercase tracking-[0.24em] text-secondary">Subic Bay Philippines</p><p class="mt-3 text-sm text-slate-500">Official guest bill prepared by Billing</p></div>
                 <div class="grid gap-4 border-b border-line py-5 sm:grid-cols-2"><div><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Guest</p><p id="receiptGuest" class="mt-1 text-lg font-bold">No guest selected</p><p id="receiptEmail" class="text-sm text-slate-500">--</p></div><div class="sm:text-right"><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Bill Number</p><p id="receiptFolio" class="mt-1 font-mono text-lg font-bold">--</p><p class="text-sm text-slate-500">{{ now(config('app.timezone'))->format('M d, Y - h:i A') }}</p></div></div>
                 <div class="space-y-3 py-5"><div class="flex justify-between text-sm"><span>Room charges</span><span id="receiptRoomCharges" class="font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Incidentals</span><span id="receiptIncidentals" class="font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Tax</span><span id="receiptTax" class="font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Amount paid</span><span id="receiptAmountPaid" class="font-bold">PHP 0.00</span></div><div class="flex justify-between border-t border-line pt-4 text-lg"><span class="font-bold">Remaining balance</span><span id="receiptBalance" class="font-serif text-2xl font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Payment status</span><span id="receiptPaymentStatus" class="font-bold uppercase">Unpaid</span></div></div>
                 <div class="rounded-lg border border-line bg-surface-low p-4"><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Billing Notes</p><p id="receiptNotes" class="mt-2 text-sm leading-6 text-slate-700">No notes entered.</p></div>

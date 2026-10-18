@@ -370,7 +370,7 @@
     @else
         <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col justify-between border-r border-white/10 bg-[#01162d] px-4 py-6 text-white lg:flex">
             <div class="space-y-6">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-2"><span class="flex h-10 w-10 items-center justify-center rounded-lg border border-[#e6c185]/50 bg-[#172b42] text-[#ffdeaa]"><span class="material-symbols-outlined">hotel_class</span></span><span><strong class="font-serif block text-lg">Le Charmé Suites</strong><small class="text-xs text-[#7f93ae]">Subic Bay - IHMS</small></span></a>
+                <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">@include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[180px] object-contain'])<span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.15em] text-[#755a28]">Integrated Hotel Management System</span></a>
                 @if ($role === 'receptionist')
                     <a href="{{ route('check-ins.create') }}" class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#755a28] px-3 py-3 text-xs font-bold text-white shadow-sm hover:bg-[#5b4313]"><span class="material-symbols-outlined text-base">bolt</span>Express Check-In</a>
                 @endif

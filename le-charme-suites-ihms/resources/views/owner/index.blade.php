@@ -114,13 +114,10 @@
     <aside class="fixed left-0 top-0 z-40 hidden h-screen w-72 flex-col justify-between border-r border-white/10 bg-primary-container text-white shadow-xl lg:flex">
         <div class="flex min-h-0 flex-1 flex-col">
             <div class="border-b border-white/10 px-5 py-5">
-                <div class="flex items-center gap-3">
-                    <span class="flex h-12 w-12 items-center justify-center rounded-lg border border-secondary-fixed/40 bg-white/10 text-secondary-fixed"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">workspace_premium</span></span>
-                    <div>
-                        <div class="font-serif text-xl font-bold uppercase leading-tight tracking-wide">LE CHARMÉ SUITES</div>
-                        <div class="mt-1 text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Owner / Management</div>
-                    </div>
-                </div>
+                <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
+                    @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
+                    <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-secondary">Owner / Management</span>
+                </a>
                 <div class="mt-4 rounded-lg border border-secondary-fixed/20 bg-primary/40 p-3">
                     <div class="flex items-center gap-3">
                         <span class="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-sm font-bold text-white ring-2 ring-secondary-fixed/30">{{ $initials }}</span>

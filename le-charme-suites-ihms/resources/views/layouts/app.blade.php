@@ -14,7 +14,10 @@
     @php($role = auth()->user()?->role)
     <div class="min-h-screen">
         <aside class="fixed inset-y-0 left-0 hidden w-64 border-r border-slate-200 bg-white p-5 lg:block">
-            <a href="{{ route('dashboard') }}" class="block text-xl font-bold text-slate-950">Hotel HMS</a>
+            <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white p-2 shadow-sm">
+                @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
+                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-amber-800">Integrated Hotel Management System</span>
+            </a>
             @if ($role === 'receptionist')
                 @php($legacyNavLink = 'block rounded-md px-3 py-2 hover:bg-slate-100')
                 @php($legacyNavActive = 'block rounded-md bg-slate-100 px-3 py-2 font-semibold text-slate-950')

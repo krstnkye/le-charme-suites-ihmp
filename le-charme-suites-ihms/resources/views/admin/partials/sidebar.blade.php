@@ -11,14 +11,9 @@
 <aside data-admin-sidebar class="nav-shell fixed inset-y-0 left-0 z-40 flex w-72 flex-col justify-between overflow-y-auto border-r border-white/10 text-white shadow-md">
     <div>
         <div class="border-b border-white/10 px-6 py-5">
-            <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                <span class="flex h-11 w-11 items-center justify-center rounded-lg border border-secondary/40 bg-surface text-secondary shadow-sm">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">hotel</span>
-                </span>
-                <span>
-                    <strong class="block font-serif text-xl leading-tight">Le Charme Suites</strong>
-                    <small class="text-[11px] font-bold uppercase tracking-wider text-[#b4c8e5]">Subic IHMS Command</small>
-                </span>
+            <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
+                @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
+                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-secondary">Subic IHMS Command</span>
             </a>
             <a href="{{ route('admin.operations.index', ['module' => 'reservations']) }}" class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#5b4313]">
                 <span class="material-symbols-outlined text-[18px]">add_circle</span>

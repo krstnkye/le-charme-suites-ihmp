@@ -53,17 +53,11 @@
 <body class="min-h-screen bg-surface font-sans text-primary antialiased">
     <aside class="fixed left-0 top-0 z-40 hidden h-screen w-72 flex-col justify-between border-r border-white/10 bg-primary-container text-white shadow-xl lg:flex">
         <div class="flex min-h-0 flex-1 flex-col">
-            <div class="flex items-center gap-3 border-b border-white/10 px-5 py-4">
-                <div class="flex h-11 w-11 items-center justify-center rounded-lg border border-secondary-fixed/40 bg-white/10 text-secondary-fixed">
-                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">hotel_class</span>
-                </div>
-                <div>
-                    <div class="font-serif text-xl font-bold leading-tight">Le Charmé Suites</div>
-                    <div class="mt-1 flex items-center gap-2">
-                        <span class="rounded bg-secondary-fixed px-1.5 py-0.5 text-[10px] font-bold text-primary">IHMS</span>
-                        <span class="text-[11px] font-semibold uppercase tracking-wider text-blue-100/70">Billing Command</span>
-                    </div>
-                </div>
+            <div class="border-b border-white/10 px-5 py-4">
+                <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
+                    @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
+                    <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-secondary">IHMS Billing Command</span>
+                </a>
             </div>
 
             <div class="mx-4 my-4 flex items-center gap-3 rounded-lg border border-secondary-fixed/20 bg-primary/40 p-3">
