@@ -10,9 +10,13 @@
     $ledgerTotal = $statMap['Ledger total'] ?? 'PHP 0.00';
     $roomTypeRows = collect($records)->values();
     $selectedRoomType = $roomTypeRows->first();
-    $roomTypeAmenities = ['High-speed Wi-Fi 6', 'RFID key access', 'Smart climate', 'Daily refresh', 'In-room safe'];
+    $officialRoomCatalog = config('hotel.room_types', []);
+    $roomTypeAmenities = config('hotel.highlights', []);
     $roomTypeWings = ['Main Wing', 'Ocean Wing', 'Executive Villas'];
-    $roomTypeCatalog = $roomTypeRows->map(function ($roomType, $index) use ($roomTypeWings) {
+    $roomTypeCatalog = $roomTypeRows->map(function ($roomType, $index) use ($roomTypeWings, $officialRoomCatalog) {
+        $specification = $officialRoomCatalog[(string) $roomType[0]] ?? null;
+        $bedConfiguration = $specification['bed_configuration'] ?? 'Custom configuration';
+
         return [
             'type' => (string) $roomType[0],
             'code' => strtoupper(substr(preg_replace('/[^A-Za-z]/', '', (string) $roomType[0]), 0, 3) ?: 'RMT') . '-' . str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT),
@@ -21,7 +25,7 @@
             'capacity' => (string) $roomType[2],
             'average_rate' => (string) $roomType[3],
             'availability' => (string) $roomType[4],
-            'bed_type' => ($index + 1) % 2 ? 'King Beds' : 'Twin Queens',
+            'bed_type' => $bedConfiguration,
         ];
     })->values();
     $roomRateRows = collect($records)->values();
@@ -627,7 +631,10 @@
                                 $code = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $typeName), 0, 3) ?: 'RMT') . '-' . str_pad((string) ($loop->iteration), 2, '0', STR_PAD_LEFT);
                                 $isSelected = $loop->first;
                                 $wing = $roomTypeWings[($loop->index) % count($roomTypeWings)];
-                                $bedType = $loop->iteration % 2 ? 'King Beds' : 'Twin Queens';
+                                $officialSpecification = $officialRoomCatalog[$typeName] ?? null;
+                                $bedConfiguration = $officialSpecification['bed_configuration'] ?? 'Custom configuration';
+                                $bedType = str_contains($bedConfiguration, 'King') ? 'King Beds' : (str_contains($bedConfiguration, 'Queen') ? 'Twin Queens' : 'Suite Layouts');
+                                $typeAmenities = $officialSpecification['amenities'] ?? $roomTypeAmenities;
                             @endphp
                             <article data-room-type-card data-type="{{ Str::headline($typeName) }}" data-code="{{ $code }}" data-wing="{{ $wing }}" data-bed="{{ $bedType }}" class="overflow-hidden rounded-xl border {{ $isSelected ? 'border-2 border-secondary/60 shadow-[0_4px_16px_-2px_rgba(23,43,66,0.08),0_1px_3px_rgba(197,163,106,0.12)]' : 'border-surface-container-highest shadow-sm' }} bg-white transition hover:-translate-y-0.5 hover:border-secondary/50">
                                 @if ($isSelected)
@@ -646,7 +653,7 @@
                                                 <span class="hidden sm:inline">-</span>
                                                 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">vpn_key</span>{{ $inventory }}</span>
                                                 <span class="hidden sm:inline">-</span>
-                                                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">square_foot</span>{{ 34 + ($loop->iteration * 8) }} sq.m.</span>
+                                                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">square_foot</span>{{ $officialSpecification ? number_format($officialSpecification['size_sqm']) . ' sq.m.' : 'Custom size' }}</span>
                                             </div>
                                         </div>
                                         <div class="shrink-0 text-left sm:text-right">
@@ -657,17 +664,17 @@
                                     </div>
                                     <div class="grid grid-cols-1 gap-4 border-b border-surface-container-highest/50 py-3.5 text-xs md:grid-cols-2">
                                         <div class="space-y-1.5">
-                                            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-outline">king_bed</span><strong class="text-primary">Bedding:</strong><span class="text-slate-600">{{ $loop->iteration % 2 ? '1 King Bed' : '2 Queen Beds' }}</span></p>
+                                            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-outline">king_bed</span><strong class="text-primary">Bedding:</strong><span class="text-slate-600">{{ $bedConfiguration }}</span></p>
                                             <p class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-outline">person</span><strong class="text-primary">Max Occupancy:</strong><span class="text-slate-600">{{ $capacityRange }}</span></p>
                                         </div>
                                         <div class="space-y-1.5">
-                                            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-outline">balcony</span><strong class="text-primary">View &amp; Layout:</strong><span class="text-slate-600">{{ $loop->iteration % 2 ? 'Bay view layout' : 'Garden wing layout' }}</span></p>
-                                            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-outline">room_service</span><strong class="text-primary">Housekeeping SLA:</strong><span class="text-slate-600">Daily room refresh</span></p>
+                                            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-outline">bathtub</span><strong class="text-primary">Bathrooms:</strong><span class="text-slate-600">{{ $officialSpecification['bathrooms'] ?? 'Custom' }}</span></p>
+                                            <p class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-outline">schedule</span><strong class="text-primary">Stay Policy:</strong><span class="text-slate-600">{{ config('hotel.check_in_time') }} in / {{ config('hotel.check_out_time') }} out</span></p>
                                         </div>
                                     </div>
                                     <div class="flex flex-wrap items-center justify-between gap-3 pt-3">
                                         <div class="flex flex-wrap items-center gap-1.5">
-                                            @foreach ($roomTypeAmenities as $amenity)
+                                            @foreach ($typeAmenities as $amenity)
                                                 <span class="rounded border border-surface-container-highest bg-surface-container-low px-2 py-0.5 text-[11px] text-slate-600">{{ $amenity }}</span>
                                             @endforeach
                                         </div>

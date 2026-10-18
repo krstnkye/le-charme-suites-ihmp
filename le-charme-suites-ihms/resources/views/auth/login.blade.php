@@ -205,7 +205,8 @@
                     Need a staff account?
                     <a class="font-semibold text-secondary hover:underline" href="{{ route('register') }}">Create one</a>
                 </p>
-                <p class="mt-2 text-xs text-on-surface-variant">Confidential Property of Le Charme Suites - Subic Bay Gateway District</p>
+                <p class="mt-2 text-xs font-semibold text-on-surface-variant">{{ config('hotel.address') }}</p>
+                <p class="mt-1 text-[11px] text-outline">{{ config('hotel.phone') }} · {{ config('hotel.email') }}</p>
             </div>
         </section>
     </main>

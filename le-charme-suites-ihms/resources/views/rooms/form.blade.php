@@ -5,7 +5,12 @@
     </div>
     <div>
         <label class="block text-sm font-medium">Room type</label>
-        <input name="room_type" value="{{ old('room_type', $room->room_type ?? '') }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2" required>
+        <input name="room_type" list="official-room-types" value="{{ old('room_type', $room->room_type ?? '') }}" class="mt-2 w-full rounded-md border border-slate-300 px-4 py-2" required>
+        <datalist id="official-room-types">
+            @foreach (array_keys(config('hotel.room_types', [])) as $officialRoomType)
+                <option value="{{ $officialRoomType }}"></option>
+            @endforeach
+        </datalist>
     </div>
     <div>
         <label class="block text-sm font-medium">Rate</label>

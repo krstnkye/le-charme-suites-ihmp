@@ -139,7 +139,7 @@
 
                         <label class="block">
                             <span class="text-xs font-bold uppercase tracking-wide text-slate-700">Room Type *</span>
-                            <input name="room_type" list="room-type-options" value="{{ old('room_type', request('room_type')) }}" class="mt-2 w-full rounded-lg border-outline-variant bg-white px-4 py-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="Standard, Deluxe, Suite..." required>
+                            <input name="room_type" list="room-type-options" value="{{ old('room_type', request('room_type')) }}" class="mt-2 w-full rounded-lg border-outline-variant bg-white px-4 py-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="Choose an official room category" required>
                             <datalist id="room-type-options">
                                 @foreach ($roomTypes as $roomType)
                                     <option value="{{ $roomType }}"></option>
@@ -185,6 +185,39 @@
                 </form>
 
                 <aside class="space-y-5">
+                    <section class="parchment-card rounded-xl border-t-4 border-t-secondary p-5">
+                        <div class="mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-secondary">verified</span>
+                            <h3 class="text-lg font-bold">Official Room Catalog</h3>
+                        </div>
+                        <p class="mb-4 text-xs leading-5 text-slate-500">Select a published Le Charmé room category to load its current base tariff and capacity.</p>
+                        <div class="space-y-2">
+                            @foreach ($officialRoomTypes as $name => $specification)
+                                <button
+                                    type="button"
+                                    data-official-room-type
+                                    data-name="{{ $name }}"
+                                    data-rate="{{ $specification['rate'] }}"
+                                    data-capacity="{{ $specification['capacity'] }}"
+                                    data-description="{{ $specification['description'] }}"
+                                    class="flex w-full items-center justify-between gap-3 rounded-lg border border-surface-container-highest bg-white px-3 py-2.5 text-left transition hover:border-secondary hover:bg-secondary/5"
+                                >
+                                    <span>
+                                        <strong class="block text-sm text-primary">{{ $name }}</strong>
+                                        <small class="text-[11px] text-slate-500">{{ number_format($specification['size_sqm']) }} sqm · {{ $specification['bed_configuration'] }}</small>
+                                    </span>
+                                    <span class="text-right">
+                                        <strong class="block text-xs text-secondary">PHP {{ number_format($specification['rate'], 2) }}</strong>
+                                        <small class="text-[10px] text-slate-500">up to {{ $specification['capacity'] }}</small>
+                                    </span>
+                                </button>
+                            @endforeach
+                        </div>
+                        <div class="mt-4 rounded-lg bg-surface-container px-3 py-2 text-xs text-slate-600">
+                            Check-in {{ config('hotel.check_in_time') }} · Check-out {{ config('hotel.check_out_time') }} · Extra guest PHP {{ number_format(config('hotel.extra_guest_rate'), 2) }}
+                        </div>
+                    </section>
+
                     <section class="parchment-card rounded-xl p-5">
                         <div class="mb-4 flex items-center gap-2">
                             <span class="material-symbols-outlined text-secondary">rule</span>
@@ -208,5 +241,21 @@
             </div>
         </main>
     </div>
+    <script>
+        const roomTypeInput = document.querySelector('[name="room_type"]');
+        const roomRateInput = document.querySelector('[name="rate"]');
+        const roomCapacityInput = document.querySelector('[name="capacity"]');
+        const roomDescriptionInput = document.querySelector('[name="description"]');
+
+        document.querySelectorAll('[data-official-room-type]').forEach((button) => {
+            button.addEventListener('click', () => {
+                roomTypeInput.value = button.dataset.name;
+                roomRateInput.value = Number(button.dataset.rate).toFixed(2);
+                roomCapacityInput.value = button.dataset.capacity;
+                roomDescriptionInput.value = button.dataset.description;
+                roomTypeInput.focus();
+            });
+        });
+    </script>
 </body>
 </html>

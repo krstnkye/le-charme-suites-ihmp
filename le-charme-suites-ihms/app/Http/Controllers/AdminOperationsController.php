@@ -104,7 +104,7 @@ class AdminOperationsController extends Controller
 
         return [
             'title' => 'Room Inventory Administration', 'subtitle' => 'Inspect encoded rooms, categories, capacity, rates, and inventory readiness from the administrator workspace.', 'icon' => 'inventory_2',
-            'stats' => [['label' => 'Total rooms', 'value' => Room::count()], ['label' => 'Standard rooms', 'value' => Room::where('room_type', 'standard')->orWhere('room_type', 'Standard')->count()], ['label' => 'Available rooms', 'value' => Room::where('status', 'available')->count()], ['label' => 'Average rate', 'value' => 'PHP ' . number_format((float) Room::avg('rate'), 2)]],
+            'stats' => [['label' => 'Total rooms', 'value' => Room::count()], ['label' => 'Standard rooms', 'value' => Room::where('room_type', 'like', 'Standard%')->count()], ['label' => 'Available rooms', 'value' => Room::where('status', 'available')->count()], ['label' => 'Average rate', 'value' => 'PHP ' . number_format((float) Room::avg('rate'), 2)]],
             'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, $record->capacity . ' guests', 'PHP ' . number_format((float) $record->rate, 2), ucfirst($record->status)]),
             'headers' => ['Room', 'Type', 'Capacity', 'Rate', 'Status'],
         ];

@@ -1,0 +1,74 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Room;
+use App\Models\User;
+use Database\Seeders\DatabaseSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class OfficialHotelProfileTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_official_property_profile_is_available_to_the_system(): void
+    {
+        $this->assertSame('Le Charmé Suites', config('hotel.name'));
+        $this->assertSame('+63 (047) 250-3333', config('hotel.phone'));
+        $this->assertSame('frontoffice@lecharmehotels.com', config('hotel.email'));
+        $this->assertSame('2:00 PM', config('hotel.check_in_time'));
+        $this->assertSame('12:00 PM', config('hotel.check_out_time'));
+        $this->assertCount(5, config('hotel.room_types'));
+    }
+
+    public function test_database_seeder_creates_the_official_room_catalog(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->assertDatabaseCount('rooms', 5);
+        $this->assertDatabaseHas('rooms', [
+            'room_number' => '102',
+            'room_type' => 'Deluxe King',
+            'rate' => 13750.00,
+            'capacity' => 3,
+            'base_occupancy' => 2,
+            'room_size_sqm' => 45.00,
+            'bed_configuration' => '1 King Bed',
+            'extra_guest_rate' => 1165.00,
+        ]);
+        $this->assertDatabaseHas('rooms', [
+            'room_number' => '301',
+            'room_type' => 'Family Room',
+            'rate' => 23800.00,
+            'capacity' => 7,
+            'bathrooms' => 2,
+        ]);
+    }
+
+    public function test_official_room_type_populates_operational_specifications(): void
+    {
+        $administrator = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($administrator)
+            ->post(route('rooms.store'), [
+                'room_number' => '501',
+                'room_type' => 'Deluxe Twin',
+                'rate' => 15840,
+                'capacity' => 5,
+                'status' => 'available',
+                'description' => 'Official catalog test room.',
+            ])
+            ->assertRedirect(route('admin.operations.index', ['module' => 'room-inventory']));
+
+        $room = Room::where('room_number', '501')->firstOrFail();
+
+        $this->assertSame('45.00', $room->room_size_sqm);
+        $this->assertSame('2 Queen Beds', $room->bed_configuration);
+        $this->assertSame(2, $room->base_occupancy);
+        $this->assertSame(1, $room->bathrooms);
+        $this->assertSame('1165.00', $room->extra_guest_rate);
+        $this->assertContains('Bike Rack', $room->amenities);
+        $this->assertTrue($room->non_smoking);
+    }
+}

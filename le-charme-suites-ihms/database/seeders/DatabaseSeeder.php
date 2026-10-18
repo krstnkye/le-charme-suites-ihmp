@@ -34,20 +34,34 @@ class DatabaseSeeder extends Seeder
         }
 
         foreach ([
-            ['101', 'Standard', 1800, 2],
-            ['102', 'Standard', 1800, 2],
-            ['201', 'Deluxe', 2800, 3],
-            ['202', 'Deluxe', 2800, 3],
-            ['301', 'Suite', 4500, 4],
-        ] as [$number, $type, $rate, $capacity]) {
-            Room::updateOrCreate([
-                'room_number' => $number,
-            ], [
+            ['101', 'Standard Room'],
+            ['102', 'Deluxe King'],
+            ['201', 'Deluxe Twin'],
+            ['202', 'Charmé Suite'],
+            ['301', 'Family Room'],
+        ] as [$number, $type]) {
+            $specification = config("hotel.room_types.{$type}");
+            $room = Room::firstOrNew(['room_number' => $number]);
+
+            $room->fill([
                 'room_type' => $type,
-                'rate' => $rate,
-                'capacity' => $capacity,
-                'status' => 'available',
+                'rate' => $specification['rate'],
+                'capacity' => $specification['capacity'],
+                'base_occupancy' => $specification['base_occupancy'],
+                'room_size_sqm' => $specification['size_sqm'],
+                'bed_configuration' => $specification['bed_configuration'],
+                'bathrooms' => $specification['bathrooms'],
+                'extra_guest_rate' => config('hotel.extra_guest_rate'),
+                'amenities' => $specification['amenities'],
+                'non_smoking' => true,
+                'description' => $specification['description'],
             ]);
+
+            if (! $room->exists) {
+                $room->status = 'available';
+            }
+
+            $room->save();
         }
     }
 }

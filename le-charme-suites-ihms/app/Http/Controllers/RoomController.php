@@ -55,8 +55,14 @@ class RoomController extends Controller
 
     public function create(): View
     {
+        $officialRoomTypes = collect(config('hotel.room_types', []));
+
         return view('rooms.create', [
-            'roomTypes' => Room::select('room_type')->distinct()->orderBy('room_type')->pluck('room_type'),
+            'roomTypes' => collect($officialRoomTypes->keys())
+                ->merge(Room::select('room_type')->distinct()->orderBy('room_type')->pluck('room_type'))
+                ->unique()
+                ->values(),
+            'officialRoomTypes' => $officialRoomTypes,
         ]);
     }
 
@@ -133,7 +139,7 @@ class RoomController extends Controller
     {
         $roomId = $room?->id ?? 'NULL';
 
-        return $request->validate([
+        $data = $request->validate([
             'room_number' => ['required', 'string', 'max:50', 'unique:rooms,room_number,' . $roomId],
             'room_type' => ['required', 'string', 'max:100'],
             'rate' => ['required', 'numeric', 'min:0'],
@@ -141,6 +147,23 @@ class RoomController extends Controller
             'status' => ['required', 'in:available,reserved,occupied,cleaning,maintenance'],
             'description' => ['nullable', 'string'],
         ]);
+
+        $officialSpecification = config('hotel.room_types.' . $data['room_type']);
+
+        if (is_array($officialSpecification)) {
+            $data = [
+                ...$data,
+                'base_occupancy' => $officialSpecification['base_occupancy'],
+                'room_size_sqm' => $officialSpecification['size_sqm'],
+                'bed_configuration' => $officialSpecification['bed_configuration'],
+                'bathrooms' => $officialSpecification['bathrooms'],
+                'extra_guest_rate' => config('hotel.extra_guest_rate'),
+                'amenities' => $officialSpecification['amenities'],
+                'non_smoking' => true,
+            ];
+        }
+
+        return $data;
     }
 
     private function recordStatus(Room $room, string $status, string $notes): void
