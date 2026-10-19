@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="{{ asset('vendor/fonts/google-fonts.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/fonts/material-symbols.css') }}">
 <script src="{{ asset('vendor/tailwindcss-3.4.17.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('css/interactions.css') }}">
 <script>
     (() => {
         const updateConnectionNotice = () => {

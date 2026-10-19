@@ -1,0 +1,158 @@
+:root {
+    --ihms-motion-fast: 150ms;
+    --ihms-motion-base: 220ms;
+    --ihms-focus: rgba(117, 90, 40, 0.32);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    text-rendering: optimizeLegibility;
+}
+
+a,
+button,
+input,
+select,
+textarea,
+summary {
+    transition-duration: var(--ihms-motion-fast);
+    transition-property: color, background-color, border-color, box-shadow, opacity, filter, transform;
+    transition-timing-function: ease-out;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+    outline: 3px solid var(--ihms-focus);
+    outline-offset: 2px;
+}
+
+button:not(:disabled):hover,
+a[class*="bg-"]:hover {
+    filter: brightness(1.035);
+}
+
+button:not(:disabled):active,
+a[class*="bg-"]:active {
+    transform: translateY(1px);
+}
+
+button:disabled,
+[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.62;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):hover,
+select:hover,
+textarea:hover {
+    border-color: rgba(117, 90, 40, 0.6);
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+    border-color: #755a28;
+    box-shadow: 0 0 0 3px rgba(117, 90, 40, 0.12);
+}
+
+main {
+    animation: ihms-page-enter 280ms ease-out both;
+}
+
+main article,
+main .ihms-card,
+main section[class*="shadow"] {
+    transition: border-color var(--ihms-motion-base) ease, box-shadow var(--ihms-motion-base) ease, transform var(--ihms-motion-base) ease;
+}
+
+main article:hover,
+main .ihms-card:hover {
+    border-color: rgba(117, 90, 40, 0.35);
+    box-shadow: 0 10px 24px -12px rgba(1, 22, 45, 0.28);
+}
+
+main article img {
+    transition: transform 320ms ease, filter 320ms ease;
+}
+
+main article:hover img {
+    filter: saturate(1.04);
+    transform: scale(1.015);
+}
+
+tbody tr {
+    transition: background-color var(--ihms-motion-fast) ease;
+}
+
+[data-universal-sidebar] a .material-symbols-outlined,
+[data-universal-sidebar] button .material-symbols-outlined {
+    transition: color var(--ihms-motion-fast) ease, transform var(--ihms-motion-base) ease;
+}
+
+[data-universal-sidebar] a:hover .material-symbols-outlined,
+[data-universal-sidebar] button:hover .material-symbols-outlined {
+    transform: translateX(2px);
+}
+
+#ihmsConnectionNotice {
+    animation: ihms-notice-enter 240ms ease-out both;
+}
+
+@keyframes ihms-page-enter {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes ihms-notice-enter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (hover: none) {
+    main article:hover,
+    main .ihms-card:hover {
+        border-color: inherit;
+        box-shadow: inherit;
+    }
+
+    main article:hover img,
+    [data-universal-sidebar] a:hover .material-symbols-outlined,
+    [data-universal-sidebar] button:hover .material-symbols-outlined {
+        filter: none;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}

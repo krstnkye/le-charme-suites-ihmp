@@ -29,6 +29,15 @@ class OfficialHotelProfileTest extends TestCase
         }
     }
 
+    public function test_shared_interaction_styles_are_available_offline(): void
+    {
+        $this->assertFileExists(public_path('css/interactions.css'));
+
+        $this->get(route('booking.create'))
+            ->assertOk()
+            ->assertSee(asset('css/interactions.css'), false);
+    }
+
     public function test_database_seeder_creates_the_official_room_catalog(): void
     {
         $this->seed(DatabaseSeeder::class);
