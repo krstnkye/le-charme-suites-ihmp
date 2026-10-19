@@ -122,7 +122,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login.store') }}" class="space-y-4">
+            <form id="login-form" method="POST" action="{{ route('login.store') }}" class="space-y-4">
                 @csrf
                 <input id="selected-role" name="role" type="hidden" value="{{ old('role') }}">
 
@@ -139,12 +139,17 @@
                             value="{{ old('email') }}"
                             placeholder="sample@lecharmehotel.com"
                             autocomplete="email"
+                            aria-describedby="email-help email-required-error"
                             class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-3 font-body-md text-body-md text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary"
                             required
                             autofocus
                         >
                     </div>
-                    <p class="mt-1.5 text-xs text-on-surface-variant">Only <strong>@lecharmehotel.com</strong> work emails can sign in.</p>
+                    <p id="email-help" class="mt-1.5 text-xs text-on-surface-variant">Only <strong>@lecharmehotel.com</strong> work emails can sign in.</p>
+                    <p id="email-required-error" class="mt-1.5 hidden items-center gap-1.5 text-xs font-semibold text-error" role="alert">
+                        <span class="material-symbols-outlined text-sm">error</span>
+                        Email address is required.
+                    </p>
                 </div>
 
                 <div>
@@ -218,6 +223,38 @@
             password.type = isHidden ? 'text' : 'password';
             icon.textContent = isHidden ? 'visibility_off' : 'visibility';
         });
+
+        const loginForm = document.getElementById('login-form');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const emailRequiredError = document.getElementById('email-required-error');
+
+        const updateEmailRequirement = () => {
+            const emailIsMissing = password.value.length > 0 && email.value.trim().length === 0;
+
+            email.setCustomValidity(emailIsMissing ? 'Email address is required.' : '');
+            email.setAttribute('aria-invalid', emailIsMissing ? 'true' : 'false');
+            emailRequiredError.classList.toggle('hidden', !emailIsMissing);
+            emailRequiredError.classList.toggle('flex', emailIsMissing);
+            email.classList.toggle('border-error', emailIsMissing);
+            email.classList.toggle('ring-1', emailIsMissing);
+            email.classList.toggle('ring-error', emailIsMissing);
+            email.classList.toggle('border-outline-variant', !emailIsMissing);
+
+            return emailIsMissing;
+        };
+
+        password.addEventListener('input', updateEmailRequirement);
+        email.addEventListener('input', updateEmailRequirement);
+        loginForm.addEventListener('submit', (event) => {
+            if (updateEmailRequirement()) {
+                event.preventDefault();
+                email.focus();
+                email.reportValidity();
+            }
+        });
+
+        updateEmailRequirement();
     </script>
 </body>
 </html>

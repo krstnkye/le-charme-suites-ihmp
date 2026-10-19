@@ -9,8 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -36,6 +36,8 @@ class AuthController extends Controller
                 'email' => ['required', 'email', new WorkEmail],
                 'password' => ['required', 'string'],
                 'role' => ['required', 'in:admin,receptionist,cashier,housekeeping,owner'],
+            ], [
+                'email.required' => 'Email address is required.',
             ]);
         } catch (ValidationException $exception) {
             $this->recordActivity($request, 'LOGIN_FAILED', false, null, 'Login rejected during validation.');

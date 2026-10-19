@@ -16,7 +16,9 @@ class WorkEmailAuthenticationTest extends TestCase
 
         $this->get(route('login'))
             ->assertOk()
-            ->assertSeeInOrder($expectedOrder);
+            ->assertSeeInOrder($expectedOrder)
+            ->assertSee('id="email-required-error"', false)
+            ->assertSeeText('Email address is required.');
 
         $this->get(route('register'))
             ->assertOk()
@@ -85,6 +87,21 @@ class WorkEmailAuthenticationTest extends TestCase
             'event_type' => 'LOGIN_SUCCESS',
             'successful' => true,
         ]);
+    }
+
+    public function test_login_requires_an_email_when_a_password_is_entered_first(): void
+    {
+        $response = $this->from(route('login'))->post(route('login.store'), [
+            'email' => '',
+            'password' => 'password',
+            'role' => 'receptionist',
+        ]);
+
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHasErrors([
+            'email' => 'Email address is required.',
+        ]);
+        $this->assertGuest();
     }
 
     public function test_login_rejects_a_non_work_email_before_authentication(): void
