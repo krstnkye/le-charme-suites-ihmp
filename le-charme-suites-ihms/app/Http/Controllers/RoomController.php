@@ -155,6 +155,7 @@ class RoomController extends Controller
         if (is_array($officialSpecification)) {
             $data = [
                 ...$data,
+                'rate' => $officialSpecification['rate'],
                 'base_occupancy' => $officialSpecification['base_occupancy'],
                 'room_size_sqm' => $officialSpecification['size_sqm'],
                 'bed_configuration' => $officialSpecification['bed_configuration'],

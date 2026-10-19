@@ -73,4 +73,26 @@ class OfficialHotelProfileTest extends TestCase
         $this->assertContains('Bike Rack', $room->amenities);
         $this->assertTrue($room->non_smoking);
     }
+
+    public function test_an_official_room_type_uses_its_published_rate_instead_of_a_manual_override(): void
+    {
+        $administrator = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($administrator)
+            ->post(route('rooms.store'), [
+                'room_number' => '502',
+                'room_type' => 'Charmé Suite',
+                'rate' => 1,
+                'capacity' => 3,
+                'status' => 'available',
+                'description' => 'Published rate synchronization test.',
+            ])
+            ->assertRedirect(route('admin.operations.index', ['module' => 'room-inventory']));
+
+        $this->assertDatabaseHas('rooms', [
+            'room_number' => '502',
+            'room_type' => 'Charmé Suite',
+            'rate' => 19500.00,
+        ]);
+    }
 }
