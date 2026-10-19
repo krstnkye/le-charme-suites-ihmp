@@ -19,6 +19,8 @@ class OfficialHotelProfileTest extends TestCase
         $this->assertSame('frontoffice@lecharmehotels.com', config('hotel.email'));
         $this->assertSame('2:00 PM', config('hotel.check_in_time'));
         $this->assertSame('12:00 PM', config('hotel.check_out_time'));
+        $this->assertSame(45, config('hotel.published_room_count'));
+        $this->assertSame(5, config('hotel.published_room_type_count'));
         $this->assertCount(5, config('hotel.room_types'));
     }
 

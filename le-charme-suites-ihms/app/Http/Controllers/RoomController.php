@@ -21,9 +21,9 @@ class RoomController extends Controller
             ->when($type !== '', fn ($query) => $query->where('room_type', $type))
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
-                    $query->where('room_number', 'like', '%' . $search . '%')
-                        ->orWhere('room_type', 'like', '%' . $search . '%')
-                        ->orWhere('description', 'like', '%' . $search . '%');
+                    $query->where('room_number', 'like', '%'.$search.'%')
+                        ->orWhere('room_type', 'like', '%'.$search.'%')
+                        ->orWhere('description', 'like', '%'.$search.'%');
                 });
             })
             ->orderBy('room_number')
@@ -44,6 +44,8 @@ class RoomController extends Controller
             'roomTypes' => Room::select('room_type')->distinct()->orderBy('room_type')->pluck('room_type'),
             'statusCounts' => Room::selectRaw('status, count(*) as total')->groupBy('status')->pluck('total', 'status'),
             'totalRooms' => $allRooms->count(),
+            'publishedRoomCount' => (int) config('hotel.published_room_count', $allRooms->count()),
+            'officialRoomTypeCount' => count(config('hotel.room_types', [])),
             'availableRooms' => $allRooms->where('status', 'available')->count(),
             'reservedRooms' => $allRooms->where('status', 'reserved')->count(),
             'occupiedRooms' => $allRooms->where('status', 'occupied')->count(),
@@ -140,7 +142,7 @@ class RoomController extends Controller
         $roomId = $room?->id ?? 'NULL';
 
         $data = $request->validate([
-            'room_number' => ['required', 'string', 'max:50', 'unique:rooms,room_number,' . $roomId],
+            'room_number' => ['required', 'string', 'max:50', 'unique:rooms,room_number,'.$roomId],
             'room_type' => ['required', 'string', 'max:100'],
             'rate' => ['required', 'numeric', 'min:0'],
             'capacity' => ['required', 'integer', 'min:1'],
@@ -148,7 +150,7 @@ class RoomController extends Controller
             'description' => ['nullable', 'string'],
         ]);
 
-        $officialSpecification = config('hotel.room_types.' . $data['room_type']);
+        $officialSpecification = config('hotel.room_types.'.$data['room_type']);
 
         if (is_array($officialSpecification)) {
             $data = [

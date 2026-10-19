@@ -112,6 +112,10 @@
             @if (session('status'))
                 <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">{{ session('status') }}</div>
             @endif
+            <div class="flex flex-col justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950 sm:flex-row sm:items-center">
+                <span><strong>{{ $totalRooms }} of {{ $publishedRoomCount }}</strong> published hotel rooms are encoded in this shared inventory.</span>
+                <span class="text-xs font-bold uppercase tracking-wider">{{ $officialRoomTypeCount }} official room types</span>
+            </div>
 
             <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
                 <div>

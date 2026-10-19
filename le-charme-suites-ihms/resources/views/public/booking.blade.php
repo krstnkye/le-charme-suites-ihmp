@@ -34,7 +34,7 @@
                 </div>
                 <aside class="rounded-lg border border-[#ffdeaa]/30 bg-white/10 p-5">
                     <p class="font-display text-xl font-bold">Hotel information</p>
-                    <dl class="mt-4 grid gap-3 text-sm"><div class="flex justify-between gap-4"><dt class="text-slate-300">Check-in</dt><dd class="font-bold">{{ config('hotel.check_in_time') }}</dd></div><div class="flex justify-between gap-4"><dt class="text-slate-300">Check-out</dt><dd class="font-bold">{{ config('hotel.check_out_time') }}</dd></div><div class="flex justify-between gap-4"><dt class="text-slate-300">Telephone</dt><dd class="font-bold">{{ config('hotel.phone') }}</dd></div></dl>
+                    <dl class="mt-4 grid gap-3 text-sm"><div class="flex justify-between gap-4"><dt class="text-slate-300">Property</dt><dd class="font-bold">{{ config('hotel.published_room_count') }} rooms · {{ config('hotel.published_room_type_count') }} types</dd></div><div class="flex justify-between gap-4"><dt class="text-slate-300">Check-in</dt><dd class="font-bold">{{ config('hotel.check_in_time') }}</dd></div><div class="flex justify-between gap-4"><dt class="text-slate-300">Check-out</dt><dd class="font-bold">{{ config('hotel.check_out_time') }}</dd></div><div class="flex justify-between gap-4"><dt class="text-slate-300">Telephone</dt><dd class="font-bold">{{ config('hotel.phone') }}</dd></div></dl>
                 </aside>
             </div>
         </section>
@@ -43,7 +43,7 @@
             <div class="grid gap-6 xl:grid-cols-[1fr_430px]">
                 <div>
                     <h2 class="font-display text-3xl font-bold">Rooms & Suites</h2>
-                    <p class="mt-2 text-sm text-slate-600">Official room information and starting rates from Le Charmé Suites.</p>
+                    <p class="mt-2 text-sm text-slate-600">Five official room types and published starting rates from Le Charmé Suites.</p>
                     <div class="mt-5 grid gap-4 md:grid-cols-2">
                         @foreach ($roomTypes as $name => $details)
                             <article class="rounded-lg border border-[#ded7cc] bg-white p-5 shadow-sm">

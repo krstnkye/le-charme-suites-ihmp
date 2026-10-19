@@ -117,7 +117,7 @@
                         </div>
                         <div class="px-3 py-1.5">
                             <p class="text-[11px] font-bold uppercase text-[#b4c8e5]">Rooms Managed</p>
-                            <p class="mt-1 text-lg font-bold">{{ $totalRooms }}</p>
+                            <p class="mt-1 text-lg font-bold">{{ $totalRooms }} / {{ $publishedRoomCount }}</p>
                         </div>
                         <div class="px-3 py-1.5">
                             <p class="text-[11px] font-bold uppercase text-[#b4c8e5]">Staff Accounts</p>
@@ -136,7 +136,7 @@
                     <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Property Occupancy</span><span class="material-symbols-outlined text-secondary">hotel</span></div>
                     <div class="mt-3 flex items-baseline gap-2"><span class="font-serif text-4xl font-bold">{{ $occupancyRate }}%</span><span class="text-sm text-slate-500">{{ $occupiedRooms }} / {{ $totalRooms }} rooms</span></div>
                     <div class="mt-3 h-2 overflow-hidden rounded-full bg-surface-container"><div class="h-full rounded-full bg-secondary" style="width: {{ min(100, $occupancyRate) }}%"></div></div>
-                    <p class="mt-2 text-xs font-semibold text-secondary">{{ $availableRooms }} rooms ready for assignment</p>
+                    <p class="mt-2 text-xs font-semibold text-secondary">{{ $availableRooms }} ready · {{ $totalRooms }} of {{ $publishedRoomCount }} rooms encoded</p>
                 </div>
                 <div class="command-card rounded-xl p-5">
                     <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Reservation Flow</span><span class="material-symbols-outlined text-secondary">calendar_month</span></div>
