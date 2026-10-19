@@ -15,7 +15,13 @@
                 <div class="rounded bg-white px-3 py-2"><img src="{{ asset('images/le-charme-logo-white.png') }}" alt="Le Charmé Suites" class="h-12 w-32 object-contain"></div>
                 <div><p class="font-display text-xl font-bold">Le Charmé Suites Subic</p><p class="text-xs text-[#ffdeaa]">European-inspired luxury with modern Filipino hospitality</p></div>
             </div>
-            <a href="{{ route('login') }}" class="rounded-lg border border-[#ffdeaa]/50 px-4 py-2 text-sm font-bold hover:bg-white/10">Staff Sign In</a>
+            <div class="flex items-center gap-2">
+                <button type="button" onclick="window.history.length > 1 ? window.history.back() : window.location.assign('{{ route('login') }}')" class="inline-flex items-center gap-1.5 rounded-lg border border-white/30 px-3 py-2 text-sm font-bold hover:bg-white/10" aria-label="Go back to the previous page">
+                    <span class="material-symbols-outlined text-lg" aria-hidden="true">arrow_back</span>
+                    Back
+                </button>
+                <a href="{{ route('login') }}" class="rounded-lg border border-[#ffdeaa]/50 px-4 py-2 text-sm font-bold hover:bg-white/10">Staff Sign In</a>
+            </div>
         </div>
     </header>
 
