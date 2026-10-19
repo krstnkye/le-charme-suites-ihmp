@@ -99,7 +99,7 @@
                             Selected Role: <span id="selected-role-label">{{ old('role') ? ($roleLabels[old('role')] ?? ucfirst(old('role'))) : 'None' }}</span>
                         </span>
                     </div>
-                    <div class="grid gap-2 sm:grid-cols-5">
+                    <div class="grid gap-2 sm:grid-cols-4">
                         @foreach ($roleOptions as $value => $role)
                             <label class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container" data-role-label="{{ $role['label'] }}">
                                 <input class="sr-only" type="radio" name="role" value="{{ $value }}" @checked(old('role') === $value) required>

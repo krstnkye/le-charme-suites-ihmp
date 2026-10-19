@@ -27,7 +27,7 @@
             'balance' => $balance,
             'check_in' => $checkInDate?->format('M d, Y') ?: 'Not recorded',
             'check_out' => $checkOutDate?->format('M d, Y') ?: 'Pending',
-            'folio' => 'FOL-' . now()->format('Y') . '-' . str_pad((string) $checkIn->id, 5, '0', STR_PAD_LEFT),
+            'folio' => 'BILL-' . now()->format('Y') . '-' . str_pad((string) $checkIn->id, 5, '0', STR_PAD_LEFT),
         ];
     })->values();
     $activeBalance = $activeCheckIns->sum('balance');

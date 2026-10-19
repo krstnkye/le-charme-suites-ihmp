@@ -11,10 +11,15 @@ class Reservation extends Model
     protected $fillable = [
         'guest_id',
         'room_id',
+        'booking_reference',
         'check_in_date',
         'check_out_date',
         'number_of_guests',
         'status',
+        'source',
+        'created_by',
+        'confirmed_by',
+        'confirmed_at',
         'notes',
     ];
 
@@ -23,6 +28,7 @@ class Reservation extends Model
         return [
             'check_in_date' => 'date',
             'check_out_date' => 'date',
+            'confirmed_at' => 'datetime',
         ];
     }
 
@@ -39,5 +45,15 @@ class Reservation extends Model
     public function checkIn(): HasOne
     {
         return $this->hasOne(CheckIn::class);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function confirmer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'confirmed_by');
     }
 }

@@ -11,16 +11,6 @@
             'badge' => 'bg-primary text-white',
             'modules' => ['All modules', 'User governance', 'System settings', 'Audit logs'],
         ],
-        'owner' => [
-            'label' => 'Hotel Owner',
-            'tier' => 'Executive',
-            'department' => 'Executive Office',
-            'scope' => 'Executive visibility across operations, reports, financial summaries, and approvals.',
-            'icon' => 'hotel_class',
-            'accent' => 'border-secondary bg-secondary-fixed/20',
-            'badge' => 'bg-secondary text-white',
-            'modules' => ['Reports', 'Operations overview', 'Revenue visibility', 'Approvals'],
-        ],
         'receptionist' => [
             'label' => 'Front Desk',
             'tier' => 'Tier 2',
@@ -52,7 +42,7 @@
             'modules' => ['Room status', 'Housekeeping', 'Maintenance notes', 'Turnover queue'],
         ],
     ];
-    $roleOrder = ['admin', 'owner', 'receptionist', 'cashier', 'housekeeping'];
+    $roleOrder = ['admin', 'receptionist', 'cashier', 'housekeeping'];
 @endphp
 
 <!DOCTYPE html>

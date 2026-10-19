@@ -10,6 +10,8 @@ use App\Models\RoomStatusLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ReservationController extends Controller
@@ -23,16 +25,16 @@ class ReservationController extends Controller
             ->when($status !== '', fn ($query) => $query->where('status', $status))
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
-                    $query->where('id', 'like', '%' . $search . '%')
+                    $query->where('id', 'like', '%'.$search.'%')
                         ->orWhereHas('guest', function ($query) use ($search) {
-                            $query->where('first_name', 'like', '%' . $search . '%')
-                                ->orWhere('last_name', 'like', '%' . $search . '%')
-                                ->orWhere('email', 'like', '%' . $search . '%')
-                                ->orWhere('phone', 'like', '%' . $search . '%');
+                            $query->where('first_name', 'like', '%'.$search.'%')
+                                ->orWhere('last_name', 'like', '%'.$search.'%')
+                                ->orWhere('email', 'like', '%'.$search.'%')
+                                ->orWhere('phone', 'like', '%'.$search.'%');
                         })
                         ->orWhereHas('room', function ($query) use ($search) {
-                            $query->where('room_number', 'like', '%' . $search . '%')
-                                ->orWhere('room_type', 'like', '%' . $search . '%');
+                            $query->where('room_number', 'like', '%'.$search.'%')
+                                ->orWhere('room_type', 'like', '%'.$search.'%');
                         });
                 });
             })
@@ -66,7 +68,9 @@ class ReservationController extends Controller
         DB::transaction(function () use ($data) {
             $room = Room::whereKey($data['room_id'])->lockForUpdate()->firstOrFail();
 
-            abort_if($room->status !== 'available', 422, 'The selected room is not available.');
+            abort_if(in_array($room->status, ['maintenance'], true), 422, 'The selected room is not available.');
+
+            $this->ensureRoomIsAvailable($room, $data['check_in_date'], $data['check_out_date']);
 
             if (empty($data['guest_id'])) {
                 $guest = Guest::create([
@@ -94,13 +98,13 @@ class ReservationController extends Controller
                 unset($data[$manualField]);
             }
 
-            $reservation = Reservation::create($data + ['status' => 'reserved']);
-            $room->update(['status' => 'reserved']);
-            RoomStatusLog::create([
-                'room_id' => $room->id,
+            $reservation = Reservation::create($data + [
+                'booking_reference' => 'LCS-'.now()->format('ymd').'-'.Str::upper(Str::random(6)),
                 'status' => 'reserved',
-                'notes' => 'Room reserved through reservation #' . $reservation->id,
-                'changed_at' => now(),
+                'source' => 'front_desk',
+                'created_by' => auth()->id(),
+                'confirmed_by' => auth()->id(),
+                'confirmed_at' => now(),
             ]);
             HotelTransaction::create([
                 'guest_id' => $reservation->guest_id,
@@ -147,7 +151,7 @@ class ReservationController extends Controller
     {
         $data = $this->validatedData($request);
         $data['status'] = $request->validate([
-            'status' => ['required', 'in:reserved,checked_in,completed,cancelled'],
+            'status' => ['required', 'in:pending,reserved,checked_in,completed,cancelled'],
         ])['status'];
 
         DB::transaction(function () use ($reservation, $data) {
@@ -179,16 +183,19 @@ class ReservationController extends Controller
                 unset($data[$manualField]);
             }
 
+            $targetRoom = Room::whereKey($data['room_id'])->lockForUpdate()->firstOrFail();
+            $this->ensureRoomIsAvailable($targetRoom, $data['check_in_date'], $data['check_out_date'], $reservation->id);
+
             $reservation->update($data);
 
             if ($oldRoomId !== (int) $data['room_id']) {
-                Room::whereKey($oldRoomId)->update(['status' => 'available']);
-                Room::whereKey($data['room_id'])->update([
-                    'status' => $data['status'] === 'checked_in' ? 'occupied' : 'reserved',
-                ]);
+                if ($data['status'] === 'checked_in') {
+                    Room::whereKey($oldRoomId)->update(['status' => 'available']);
+                    $targetRoom->update(['status' => 'occupied']);
+                }
             }
 
-            if ($data['status'] === 'cancelled') {
+            if ($data['status'] === 'cancelled' && $reservation->room?->status === 'reserved') {
                 $reservation->room()->update(['status' => 'available']);
             }
         });
@@ -226,5 +233,22 @@ class ReservationController extends Controller
             'number_of_guests' => ['required', 'integer', 'min:1'],
             'notes' => ['nullable', 'string'],
         ]);
+    }
+
+    private function ensureRoomIsAvailable(Room $room, string $checkInDate, string $checkOutDate, ?int $exceptReservationId = null): void
+    {
+        $conflict = Reservation::query()
+            ->where('room_id', $room->id)
+            ->when($exceptReservationId, fn ($query) => $query->whereKeyNot($exceptReservationId))
+            ->whereIn('status', ['pending', 'reserved', 'checked_in'])
+            ->where('check_in_date', '<', $checkOutDate)
+            ->where('check_out_date', '>', $checkInDate)
+            ->exists();
+
+        if ($conflict) {
+            throw ValidationException::withMessages([
+                'room_id' => 'This room already has a booking that overlaps the selected dates.',
+            ]);
+        }
     }
 }

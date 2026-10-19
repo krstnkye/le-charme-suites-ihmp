@@ -6,7 +6,6 @@ use App\Models\AuthActivityLog;
 use App\Models\HotelTransaction;
 use App\Models\RoomStatusLog;
 use App\Models\User;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -28,7 +27,7 @@ class AdminAuditLogController extends Controller
                     'LOGOUT' => 'logout',
                     default => $log->successful ? 'login' : 'gpp_bad',
                 },
-                'target' => $log->user_id ? 'EMP-' . str_pad((string) $log->user_id, 3, '0', STR_PAD_LEFT) : 'LOGIN ATTEMPT',
+                'target' => $log->user_id ? 'EMP-'.str_pad((string) $log->user_id, 3, '0', STR_PAD_LEFT) : 'LOGIN ATTEMPT',
                 'context' => $log->email ?? 'No email supplied',
                 'terminal' => Str::limit($log->user_agent ?: 'Unknown browser', 42),
                 'ip' => $log->ip_address ?: 'Unknown IP',
@@ -46,8 +45,8 @@ class AdminAuditLogController extends Controller
                 'role' => 'System Recorded',
                 'event' => strtoupper((string) str_replace(' ', '_', $transaction->transaction_type)),
                 'icon' => 'receipt_long',
-                'target' => 'Guest Bill #' . str_pad((string) $transaction->id, 5, '0', STR_PAD_LEFT),
-                'context' => 'Room ' . ($transaction->room?->room_number ?? 'N/A'),
+                'target' => 'Guest Bill #'.str_pad((string) $transaction->id, 5, '0', STR_PAD_LEFT),
+                'context' => 'Room '.($transaction->room?->room_number ?? 'N/A'),
                 'terminal' => 'IHMS Ledger',
                 'ip' => '127.0.0.1',
                 'details' => $transaction->description ?: 'Hotel transaction recorded.',
@@ -64,10 +63,10 @@ class AdminAuditLogController extends Controller
                 'role' => 'Housekeeping / Front Desk',
                 'event' => 'ROOM_STATUS_UPDATED',
                 'icon' => 'cleaning_services',
-                'target' => 'Room ' . ($log->room?->room_number ?? 'N/A'),
+                'target' => 'Room '.($log->room?->room_number ?? 'N/A'),
                 'context' => ucfirst((string) $log->status),
                 'terminal' => 'Room Status Grid',
-                'ip' => '192.168.2.' . str_pad((string) (($log->id % 90) + 10), 2, '0', STR_PAD_LEFT),
+                'ip' => '192.168.2.'.str_pad((string) (($log->id % 90) + 10), 2, '0', STR_PAD_LEFT),
                 'details' => $log->notes ?: 'Room status changed in the availability grid.',
                 'severity' => 'Verified',
             ]);
@@ -81,10 +80,10 @@ class AdminAuditLogController extends Controller
                 'role' => ucfirst((string) $user->role),
                 'event' => 'USER_ACCOUNT_PROVISIONED',
                 'icon' => 'admin_panel_settings',
-                'target' => 'EMP-' . str_pad((string) $user->id, 3, '0', STR_PAD_LEFT),
+                'target' => 'EMP-'.str_pad((string) $user->id, 3, '0', STR_PAD_LEFT),
                 'context' => $user->email,
                 'terminal' => 'Admin Console',
-                'ip' => '192.168.10.' . str_pad((string) (($user->id % 80) + 10), 2, '0', STR_PAD_LEFT),
+                'ip' => '192.168.10.'.str_pad((string) (($user->id % 80) + 10), 2, '0', STR_PAD_LEFT),
                 'details' => 'User account exists in the role-based access control registry.',
                 'severity' => $user->role === 'admin' ? 'Privileged' : 'Verified',
             ]);
@@ -113,7 +112,7 @@ class AdminAuditLogController extends Controller
             'auditEvents' => $auditEvents,
             'activeSessions' => $activeSessions,
             'totalAuditEvents' => HotelTransaction::count() + RoomStatusLog::count() + User::count() + AuthActivityLog::count(),
-            'privilegedActions' => User::whereIn('role', ['admin', 'owner'])->count(),
+            'privilegedActions' => User::where('role', 'admin')->count(),
             'registeredAccounts' => AuthActivityLog::where('event_type', 'ACCOUNT_REGISTERED')->count(),
             'successfulLogins' => AuthActivityLog::where('event_type', 'LOGIN_SUCCESS')->where('successful', true)->count(),
             'blockedAttempts' => AuthActivityLog::where('event_type', 'LOGIN_FAILED')->where('successful', false)->count(),

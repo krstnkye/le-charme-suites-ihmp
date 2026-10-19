@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Room extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'room_number',
         'room_type',
@@ -42,5 +45,10 @@ class Room extends Model
     public function statusLogs(): HasMany
     {
         return $this->hasMany(RoomStatusLog::class);
+    }
+
+    public function housekeepingTasks(): HasMany
+    {
+        return $this->hasMany(HousekeepingTask::class);
     }
 }

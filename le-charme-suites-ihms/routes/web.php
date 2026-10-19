@@ -14,9 +14,11 @@ use App\Http\Controllers\DepartmentMessageController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HousekeepingController;
-use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\HousekeepingTaskController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReservationConfirmationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SystemManualController;
@@ -25,10 +27,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login')->name('home');
 Route::post('/generate', [HomeController::class, 'generate'])->name('generate');
+Route::get('/book', [PublicBookingController::class, 'create'])->name('booking.create');
+Route::post('/book', [PublicBookingController::class, 'store'])->middleware('throttle:10,1')->name('booking.store');
+Route::get('/book/confirmation/{reference}', [PublicBookingController::class, 'confirmation'])
+    ->middleware('throttle:30,1')
+    ->name('booking.confirmation');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 });
@@ -50,6 +57,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/check-ins', [CheckInController::class, 'index'])->name('check-ins.index');
         Route::get('/check-ins/create', [CheckInController::class, 'create'])->name('check-ins.create');
         Route::post('/check-ins', [CheckInController::class, 'store'])->name('check-ins.store');
+        Route::post('/reservations/{reservation}/confirmation', ReservationConfirmationController::class)
+            ->name('reservations.confirmation.store');
     });
 
     Route::middleware('role:admin')->group(function () {
@@ -78,12 +87,14 @@ Route::middleware('auth')->group(function () {
         Route::match(['put', 'patch'], '/rooms/{room}', [RoomController::class, 'update'])->whereNumber('room')->name('rooms.update');
     });
 
-    Route::middleware('role:housekeeping,owner')->group(function () {
+    Route::middleware('role:housekeeping')->group(function () {
         Route::get('/housekeeping/{page}', HousekeepingController::class)->name('housekeeping.page');
     });
 
-    Route::middleware('role:owner')->group(function () {
-        Route::get('/owner/{page?}', OwnerController::class)->name('owner.page');
+    Route::middleware('role:receptionist,housekeeping')->group(function () {
+        Route::post('/housekeeping-tasks', [HousekeepingTaskController::class, 'store'])->name('housekeeping-tasks.store');
+        Route::patch('/housekeeping-tasks/{housekeepingTask}', [HousekeepingTaskController::class, 'update'])
+            ->name('housekeeping-tasks.update');
     });
 
     Route::middleware('role:receptionist,cashier')->group(function () {
@@ -93,7 +104,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/check-outs', [CheckOutController::class, 'store'])->name('check-outs.store');
     });
 
-    Route::middleware('role:cashier,owner')->group(function () {
+    Route::middleware('role:cashier')->group(function () {
         Route::get('/reports', ReportController::class)->name('reports.index');
     });
 });

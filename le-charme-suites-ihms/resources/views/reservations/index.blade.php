@@ -1,6 +1,6 @@
 @php
     $user = auth()->user();
-    $statusOptions = ['reserved', 'checked_in', 'completed', 'cancelled'];
+    $statusOptions = ['pending', 'reserved', 'checked_in', 'completed', 'cancelled'];
     $selected = $selectedReservation;
     $selectedGuest = $selected?->guest;
     $selectedRoom = $selected?->room;
@@ -9,12 +9,14 @@
         : 1;
     $selectedTotal = $selectedRoom ? $selectedRoom->rate * $selectedNights : 0;
     $statusLabels = [
+        'pending' => 'Online Request',
         'reserved' => 'Confirmed',
         'checked_in' => 'In House',
         'completed' => 'Completed',
         'cancelled' => 'Cancelled',
     ];
     $statusClasses = [
+        'pending' => 'bg-amber-50 text-amber-800 border-amber-200',
         'reserved' => 'bg-secondary-fixed text-on-secondary-fixed-variant border-secondary/30',
         'checked_in' => 'bg-primary/10 text-primary border-primary/20',
         'completed' => 'bg-emerald-50 text-emerald-800 border-emerald-200',
@@ -151,13 +153,13 @@
                         </form>
                     </section>
 
-                    <section class="grid grid-cols-2 gap-3 md:grid-cols-4">
+                    <section class="grid grid-cols-2 gap-3 md:grid-cols-5">
                         @foreach ($statusOptions as $option)
                             <a href="{{ route('reservations.index', ['status' => $option]) }}" class="rounded-xl border border-outline-variant/70 bg-surface-container-lowest p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">{{ $statusLabels[$option] }}</span>
                                     <span class="material-symbols-outlined text-secondary text-[19px]">
-                                        {{ $option === 'reserved' ? 'event_available' : ($option === 'checked_in' ? 'hotel' : ($option === 'completed' ? 'task_alt' : 'cancel')) }}
+                                        {{ $option === 'pending' ? 'language' : ($option === 'reserved' ? 'event_available' : ($option === 'checked_in' ? 'hotel' : ($option === 'completed' ? 'task_alt' : 'cancel'))) }}
                                     </span>
                                 </div>
                                 <p class="mt-3 text-3xl font-bold text-primary">{{ $statusCounts[$option] ?? 0 }}</p>
@@ -230,7 +232,7 @@
                                                 $initials = strtoupper(substr($guest?->first_name ?? 'G', 0, 1) . substr($guest?->last_name ?? '', 0, 1));
                                             @endphp
                                             <tr class="{{ $loop->first ? 'border-l-4 border-secondary bg-secondary-fixed/15' : 'hover:bg-surface-container-low' }} transition-colors">
-                                                <td class="px-4 py-3.5 font-bold text-primary">#LC-{{ str_pad($reservation->id, 5, '0', STR_PAD_LEFT) }}</td>
+                                                <td class="px-4 py-3.5"><p class="font-bold text-primary">{{ $reservation->booking_reference ?: '#LC-'.str_pad($reservation->id, 5, '0', STR_PAD_LEFT) }}</p><p class="text-[10px] font-bold uppercase text-slate-500">{{ str_replace('_', ' ', $reservation->source ?? 'front_desk') }}</p></td>
                                                 <td class="px-4 py-3.5">
                                                     <div class="flex items-center gap-2.5">
                                                         <div class="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-bold text-secondary-fixed">{{ $initials }}</div>
@@ -273,6 +275,14 @@
                                                                 Check-In
                                                                 <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
                                                             </a>
+                                                        @elseif ($reservation->status === 'pending')
+                                                            <form method="POST" action="{{ route('reservations.confirmation.store', $reservation) }}">
+                                                                @csrf
+                                                                <button class="inline-flex items-center gap-1 rounded bg-amber-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm hover:bg-amber-700" title="Confirm online booking">
+                                                                    Confirm
+                                                                    <span class="material-symbols-outlined text-[14px]">check</span>
+                                                                </button>
+                                                            </form>
                                                         @endif
                                                     </div>
                                                 </td>

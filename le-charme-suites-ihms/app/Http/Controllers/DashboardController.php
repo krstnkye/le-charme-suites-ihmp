@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guest;
 use App\Models\CheckIn;
 use App\Models\CheckOut;
+use App\Models\Guest;
 use App\Models\HotelTransaction;
 use App\Models\Reservation;
 use App\Models\Room;
@@ -26,7 +26,7 @@ class DashboardController extends Controller
             'currentGuests' => Guest::whereHas('reservations', fn ($query) => $query->where('status', 'checked_in'))->count(),
             'arrivalsToday' => Reservation::where('status', 'reserved')->whereDate('check_in_date', now(config('app.timezone'))->toDateString())->count(),
             'departuresToday' => Reservation::where('status', 'checked_in')->whereDate('check_out_date', now(config('app.timezone'))->toDateString())->count(),
-            'pendingCheckIns' => Reservation::where('status', 'reserved')->count(),
+            'pendingCheckIns' => Reservation::whereIn('status', ['pending', 'reserved'])->count(),
             'recentTransactions' => HotelTransaction::with(['guest', 'room'])->latest('transaction_date')->take(5)->get(),
             'activeReservationsList' => Reservation::with(['guest', 'room'])->latest()->take(8)->get(),
             'roomMatrix' => Room::orderBy('room_number')->get()->groupBy(fn (Room $room) => substr($room->room_number, 0, 1)),
@@ -107,26 +107,6 @@ class DashboardController extends Controller
                 'recordedRevenue' => HotelTransaction::whereDate('transaction_date', $today)->sum('amount'),
                 'unpaidFolios' => CheckOut::where('payment_status', 'unpaid')->count(),
                 'partialFolios' => CheckOut::where('payment_status', 'partial')->count(),
-            ]);
-        }
-
-        if (auth()->user()?->role === 'owner') {
-            return view('owner.index', [
-                ...$data,
-                'page' => 'dashboard',
-                'totalGuests' => Guest::count(),
-                'settledToday' => CheckOut::whereDate('checked_out_at', now(config('app.timezone'))->toDateString())->count(),
-                'collectedToday' => CheckOut::whereDate('checked_out_at', now(config('app.timezone'))->toDateString())->sum('amount_paid'),
-                'recordedRevenue' => HotelTransaction::whereDate('transaction_date', now(config('app.timezone'))->toDateString())->sum('amount'),
-                'guests' => Guest::withCount('reservations')->withSum('transactions', 'amount')->latest()->take(8)->get(),
-                'guestSpendTotal' => HotelTransaction::sum('amount'),
-                'identifiedGuests' => Guest::whereNotNull('identification_number')->count(),
-                'rooms' => Room::orderBy('room_number')->take(12)->get(),
-                'reservations' => Reservation::with(['guest', 'room'])->latest()->take(8)->get(),
-                'checkIns' => CheckIn::with(['guest', 'room', 'reservation'])->latest('checked_in_at')->take(8)->get(),
-                'checkOuts' => CheckOut::with(['guest', 'room'])->latest('checked_out_at')->take(8)->get(),
-                'transactions' => HotelTransaction::with(['guest', 'room'])->latest('transaction_date')->take(8)->get(),
-                'housekeepingLogs' => RoomStatusLog::with('room')->latest('changed_at')->take(8)->get(),
             ]);
         }
 

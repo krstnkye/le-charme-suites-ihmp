@@ -14,10 +14,6 @@ class DepartmentMessageController extends Controller
 {
     public function index(Request $request): View|RedirectResponse
     {
-        if ($request->user()->role === 'owner') {
-            return redirect()->route('owner.page', ['page' => 'messages']);
-        }
-
         return view('messages.index', $this->inboxData($request));
     }
 
@@ -79,8 +75,7 @@ class DepartmentMessageController extends Controller
             'user' => $user,
             'messages' => $messages,
             'departments' => $this->departments(),
-            'unreadCount' => $messages->filter(fn (DepartmentMessage $message): bool =>
-                $message->sender_id !== $user->id && $message->readers->isEmpty()
+            'unreadCount' => $messages->filter(fn (DepartmentMessage $message): bool => $message->sender_id !== $user->id && $message->readers->isEmpty()
             )->count(),
         ];
     }
@@ -102,7 +97,6 @@ class DepartmentMessageController extends Controller
             'receptionist' => 'Front Desk',
             'cashier' => 'Billing',
             'housekeeping' => 'Housekeeping',
-            'owner' => 'Owner / Management',
         ];
     }
 }

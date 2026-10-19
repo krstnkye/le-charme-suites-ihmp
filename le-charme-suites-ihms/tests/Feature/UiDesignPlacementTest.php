@@ -72,43 +72,14 @@ class UiDesignPlacementTest extends TestCase
         }
     }
 
-    public function test_owner_reference_designs_are_rendered_on_their_intended_pages(): void
+    public function test_public_booking_uses_the_official_hotel_identity_and_room_catalog(): void
     {
-        $owner = User::factory()->create(['role' => 'owner']);
-
-        $pages = [
-            'dashboard' => 'Hotel Ownership & Executive Performance Portal',
-            'guests' => 'Guest Management & Corporate Roster Overview',
-            'rooms' => 'Room Management Overview',
-            'room-inventory' => 'Room Inventory Overview',
-            'room-availability' => 'Room Availability & Booking Pace Matrix',
-            'room-status' => 'Housekeeping Room Status Matrix',
-            'reservations' => 'Reservations Overview',
-            'checkins' => 'Check-in / Check-out Overview',
-            'checkin-records' => 'Check-in Records & In-House Registry',
-            'checkout-records' => 'Check-out Records & Turnover Archive',
-            'billing' => 'Billing & Transactions Overview',
-            'billing-records' => 'Billing Records & Account Archive',
-            'housekeeping' => 'Housekeeping Department Overview',
-            'housekeeping-requests' => 'Housekeeping Requests Ledger',
-            'reports' => 'Reports & Records Overview',
-            'operational-reports' => 'Operational Reports & Departmental Telemetry',
-            'transaction-reports' => 'Transaction Reports & Financial Audit Intelligence',
-            'records' => 'Master Operational & Historical Records Archive',
-            'profile' => 'Owner Executive Profile & Oversight Security',
-        ];
-
-        foreach ($pages as $page => $signature) {
-            $url = $page === 'dashboard'
-                ? route('dashboard')
-                : route('owner.page', ['page' => $page]);
-
-            $this->actingAs($owner)
-                ->get($url)
-                ->assertOk()
-                ->assertSeeText($signature)
-                ->assertSee('aria-label="Owner Sidebar"', false);
-        }
+        $this->get(route('booking.create'))
+            ->assertOk()
+            ->assertSeeText('Find your perfect stay')
+            ->assertSeeText('Deluxe King')
+            ->assertSeeText('Charmé Suite')
+            ->assertSeeText('European-inspired luxury with modern Filipino hospitality');
     }
 
     public function test_front_desk_design_system_covers_operational_detail_and_edit_pages(): void

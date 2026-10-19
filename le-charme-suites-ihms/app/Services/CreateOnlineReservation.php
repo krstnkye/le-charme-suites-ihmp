@@ -1,0 +1,106 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Guest;
+use App\Models\HotelTransaction;
+use App\Models\IntegrationEvent;
+use App\Models\Reservation;
+use App\Models\Room;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+
+class CreateOnlineReservation
+{
+    /** @param array<string, mixed> $data */
+    public function handle(array $data, string $source, ?string $ipAddress = null): Reservation
+    {
+        return DB::transaction(function () use ($data, $source, $ipAddress): Reservation {
+            $room = Room::query()
+                ->where('room_type', $data['room_type'])
+                ->whereNotIn('status', ['maintenance'])
+                ->where('capacity', '>=', $data['number_of_guests'])
+                ->whereDoesntHave('reservations', function ($query) use ($data) {
+                    $query->whereIn('status', ['pending', 'reserved', 'checked_in'])
+                        ->where('check_in_date', '<', $data['check_out_date'])
+                        ->where('check_out_date', '>', $data['check_in_date']);
+                })
+                ->lockForUpdate()
+                ->orderBy('room_number')
+                ->first();
+
+            if (! $room) {
+                throw ValidationException::withMessages([
+                    'room_type' => 'No room of this type is available for the selected dates and number of guests.',
+                ]);
+            }
+
+            $guest = Guest::query()->firstOrCreate(
+                ['email' => Str::lower($data['email'])],
+                [
+                    'first_name' => $data['first_name'],
+                    'last_name' => $data['last_name'],
+                    'phone' => $data['phone'],
+                    'address' => $data['address'] ?? null,
+                ],
+            );
+
+            $guest->update([
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'phone' => $data['phone'],
+                'address' => $data['address'] ?? $guest->address,
+            ]);
+
+            $reservation = Reservation::create([
+                'booking_reference' => $this->reference(),
+                'guest_id' => $guest->id,
+                'room_id' => $room->id,
+                'check_in_date' => $data['check_in_date'],
+                'check_out_date' => $data['check_out_date'],
+                'number_of_guests' => $data['number_of_guests'],
+                'status' => 'pending',
+                'source' => $source,
+                'notes' => $data['notes'] ?? null,
+            ]);
+
+            HotelTransaction::create([
+                'guest_id' => $guest->id,
+                'reservation_id' => $reservation->id,
+                'room_id' => $room->id,
+                'transaction_type' => 'online_booking_request',
+                'status' => 'pending',
+                'transaction_date' => now(),
+                'description' => 'Online booking request received from '.$source.'.',
+            ]);
+
+            IntegrationEvent::create([
+                'channel' => $source === 'public_website' ? 'website' : 'api',
+                'direction' => 'inbound',
+                'dataset' => 'reservations',
+                'format' => 'json',
+                'record_count' => 1,
+                'status' => 'completed',
+                'endpoint' => '/api/v1/bookings',
+                'metadata' => [
+                    'ip_address' => $ipAddress,
+                    'source' => $source,
+                    'booking_reference' => $reservation->booking_reference,
+                ],
+                'occurred_at' => now(),
+            ]);
+
+            return $reservation->load(['guest', 'room']);
+        });
+    }
+
+    private function reference(): string
+    {
+        do {
+            $reference = 'LCS-'.now()->format('ymd').'-'.Str::upper(Str::random(6));
+        } while (Reservation::where('booking_reference', $reference)->exists());
+
+        return $reference;
+    }
+}

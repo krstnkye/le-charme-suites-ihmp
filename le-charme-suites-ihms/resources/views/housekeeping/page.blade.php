@@ -63,6 +63,59 @@
         @endforeach
     </section>
 
+    @if (in_array($pageKey, ['tasks', 'assigned-rooms', 'cleaning-tasks', 'priority-rooms', 'completed-tasks'], true))
+        <section class="grid gap-6 xl:grid-cols-[1fr_360px]">
+            <div class="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
+                <div class="flex flex-col justify-between gap-3 border-b border-line bg-[#f6f3ed] p-5 sm:flex-row sm:items-center">
+                    <div><p class="text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Shared Database Workflow</p><h3 class="mt-1 font-serif text-2xl font-bold">Live Housekeeping Work Orders</h3><p class="mt-1 text-sm text-slate-500">Assignments, progress, due times, and completion history are visible to authorized departments.</p></div>
+                    <span class="rounded bg-primary px-3 py-1.5 text-xs font-bold text-white">{{ $housekeepingTasks->whereNotIn('status', ['completed', 'cancelled'])->count() }} Active</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[820px] text-left text-sm">
+                        <thead class="bg-[#fdfcfa] text-[11px] font-bold uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Room / Task</th><th class="px-4 py-3">Assigned to</th><th class="px-4 py-3">Priority</th><th class="px-4 py-3">Due</th><th class="px-4 py-3">Status & Action</th></tr></thead>
+                        <tbody class="divide-y divide-line">
+                            @forelse ($housekeepingTasks as $task)
+                                <tr>
+                                    <td class="px-4 py-3"><p class="font-bold text-primary">Room {{ $task->room->room_number }} · {{ $task->title }}</p><p class="mt-1 text-xs text-slate-500">{{ $task->instructions ?: ucfirst(str_replace('_', ' ', $task->task_type)) }}</p></td>
+                                    <td class="px-4 py-3 font-semibold">{{ $task->assignee?->name ?? 'Unassigned queue' }}</td>
+                                    <td class="px-4 py-3"><span @class(['rounded px-2 py-1 text-[11px] font-bold uppercase', 'bg-red-100 text-red-800' => in_array($task->priority, ['urgent', 'high'], true), 'bg-slate-100 text-slate-700' => in_array($task->priority, ['normal', 'low'], true)])>{{ $task->priority }}</span></td>
+                                    <td class="px-4 py-3 text-xs">{{ $task->due_at?->format('M d, h:i A') ?? 'No deadline' }}</td>
+                                    <td class="px-4 py-3">
+                                        @if (! in_array($task->status, ['completed', 'cancelled'], true))
+                                            <form method="POST" action="{{ route('housekeeping-tasks.update', $task) }}" class="flex items-center gap-2">
+                                                @csrf @method('PATCH')
+                                                <select name="status" class="rounded border-line py-1.5 text-xs font-bold">
+                                                    @foreach (['queued' => 'Queued', 'in_progress' => 'Start / In Progress', 'inspection' => 'Ready for Inspection', 'completed' => 'Complete'] as $value => $label)<option value="{{ $value }}" @selected($task->status === $value)>{{ $label }}</option>@endforeach
+                                                </select>
+                                                <input type="hidden" name="assigned_to" value="{{ $task->assigned_to }}">
+                                                <button class="rounded bg-primary px-2.5 py-1.5 text-xs font-bold text-white">Save</button>
+                                            </form>
+                                        @else
+                                            <span class="font-bold text-emerald-700">{{ ucfirst($task->status) }}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="5" class="px-4 py-10 text-center text-slate-500">No housekeeping work orders yet. Create one using the assignment form.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ route('housekeeping-tasks.store') }}" class="h-fit space-y-4 rounded-lg border border-line bg-white p-5 shadow-sm">
+                @csrf
+                <div><p class="text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Task Assignment</p><h3 class="mt-1 font-serif text-xl font-bold">Create Work Order</h3></div>
+                <label class="block text-xs font-bold">Room<select name="room_id" required class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm"><option value="">Select room</option>@foreach ($allRooms as $room)<option value="{{ $room->id }}">Room {{ $room->room_number }} · {{ $room->status }}</option>@endforeach</select></label>
+                <label class="block text-xs font-bold">Task type<select name="task_type" required class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm">@foreach (['turnover' => 'Departure Turnover', 'stayover' => 'Occupied Room Service', 'inspection' => 'Room Inspection', 'guest_request' => 'Guest Request', 'deep_cleaning' => 'Deep Cleaning', 'maintenance_follow_up' => 'Maintenance Follow-up'] as $value => $label)<option value="{{ $value }}">{{ $label }}</option>@endforeach</select></label>
+                <label class="block text-xs font-bold">Task title<input name="title" required maxlength="255" class="mt-1 w-full rounded-lg border-line px-3 py-2.5 text-sm" placeholder="Example: Prepare room for arrival"></label>
+                <label class="block text-xs font-bold">Instructions<textarea name="instructions" rows="3" class="mt-1 w-full rounded-lg border-line px-3 py-2.5 text-sm"></textarea></label>
+                <div class="grid grid-cols-2 gap-3"><label class="text-xs font-bold">Priority<select name="priority" class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm"><option value="normal">Normal</option><option value="high">High</option><option value="urgent">Urgent</option><option value="low">Low</option></select></label><label class="text-xs font-bold">Due by<input name="due_at" type="datetime-local" class="mt-1 w-full rounded-lg border-line px-3 py-2.5 text-sm"></label></div>
+                <button class="flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-3 text-sm font-bold text-white"><span class="material-symbols-outlined text-lg">assignment_add</span>Assign to me</button>
+            </form>
+        </section>
+    @endif
+
     @if ($pageKey === 'assigned-rooms')
         <section class="rounded-lg border border-line bg-white shadow-sm">
             <div class="border-b border-line bg-[#f6f3ed] p-5">
@@ -4074,7 +4127,7 @@
                     'room' => $room,
                     'foundLocation' => 'Room ' . $room->room_number . ' - ' . ($room->room_type ?? 'Guest Room'),
                     'discoveryTime' => optional($roomLog?->changed_at)->format('M d, Y h:i A') ?? now()->format('M d, Y h:i A'),
-                    'guest' => $room->status === 'occupied' ? 'Current in-house guest' : 'Previous guest on room folio',
+                    'guest' => $room->status === 'occupied' ? 'Current in-house guest' : 'Previous guest on room bill',
                     'notes' => $roomLog?->notes ?: 'Recovered during housekeeping turnover and awaiting owner claim verification.',
                 ]);
             });

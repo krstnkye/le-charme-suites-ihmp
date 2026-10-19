@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HousekeepingTask;
 use App\Models\Room;
 use App\Models\RoomStatusLog;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -156,7 +158,7 @@ class HousekeepingController extends Controller
         $maintenanceQueue = $allRooms->where('status', 'maintenance')->values();
         $priorityRooms = $allRooms
             ->whereIn('status', ['maintenance', 'cleaning'])
-            ->sortBy(fn (Room $room) => ($room->status === 'maintenance' ? '0' : '1') . $room->room_number)
+            ->sortBy(fn (Room $room) => ($room->status === 'maintenance' ? '0' : '1').$room->room_number)
             ->values();
 
         return [
@@ -170,9 +172,9 @@ class HousekeepingController extends Controller
             'assignedRooms' => $allRooms
                 ->whereIn('status', ['cleaning', 'maintenance', 'occupied'])
                 ->sortBy(fn (Room $room) => match ($room->status) {
-                    'cleaning' => '0' . $room->room_number,
-                    'maintenance' => '1' . $room->room_number,
-                    default => '2' . $room->room_number,
+                    'cleaning' => '0'.$room->room_number,
+                    'maintenance' => '1'.$room->room_number,
+                    default => '2'.$room->room_number,
                 })
                 ->values(),
             'inspectionRooms' => $priorityRooms,
@@ -186,6 +188,10 @@ class HousekeepingController extends Controller
                 ->latest('changed_at')
                 ->take(20)
                 ->get(),
+            'housekeepingTasks' => HousekeepingTask::with(['room', 'assignee', 'creator'])
+                ->latest()
+                ->get(),
+            'housekeepingStaff' => User::where('role', 'housekeeping')->orderBy('name')->get(),
         ];
     }
 }

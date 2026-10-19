@@ -97,7 +97,7 @@
                         Selected Role: <span id="selected-role-label">None</span>
                     </span>
                 </div>
-                <div class="grid gap-2 sm:grid-cols-5">
+                <div class="grid gap-2 sm:grid-cols-4">
                     @foreach (config('hotel.staff_roles') as $value => $role)
                         <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container {{ old('role') === $value ? 'is-selected' : '' }}" data-label="{{ $role['label'] }}" data-value="{{ $value }}" type="button" aria-pressed="{{ old('role') === $value ? 'true' : 'false' }}">
                             <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
@@ -177,7 +177,7 @@
                         <input name="remember" class="rounded border-outline-variant text-primary focus:ring-secondary" type="checkbox" checked>
                         <span>Remember me</span>
                     </label>
-                    <a class="font-semibold text-secondary hover:underline" href="#" onclick="alert('Please contact the system administrator to reset your password.'); return false;">Forgot password?</a>
+                    <a class="font-semibold text-secondary hover:underline" href="mailto:{{ config('hotel.email') }}?subject=IHMS%20Password%20Reset%20Request">Forgot password?</a>
                 </div>
 
                 <button class="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-secondary/20 bg-primary py-3 font-title-md text-title-md text-white shadow-md transition hover:bg-primary-container" type="submit">
@@ -190,6 +190,10 @@
                 <p class="text-xs text-on-surface-variant">
                     Need a staff account?
                     <a class="font-semibold text-secondary hover:underline" href="{{ route('register') }}">Create one</a>
+                </p>
+                <p class="mt-2 text-xs text-on-surface-variant">
+                    Booking as a guest?
+                    <a class="font-semibold text-secondary hover:underline" href="{{ route('booking.create') }}">Reserve a room online</a>
                 </p>
                 <p class="mt-2 text-xs font-semibold text-on-surface-variant">{{ config('hotel.address') }}</p>
                 <p class="mt-1 text-[11px] text-outline">{{ config('hotel.phone') }} · {{ config('hotel.email') }}</p>

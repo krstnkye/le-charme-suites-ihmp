@@ -94,29 +94,13 @@ class DepartmentSidebarTest extends TestCase
         }
     }
 
-    public function test_owner_pages_share_the_responsive_owner_sidebar(): void
+    public function test_removed_owner_department_has_no_dashboard_route(): void
     {
         $owner = User::factory()->create(['role' => 'owner']);
 
         $this->actingAs($owner)->get(route('dashboard'))
-            ->assertOk()
-            ->assertSee('data-sidebar-toggle', false)
-            ->assertDontSee('data-page-back', false);
+            ->assertForbidden();
 
-        foreach ([
-            route('owner.page', ['page' => 'rooms']),
-            route('owner.page', ['page' => 'reservations']),
-            route('owner.page', ['page' => 'billing-records']),
-            route('owner.page', ['page' => 'housekeeping']),
-            route('owner.page', ['page' => 'reports']),
-            route('owner.page', ['page' => 'profile']),
-        ] as $url) {
-            $this->actingAs($owner)->get($url)
-                ->assertOk()
-                ->assertSee('aria-label="Owner Sidebar"', false)
-                ->assertSee('data-universal-sidebar', false)
-                ->assertSee('data-sidebar-toggle', false)
-                ->assertSee('data-page-back', false);
-        }
+        $this->assertFalse(app('router')->has('owner.page'));
     }
 }

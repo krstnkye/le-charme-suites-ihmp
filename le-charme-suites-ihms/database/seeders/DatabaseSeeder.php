@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             ['Front Desk Receptionist', 'receptionist@lecharmehotel.com', 'receptionist'],
             ['Billing Staff', 'billing@lecharmehotel.com', 'cashier'],
             ['Housekeeping Staff', 'housekeeping@lecharmehotel.com', 'housekeeping'],
-            ['Hotel Owner', 'owner@lecharmehotel.com', 'owner'],
         ] as [$name, $email, $role]) {
             User::updateOrCreate([
                 'email' => $email,

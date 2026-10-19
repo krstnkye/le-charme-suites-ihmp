@@ -178,7 +178,7 @@
                             <span class="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold">{{ $totalUsers }} Accounts</span>
                         </div>
                         <div class="my-5 grid grid-cols-3 gap-3 border-y border-surface-container py-3">
-                            <div><span class="text-[11px] font-bold text-slate-500">ROLES</span><p class="font-bold">5 Tiers</p></div>
+                            <div><span class="text-[11px] font-bold text-slate-500">DEPARTMENTS</span><p class="font-bold">4 Workspaces</p></div>
                             <div><span class="text-[11px] font-bold text-slate-500">ADMINS</span><p class="font-bold text-emerald-700">{{ $adminCount }}</p></div>
                             <div><span class="text-[11px] font-bold text-slate-500">OWNERS</span><p class="font-bold text-secondary">{{ $ownerCount }}</p></div>
                         </div>

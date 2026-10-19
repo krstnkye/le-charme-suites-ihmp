@@ -17,7 +17,6 @@ return [
         'receptionist' => ['label' => 'Receptionist', 'icon' => 'badge'],
         'cashier' => ['label' => 'Billing', 'icon' => 'payments'],
         'housekeeping' => ['label' => 'Housekeeping', 'icon' => 'cleaning_services'],
-        'owner' => ['label' => 'Owner', 'icon' => 'workspace_premium'],
     ],
     'positioning' => 'European-inspired business and leisure hospitality in Subic Bay.',
     'highlights' => [

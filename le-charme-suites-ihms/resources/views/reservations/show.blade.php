@@ -84,7 +84,7 @@
                 <span class="hidden font-headline text-xl font-semibold tracking-wide text-primary md:block">Le Charme Suites IHMS</span>
                 <div class="relative hidden w-80 lg:block">
                     <span class="material-symbols-outlined absolute left-3 top-2.5 text-lg text-on-surface-variant">search</span>
-                    <input class="w-full rounded-lg border-surface-variant bg-white py-2 pl-9 pr-4 text-sm focus:border-secondary focus:ring-secondary" placeholder="Search guests, rooms, folio numbers...">
+                    <input class="w-full rounded-lg border-surface-variant bg-white py-2 pl-9 pr-4 text-sm focus:border-secondary focus:ring-secondary" placeholder="Search guests, rooms, or booking numbers...">
                 </div>
             </div>
 

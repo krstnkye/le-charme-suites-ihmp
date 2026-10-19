@@ -2,21 +2,18 @@
     $currentUser = auth()->user();
     $roleLabels = [
         'admin' => 'System Administrator',
-        'owner' => 'Hotel Owner',
         'receptionist' => 'Front Desk Lead',
         'cashier' => 'Cashier & Finance',
         'housekeeping' => 'Housekeeping Lead',
     ];
     $roleTiers = [
         'admin' => 'Tier 1',
-        'owner' => 'Executive',
         'receptionist' => 'Tier 2',
         'cashier' => 'Tier 2',
         'housekeeping' => 'Tier 4',
     ];
     $roleDepartments = [
         'admin' => 'IT Infrastructure',
-        'owner' => 'Executive Office',
         'receptionist' => 'Front Office',
         'cashier' => 'Finance & Billing',
         'housekeeping' => 'Rooms & Facilities',

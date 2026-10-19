@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(IntegrationEvent::class, 'actor_id');
     }
+
+    public function assignedHousekeepingTasks(): HasMany
+    {
+        return $this->hasMany(HousekeepingTask::class, 'assigned_to');
+    }
 }

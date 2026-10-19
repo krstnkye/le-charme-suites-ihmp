@@ -14,10 +14,6 @@ class ProfileController extends Controller
 {
     public function edit(Request $request): View|RedirectResponse
     {
-        if ($request->user()?->role === 'owner') {
-            return redirect()->route('owner.page', ['page' => 'profile']);
-        }
-
         $view = match ($request->user()?->role) {
             'housekeeping' => 'profile.housekeeping-edit',
             'cashier' => 'profile.billing-edit',

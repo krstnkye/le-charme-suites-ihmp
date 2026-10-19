@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CheckIn;
 use App\Models\CheckOut;
 use App\Models\HotelTransaction;
+use App\Models\HousekeepingTask;
 use App\Models\RoomStatusLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,16 +23,16 @@ class CheckOutController extends Controller
             ->when($paymentStatus !== '', fn ($query) => $query->where('payment_status', $paymentStatus))
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
-                    $query->where('id', 'like', '%' . $search . '%')
+                    $query->where('id', 'like', '%'.$search.'%')
                         ->orWhereHas('guest', function ($query) use ($search) {
-                            $query->where('first_name', 'like', '%' . $search . '%')
-                                ->orWhere('last_name', 'like', '%' . $search . '%')
-                                ->orWhere('email', 'like', '%' . $search . '%')
-                                ->orWhere('phone', 'like', '%' . $search . '%');
+                            $query->where('first_name', 'like', '%'.$search.'%')
+                                ->orWhere('last_name', 'like', '%'.$search.'%')
+                                ->orWhere('email', 'like', '%'.$search.'%')
+                                ->orWhere('phone', 'like', '%'.$search.'%');
                         })
                         ->orWhereHas('room', function ($query) use ($search) {
-                            $query->where('room_number', 'like', '%' . $search . '%')
-                                ->orWhere('room_type', 'like', '%' . $search . '%');
+                            $query->where('room_number', 'like', '%'.$search.'%')
+                                ->orWhere('room_type', 'like', '%'.$search.'%');
                         });
                 });
             })
@@ -81,16 +82,16 @@ class CheckOutController extends Controller
             ->when($paymentStatus !== '', fn ($query) => $query->where('payment_status', $paymentStatus))
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
-                    $query->where('id', 'like', '%' . $search . '%')
+                    $query->where('id', 'like', '%'.$search.'%')
                         ->orWhereHas('guest', function ($query) use ($search) {
-                            $query->where('first_name', 'like', '%' . $search . '%')
-                                ->orWhere('last_name', 'like', '%' . $search . '%')
-                                ->orWhere('email', 'like', '%' . $search . '%')
-                                ->orWhere('phone', 'like', '%' . $search . '%');
+                            $query->where('first_name', 'like', '%'.$search.'%')
+                                ->orWhere('last_name', 'like', '%'.$search.'%')
+                                ->orWhere('email', 'like', '%'.$search.'%')
+                                ->orWhere('phone', 'like', '%'.$search.'%');
                         })
                         ->orWhereHas('room', function ($query) use ($search) {
-                            $query->where('room_number', 'like', '%' . $search . '%')
-                                ->orWhere('room_type', 'like', '%' . $search . '%');
+                            $query->where('room_number', 'like', '%'.$search.'%')
+                                ->orWhere('room_type', 'like', '%'.$search.'%');
                         });
                 });
             })
@@ -143,6 +144,16 @@ class CheckOutController extends Controller
             $checkIn->update(['status' => 'completed']);
             $checkIn->reservation->update(['status' => 'completed']);
             $checkIn->room->update(['status' => 'cleaning']);
+            HousekeepingTask::create([
+                'room_id' => $checkIn->room_id,
+                'created_by' => auth()->id(),
+                'task_type' => 'turnover',
+                'title' => 'Departure turnover - Room '.$checkIn->room->room_number,
+                'instructions' => 'Prepare the room for the next guest and submit completion notes for inspection.',
+                'priority' => 'high',
+                'status' => 'queued',
+                'due_at' => now()->addHours(2),
+            ]);
             RoomStatusLog::create([
                 'room_id' => $checkIn->room_id,
                 'status' => 'cleaning',

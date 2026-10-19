@@ -29,7 +29,7 @@ class AdminUserRoleController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', new WorkEmail, Rule::unique('users', 'email')],
-            'role' => ['required', 'in:admin,owner,receptionist,cashier,housekeeping'],
+            'role' => ['required', 'in:admin,receptionist,cashier,housekeeping'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -45,7 +45,7 @@ class AdminUserRoleController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', new WorkEmail, Rule::unique('users', 'email')->ignore($user->id)],
-            'role' => ['required', 'in:admin,owner,receptionist,cashier,housekeeping'],
+            'role' => ['required', 'in:admin,receptionist,cashier,housekeeping'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -79,7 +79,7 @@ class AdminUserRoleController extends Controller
 
     public function permissions(Request $request): View
     {
-        $roles = ['admin', 'owner', 'receptionist', 'cashier', 'housekeeping'];
+        $roles = ['admin', 'receptionist', 'cashier', 'housekeeping'];
         $selectedRole = $request->string('role')->toString();
         $selectedRole = in_array($selectedRole, $roles, true) ? $selectedRole : 'admin';
 
@@ -94,7 +94,7 @@ class AdminUserRoleController extends Controller
     public function savePermissions(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'role' => ['required', 'in:admin,owner,receptionist,cashier,housekeeping'],
+            'role' => ['required', 'in:admin,receptionist,cashier,housekeeping'],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['array'],
             'permissions.*.*' => ['boolean'],
@@ -111,7 +111,7 @@ class AdminUserRoleController extends Controller
     public function resetPermissions(Request $request): RedirectResponse
     {
         $role = $request->validate([
-            'role' => ['required', 'in:admin,owner,receptionist,cashier,housekeeping'],
+            'role' => ['required', 'in:admin,receptionist,cashier,housekeeping'],
         ])['role'];
 
         $matrix = session('permission_matrix', []);

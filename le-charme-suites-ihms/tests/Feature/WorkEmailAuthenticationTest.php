@@ -12,7 +12,7 @@ class WorkEmailAuthenticationTest extends TestCase
 
     public function test_login_and_registration_show_roles_in_the_same_order(): void
     {
-        $expectedOrder = ['Admin', 'Receptionist', 'Billing', 'Housekeeping', 'Owner'];
+        $expectedOrder = ['Admin', 'Receptionist', 'Billing', 'Housekeeping'];
 
         $this->get(route('login'))
             ->assertOk()
@@ -207,7 +207,6 @@ class WorkEmailAuthenticationTest extends TestCase
             'receptionist' => 'Front Desk Operations Center',
             'cashier' => 'Cashier & Billing Operations Console',
             'housekeeping' => 'Daily Rooms Readiness & Turnover Control',
-            'owner' => 'Executive Owner Dashboard',
         ];
 
         foreach ($dashboards as $role => $signature) {

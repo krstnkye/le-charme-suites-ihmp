@@ -2,12 +2,11 @@
     $currentUser = auth()->user();
     $roleMeta = [
         'admin' => ['label' => 'System Admin', 'tier' => 'Tier 1', 'department' => 'IT Infrastructure', 'terminal' => 'Primary Host', 'mfa' => 'Hardware Key', 'icon' => 'admin_panel_settings', 'badge' => 'bg-primary/10 text-primary'],
-        'owner' => ['label' => 'Hotel Owner', 'tier' => 'Executive', 'department' => 'Executive Office', 'terminal' => 'Executive Console', 'mfa' => 'Dual Approval', 'icon' => 'hotel_class', 'badge' => 'bg-secondary-fixed/60 text-secondary'],
         'receptionist' => ['label' => 'Front Desk', 'tier' => 'Tier 2', 'department' => 'Front Office', 'terminal' => 'Front Desk Terminal', 'mfa' => 'Authenticator App', 'icon' => 'concierge', 'badge' => 'bg-secondary-container/50 text-secondary'],
         'cashier' => ['label' => 'Cashier', 'tier' => 'Tier 2', 'department' => 'Finance & Billing', 'terminal' => 'Cashier Terminal', 'mfa' => 'POS PIN + OTP', 'icon' => 'payments', 'badge' => 'bg-secondary-container/50 text-secondary'],
         'housekeeping' => ['label' => 'Housekeeping', 'tier' => 'Tier 4', 'department' => 'Rooms & Facilities', 'terminal' => 'Mobile Tablet', 'mfa' => 'SMS OTP', 'icon' => 'cleaning_services', 'badge' => 'bg-surface-container text-slate-700'],
     ];
-    $roleOrder = ['admin', 'owner', 'receptionist', 'cashier', 'housekeeping'];
+    $roleOrder = ['admin', 'receptionist', 'cashier', 'housekeeping'];
 @endphp
 
 <!DOCTYPE html>
