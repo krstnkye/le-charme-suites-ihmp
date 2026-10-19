@@ -78,6 +78,8 @@ class AuthController extends Controller
             'email' => ['required', 'email', 'max:255', new WorkEmail, 'unique:users,email'],
             'role' => ['required', 'in:admin,receptionist,cashier,housekeeping,owner'],
             'password' => ['required', 'confirmed', Password::min(8)],
+        ], [
+            'password.confirmed' => 'Passwords do not match.',
         ]);
 
         $user = User::create($data);

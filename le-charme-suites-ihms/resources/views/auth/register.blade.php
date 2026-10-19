@@ -89,7 +89,7 @@
                     ->all();
             @endphp
 
-            <form method="POST" action="{{ route('register.store') }}" class="space-y-5">
+            <form id="registration-form" method="POST" action="{{ route('register.store') }}" class="space-y-5">
                 @csrf
 
                 <div>
@@ -139,7 +139,7 @@
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-secondary">
                                 <span class="material-symbols-outlined text-lg">lock</span>
                             </span>
-                            <input id="password" name="password" type="password" class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-10 text-sm focus:border-secondary focus:ring-secondary" placeholder="Minimum 8 characters" required>
+                            <input id="password" name="password" type="password" class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-10 text-sm focus:border-secondary focus:ring-secondary" placeholder="Minimum 8 characters" aria-describedby="password-match-status" required>
                             <button class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-primary" data-password-toggle="password" type="button" aria-label="Show password">
                                 <span class="material-symbols-outlined text-lg">visibility</span>
                             </button>
@@ -152,11 +152,22 @@
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-secondary">
                                 <span class="material-symbols-outlined text-lg">verified_user</span>
                             </span>
-                            <input id="password_confirmation" name="password_confirmation" type="password" class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-10 text-sm focus:border-secondary focus:ring-secondary" required>
+                            <input id="password_confirmation" name="password_confirmation" type="password" class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-10 text-sm focus:border-secondary focus:ring-secondary" aria-describedby="password-match-status" required>
                             <button class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-primary" data-password-toggle="password_confirmation" type="button" aria-label="Show confirm password">
                                 <span class="material-symbols-outlined text-lg">visibility</span>
                             </button>
                         </div>
+                    </div>
+
+                    <div id="password-match-status" class="hidden sm:col-span-2" role="status" aria-live="polite">
+                        <p id="password-match-success" class="hidden items-center gap-1.5 text-xs font-bold text-emerald-700">
+                            <span class="material-symbols-outlined text-base" aria-hidden="true">check_circle</span>
+                            <span>Passwords match.</span>
+                        </p>
+                        <p id="password-match-error" class="hidden items-center gap-1.5 text-xs font-bold text-error">
+                            <span class="material-symbols-outlined text-base" aria-hidden="true">error</span>
+                            <span>Passwords do not match.</span>
+                        </p>
                     </div>
                 </div>
 
@@ -178,6 +189,28 @@
     </main>
     <script>
         const selectedRoleLabel = document.getElementById('selected-role-label');
+        const registrationForm = document.getElementById('registration-form');
+        const password = document.getElementById('password');
+        const passwordConfirmation = document.getElementById('password_confirmation');
+        const passwordMatchStatus = document.getElementById('password-match-status');
+        const passwordMatchSuccess = document.getElementById('password-match-success');
+        const passwordMatchError = document.getElementById('password-match-error');
+
+        const updatePasswordMatchStatus = () => {
+            const hasConfirmation = passwordConfirmation.value.length > 0;
+            const passwordsMatch = hasConfirmation && password.value === passwordConfirmation.value;
+            const passwordsMismatch = hasConfirmation && !passwordsMatch;
+
+            passwordConfirmation.setCustomValidity(passwordsMismatch ? 'Passwords do not match.' : '');
+            passwordConfirmation.setAttribute('aria-invalid', passwordsMismatch ? 'true' : 'false');
+            passwordMatchStatus.classList.toggle('hidden', !hasConfirmation);
+            passwordMatchSuccess.classList.toggle('hidden', !passwordsMatch);
+            passwordMatchSuccess.classList.toggle('flex', passwordsMatch);
+            passwordMatchError.classList.toggle('hidden', !passwordsMismatch);
+            passwordMatchError.classList.toggle('flex', passwordsMismatch);
+
+            return passwordsMatch;
+        };
 
         document.querySelectorAll('.role-card input[name="role"]').forEach((input) => {
             input.addEventListener('change', () => {
@@ -197,6 +230,17 @@
                 icon.textContent = isHidden ? 'visibility_off' : 'visibility';
                 button.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
             });
+        });
+
+        password.addEventListener('input', updatePasswordMatchStatus);
+        passwordConfirmation.addEventListener('input', updatePasswordMatchStatus);
+
+        registrationForm.addEventListener('submit', (event) => {
+            if (passwordConfirmation.value.length > 0 && !updatePasswordMatchStatus()) {
+                event.preventDefault();
+                passwordConfirmation.focus();
+                passwordConfirmation.reportValidity();
+            }
         });
     </script>
 </body>

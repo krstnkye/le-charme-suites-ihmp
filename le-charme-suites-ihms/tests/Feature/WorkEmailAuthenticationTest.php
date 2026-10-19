@@ -22,7 +22,10 @@ class WorkEmailAuthenticationTest extends TestCase
 
         $this->get(route('register'))
             ->assertOk()
-            ->assertSeeInOrder($expectedOrder);
+            ->assertSeeInOrder($expectedOrder)
+            ->assertSee('id="password-match-status"', false)
+            ->assertSeeText('Passwords match.')
+            ->assertSeeText('Passwords do not match.');
     }
 
     public function test_registration_accepts_a_work_email(): void
@@ -64,6 +67,24 @@ class WorkEmailAuthenticationTest extends TestCase
             'email' => 'Invalid email. Please use your work email ending in @lecharmehotel.com.',
         ]);
         $this->assertDatabaseMissing('users', ['email' => 'sample@gmail.com']);
+    }
+
+    public function test_registration_rejects_passwords_that_do_not_match(): void
+    {
+        $response = $this->from(route('register'))->post(route('register.store'), [
+            'name' => 'Sample Employee',
+            'email' => 'sample@lecharmehotel.com',
+            'role' => 'receptionist',
+            'password' => 'password',
+            'password_confirmation' => 'different-password',
+        ]);
+
+        $response->assertRedirect(route('register'));
+        $response->assertSessionHasErrors([
+            'password' => 'Passwords do not match.',
+        ]);
+        $this->assertGuest();
+        $this->assertDatabaseMissing('users', ['email' => 'sample@lecharmehotel.com']);
     }
 
     public function test_login_accepts_a_work_email_case_insensitively(): void
