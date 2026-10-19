@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Add Guest Registration - Le Charmé Suites IHMS</title>
+    <title>Add Guest Registration - Le Charmé Suites IHMP</title>
     @include('partials.offline-assets')
     <script>tailwind.config = { theme: { extend: { fontFamily: { body: ['Manrope'], display: ['Noto Serif'] } } } };</script>
     <style>

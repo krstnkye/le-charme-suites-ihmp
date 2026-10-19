@@ -75,7 +75,7 @@ class IntegrationReliabilityTest extends TestCase
 
         $response->assertOk()
             ->assertHeader('content-type', 'text/csv; charset=UTF-8')
-            ->assertHeader('x-ihms-checksum-sha256');
+            ->assertHeader('x-ihmp-checksum-sha256');
 
         $this->assertDatabaseHas('integration_events', [
             'actor_id' => $admin->id,
@@ -120,7 +120,7 @@ class IntegrationReliabilityTest extends TestCase
 
         $this->getJson('/api/v1/status')
             ->assertStatus(503)
-            ->assertJsonPath('message', 'The IHMS integration API is disabled until IHMS_API_KEY is configured.');
+            ->assertJsonPath('message', 'The IHMP integration API is disabled until IHMP_API_KEY is configured.');
 
         $this->assertSame(0, IntegrationEvent::count());
     }
@@ -147,7 +147,7 @@ class IntegrationReliabilityTest extends TestCase
         $this->actingAs($user)
             ->get(route('system-manual'))
             ->assertOk()
-            ->assertSee('IHMS Integration Flipbook')
+            ->assertSee('IHMP Integration Flipbook')
             ->assertSee('Shared Database')
             ->assertSee('API &amp; File Transfer', false);
     }

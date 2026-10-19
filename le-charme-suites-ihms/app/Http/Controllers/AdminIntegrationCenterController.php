@@ -72,7 +72,7 @@ class AdminIntegrationCenterController extends Controller
             'status' => 'completed',
             'checksum' => $checksum,
             'endpoint' => $request->path(),
-            'metadata' => ['ip_address' => $request->ip(), 'filename' => "ihms-{$dataset}.{$format}"],
+            'metadata' => ['ip_address' => $request->ip(), 'filename' => "ihmp-{$dataset}.{$format}"],
             'occurred_at' => now(),
         ]);
 
@@ -80,8 +80,8 @@ class AdminIntegrationCenterController extends Controller
 
         return response($contents, 200, [
             'Content-Type' => $contentType,
-            'Content-Disposition' => 'attachment; filename="ihms-'.$dataset.'-'.now()->format('Ymd-His').'.'.$format.'"',
-            'X-IHMS-Checksum-SHA256' => $checksum,
+            'Content-Disposition' => 'attachment; filename="ihmp-'.$dataset.'-'.now()->format('Ymd-His').'.'.$format.'"',
+            'X-IHMP-Checksum-SHA256' => $checksum,
         ]);
     }
 
@@ -102,7 +102,7 @@ class AdminIntegrationCenterController extends Controller
 
         return response($this->toCsv($records), 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="ihms-file-transfer-report-'.now()->format('Ymd-His').'.csv"',
+            'Content-Disposition' => 'attachment; filename="ihmp-file-transfer-report-'.now()->format('Ymd-His').'.csv"',
         ]);
     }
 

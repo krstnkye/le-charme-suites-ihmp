@@ -53,7 +53,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title }} - Le Charme Suites IHMS</title>
+    <title>{{ $title }} - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -113,7 +113,7 @@
         <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-container-highest bg-surface px-8 shadow-sm">
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-secondary">{{ $isReports ? 'monitoring' : ($isRoomTypes ? 'bed' : ($isRoomRates ? 'price_change' : 'security')) }}</span>
-                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMS - {{ $isReports ? 'Executive Reports & Auditing Center' : ($isRoomTypes ? 'Room Types & Suite Specifications' : ($isRoomRates ? 'Room Rates & Tariffs Management' : 'Administrator Operations')) }}</h1>
+                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - {{ $isReports ? 'Executive Reports & Auditing Center' : ($isRoomTypes ? 'Room Types & Suite Specifications' : ($isRoomRates ? 'Room Rates & Tariffs Management' : 'Administrator Operations')) }}</h1>
             </div>
             <div class="flex items-center gap-4">
                 @if ($isReports || $isRoomTypes || $isRoomRates)

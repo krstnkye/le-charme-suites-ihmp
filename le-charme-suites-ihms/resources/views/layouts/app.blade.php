@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Le Charmé Suites IHMS')</title>
+    <title>@yield('title', 'Le Charmé Suites IHMP')</title>
     @include('partials.offline-assets')
     <script>tailwind.config = { theme: { extend: { fontFamily: { body: ['Manrope', 'sans-serif'], headline: ['Noto Serif', 'serif'] } } } };</script>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -30,7 +30,7 @@
         <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-white/10 bg-[#01162d] p-5 text-white lg:block">
             <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white p-3 shadow-sm">
                 @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
-                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">Integrated Hotel Management System</span>
+                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">Integrated Hotel Management Portal</span>
             </a>
             <nav class="mt-8 space-y-1 text-sm font-semibold">
                 <a class="block rounded-lg px-3 py-2.5 hover:bg-[#172b42]" href="{{ route('dashboard') }}">Dashboard</a>
@@ -48,7 +48,7 @@
 
     <div class="lg:ml-64">
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-[#e5e2dc] bg-white px-5 py-3 shadow-sm sm:px-8">
-            <div class="min-w-0"><p class="text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">@yield('section_label', 'Integrated Hotel Management System')</p><h1 class="ihms-serif truncate text-xl font-semibold text-[#01162d] sm:text-2xl">@yield('page_title', 'Dashboard')</h1></div>
+            <div class="min-w-0"><p class="text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">@yield('section_label', 'Integrated Hotel Management Portal')</p><h1 class="ihms-serif truncate text-xl font-semibold text-[#01162d] sm:text-2xl">@yield('page_title', 'Dashboard')</h1></div>
             <div class="flex shrink-0 items-center gap-3">
                 <div class="hidden text-right sm:block"><p class="text-xs font-bold text-[#01162d]">{{ auth()->user()?->name }}</p><p id="ihms-layout-clock" class="text-[11px] text-slate-500">{{ now(config('app.timezone'))->format('M d, Y • h:i A') }}</p></div>
                 <a href="{{ route('profile.edit') }}" class="flex h-9 w-9 items-center justify-center rounded-full bg-[#fdd79a] text-xs font-bold text-[#271900]" aria-label="Open my profile">{{ strtoupper(substr(auth()->user()?->name ?? 'ST', 0, 1)) }}</a>
@@ -63,7 +63,7 @@
         </main>
     </div>
 
-    @if (session('account_created'))<script>window.addEventListener('DOMContentLoaded', () => { const promptId = @json(session('account_created_prompt_id')); const storageKey = 'ihms-last-account-created-prompt'; if (sessionStorage.getItem(storageKey) !== promptId) { sessionStorage.setItem(storageKey, promptId); alert('Account created successfully. Welcome to the Integrated Hotel Management System.'); } });</script>@endif
+    @if (session('account_created'))<script>window.addEventListener('DOMContentLoaded', () => { const promptId = @json(session('account_created_prompt_id')); const storageKey = 'ihms-last-account-created-prompt'; if (sessionStorage.getItem(storageKey) !== promptId) { sessionStorage.setItem(storageKey, promptId); alert('Account created successfully. Welcome to the Integrated Hotel Management Portal.'); } });</script>@endif
     <script>(() => { const clock = document.getElementById('ihms-layout-clock'); if (!clock) return; const refresh = () => { clock.textContent = new Intl.DateTimeFormat('en-US', { timeZone: @json(config('app.timezone')), month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date()).replace(',', ' •'); }; refresh(); setInterval(refresh, 30000); })();</script>
     @stack('scripts')
     @include('partials.page-back-button')

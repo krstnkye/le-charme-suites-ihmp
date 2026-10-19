@@ -22,7 +22,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Billing Reports - Le Charmé Suites IHMS</title>
+    <title>Billing Reports - Le Charmé Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = { theme: { extend: {
@@ -46,7 +46,7 @@
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
             <div>
                 <div class="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500"><span>Billing Operations</span><span>/</span><span class="text-secondary">Reports Center</span></div>
-                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMS <span class="font-sans text-sm font-semibold text-slate-500">| Shift Financial Reconciliation</span></h1>
+                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMP <span class="font-sans text-sm font-semibold text-slate-500">| Shift Financial Reconciliation</span></h1>
             </div>
             <div class="flex flex-wrap items-center justify-end gap-3">
                 <button type="button" onclick="alert('Cash drawer access has been logged for audit review.')" class="hidden items-center gap-2 rounded-lg border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-container/30 md:flex"><span class="material-symbols-outlined text-base">lock_open</span>Open Cash Drawer</button>

@@ -1,4 +1,4 @@
-# Le Charme Suites IHMS - Group Setup and Troubleshooting
+# Le Charme Suites IHMP - Group Setup and Troubleshooting
 
 ## Important Folder Layout
 
@@ -86,14 +86,14 @@ the read-only integration API, add a long private key to the host computer's
 `.env` file:
 
 ```env
-IHMS_API_KEY=replace-this-with-a-long-random-private-key
-IHMS_MAX_EXPORT_RECORDS=200
+IHMP_API_KEY=replace-this-with-a-long-random-private-key
+IHMP_MAX_EXPORT_RECORDS=200
 ```
 
 Restart the server after changing `.env`. Approved clients can call
 `/api/v1/status` or `/api/v1/datasets/rooms` with either an
-`Authorization: Bearer YOUR_KEY` header or an `X-IHMS-Key` header. Never commit
-the real key to GitHub. Leave `IHMS_API_KEY` blank when no external connection is
+`Authorization: Bearer YOUR_KEY` header or an `X-IHMP-Key` header. Never commit
+the real key to GitHub. Leave `IHMP_API_KEY` blank when no external connection is
 needed; the endpoints then return a disabled response.
 
 ## Viewing Signup and Login History

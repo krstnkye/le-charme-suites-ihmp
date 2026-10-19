@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Update Room ' . $room->room_number . ' - Le Charmé Suites IHMS')
+@section('title', 'Update Room ' . $room->room_number . ' - Le Charmé Suites IHMP')
 @section('section_label', 'Front Desk / Room Management')
 @section('page_title', 'Update Room')
 

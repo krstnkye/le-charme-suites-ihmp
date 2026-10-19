@@ -36,7 +36,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Permissions Matrix & Capability Grants - Le Charme Suites IHMS</title>
+    <title>Permissions Matrix & Capability Grants - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -135,7 +135,7 @@
                         <span class="font-bold text-secondary">Permissions</span>
                     </nav>
                     <h1 class="font-serif text-4xl font-semibold tracking-tight">Granular Permissions Matrix &amp; Capability Grants</h1>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage read, write, execute, override, and export access for each hotel role across core IHMS modules with administrator-level audit tracking.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage read, write, execute, override, and export access for each hotel role across core IHMP modules with administrator-level audit tracking.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
                     <a href="{{ route('admin.audit-logs.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-outline-variant/60 bg-white px-3.5 py-2 text-sm font-bold text-primary shadow-sm transition hover:bg-surface-container-low">
@@ -191,7 +191,7 @@
                         <div class="flex items-center justify-between border-b border-surface-container-highest bg-surface-container-low/60 p-5">
                             <div>
                                 <h2 class="font-serif text-2xl font-semibold">Capability Matrix</h2>
-                                <p class="mt-1 text-sm text-slate-500">{{ $roleLabels[$selectedRole] }} access across core IHMS modules.</p>
+                                <p class="mt-1 text-sm text-slate-500">{{ $roleLabels[$selectedRole] }} access across core IHMP modules.</p>
                             </div>
                             <span class="rounded-full bg-surface-container-highest/80 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">{{ count($capabilities) }} Active Modules</span>
                         </div>

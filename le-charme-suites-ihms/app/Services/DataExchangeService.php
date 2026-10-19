@@ -59,7 +59,7 @@ class DataExchangeService
                 'transaction_date' => $transaction->transaction_date?->toIso8601String(),
                 'description' => $transaction->description,
             ]),
-            default => throw new InvalidArgumentException('Unsupported IHMS dataset.'),
+            default => throw new InvalidArgumentException('Unsupported IHMP dataset.'),
         };
     }
 

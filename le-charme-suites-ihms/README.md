@@ -1,6 +1,6 @@
-# Le Charme Suites Integrated Hotel Management System
+# Le Charme Suites Integrated Hotel Management Portal
 
-Le Charme Suites IHMS is a Laravel application with role-specific workspaces for
+Le Charme Suites IHMP is a Laravel application with role-specific workspaces for
 administrators, receptionists, billing staff, housekeeping staff, and owners.
 It uses a local SQLite database by default, so XAMPP and MySQL are not required.
 
@@ -96,7 +96,7 @@ installed; older accounts still appear as account-provisioning records.
 - The system remains autonomous: hotel operations use the local shared database
   and do not depend on a third-party cloud service or API.
 - Optional read-only integration endpoints are under `/api/v1`. Set a private
-  `IHMS_API_KEY` in `.env` to enable them. When the value is blank, external API
+  `IHMP_API_KEY` in `.env` to enable them. When the value is blank, external API
   access is safely disabled.
 
 The implementation and presentation traceability report is in

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integration & Reliability Center - Le Charme Suites IHMS</title>
+    <title>Integration & Reliability Center - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>tailwind.config={theme:{extend:{colors:{primary:'#01162d','primary-container':'#172b42',secondary:'#755a28','secondary-fixed':'#ffdeaa',surface:'#fcf9f3',line:'#e5e2dc'},fontFamily:{sans:['Manrope','sans-serif'],serif:['Noto Serif','serif']}}}};</script>
     <style>.material-symbols-outlined{display:inline-block;vertical-align:middle;line-height:1;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}</style>
@@ -79,7 +79,7 @@
                 </div>
                 <div class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
                     <div class="border-b border-line px-5 py-4"><h3 class="font-serif text-2xl font-bold">Embedded System Flipbook</h3><p class="text-sm text-slate-500">Local, presentation-ready integration guide.</p></div>
-                    <iframe class="h-[520px] w-full" src="{{ route('system-manual', ['embed' => 1]) }}" title="IHMS system integration flipbook"></iframe>
+                    <iframe class="h-[520px] w-full" src="{{ route('system-manual', ['embed' => 1]) }}" title="IHMP system integration flipbook"></iframe>
                 </div>
             </section>
         </main>

@@ -92,7 +92,7 @@ class AuthController extends Controller
 
         return redirect()
             ->route('dashboard')
-            ->with('status', 'Welcome to the IHMS workspace.')
+            ->with('status', 'Welcome to the IHMP workspace.')
             ->with('account_created', true)
             ->with('account_created_prompt_id', (string) Str::uuid());
     }

@@ -16,7 +16,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $isAdmin ? 'My Profile & Security Credentials' : 'Front Desk Agent Profile & Shift Credentials' }} - Le Charmé Suites IHMS</title>
+    <title>{{ $isAdmin ? 'My Profile & Security Credentials' : 'Front Desk Agent Profile & Shift Credentials' }} - Le Charmé Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -133,7 +133,7 @@
                                     <h1 class="font-serif text-4xl font-semibold tracking-tight text-primary">{{ $user->name }}</h1>
                                     <span class="rounded-full border border-secondary/30 bg-secondary-fixed/40 px-2.5 py-0.5 text-xs font-bold text-secondary">Tier 1 System Admin - Root Level 5</span>
                                 </div>
-                                <p class="mt-2 text-sm font-medium text-slate-600">Administrator account for Le Charme Suites IHMS command operations.</p>
+                                <p class="mt-2 text-sm font-medium text-slate-600">Administrator account for Le Charme Suites IHMP command operations.</p>
                                 <div class="mt-3 flex flex-wrap items-center gap-2">
                                     <span class="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-1 text-xs font-bold text-primary"><span class="material-symbols-outlined text-sm">fingerprint</span>Admin Identity Verified</span>
                                     <span class="inline-flex items-center gap-1 rounded border border-secondary-container bg-secondary-container/40 px-2 py-1 text-xs font-bold text-secondary"><span class="material-symbols-outlined text-sm">verified_user</span>SBMA Enclave Clearance</span>
@@ -184,7 +184,7 @@
                                 <label class="space-y-1 sm:col-span-2">
                                     <span class="block text-xs font-bold uppercase tracking-wider text-slate-500">Full Legal Name</span>
                                     <input name="name" value="{{ old('name', $user->name) }}" required class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm text-primary outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20">
-                                    <span class="text-[10px] text-outline">This changes the display name shown across the IHMS portal.</span>
+                                    <span class="text-[10px] text-outline">This changes the display name shown across the IHMP portal.</span>
                                 </label>
                                 <label class="space-y-1">
                                     <span class="block text-xs font-bold uppercase tracking-wider text-slate-500">Employee Identifier</span>
@@ -360,7 +360,7 @@
                     </footer>
                 </form>
 
-                <p class="pb-6 text-center text-xs text-outline">Le Charmé Suites Subic Integrated Hotel Management System (IHMS) - SEC Registered - SBMA Freeport Zone - Cryptographic Level 4 Active</p>
+                <p class="pb-6 text-center text-xs text-outline">Le Charmé Suites Subic Integrated Hotel Management Portal (IHMP) - SEC Registered - SBMA Freeport Zone - Cryptographic Level 4 Active</p>
             </main>
         </div>
     @else
@@ -422,7 +422,7 @@
                         <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Agent Badge ID</p><p class="mt-1 font-mono text-sm font-bold">LCS-FDA-{{ str_pad((string) $user->id, 4, '0', STR_PAD_LEFT) }}</p><span class="text-[11px] text-[#b4c8e5]">{{ $employeeId }}</span></div>
                         <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Authority</p><p class="mt-1 text-sm font-bold">Front Desk</p><span class="text-[11px] text-[#b4c8e5]">Role key: {{ $role }}</span></div>
                         <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Account Status</p><p class="mt-1 flex items-center gap-1.5 text-sm font-bold text-emerald-300"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Active</p><span class="text-[11px] text-[#b4c8e5]">Local access enabled</span></div>
-                        <div class="col-span-2 rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5 sm:col-span-1"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Member Since</p><p class="mt-1 text-sm font-bold">{{ $user->created_at?->timezone(config('app.timezone'))->format('M d, Y') }}</p><span class="text-[11px] text-[#b4c8e5]">IHMS personnel record</span></div>
+                        <div class="col-span-2 rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5 sm:col-span-1"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Member Since</p><p class="mt-1 text-sm font-bold">{{ $user->created_at?->timezone(config('app.timezone'))->format('M d, Y') }}</p><span class="text-[11px] text-[#b4c8e5]">IHMP personnel record</span></div>
                     </div>
                 </section>
 
@@ -442,7 +442,7 @@
                                     </div>
                                     <div class="mt-4 grid gap-2 text-xs text-slate-600 sm:grid-cols-2">
                                         <span class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-[#755a28]">domain</span>Front Office Department</span>
-                                        <span class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-[#755a28]">desktop_windows</span>IHMS Front Desk Station</span>
+                                        <span class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-[#755a28]">desktop_windows</span>IHMP Front Desk Station</span>
                                         <span class="flex items-center gap-2 sm:col-span-2"><span class="material-symbols-outlined text-base text-[#755a28]">mail</span><span class="truncate">{{ $user->email }}</span></span>
                                     </div>
                                 </div>

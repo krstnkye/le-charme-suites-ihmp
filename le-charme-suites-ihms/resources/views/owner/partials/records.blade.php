@@ -155,7 +155,7 @@
     <div class="flex flex-col gap-3 border-b border-line bg-surface-low p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h3 class="font-serif text-2xl font-bold text-primary">Institutional Ledger & Document Register</h3>
-            <p class="mt-1 text-sm text-slate-500">Archived records signed by the IHMS owner-view audit ledger.</p>
+            <p class="mt-1 text-sm text-slate-500">Archived records signed by the IHMP owner-view audit ledger.</p>
         </div>
         <div class="flex items-center gap-2 text-xs text-slate-500"><span id="ownerRecordsPageLabel">Showing {{ $visibleRows->count() }} of {{ $totalArchived }}</span><span class="rounded border border-line bg-white px-2 py-1 font-mono">Node PH-SBFZ-01</span></div>
     </div>

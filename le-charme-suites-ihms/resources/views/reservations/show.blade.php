@@ -30,7 +30,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation #LC-{{ str_pad($reservation->id, 5, '0', STR_PAD_LEFT) }} - Le Charme Suites IHMS</title>
+    <title>Reservation #LC-{{ str_pad($reservation->id, 5, '0', STR_PAD_LEFT) }} - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -81,7 +81,7 @@
     <div class="lg:ml-64">
         <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-variant bg-surface px-4 shadow-sm lg:px-7">
             <div class="flex items-center gap-6">
-                <span class="hidden font-headline text-xl font-semibold tracking-wide text-primary md:block">Le Charme Suites IHMS</span>
+                <span class="hidden font-headline text-xl font-semibold tracking-wide text-primary md:block">Le Charme Suites IHMP</span>
                 <div class="relative hidden w-80 lg:block">
                     <span class="material-symbols-outlined absolute left-3 top-2.5 text-lg text-on-surface-variant">search</span>
                     <input class="w-full rounded-lg border-surface-variant bg-white py-2 pl-9 pr-4 text-sm focus:border-secondary focus:ring-secondary" placeholder="Search guests, rooms, or booking numbers...">
@@ -101,7 +101,7 @@
 
         <main class="mx-auto flex max-w-[1600px] flex-col gap-6 p-4 lg:p-8">
             <nav class="flex items-center gap-2 text-xs font-bold text-on-surface-variant">
-                <a href="{{ route('dashboard') }}" class="transition hover:text-primary">IHMS</a>
+                <a href="{{ route('dashboard') }}" class="transition hover:text-primary">IHMP</a>
                 <span class="material-symbols-outlined text-xs text-outline">chevron_right</span>
                 <a href="{{ route('reservations.index') }}" class="transition hover:text-primary">Reservations</a>
                 <span class="material-symbols-outlined text-xs text-outline">chevron_right</span>
@@ -438,7 +438,7 @@
                 <div class="flex items-center gap-4 text-[11px]">
                     <span>Record Hash: RES-{{ str_pad($reservation->id, 5, '0', STR_PAD_LEFT) }}-IPT101</span>
                     <span>•</span>
-                    <span class="font-bold text-secondary">Le Charme Suites IHMS</span>
+                    <span class="font-bold text-secondary">Le Charme Suites IHMP</span>
                 </div>
             </footer>
         </main>

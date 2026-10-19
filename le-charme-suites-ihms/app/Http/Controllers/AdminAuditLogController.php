@@ -47,7 +47,7 @@ class AdminAuditLogController extends Controller
                 'icon' => 'receipt_long',
                 'target' => 'Guest Bill #'.str_pad((string) $transaction->id, 5, '0', STR_PAD_LEFT),
                 'context' => 'Room '.($transaction->room?->room_number ?? 'N/A'),
-                'terminal' => 'IHMS Ledger',
+                'terminal' => 'IHMP Ledger',
                 'ip' => '127.0.0.1',
                 'details' => $transaction->description ?: 'Hotel transaction recorded.',
                 'severity' => $transaction->status === 'paid' ? 'Verified' : 'Review',

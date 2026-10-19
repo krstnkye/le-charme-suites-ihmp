@@ -260,7 +260,7 @@
         </div>
         <h3 class="font-serif text-xl font-bold text-primary">Executive Advisory</h3>
         <p class="mt-2 text-sm leading-6 text-slate-600">
-            Direct reservation creation, room rate discounting, and cancellation penalty waivers require department or administrator credentials under IHMS governance protocol.
+            Direct reservation creation, room rate discounting, and cancellation penalty waivers require department or administrator credentials under IHMP governance protocol.
         </p>
         <div class="mt-5 flex items-center justify-between border-t border-line pt-4 text-xs text-slate-500">
             <span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm">security</span>Governance ID #880-SBMA</span>

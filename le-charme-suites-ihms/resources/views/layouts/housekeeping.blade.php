@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Housekeeping Workspace - Le Charme Suites IHMS')</title>
+    <title>@yield('title', 'Housekeeping Workspace - Le Charme Suites IHMP')</title>
     @include('partials.offline-assets')
     <script>tailwind.config={theme:{extend:{colors:{primary:'#01162d',secondary:'#755a28',cream:'#fcf9f3',line:'#e5e2dc'},fontFamily:{sans:['Manrope','sans-serif'],serif:['Noto Serif','serif']}}}};</script>
     <style>.material-symbols-outlined{display:inline-block;vertical-align:middle;line-height:1;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}</style>
@@ -13,7 +13,7 @@
     @include('partials.housekeeping-sidebar', ['active' => $active ?? 'dashboard'])
     <div class="min-h-screen lg:pl-72">
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-cream/95 px-6 py-3 shadow-sm backdrop-blur">
-            <div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">cleaning_services</span><div><h1 class="font-serif text-xl font-bold">Le Charme Suites IHMS - Housekeeping Workspace</h1><p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-secondary">Rooms &amp; Facilities Operations</p></div></div>
+            <div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">cleaning_services</span><div><h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - Housekeeping Workspace</h1><p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-secondary">Rooms &amp; Facilities Operations</p></div></div>
             <div class="flex items-center gap-3">
                 <div class="hidden rounded-lg border border-line bg-white/80 px-3 py-2 text-right shadow-sm md:block" aria-live="polite">
                     <p id="housekeeping-live-date" class="text-[11px] font-bold uppercase tracking-[0.14em] text-secondary">{{ now('Asia/Manila')->format('M d, Y') }}</p>

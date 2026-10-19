@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Charme Suites - IHMS Terminal Authentication</title>
+    <title>Le Charme Suites - IHMP Terminal Authentication</title>
 
     @include('partials.offline-assets')
     <script>
@@ -86,7 +86,7 @@
                 <p class="mt-1 font-label-md text-label-md uppercase tracking-widest text-secondary">Subic Bay Philippines</p>
                 <div class="mx-auto my-3 h-0.5 w-12 bg-secondary opacity-60"></div>
                 <p class="font-body-sm text-body-sm font-medium text-on-surface-variant">
-                    Staff Log In Console - Integrated Hotel Management System (IHMS) - IPT101
+                    Staff Log In Console - Integrated Hotel Management Portal (IHMP) - IPT101
                 </p>
             </div>
 
@@ -177,11 +177,11 @@
                         <input name="remember" class="rounded border-outline-variant text-primary focus:ring-secondary" type="checkbox" checked>
                         <span>Remember me</span>
                     </label>
-                    <a class="font-semibold text-secondary hover:underline" href="mailto:{{ config('hotel.email') }}?subject=IHMS%20Password%20Reset%20Request">Forgot password?</a>
+                    <a class="font-semibold text-secondary hover:underline" href="mailto:{{ config('hotel.email') }}?subject=IHMP%20Password%20Reset%20Request">Forgot password?</a>
                 </div>
 
                 <button class="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-secondary/20 bg-primary py-3 font-title-md text-title-md text-white shadow-md transition hover:bg-primary-container" type="submit">
-                    <span>Sign In to IHMS</span>
+                    <span>Sign In to IHMP</span>
                     <span class="material-symbols-outlined text-secondary-fixed">arrow_forward</span>
                 </button>
             </form>

@@ -35,7 +35,7 @@ class FrontDeskSidebarTest extends TestCase
                 ->assertSee('aria-label="Front Desk Sidebar"', false)
                 ->assertSee('data-universal-sidebar', false)
                 ->assertSee('data-sidebar-toggle', false)
-                ->assertSee('Front Desk IHMS')
+                ->assertSee('Front Desk IHMP')
                 ->assertSee('Express Check-In')
                 ->assertSee('Sign Out');
         }

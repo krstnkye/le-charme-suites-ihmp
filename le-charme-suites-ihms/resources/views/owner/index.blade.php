@@ -91,7 +91,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $pageTitle }} - Le Charmé Suites IHMS</title>
+    <title>{{ $pageTitle }} - Le Charmé Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = { theme: { extend: {
@@ -115,7 +115,7 @@
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
             <div>
                 <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Owner Access / View Only</p>
-                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMS <span class="font-sans text-sm font-semibold text-slate-500">Executive Command Center</span></h1>
+                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMP <span class="font-sans text-sm font-semibold text-slate-500">Executive Command Center</span></h1>
             </div>
             <div class="flex items-center gap-3">
                 <span class="hidden rounded-full border border-line bg-surface-low px-3 py-1.5 text-xs font-bold text-slate-600 md:inline-flex">No record editing privileges</span>

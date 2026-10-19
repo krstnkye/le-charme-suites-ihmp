@@ -56,7 +56,7 @@
             'category' => 'Accounts',
             'amount' => $pendingTotal,
             'breakdown' => $transactionCollection->count().' transaction line(s) visible to owner audit',
-            'officer' => 'IHMS Ledger Core',
+            'officer' => 'IHMP Ledger Core',
             'status' => $pendingTotal > 0 ? 'Open Review' : 'Cleared',
             'formats' => ['PDF', 'CSV'],
             'icon' => 'account_balance_wallet',

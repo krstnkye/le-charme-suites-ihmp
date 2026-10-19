@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Reservation - Le Charmé Suites IHMS')
+@section('title', 'Edit Reservation - Le Charmé Suites IHMP')
 @section('section_label', 'Front Desk / Reservations')
 @section('page_title', 'Edit Reservation')
 

@@ -2266,7 +2266,7 @@
             <div class="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
                 <div class="flex flex-wrap items-center gap-2 text-xs font-bold text-slate-500">
                     <span class="material-symbols-outlined text-base text-secondary">home</span>
-                    <span>Subic IHMS</span>
+                    <span>Subic IHMP</span>
                     <span>/</span>
                     <span>Housekeeping Oversight</span>
                     <span>/</span>
@@ -4480,7 +4480,7 @@
                                 <span class="material-symbols-outlined rounded-lg bg-white/10 p-2 text-[#ffdeaa]">podcasts</span>
                                 <div>
                                     <h4 class="font-bold">Radio Broadcast Log</h4>
-                                    <p class="text-xs text-[#ffdeaa]">Subic IHMS Channel 4 Dispatch</p>
+                                    <p class="text-xs text-[#ffdeaa]">Subic IHMP Channel 4 Dispatch</p>
                                 </div>
                             </div>
                             <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>

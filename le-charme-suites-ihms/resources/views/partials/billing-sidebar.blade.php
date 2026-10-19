@@ -30,7 +30,7 @@
         <div class="border-b border-white/10 px-5 py-4">
             <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
                 @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
-                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">IHMS Billing Command</span>
+                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">IHMP Billing Command</span>
             </a>
         </div>
 

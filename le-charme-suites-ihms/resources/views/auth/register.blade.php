@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account - Le Charme Suites IHMS</title>
+    <title>Create Account - Le Charme Suites IHMP</title>
 
     @include('partials.offline-assets')
     <script>
@@ -69,7 +69,7 @@
                 </div>
                 <p class="mt-1 text-xs font-bold uppercase tracking-[0.24em] text-secondary">Subic Bay Philippines</p>
                 <div class="mx-auto my-3 h-0.5 w-12 bg-secondary opacity-60"></div>
-                <p class="text-sm font-medium text-on-surface-variant">Integrated Hotel Management System account registration</p>
+                <p class="text-sm font-medium text-on-surface-variant">Integrated Hotel Management Portal account registration</p>
             </div>
 
             @if ($errors->any())
@@ -172,7 +172,7 @@
                 </div>
 
                 <button class="flex w-full items-center justify-center gap-2 rounded-lg border border-secondary/20 bg-primary px-5 py-3 text-base font-bold text-surface shadow-md transition hover:bg-[#172b42]" type="submit">
-                    <span>Create IHMS Account</span>
+                    <span>Create IHMP Account</span>
                     <span class="material-symbols-outlined text-secondary-fixed">arrow_forward</span>
                 </button>
             </form>
@@ -180,7 +180,7 @@
             <div class="mt-6 border-t border-surface-variant pt-4 text-center">
                 <p class="text-xs text-on-surface-variant">
                     Already registered?
-                    <a class="font-bold text-secondary hover:underline" href="{{ route('login') }}">Sign in to IHMS</a>
+                    <a class="font-bold text-secondary hover:underline" href="{{ route('login') }}">Sign in to IHMP</a>
                 </p>
                 <p class="mt-2 text-xs font-semibold text-on-surface-variant">{{ config('hotel.address') }}</p>
                 <p class="mt-1 text-[11px] text-outline">{{ config('hotel.phone') }} · {{ config('hotel.email') }}</p>

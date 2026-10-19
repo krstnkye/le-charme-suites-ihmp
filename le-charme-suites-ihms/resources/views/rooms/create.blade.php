@@ -14,7 +14,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add Room - Le Charme Suites IHMS</title>
+    <title>Add Room - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -71,7 +71,7 @@
         <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-container-highest bg-surface px-8 shadow-sm">
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-secondary">add_business</span>
-                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMS - Room Inventory Administration</h1>
+                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - Room Inventory Administration</h1>
             </div>
             <div class="flex items-center gap-4">
                 <span class="rounded-full bg-surface-container px-3 py-1 text-xs font-bold text-secondary">Administrator-only workspace</span>
@@ -94,7 +94,7 @@
                         <span class="font-bold text-primary">Add Room</span>
                     </div>
                     <h2 class="font-serif text-4xl font-bold">Add Room Inventory Record</h2>
-                    <p class="mt-2 max-w-3xl text-sm text-slate-600">Create a room unit, assign its type, rate, capacity, and starting operational status for the IHMS room inventory.</p>
+                    <p class="mt-2 max-w-3xl text-sm text-slate-600">Create a room unit, assign its type, rate, capacity, and starting operational status for the IHMP room inventory.</p>
                 </div>
                 <a href="{{ route('admin.operations.index', ['module' => 'room-inventory']) }}" class="inline-flex items-center gap-2 rounded-lg border border-outline-variant bg-white px-4 py-2.5 text-sm font-bold shadow-sm transition hover:bg-surface-container">
                     <span class="material-symbols-outlined text-sm">arrow_back</span>

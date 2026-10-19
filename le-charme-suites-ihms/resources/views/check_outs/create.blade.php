@@ -40,7 +40,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Billing Guest Bill Ledger - Le Charmé Suites IHMS</title>
+    <title>Billing Guest Bill Ledger - Le Charmé Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = { theme: { extend: {
@@ -89,7 +89,7 @@
                 <div class="pointer-events-none absolute -bottom-16 -right-12 h-80 w-80 rounded-full bg-secondary/10 blur-3xl"></div>
                 <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
                     <div class="max-w-4xl">
-                        <div class="mb-2 flex flex-wrap items-center gap-2"><span class="rounded border border-secondary-fixed/30 bg-secondary/30 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Executive Grandeur IHMS</span><span class="text-xs font-semibold text-blue-100/70">Front Desk &amp; Night Audit Certified</span></div>
+                        <div class="mb-2 flex flex-wrap items-center gap-2"><span class="rounded border border-secondary-fixed/30 bg-secondary/30 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Executive Grandeur IHMP</span><span class="text-xs font-semibold text-blue-100/70">Front Desk &amp; Night Audit Certified</span></div>
                         <h2 class="font-serif text-4xl font-bold leading-tight">Guest Bill Ledger &amp; Invoicing Management</h2>
                         <p class="mt-2 text-sm leading-6 text-blue-100">Consolidated active guest bills, incidental room routing, statutory revenue accounting, and final settlement processing for Billing department staff.</p>
                     </div>

@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security & Audit Logs - Le Charme Suites IHMS</title>
+    <title>Security & Audit Logs - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -102,7 +102,7 @@
                         <span class="text-secondary">Security & Audit Logs</span>
                     </div>
                     <h2 class="font-serif text-4xl font-semibold tracking-tight">Security & Audit Logs Command Console</h2>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Monitor role access, privileged changes, guest bill events, room updates, active sessions, and compliance proof records for the IHMS portal.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Monitor role access, privileged changes, guest bill events, room updates, active sessions, and compliance proof records for the IHMP portal.</p>
                 </div>
                 <span class="inline-flex w-fit items-center gap-2 rounded-full border border-secondary/30 bg-secondary-fixed/40 px-3 py-1.5 text-xs font-bold text-secondary">
                     <span class="material-symbols-outlined text-sm">lock</span>
@@ -255,7 +255,7 @@
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-secondary">policy</span>
                             <div>
-                                <h3 class="font-serif text-2xl font-semibold">IHMS Access Control & Security Policies</h3>
+                                <h3 class="font-serif text-2xl font-semibold">IHMP Access Control & Security Policies</h3>
                                 <p class="text-sm text-slate-500">Configured for classroom-grade compliance modeling and operational safeguards.</p>
                             </div>
                         </div>

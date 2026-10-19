@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Settings - Le Charme Suites IHMS</title>
+    <title>System Settings - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -68,7 +68,7 @@
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">settings</span>
                 <div>
-                    <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMS</h1>
+                    <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP</h1>
                     <p class="text-xs font-bold uppercase tracking-wider text-secondary">Global System Settings</p>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                         </span>
                         <div>
                             <h3 class="font-bold">Subic Bay Freeport Zone Regulatory Sync Online</h3>
-                            <p class="text-sm leading-6 text-slate-600">Tax exemptions, duty-free hospitality thresholds, and local operating rules are staged for the current academic IHMS configuration.</p>
+                            <p class="text-sm leading-6 text-slate-600">Tax exemptions, duty-free hospitality thresholds, and local operating rules are staged for the current academic IHMP configuration.</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -378,7 +378,7 @@
             button.addEventListener('click', () => {
                 const feedback = document.getElementById('save-feedback');
                 const messages = {
-                    sync: 'Regulatory configuration re-check completed using the current local IHMS values.',
+                    sync: 'Regulatory configuration re-check completed using the current local IHMP values.',
                     poll: 'Peripheral status poll completed. All listed devices remain online.',
                     backup: 'Manual backup snapshot prepared for the current local development data.',
                 };

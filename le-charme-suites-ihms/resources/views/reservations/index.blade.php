@@ -29,7 +29,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservations - Le Charme Suites IHMS</title>
+    <title>Reservations - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -401,7 +401,7 @@
 
                                     <div class="flex items-center gap-2 rounded-lg border border-outline-variant/40 bg-white p-2.5 text-[11px] text-on-surface-variant">
                                         <span class="material-symbols-outlined text-outline text-[16px]">verified_user</span>
-                                        <span>Audit stamp: reservation data loaded from the IHMS database.</span>
+                                        <span>Audit stamp: reservation data loaded from the IHMP database.</span>
                                     </div>
                                 </div>
                             @else

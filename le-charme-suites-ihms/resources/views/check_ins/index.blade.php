@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Check-ins - Le Charmé Suites IHMS</title>
+    <title>Check-ins - Le Charmé Suites IHMP</title>
     @include('partials.offline-assets')
     <script>tailwind.config = { theme: { extend: { fontFamily: { body: ['Manrope'], display: ['Noto Serif'] } } } };</script>
     <style>
@@ -20,7 +20,7 @@
     @include('partials.front-desk-sidebar', ['active' => 'check-ins'])
 
     <div class="lg:ml-64">
-        <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-[#e5e2dc] bg-white px-5 py-3 shadow-sm sm:px-8"><div class="flex items-center gap-3"><span class="serif text-lg font-semibold text-[#01162d] sm:text-xl">Le Charmé Suites IHMS</span><span class="hidden h-5 w-px bg-[#e5e2dc] sm:block"></span><span class="hidden text-xs font-semibold uppercase tracking-wider text-[#755a28] sm:block">Check-ins</span></div><div class="flex items-center gap-3"><div class="text-right"><p class="text-xs font-bold text-[#01162d]">{{ ucwords(str_replace('_', ' ', $role ?? 'Staff')) }}</p><p id="check-in-clock" class="text-[11px] text-slate-500">{{ now(config('app.timezone'))->format('M d, Y • h:i A') }}</p></div><span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#fdd79a] text-xs font-bold text-[#271900]">{{ strtoupper(substr(auth()->user()?->name ?? 'ST', 0, 2)) }}</span></div></header>
+        <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-[#e5e2dc] bg-white px-5 py-3 shadow-sm sm:px-8"><div class="flex items-center gap-3"><span class="serif text-lg font-semibold text-[#01162d] sm:text-xl">Le Charmé Suites IHMP</span><span class="hidden h-5 w-px bg-[#e5e2dc] sm:block"></span><span class="hidden text-xs font-semibold uppercase tracking-wider text-[#755a28] sm:block">Check-ins</span></div><div class="flex items-center gap-3"><div class="text-right"><p class="text-xs font-bold text-[#01162d]">{{ ucwords(str_replace('_', ' ', $role ?? 'Staff')) }}</p><p id="check-in-clock" class="text-[11px] text-slate-500">{{ now(config('app.timezone'))->format('M d, Y • h:i A') }}</p></div><span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#fdd79a] text-xs font-bold text-[#271900]">{{ strtoupper(substr(auth()->user()?->name ?? 'ST', 0, 2)) }}</span></div></header>
 
         <main class="mx-auto flex w-full max-w-[1600px] flex-col gap-6 bg-[#fcf9f3] p-5 sm:p-8">
             @if (session('status'))<div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">{{ session('status') }}</div>@endif

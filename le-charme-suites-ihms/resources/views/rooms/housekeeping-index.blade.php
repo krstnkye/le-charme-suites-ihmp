@@ -35,7 +35,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Status & Live Floor Matrix - Le Charme Suites IHMS</title>
+    <title>Room Status & Live Floor Matrix - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -384,7 +384,7 @@
         </div>
 
         <footer class="hidden h-8 shrink-0 items-center justify-between border-t border-line bg-[#ebe8e2] px-5 text-[11px] text-slate-500 lg:flex">
-            <span><strong class="text-primary">Le Charme Suites Subic</strong> • IHMS Housekeeping Module</span>
+            <span><strong class="text-primary">Le Charme Suites Subic</strong> • IHMP Housekeeping Module</span>
             <span class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-emerald-600"></span>PMS Database Connected</span>
         </footer>
     </div>

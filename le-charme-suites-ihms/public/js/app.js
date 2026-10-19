@@ -1,1 +1,1 @@
-console.log('Le Charme Suites IHMS loaded');
+console.log('Le Charme Suites IHMP loaded');

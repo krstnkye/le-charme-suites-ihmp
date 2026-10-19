@@ -18,7 +18,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Billing Dashboard - Le Charme Suites IHMS</title>
+    <title>Billing Dashboard - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -62,7 +62,7 @@
                     <span>/</span>
                     <span class="text-secondary">Command Dashboard</span>
                 </div>
-                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMS <span class="font-sans font-normal text-slate-400">|</span> <span class="font-sans text-sm font-semibold text-slate-600">Subic Bay Freeport Zone</span></h1>
+                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMP <span class="font-sans font-normal text-slate-400">|</span> <span class="font-sans text-sm font-semibold text-slate-600">Subic Bay Freeport Zone</span></h1>
             </div>
             <div class="flex flex-wrap items-center justify-end gap-3">
                 <div class="hidden items-center gap-2 rounded-full border border-line bg-surface-low px-3 py-1.5 text-xs font-semibold text-primary xl:flex">

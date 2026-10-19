@@ -18,7 +18,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Housekeeping Dashboard - Le Charme Suites IHMS</title>
+    <title>Housekeeping Dashboard - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -56,7 +56,7 @@
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-secondary">cleaning_services</span>
                 <div>
-                    <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMS - Housekeeping Workspace</h1>
+                    <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - Housekeeping Workspace</h1>
                     <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-secondary">Rooms & Facilities Operations</p>
                 </div>
             </div>

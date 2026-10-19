@@ -15,11 +15,11 @@ class EnsureIntegrationApiKey
 
         if ($configuredKey === '') {
             return new JsonResponse([
-                'message' => 'The IHMS integration API is disabled until IHMS_API_KEY is configured.',
+                'message' => 'The IHMP integration API is disabled until IHMP_API_KEY is configured.',
             ], 503);
         }
 
-        $providedKey = (string) ($request->bearerToken() ?: $request->header('X-IHMS-Key'));
+        $providedKey = (string) ($request->bearerToken() ?: $request->header('X-IHMP-Key'));
 
         if ($providedKey === '' || ! hash_equals($configuredKey, $providedKey)) {
             return new JsonResponse(['message' => 'Invalid integration credentials.'], 401);

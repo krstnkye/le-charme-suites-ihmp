@@ -35,7 +35,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Record Check-in - Le Charme Suites IHMS</title>
+    <title>Record Check-in - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -91,7 +91,7 @@
         <main class="min-h-screen flex-1 lg:ml-64">
             <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-variant bg-surface-container-lowest px-8 shadow-sm">
                 <div class="flex items-center gap-4">
-                    <h2 class="font-serif text-xl font-bold">Le Charme Suites IHMS</h2>
+                    <h2 class="font-serif text-xl font-bold">Le Charme Suites IHMP</h2>
                     <span class="h-6 w-px bg-surface-variant"></span>
                     <span class="text-xs font-bold uppercase tracking-wider text-secondary">Check-ins</span>
                 </div>

@@ -16,7 +16,7 @@
     <div class="flex min-h-0 flex-1 flex-col gap-6">
         <a href="{{ route('dashboard') }}" class="block shrink-0 rounded-lg bg-white px-3 py-2 shadow-sm">
             @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[180px] object-contain'])
-            <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.15em] text-[#755a28]">Front Desk IHMS</span>
+            <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.15em] text-[#755a28]">Front Desk IHMP</span>
         </a>
 
         <a href="{{ route('check-ins.create') }}" class="flex w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-[#755a28] px-3 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#5b4313]">

@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Admin Guest Management - Le Charme Suites IHMS</title>
+    <title>Admin Guest Management - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -68,7 +68,7 @@
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">supervisor_account</span>
                 <div>
-                    <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMS</h1>
+                    <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP</h1>
                     <p class="text-xs font-bold uppercase tracking-wider text-secondary">Administrator Guest Registry</p>
                 </div>
             </div>

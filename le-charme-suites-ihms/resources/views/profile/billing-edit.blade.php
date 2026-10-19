@@ -15,7 +15,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Billing Profile &amp; Terminal Credentials - Le Charmé Suites IHMS</title>
+    <title>Billing Profile &amp; Terminal Credentials - Le Charmé Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = { theme: { extend: {
@@ -249,7 +249,7 @@
                     <div class="flex items-center gap-3">
                         <span class="flex h-10 w-10 items-center justify-center rounded-full bg-secondary-fixed/50 text-secondary"><span class="material-symbols-outlined">enhanced_encryption</span></span>
                         <div>
-                            <p class="text-sm font-bold">Billing account changes are recorded in the IHMS audit ledger.</p>
+                            <p class="text-sm font-bold">Billing account changes are recorded in the IHMP audit ledger.</p>
                             <p class="font-mono text-xs text-slate-500">Session Hash: {{ substr(sha1($user->email), 0, 8) }}-{{ substr(sha1((string) $user->id), -8) }}</p>
                         </div>
                     </div>

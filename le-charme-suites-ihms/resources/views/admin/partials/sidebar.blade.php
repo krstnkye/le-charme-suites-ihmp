@@ -13,7 +13,7 @@
         <div class="border-b border-white/10 px-6 py-5">
             <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
                 @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
-                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">Subic IHMS Command</span>
+                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">Subic IHMP Command</span>
             </a>
             <a href="{{ route('admin.operations.index', ['module' => 'reservations']) }}" class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#755a28] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#5b4313]">
                 <span class="material-symbols-outlined text-[18px]">add_circle</span>

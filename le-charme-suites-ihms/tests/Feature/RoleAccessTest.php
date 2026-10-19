@@ -318,7 +318,7 @@ class RoleAccessTest extends TestCase
             ->assertOk()
             ->assertSeeText('Security & Compliance Audit Log')
             ->assertSee('Cryptographic Audit Ledger Stream')
-            ->assertSeeText('IHMS Access Control & Security Policies')
+            ->assertSeeText('IHMP Access Control & Security Policies')
             ->assertSee('Active Sessions');
     }
 

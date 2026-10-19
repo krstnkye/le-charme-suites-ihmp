@@ -20,7 +20,7 @@
         <div>
             <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#755a28]">Interdepartment Communication</p>
             <h2 class="mt-1 font-serif text-3xl font-bold text-[#01162d]">Shared Message Center</h2>
-            <p class="mt-1 text-sm text-slate-600">Messages and individual read history are retained in the central IHMS database.</p>
+            <p class="mt-1 text-sm text-slate-600">Messages and individual read history are retained in the central IHMP database.</p>
         </div>
         <div class="rounded-lg border border-[#e5e2dc] bg-white px-4 py-3 text-right">
             <p class="text-xs font-bold uppercase text-slate-500">Unread for you</p>

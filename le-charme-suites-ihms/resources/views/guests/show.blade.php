@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $guest->full_name . ' - Le Charmé Suites IHMS')
+@section('title', $guest->full_name . ' - Le Charmé Suites IHMP')
 @section('section_label', 'Front Desk / Guest Management')
 @section('page_title', 'Guest Profile')
 

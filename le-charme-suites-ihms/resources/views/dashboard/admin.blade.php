@@ -74,7 +74,7 @@
         <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-container-highest bg-surface px-8 shadow-sm">
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">security</span>
-                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMS - System Administration Command Center</h1>
+                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - System Administration Command Center</h1>
                 <span class="hidden rounded-full border border-secondary/20 bg-surface-container px-3 py-1 text-xs font-bold text-secondary lg:inline-flex">
                     Subic Bay Freeport Zone
                 </span>
@@ -105,7 +105,7 @@
                     <div>
                         <div class="flex items-center gap-2 text-secondary-fixed">
                             <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
-                            <span class="text-xs font-bold uppercase tracking-wider">Subic Bay IHMS Master Telemetry - Live Operations</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">Subic Bay IHMP Master Telemetry - Live Operations</span>
                         </div>
                         <h2 class="mt-2 font-serif text-4xl font-bold">Property Systems Integrity & Control</h2>
                         <p class="mt-2 text-sm leading-6 text-[#b4c8e5]">Primary hotel operations, guest bills, room inventory, and role access are monitored from this administrator workspace.</p>
@@ -169,7 +169,7 @@
                         <h2 class="font-serif text-2xl font-bold">Operational Governance & Subsystems</h2>
                         <p class="mt-1 text-sm text-slate-500">Direct administrative access and real-time ledger verification.</p>
                     </div>
-                    <span class="rounded-full bg-surface-container-highest px-3 py-1 text-xs font-bold text-slate-600">Synchronized with local Laravel IHMS database</span>
+                    <span class="rounded-full bg-surface-container-highest px-3 py-1 text-xs font-bold text-slate-600">Synchronized with local Laravel IHMP database</span>
                 </div>
                 <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
                     <div class="command-card rounded-xl p-6">
@@ -249,7 +249,7 @@
                             </div>
                             <div class="text-right text-xs text-slate-500">
                                 <span>{{ $transaction->transaction_date?->timezone(config('app.timezone'))->format('M d, Y h:i A') }}</span>
-                                <p class="font-mono text-secondary">IHMS</p>
+                                <p class="font-mono text-secondary">IHMP</p>
                             </div>
                         </div>
                     @empty
@@ -271,7 +271,7 @@
             </section>
 
             <footer class="pb-8 pt-4 text-center text-xs text-slate-500">
-                <p>Le Charme Suites Integrated Hospitality Management System (IHMS) - Subic Bay Central Server Cluster</p>
+                <p>Le Charme Suites Integrated Hotel Management Portal (IHMP) - Subic Bay Central Server Cluster</p>
                 <p class="mt-1">Authorized Administration Station - Laravel local development environment</p>
             </footer>
         </main>
