@@ -1,19 +1,19 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminAuditLogController;
 use App\Http\Controllers\AdminGuestController;
-use App\Http\Controllers\AdminUserRoleController;
+use App\Http\Controllers\AdminIntegrationCenterController;
 use App\Http\Controllers\AdminOperationsController;
 use App\Http\Controllers\AdminSystemSettingsController;
-use App\Http\Controllers\AdminIntegrationCenterController;
+use App\Http\Controllers\AdminUserRoleController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentMessageController;
 use App\Http\Controllers\GuestController;
-use App\Http\Controllers\HousekeepingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HousekeepingController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -23,7 +23,7 @@ use App\Http\Controllers\SystemManualController;
 use App\Http\Controllers\UiPreferenceController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::redirect('/', '/login')->name('home');
 Route::post('/generate', [HomeController::class, 'generate'])->name('generate');
 
 Route::middleware('guest')->group(function () {
