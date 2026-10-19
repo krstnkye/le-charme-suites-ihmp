@@ -226,7 +226,11 @@
                             </div>
                             <div class="grid grid-cols-1 gap-3 md:grid-cols-2 2xl:grid-cols-3">
                                 @foreach ($floorRooms as $room)
-                                    <article class="rounded-lg border bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md {{ $room->status === 'maintenance' ? 'border-red-300' : 'border-line' }}">
+                                    <article class="overflow-hidden rounded-lg border bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md {{ $room->status === 'maintenance' ? 'border-red-300' : 'border-line' }}">
+                                        @if ($room->imagePath())
+                                            <img src="{{ asset($room->imagePath()) }}" alt="{{ $room->room_type }} room reference" class="aspect-[3/1] w-full object-cover" loading="lazy">
+                                        @endif
+                                        <div class="p-4">
                                         <div class="flex items-start justify-between gap-3">
                                             <div>
                                                 <div class="flex items-center gap-1.5">
@@ -249,6 +253,7 @@
                                                 <a href="{{ route('rooms.show', $room) }}" class="rounded bg-primary px-2.5 py-1 text-xs font-bold text-white hover:bg-[#172b42]">View</a>
                                                 <a href="{{ route('rooms.edit', $room) }}" class="rounded border border-secondary/40 px-2.5 py-1 text-xs font-bold text-secondary hover:bg-[#fff8ec]">Update</a>
                                             </div>
+                                        </div>
                                         </div>
                                     </article>
                                 @endforeach

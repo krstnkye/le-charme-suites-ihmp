@@ -52,6 +52,7 @@
         $checkIn = $latestReservation?->check_in ? \Carbon\Carbon::parse($latestReservation->check_in)->format('M d, Y') : 'Not scheduled';
         $checkOut = $latestReservation?->check_out ? \Carbon\Carbon::parse($latestReservation->check_out)->format('M d, Y') : 'Not scheduled';
         $currentStatus = $statusLabels[$room->status] ?? ucfirst($room->status);
+        $roomImage = $room->imagePath();
         $qaItems = [
             ['label' => 'Bed presentation and linen quality verified', 'time' => now('Asia/Manila')->subMinutes(34)->format('h:i A')],
             ['label' => 'Bathroom amenities and towels replenished', 'time' => now('Asia/Manila')->subMinutes(28)->format('h:i A')],
@@ -74,6 +75,12 @@
         </div>
 
         <section class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
+            @if ($roomImage)
+                <figure class="relative aspect-[16/5] overflow-hidden bg-slate-100">
+                    <img src="{{ asset($roomImage) }}" alt="{{ $room->room_type }} room reference" class="h-full w-full object-cover">
+                    <figcaption class="absolute bottom-3 left-4 rounded bg-primary/85 px-3 py-1 text-xs font-bold text-white">Official {{ $room->room_type }} reference</figcaption>
+                </figure>
+            @endif
             <div class="border-t-4 border-primary bg-gradient-to-br from-white via-white to-amber-50/60 p-6">
                 <div class="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
                     <div class="space-y-4">

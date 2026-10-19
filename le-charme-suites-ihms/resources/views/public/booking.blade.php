@@ -52,10 +52,16 @@
                     <p class="mt-2 text-sm text-slate-600">Five official room types and published starting rates from Le Charmé Suites.</p>
                     <div class="mt-5 grid gap-4 md:grid-cols-2">
                         @foreach ($roomTypes as $name => $details)
-                            <article class="rounded-lg border border-[#ded7cc] bg-white p-5 shadow-sm">
-                                <div class="flex items-start justify-between gap-4"><div><h3 class="font-display text-xl font-bold">{{ $name }}</h3><p class="mt-1 text-sm text-slate-600">{{ $details['description'] }}</p></div><span class="material-symbols-outlined text-[#8b6827]">hotel</span></div>
-                                <div class="mt-4 grid grid-cols-2 gap-2 text-xs text-slate-600"><span>{{ $details['size_sqm'] }} sqm</span><span>Up to {{ $details['capacity'] }} guests</span><span>{{ $details['bed_configuration'] }}</span><span>{{ $details['bathrooms'] }} bathroom{{ $details['bathrooms'] > 1 ? 's' : '' }}</span></div>
-                                <div class="mt-4 flex items-end justify-between gap-3 border-t border-[#eee9df] pt-4"><p><span class="text-xs text-slate-500">From</span><br><strong class="font-display text-xl">PHP {{ number_format($details['rate'], 2) }}</strong> <span class="text-xs">/ night</span></p><span class="rounded bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-800">{{ $availableCounts[$name] ?? 0 }} in inventory</span></div>
+                            <article class="overflow-hidden rounded-lg border border-[#ded7cc] bg-white shadow-sm">
+                                <figure class="relative aspect-[3/2] overflow-hidden bg-slate-100">
+                                    <img src="{{ asset($details['image']) }}" alt="{{ $name }} at Le Charmé Suites" class="h-full w-full object-cover transition duration-300 hover:scale-[1.02]" loading="lazy">
+                                    <figcaption class="absolute bottom-3 left-3 rounded bg-[#01162d]/85 px-2.5 py-1 text-xs font-bold text-white">{{ $name }}</figcaption>
+                                </figure>
+                                <div class="p-5">
+                                    <div class="flex items-start justify-between gap-4"><div><h3 class="font-display text-xl font-bold">{{ $name }}</h3><p class="mt-1 text-sm text-slate-600">{{ $details['description'] }}</p></div><span class="material-symbols-outlined text-[#8b6827]">hotel</span></div>
+                                    <div class="mt-4 grid grid-cols-2 gap-2 text-xs text-slate-600"><span>{{ $details['size_sqm'] }} sqm</span><span>Up to {{ $details['capacity'] }} guests</span><span>{{ $details['bed_configuration'] }}</span><span>{{ $details['bathrooms'] }} bathroom{{ $details['bathrooms'] > 1 ? 's' : '' }}</span></div>
+                                    <div class="mt-4 flex items-end justify-between gap-3 border-t border-[#eee9df] pt-4"><p><span class="text-xs text-slate-500">From</span><br><strong class="font-display text-xl">PHP {{ number_format($details['rate'], 2) }}</strong> <span class="text-xs">/ night</span></p><span class="rounded bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-800">{{ $availableCounts[$name] ?? 0 }} in inventory</span></div>
+                                </div>
                             </article>
                         @endforeach
                     </div>

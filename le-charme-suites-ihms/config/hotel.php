@@ -31,6 +31,8 @@ return [
     'room_types' => [
         'Standard Room' => [
             'rate' => 8764.00,
+            'image' => 'images/rooms/standard-room.jpg',
+            'image_source' => 'https://lecharmehotels.com/img/rooms/room_1758183999_main.png',
             'capacity' => 2,
             'base_occupancy' => 2,
             'size_sqm' => 28.00,
@@ -41,6 +43,8 @@ return [
         ],
         'Deluxe King' => [
             'rate' => 13750.00,
+            'image' => 'images/rooms/deluxe-king.jpg',
+            'image_source' => 'https://lecharmehotels.com/img/rooms/room_1758183687_main.png',
             'capacity' => 3,
             'base_occupancy' => 2,
             'size_sqm' => 45.00,
@@ -51,6 +55,8 @@ return [
         ],
         'Deluxe Twin' => [
             'rate' => 15840.00,
+            'image' => 'images/rooms/deluxe-twin.jpg',
+            'image_source' => 'https://lecharmehotels.com/img/rooms/room_1758183770_main.jpg',
             'capacity' => 5,
             'base_occupancy' => 2,
             'size_sqm' => 45.00,
@@ -61,6 +67,8 @@ return [
         ],
         'Charmé Suite' => [
             'rate' => 19500.00,
+            'image' => 'images/rooms/charme-suite.jpg',
+            'image_source' => 'https://lecharmehotels.com/img/rooms/room_1758183556_main.png',
             'capacity' => 3,
             'base_occupancy' => 2,
             'size_sqm' => 55.00,
@@ -71,6 +79,8 @@ return [
         ],
         'Family Room' => [
             'rate' => 23800.00,
+            'image' => 'images/rooms/family-room.jpg',
+            'image_source' => 'https://lecharmehotels.com/img/rooms/room_1758183921_main.png',
             'capacity' => 7,
             'base_occupancy' => 4,
             'size_sqm' => 65.00,

@@ -22,6 +22,11 @@ class OfficialHotelProfileTest extends TestCase
         $this->assertSame(45, config('hotel.published_room_count'));
         $this->assertSame(5, config('hotel.published_room_type_count'));
         $this->assertCount(5, config('hotel.room_types'));
+
+        foreach (config('hotel.room_types') as $roomType) {
+            $this->assertFileExists(public_path($roomType['image']));
+            $this->assertStringStartsWith('https://lecharmehotels.com/img/rooms/', $roomType['image_source']);
+        }
     }
 
     public function test_database_seeder_creates_the_official_room_catalog(): void

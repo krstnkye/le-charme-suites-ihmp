@@ -224,11 +224,17 @@
                 </div>
                 <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
                     @forelse ($availableRecommendations as $room)
-                        <article class="relative flex flex-col justify-between rounded-xl border-2 border-emerald-500/40 bg-white p-5 shadow-sm transition hover:shadow-md">
+                        <article class="relative flex flex-col overflow-hidden rounded-xl border-2 border-emerald-500/40 bg-white shadow-sm transition hover:shadow-md">
                             @if ($loop->first)
-                                <span class="absolute -top-3 right-4 rounded-full bg-secondary px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">Ready</span>
+                                <span class="absolute right-4 top-3 z-10 rounded-full bg-secondary px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">Ready</span>
                             @endif
-                            <div>
+                            @if ($room->imagePath())
+                                <img src="{{ asset($room->imagePath()) }}" alt="{{ $room->room_type }} room reference" class="aspect-[3/2] w-full object-cover" loading="lazy">
+                            @else
+                                <div class="flex aspect-[3/2] items-center justify-center bg-surface-container text-on-surface-variant"><span class="material-symbols-outlined text-5xl">bedroom_parent</span><span class="sr-only">Room photo unavailable</span></div>
+                            @endif
+                            <div class="flex flex-1 flex-col justify-between p-5">
+                                <div>
                                 <span class="text-xs font-bold uppercase text-secondary">Floor {{ substr($room->room_number, 0, 1) }}</span>
                                 <h4 class="mt-1 text-lg font-bold text-primary">Room {{ $room->room_number }} - {{ $room->room_type }}</h4>
                                 <p class="mt-2 min-h-10 text-sm text-on-surface-variant">{{ $room->description ?: 'Clean room inventory available for guest assignment.' }}</p>
@@ -240,18 +246,19 @@
                                     <span class="material-symbols-outlined text-sm">check_circle</span>
                                     AVAILABLE
                                 </span>
+                                </div>
+                                @if (in_array($role, ['admin', 'receptionist'], true))
+                                    <a href="{{ route('reservations.create', ['room_id' => $room->id]) }}" class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-primary-container">
+                                        <span class="material-symbols-outlined text-lg">add_circle</span>
+                                        Select for Reservation
+                                    </a>
+                                @else
+                                    <a href="{{ route('rooms.show', $room) }}" class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-primary-container">
+                                        <span class="material-symbols-outlined text-lg">visibility</span>
+                                        View Room
+                                    </a>
+                                @endif
                             </div>
-                            @if (in_array($role, ['admin', 'receptionist'], true))
-                                <a href="{{ route('reservations.create', ['room_id' => $room->id]) }}" class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-primary-container">
-                                    <span class="material-symbols-outlined text-lg">add_circle</span>
-                                    Select for Reservation
-                                </a>
-                            @else
-                                <a href="{{ route('rooms.show', $room) }}" class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-primary-container">
-                                    <span class="material-symbols-outlined text-lg">visibility</span>
-                                    View Room
-                                </a>
-                            @endif
                         </article>
                     @empty
                         <div class="rounded-xl border border-surface-variant bg-white p-6 text-sm font-semibold text-on-surface-variant md:col-span-3">

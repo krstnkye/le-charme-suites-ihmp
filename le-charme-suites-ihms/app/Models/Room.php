@@ -51,4 +51,9 @@ class Room extends Model
     {
         return $this->hasMany(HousekeepingTask::class);
     }
+
+    public function imagePath(): ?string
+    {
+        return config('hotel.room_types')[$this->room_type]['image'] ?? null;
+    }
 }
