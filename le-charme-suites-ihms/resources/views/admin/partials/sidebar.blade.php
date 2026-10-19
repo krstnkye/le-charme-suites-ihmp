@@ -4,18 +4,18 @@
     $activeModule = request()->routeIs('rooms.*') ? 'room-inventory' : $activeModule;
 
     $navBase = 'flex items-center gap-3 rounded-r-lg border-l-4 px-4 py-2 text-sm transition';
-    $navIdle = 'border-transparent text-[#b4c8e5] hover:bg-primary/30 hover:text-white';
-    $navActive = 'border-secondary-fixed bg-primary/40 font-bold text-white';
+    $navIdle = 'border-transparent text-[#b4c8e5] hover:bg-[#01162d]/30 hover:text-white';
+    $navActive = 'border-secondary-fixed border-[#ffdeaa] bg-[#01162d]/40 font-bold text-white';
 @endphp
 
-<aside data-admin-sidebar data-universal-sidebar class="nav-shell fixed inset-y-0 left-0 z-40 flex w-72 flex-col justify-between overflow-y-auto border-r border-white/10 text-white shadow-md" aria-label="Administrator Sidebar">
+<aside data-admin-sidebar data-universal-sidebar class="nav-shell fixed inset-y-0 left-0 z-40 flex w-72 flex-col justify-between overflow-y-auto border-r border-white/10 bg-[#172b42] text-white shadow-md" style="background-image: radial-gradient(rgba(255, 222, 170, 0.14) 1px, transparent 1px); background-size: 26px 26px;" aria-label="Administrator Sidebar">
     <div>
         <div class="border-b border-white/10 px-6 py-5">
             <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white px-3 py-2 shadow-sm">
                 @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
-                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-secondary">Subic IHMS Command</span>
+                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">Subic IHMS Command</span>
             </a>
-            <a href="{{ route('admin.operations.index', ['module' => 'reservations']) }}" class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#5b4313]">
+            <a href="{{ route('admin.operations.index', ['module' => 'reservations']) }}" class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#755a28] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#5b4313]">
                 <span class="material-symbols-outlined text-[18px]">add_circle</span>
                 New Reservation
             </a>
@@ -23,15 +23,15 @@
 
         <nav class="space-y-4 px-3 py-4" aria-label="Administrator navigation">
             <div>
-                <p class="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-secondary-fixed">Administrator</p>
+                <p class="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[#ffdeaa]">Administrator</p>
                 <a href="{{ route('dashboard') }}" class="{{ $navBase }} mt-2 py-2.5 {{ request()->routeIs('dashboard') ? $navActive : $navIdle }}">
-                    <span class="material-symbols-outlined {{ request()->routeIs('dashboard') ? 'text-secondary-fixed' : '' }}" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                    <span class="material-symbols-outlined {{ request()->routeIs('dashboard') ? 'text-[#ffdeaa]' : '' }}" style="font-variation-settings: 'FILL' 1;">dashboard</span>
                     Dashboard
                 </a>
             </div>
 
             <div class="space-y-1">
-                <p class="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-secondary-fixed">User &amp; Role Management</p>
+                <p class="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[#ffdeaa]">User &amp; Role Management</p>
                 <a href="{{ route('admin.users.index') }}" class="{{ $navBase }} {{ request()->routeIs('admin.users.index') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">group</span>Users</a>
                 <a href="{{ route('admin.roles.index') }}" class="{{ $navBase }} {{ request()->routeIs('admin.roles.index') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">admin_panel_settings</span>Roles</a>
                 <a href="{{ route('admin.permissions.index') }}" class="{{ $navBase }} {{ request()->routeIs('admin.permissions.index') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">lock</span>Permissions</a>
@@ -70,7 +70,7 @@
     <form method="POST" action="{{ route('logout') }}" class="border-t border-white/10 p-3">
         @csrf
         <button class="flex w-full items-center gap-3 rounded-r-lg border-l-4 border-transparent px-4 py-2 text-left text-sm text-red-100 transition hover:bg-red-900/30 hover:text-white">
-            <span class="material-symbols-outlined text-error">logout</span>
+            <span class="material-symbols-outlined text-[#ffb4ab]">logout</span>
             Log Out
         </button>
     </form>

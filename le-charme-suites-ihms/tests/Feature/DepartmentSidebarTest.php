@@ -26,6 +26,8 @@ class DepartmentSidebarTest extends TestCase
             route('admin.operations.index', ['module' => 'reservations']),
             route('admin.audit-logs.index'),
             route('admin.settings.index'),
+            route('admin.integration.index'),
+            route('messages.index'),
             route('profile.edit'),
         ] as $url) {
             $this->actingAs($admin)->get($url)
@@ -33,6 +35,9 @@ class DepartmentSidebarTest extends TestCase
                 ->assertSee('aria-label="Administrator Sidebar"', false)
                 ->assertSee('data-universal-sidebar', false)
                 ->assertSee('data-sidebar-toggle', false)
+                ->assertSee('bg-[#172b42]', false)
+                ->assertSee('border-[#ffdeaa]', false)
+                ->assertSee('bg-[#01162d]/40', false)
                 ->assertSee('data-page-back', false);
         }
     }
