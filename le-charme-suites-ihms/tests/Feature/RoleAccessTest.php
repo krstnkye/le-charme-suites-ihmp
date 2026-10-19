@@ -363,6 +363,9 @@ class RoleAccessTest extends TestCase
             ->get(route('profile.edit'))
             ->assertOk()
             ->assertSee('My Profile')
+            ->assertSeeText('Front Desk Agent Profile & Station Authority')
+            ->assertSeeText('Station Authority')
+            ->assertSeeText('Security & Account Status')
             ->assertSee('Front Desk Employee')
             ->assertSee('receptionist');
 
