@@ -32,13 +32,13 @@
     @include('partials.favicon')
 </head>
 <body class="min-h-screen bg-surface font-sans text-primary antialiased">
-    @if ($user?->role === 'receptionist')
-        @include('partials.front-desk-sidebar', ['active' => 'transactions'])
-    @else
+    @if ($user?->role === 'cashier')
         @include('partials.billing-sidebar', ['active' => 'history'])
+    @else
+        @include('partials.front-desk-sidebar', ['active' => 'transactions'])
     @endif
 
-    <div class="flex min-h-screen flex-col {{ $user?->role === 'receptionist' ? 'lg:ml-64' : 'lg:ml-72' }}">
+    <div class="flex min-h-screen flex-col {{ $user?->role === 'cashier' ? 'lg:ml-72' : 'lg:ml-64' }}">
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
             <div>
                 <h1 class="font-serif text-xl font-bold text-primary">Billing &amp; Cashier Dashboard</h1>
