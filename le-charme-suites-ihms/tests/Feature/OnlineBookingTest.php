@@ -15,7 +15,7 @@ class OnlineBookingTest extends TestCase
     {
         $this->get(route('booking.create'))
             ->assertOk()
-            ->assertSee('sm:col-span-2 sm:mx-auto sm:w-[calc(50%-0.625rem)]', false)
+            ->assertSee('sm:col-span-2 sm:w-full sm:max-w-[calc(50%-0.625rem)] sm:justify-self-center', false)
             ->assertSeeText('Bike-Friendly Destination:')
             ->assertSeeText('Direct booking request');
     }

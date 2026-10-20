@@ -97,7 +97,7 @@
                     @foreach ($roomTypes as $name => $details)
                         <article @class([
                             'group flex flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#c5a36a]/60 hover:shadow-lg',
-                            'sm:col-span-2 sm:mx-auto sm:w-[calc(50%-0.625rem)]' => $loop->last && $loop->count % 2 !== 0,
+                            'sm:col-span-2 sm:w-full sm:max-w-[calc(50%-0.625rem)] sm:justify-self-center' => $loop->last && $loop->count % 2 !== 0,
                         ])>
                             <figure class="relative aspect-[3/2] overflow-hidden bg-slate-100">
                                 <img src="{{ asset($details['image']) }}" alt="{{ $name }} at Le Charmé Suites" class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]" loading="lazy">
