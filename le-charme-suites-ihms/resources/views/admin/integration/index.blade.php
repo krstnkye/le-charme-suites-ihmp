@@ -44,7 +44,12 @@
                     <h3 class="mt-1 font-serif text-2xl font-bold">What Is Integrated Now</h3>
                     <p class="mt-1 text-sm text-slate-500">Separates the working school-project integration from the official hotel connection that still requires authorization.</p>
                 </div>
-                <div class="grid gap-4 p-5 lg:grid-cols-3">
+                <div class="grid gap-4 p-5 md:grid-cols-2 xl:grid-cols-4">
+                    <article class="rounded-lg border border-sky-200 bg-sky-50 p-4">
+                        <div class="flex items-center justify-between gap-3"><strong>Official Website Simulator</strong><span class="rounded-full bg-sky-700 px-2.5 py-1 text-[10px] font-bold uppercase text-white">Academic demo</span></div>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">The <a class="font-bold text-primary underline" href="{{ route('website-simulation.create') }}">website booking simulator</a> stands in for the official website. Its bookings enter the front desk queue as <em>Official Website (Simulated)</em>, so the integration can be demonstrated without accessing the hotel's real system or guest data.</p>
+                        <p class="mt-3 text-xs font-bold text-sky-800">{{ number_format($simulatedWebsiteBookingCount) }} simulated website booking(s)</p>
+                    </article>
                     <article class="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
                         <div class="flex items-center justify-between gap-3"><strong>IHMP Direct Booking Page</strong><span class="rounded-full bg-emerald-700 px-2.5 py-1 text-[10px] font-bold uppercase text-white">Active</span></div>
                         <p class="mt-3 text-sm leading-6 text-slate-600">The public <a class="font-bold text-primary underline" href="{{ route('booking.create') }}">booking page</a> validates availability and saves guest, reservation, transaction, and audit records in the shared database.</p>

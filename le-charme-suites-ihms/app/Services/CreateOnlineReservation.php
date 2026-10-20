@@ -91,13 +91,21 @@ class CreateOnlineReservation
             ]);
 
             IntegrationEvent::create([
-                'channel' => $source === 'public_website' ? 'website' : 'api',
+                'channel' => match ($source) {
+                    'public_website' => 'website',
+                    'official_website_simulation' => 'website_simulation',
+                    default => 'api',
+                },
                 'direction' => 'inbound',
                 'dataset' => 'reservations',
                 'format' => 'json',
                 'record_count' => 1,
                 'status' => 'completed',
-                'endpoint' => $source === 'public_website' ? '/book' : '/api/v1/bookings',
+                'endpoint' => match ($source) {
+                    'public_website' => '/book',
+                    'official_website_simulation' => '/website-booking',
+                    default => '/api/v1/bookings',
+                },
                 'metadata' => [
                     'ip_address' => $ipAddress,
                     'source' => $source,

@@ -21,7 +21,7 @@ class OnlineBookingTest extends TestCase
             ->assertOk()
             ->assertSee('sm:col-span-2 sm:w-full sm:max-w-[calc(50%-0.625rem)] sm:justify-self-center', false)
             ->assertSeeText('Bike-Friendly Destination:')
-            ->assertSeeText('Direct booking request');
+            ->assertSeeText('Sample data only');
     }
 
     public function test_guest_can_submit_online_booking_that_appears_in_shared_database(): void

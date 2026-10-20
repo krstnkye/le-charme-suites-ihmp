@@ -232,7 +232,7 @@
                                                 $initials = strtoupper(substr($guest?->first_name ?? 'G', 0, 1) . substr($guest?->last_name ?? '', 0, 1));
                                             @endphp
                                             <tr class="{{ $loop->first ? 'border-l-4 border-secondary bg-secondary-fixed/15' : 'hover:bg-surface-container-low' }} transition-colors">
-                                                <td class="px-4 py-3.5"><p class="font-bold text-primary">{{ $reservation->booking_reference ?: '#LC-'.str_pad($reservation->id, 5, '0', STR_PAD_LEFT) }}</p><p class="text-[10px] font-bold uppercase text-slate-500">{{ match ($reservation->source) { 'public_website' => 'IHMP direct booking', 'hotel_website_api' => 'Official website API', default => str_replace('_', ' ', $reservation->source ?? 'front_desk') } }}</p></td>
+                                                <td class="px-4 py-3.5"><p class="font-bold text-primary">{{ $reservation->booking_reference ?: '#LC-'.str_pad($reservation->id, 5, '0', STR_PAD_LEFT) }}</p><p class="text-[10px] font-bold uppercase text-slate-500">{{ config('integrations.booking_sources.'.($reservation->source ?? 'front_desk'), str_replace('_', ' ', $reservation->source ?? 'front_desk')) }}</p></td>
                                                 <td class="px-4 py-3.5">
                                                     <div class="flex items-center gap-2.5">
                                                         <div class="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-bold text-secondary-fixed">{{ $initials }}</div>

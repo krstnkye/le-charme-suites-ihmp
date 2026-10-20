@@ -7,25 +7,35 @@ use App\Models\Room;
 use App\Services\CreateOnlineReservation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class PublicBookingController extends Controller
 {
     public function create(): View
     {
-        return view('public.booking', [
-            'roomTypes' => collect(config('hotel.room_types')),
-            'availableCounts' => Room::query()
-                ->whereNotIn('status', ['maintenance'])
-                ->selectRaw('room_type, count(*) as total')
-                ->groupBy('room_type')
-                ->pluck('total', 'room_type'),
-        ]);
+        return view('public.booking', $this->bookingPageData(isWebsiteSimulation: false));
+    }
+
+    /**
+     * Academic stand-in for the official Le Charmé website booking page. Bookings made
+     * here travel through the same integration service the real website connector would use.
+     */
+    public function createWebsiteSimulation(): View
+    {
+        return view('public.booking', $this->bookingPageData(isWebsiteSimulation: true));
     }
 
     public function store(Request $request, CreateOnlineReservation $creator): RedirectResponse
     {
         $reservation = $creator->handle($this->validated($request), 'public_website', $request->ip());
+
+        return redirect()->route('booking.confirmation', $reservation->booking_reference);
+    }
+
+    public function storeWebsiteSimulation(Request $request, CreateOnlineReservation $creator): RedirectResponse
+    {
+        $reservation = $creator->handle($this->validated($request), 'official_website_simulation', $request->ip());
 
         return redirect()->route('booking.confirmation', $reservation->booking_reference);
     }
@@ -37,6 +47,23 @@ class PublicBookingController extends Controller
             ->firstOrFail();
 
         return view('public.booking-confirmation', compact('reservation'));
+    }
+
+    /**
+     * @return array{roomTypes: Collection<string, array<string, mixed>>, availableCounts: Collection<string, int>, isWebsiteSimulation: bool, formAction: string}
+     */
+    private function bookingPageData(bool $isWebsiteSimulation): array
+    {
+        return [
+            'roomTypes' => collect(config('hotel.room_types')),
+            'availableCounts' => Room::query()
+                ->whereNotIn('status', ['maintenance'])
+                ->selectRaw('room_type, count(*) as total')
+                ->groupBy('room_type')
+                ->pluck('total', 'room_type'),
+            'isWebsiteSimulation' => $isWebsiteSimulation,
+            'formAction' => route($isWebsiteSimulation ? 'website-simulation.store' : 'booking.store'),
+        ];
     }
 
     /** @return array<string, mixed> */

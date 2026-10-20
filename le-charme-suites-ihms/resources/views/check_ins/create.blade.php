@@ -34,11 +34,7 @@
             'deposit' => $deposit,
             'folio' => 'RES-' . str_pad((string) $reservation->id, 5, '0', STR_PAD_LEFT),
             'booking_reference' => $reservation->booking_reference ?: 'RES-' . str_pad((string) $reservation->id, 5, '0', STR_PAD_LEFT),
-            'source' => match ($reservation->source) {
-                'public_website' => 'IHMP Direct Booking',
-                'hotel_website_api' => 'Official Website API',
-                default => str($reservation->source ?: 'front_desk')->replace('_', ' ')->title()->toString(),
-            },
+            'source' => config('integrations.booking_sources.'.($reservation->source ?: 'front_desk'), str($reservation->source ?: 'front_desk')->replace('_', ' ')->title()->toString()),
             'registration_card_url' => route('reservations.registration-card', ['reservation' => $reservation, 'print' => 1]),
         ];
     })->values();

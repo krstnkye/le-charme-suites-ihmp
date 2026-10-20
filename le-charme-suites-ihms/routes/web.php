@@ -14,6 +14,7 @@ use App\Http\Controllers\DepartmentMessageController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\HousekeepingController;
 use App\Http\Controllers\HousekeepingTaskController;
+use App\Http\Controllers\OnlineBookingFeedController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\ReportController;
@@ -27,6 +28,8 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/login')->name('home');
 Route::get('/book', [PublicBookingController::class, 'create'])->name('booking.create');
 Route::post('/book', [PublicBookingController::class, 'store'])->middleware('throttle:10,1')->name('booking.store');
+Route::get('/website-booking', [PublicBookingController::class, 'createWebsiteSimulation'])->name('website-simulation.create');
+Route::post('/website-booking', [PublicBookingController::class, 'storeWebsiteSimulation'])->middleware('throttle:10,1')->name('website-simulation.store');
 Route::get('/book/confirmation/{reference}', [PublicBookingController::class, 'confirmation'])
     ->middleware('throttle:30,1')
     ->name('booking.confirmation');
@@ -59,6 +62,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/system-manual', SystemManualController::class)->name('system-manual');
 
     Route::middleware('role:receptionist')->group(function () {
+        Route::get('/online-booking-requests', OnlineBookingFeedController::class)
+            ->middleware('permission:reservations.read')
+            ->name('online-booking-requests.feed');
         Route::resource('guests', GuestController::class)
             ->middlewareFor(['index', 'show'], 'permission:guests.read')
             ->middlewareFor(['create', 'store', 'edit', 'update'], 'permission:guests.write')

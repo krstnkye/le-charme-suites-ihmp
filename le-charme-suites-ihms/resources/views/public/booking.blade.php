@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Book Your Stay - Le Charmé Suites Subic</title>
+    <title>{{ $isWebsiteSimulation ? 'Official Website Booking (Simulation)' : 'Book Your Stay' }} - Le Charmé Suites IHMP</title>
     @include('partials.offline-assets')
     @include('partials.favicon')
     <script>
@@ -18,15 +18,19 @@
     </script>
 </head>
 <body class="flex min-h-screen flex-col bg-[#f8f6f0] font-body text-slate-800 antialiased selection:bg-amber-200">
+    <div class="border-b border-amber-300 bg-amber-50 px-4 py-2 text-center text-[11px] font-semibold leading-5 text-amber-900" role="note">
+        <span class="material-symbols-outlined align-middle text-sm" aria-hidden="true">school</span>
+        {{ config('integrations.academic_notice') }}
+    </div>
     <header class="sticky top-0 z-50 border-b border-white/10 bg-[#0c1c2e] text-white shadow-sm">
         <div class="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-            <a href="{{ route('booking.create') }}" class="group flex min-w-0 items-center gap-3 sm:gap-4" aria-label="Le Charmé Suites booking home">
+            <a href="{{ route($isWebsiteSimulation ? 'website-simulation.create' : 'booking.create') }}" class="group flex min-w-0 items-center gap-3 sm:gap-4" aria-label="Le Charmé Suites booking home">
                 <span class="flex h-14 w-32 shrink-0 items-center justify-center rounded-lg bg-white px-3 shadow-sm sm:w-36">
                     <img src="{{ asset('images/le-charme-logo-white.png') }}" alt="Le Charmé Suites" class="h-11 w-full object-contain">
                 </span>
                 <span class="hidden min-w-0 sm:block">
                     <span class="block truncate font-display text-xl font-bold transition group-hover:text-amber-100">Le Charmé Suites Subic</span>
-                    <span class="block truncate text-xs text-[#e6cda3]">European-inspired luxury with modern Filipino hospitality</span>
+                    <span class="block truncate text-xs text-[#e6cda3]">{{ $isWebsiteSimulation ? 'Official website booking channel - academic simulation' : 'European-inspired luxury with modern Filipino hospitality' }}</span>
                 </span>
             </a>
 
@@ -160,9 +164,15 @@
             </div>
 
             <aside id="booking-form" class="h-fit scroll-mt-28 rounded-2xl border-2 border-[#c5a36a]/50 bg-white p-6 shadow-xl sm:p-7 lg:sticky lg:top-24 lg:col-span-5">
-                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#9c7938]">Secure booking request</p>
+                @if ($isWebsiteSimulation)
+                    <div class="mb-4 rounded-lg border border-sky-200 bg-sky-50 p-3 text-xs leading-5 text-sky-900">
+                        <p class="font-bold">Official website integration simulation</p>
+                        <p class="mt-1">This page stands in for the booking form on <a class="font-bold underline" href="{{ config('integrations.official_website.url') }}" target="_blank" rel="noopener noreferrer">lecharmehotels.com</a>. IHMP has no access to the hotel's real website or guest data, so bookings made here demonstrate how a website booking would reach the front desk.</p>
+                    </div>
+                @endif
+                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#9c7938]">{{ $isWebsiteSimulation ? 'Website booking request' : 'Secure booking request' }}</p>
                 <h2 class="mt-1 font-display text-3xl font-bold text-[#112235]">Reserve online</h2>
-                <p class="mt-2 text-xs leading-5 text-slate-500">Your request appears instantly in the front desk system. Staff confirmation is required before arrival.</p>
+                <p class="mt-2 text-xs leading-5 text-slate-500">Your request appears instantly in the IHMP front desk queue as a pending booking. Staff confirmation is required before arrival.</p>
 
                 @if ($errors->any())
                     <div class="mt-5 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800" role="alert">
@@ -171,7 +181,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('booking.store') }}" method="POST" class="mt-5 space-y-4">
+                <form action="{{ $formAction }}" method="POST" class="mt-5 space-y-4">
                     @csrf
                     <div class="grid gap-3 sm:grid-cols-2">
                         <label class="text-xs font-bold text-slate-700" for="first_name">First name<input id="first_name" name="first_name" value="{{ old('first_name') }}" required autocomplete="given-name" placeholder="Juan" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm transition focus:border-[#c5a36a] focus:ring-[#c5a36a]/30"></label>
@@ -191,7 +201,7 @@
                         Submit Booking Request
                         <span class="material-symbols-outlined text-lg text-[#c5a36a]">arrow_forward</span>
                     </button>
-                    <p class="text-center text-[10px] leading-4 text-slate-400">Direct booking request · Secure local processing · No hidden system fees</p>
+                    <p class="text-center text-[10px] leading-4 text-slate-400">Sample data only · Secure local processing · No payment is collected</p>
                 </form>
             </aside>
         </section>
@@ -199,7 +209,7 @@
 
     <footer class="border-t border-white/10 bg-[#0c1c2e] py-7 text-xs text-slate-400">
         <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-center sm:px-6 md:flex-row md:text-left lg:px-8">
-            <div><span class="font-display font-bold text-white">Le Charmé Suites Subic</span><span class="ml-2">© {{ now()->year }}. All Rights Reserved.</span></div>
+            <div><span class="font-display font-bold text-white">Le Charmé Suites IHMP</span><span class="ml-2">Academic capstone prototype · Not the hotel's official booking system</span></div>
             <div class="flex flex-wrap justify-center gap-x-5 gap-y-2">
                 <a href="{{ config('hotel.website') }}" target="_blank" rel="noopener noreferrer" class="transition hover:text-white">Official Website</a>
                 <a href="mailto:{{ config('hotel.email') }}" class="transition hover:text-white">Front Desk Support</a>

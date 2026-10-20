@@ -39,3 +39,7 @@
 </aside>
 
 @include('partials.universal-sidebar-controls')
+
+@if (auth()->user()?->hasPermissionTo('reservations.read'))
+    @include('partials.online-booking-alerts')
+@endif
