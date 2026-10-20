@@ -2,8 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\CheckIn;
+use App\Models\HousekeepingTask;
 use App\Models\Reservation;
 use App\Models\Room;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -101,6 +104,55 @@ class OnlineBookingTest extends TestCase
         $second->assertCreated();
         $this->assertSame($first->json('booking_reference'), $second->json('booking_reference'));
         $this->assertSame(1, Reservation::where('external_reference', 'LECHARME-WEB-10001')->count());
+    }
+
+    public function test_online_booking_flows_through_front_desk_and_into_housekeeping(): void
+    {
+        config(['integrations.api_key' => 'booking-secret']);
+        $receptionist = User::factory()->create([
+            'role' => 'receptionist',
+            'email' => 'integration.frontdesk@lecharmehotel.com',
+        ]);
+        $room = Room::factory()->create([
+            'room_number' => '105',
+            'room_type' => 'Deluxe King',
+            'capacity' => 3,
+            'status' => 'available',
+        ]);
+
+        $this->withToken('booking-secret')
+            ->postJson('/api/v1/bookings', $this->bookingPayload([
+                'external_reference' => 'LECHARME-WEB-10002',
+            ]))
+            ->assertCreated();
+
+        $reservation = Reservation::firstOrFail();
+        $this->actingAs($receptionist)
+            ->post(route('reservations.confirmation.store', $reservation))
+            ->assertSessionHas('status');
+        $this->assertSame('reserved', $reservation->fresh()->status);
+
+        $this->actingAs($receptionist)
+            ->post(route('check-ins.store'), ['reservation_id' => $reservation->id])
+            ->assertRedirect(route('check-ins.index'));
+        $this->assertSame('occupied', $room->fresh()->status);
+
+        $checkIn = CheckIn::firstOrFail();
+        $this->actingAs($receptionist)
+            ->post(route('check-outs.store'), [
+                'check_in_id' => $checkIn->id,
+                'amount_paid' => 27500,
+                'payment_status' => 'paid',
+            ])
+            ->assertRedirect(route('check-outs.index'));
+
+        $this->assertSame('cleaning', $room->fresh()->status);
+        $this->assertDatabaseHas('housekeeping_tasks', [
+            'room_id' => $room->id,
+            'task_type' => 'turnover',
+            'status' => 'queued',
+        ]);
+        $this->assertSame(1, HousekeepingTask::count());
     }
 
     /** @param array<string, mixed> $overrides
