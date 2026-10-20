@@ -1,8 +1,8 @@
 @echo off
 setlocal
-title Le Charme Suites IHMS Shared LAN Server
+title Le Charme Suites IHMP Shared LAN Server
 
-cd /d "%~dp0le-charme-suites-ihms"
+cd /d "%~dp0le-charme-suites-ihmp"
 if errorlevel 1 goto :wrong_folder
 
 where php >nul 2>nul
@@ -12,7 +12,7 @@ if not exist .env goto :not_configured
 if not exist database\database.sqlite goto :not_configured
 
 echo.
-echo Le Charme Suites IHMS - Shared Offline / LAN Mode
+echo Le Charme Suites IHMP - Shared Offline / LAN Mode
 echo -------------------------------------------------
 echo 1. Keep this window open.
 echo 2. Keep all laptops connected to the same private Wi-Fi network.
@@ -38,6 +38,6 @@ pause
 exit /b 1
 
 :wrong_folder
-echo ERROR: The le-charme-suites-ihms application folder was not found.
+echo ERROR: The le-charme-suites-ihmp application folder was not found.
 pause
 exit /b 1

@@ -3,7 +3,7 @@
 ## Purpose
 
 This document maps the professor's discussion points to verifiable parts of the
-Le Charme Suites Integrated Hotel Management System (IHMS). It describes the
+Le Charme Suites Integrated Hotel Management Portal (IHMP). It describes the
 implemented development-phase behavior; it does not claim production approval
 from Le Charme Suites, SBMA, or a payment provider.
 
@@ -18,7 +18,7 @@ from Le Charme Suites, SBMA, or a payment provider.
 | Internet / intranet | Daily hotel operations are intranet-first. Internet is optional. One host serves the application to department devices through a private LAN. | Run `run-shared-lan-server.bat`; open the host IPv4 address from another device. |
 | Internet capability problems | Frontend assets are local. The application does not require a CDN, Node server, or cloud database during hotel operation. | Disconnect internet while keeping the LAN and host active; pages continue to load. |
 | Lesser memory and components | The project uses PHP, Laravel, SQLite, and locally stored static assets. API output is capped to prevent large transfers over slow links. | View **Integration Center > Lightweight Runtime**. |
-| Network reliability / slow connection | Central hosting avoids database copies on each department PC. Local files reduce bandwidth, and API limits default to 200 records per request. | View `IHMS_MAX_EXPORT_RECORDS` in `.env.example` and the Integration Center. |
+| Network reliability / slow connection | Central hosting avoids database copies on each department PC. Local files reduce bandwidth, and API limits default to 200 records per request. | View `IHMP_MAX_EXPORT_RECORDS` in `.env.example` and the Integration Center. |
 | Autonomous operation | The system remains usable on the private LAN without public internet. It is not autonomous if the host computer or LAN is turned off; that operational dependency must be stated honestly. | Demonstrate the shared LAN procedure and `/up` health endpoint. |
 | File transfer between platforms | Admins can export Guests, Rooms, Reservations, and Transactions as CSV or JSON. Each export is recorded with record count and SHA-256 checksum. | **Admin > Integration Center > Platform File Transfer**. |
 | File transfer report | A CSV transfer report contains time, actor, direction, channel, dataset, format, record count, status, checksum, and endpoint. | Select **Download Transfer Report** in the Integration Center. |
@@ -33,7 +33,7 @@ from Le Charme Suites, SBMA, or a payment provider.
 
 ## Shared Database Procedure
 
-1. Choose one laptop or desktop as the IHMS host.
+1. Choose one laptop or desktop as the IHMP host.
 2. Run `setup-and-run.bat` once to install dependencies, create SQLite, and run migrations.
 3. For shared operation, run `run-shared-lan-server.bat`.
 4. Connect department devices to the same private router or Wi-Fi network.
@@ -48,9 +48,9 @@ users to connect to the same running host.
 ## API Procedure
 
 1. Generate a long random API key for the approved receiving platform.
-2. Set `IHMS_API_KEY` in the host `.env` file. Never commit the key to GitHub.
+2. Set `IHMP_API_KEY` in the host `.env` file. Never commit the key to GitHub.
 3. Run `php artisan optimize:clear` after changing `.env`.
-4. Send `Authorization: Bearer YOUR_KEY` or `X-IHMS-Key: YOUR_KEY`.
+4. Send `Authorization: Bearer YOUR_KEY` or `X-IHMP-Key: YOUR_KEY`.
 5. Read status from `/api/v1/status`.
 6. Read an approved dataset from `/api/v1/datasets/rooms`, `guests`, `reservations`, or `transactions`.
 7. Verify the transfer in **Admin > Integration Center**.

@@ -1,6 +1,8 @@
 composer.phar
 Le-Charme-Suites-IHMS-share-*.zip
 Le-Charme-Suites-IHMS-share-*/
+Le-Charme-Suites-IHMP-share-*.zip
+Le-Charme-Suites-IHMP-share-*/
 
 # Local document renders and scratch output
 /.proposal-render-*/

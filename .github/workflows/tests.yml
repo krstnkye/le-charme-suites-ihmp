@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: le-charme-suites-ihms
+        working-directory: le-charme-suites-ihmp
 
     steps:
       - uses: actions/checkout@v4

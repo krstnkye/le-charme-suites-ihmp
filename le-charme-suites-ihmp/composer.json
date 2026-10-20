@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "krstnkye/le-charme-suites-ihms",
+    "name": "krstnkye/le-charme-suites-ihmp",
     "type": "project",
     "description": "Le Charme Suites Integrated Hotel Management Portal.",
     "keywords": ["laravel", "framework"],

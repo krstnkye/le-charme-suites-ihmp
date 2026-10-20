@@ -1,8 +1,8 @@
 @echo off
 setlocal
-title Le Charme Suites IHMS Setup
+title Le Charme Suites IHMP Setup
 
-cd /d "%~dp0le-charme-suites-ihms"
+cd /d "%~dp0le-charme-suites-ihmp"
 if errorlevel 1 goto :wrong_folder
 
 where php >nul 2>nul
@@ -48,7 +48,7 @@ if errorlevel 1 goto :failed
 
 if /I "%~1"=="--no-serve" goto :done
 
-echo [5/5] Starting Le Charme Suites IHMS...
+echo [5/5] Starting Le Charme Suites IHMP...
 echo Open http://127.0.0.1:8000 in your browser.
 echo Keep this window open while using the system.
 echo.
@@ -60,7 +60,7 @@ echo [5/5] Setup verification completed successfully.
 exit /b 0
 
 :wrong_folder
-echo ERROR: The le-charme-suites-ihms application folder was not found.
+echo ERROR: The le-charme-suites-ihmp application folder was not found.
 goto :help
 
 :missing_php
@@ -86,6 +86,6 @@ echo.
 echo ERROR: Setup stopped because a command failed. Read the message above.
 
 :help
-echo See le-charme-suites-ihms\GROUPMATES_SETUP.md for troubleshooting.
+echo See le-charme-suites-ihmp\GROUPMATES_SETUP.md for troubleshooting.
 pause
 exit /b 1

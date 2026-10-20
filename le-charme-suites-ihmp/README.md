@@ -23,7 +23,7 @@ From the repository's outer folder, run:
 setup-and-run.bat
 ```
 
-For a manual setup, open a terminal inside `le-charme-suites-ihms` and run:
+For a manual setup, open a terminal inside `le-charme-suites-ihmp` and run:
 
 ```bat
 composer install

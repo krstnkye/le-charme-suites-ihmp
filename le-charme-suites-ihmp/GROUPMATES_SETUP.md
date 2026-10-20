@@ -5,10 +5,10 @@
 After cloning GitHub, the repository contains this structure:
 
 ```text
-le-charme-suites-ihms repository
+le-charme-suites-ihmp repository
 |-- setup-and-run.bat
 |-- update-and-run.bat
-`-- le-charme-suites-ihms
+`-- le-charme-suites-ihmp
     |-- artisan
     |-- app
     |-- database
@@ -16,7 +16,7 @@ le-charme-suites-ihms repository
     `-- routes
 ```
 
-The inner `le-charme-suites-ihms` folder is the Laravel application. Open the
+The inner `le-charme-suites-ihmp` folder is the Laravel application. Open the
 outer repository folder in VS Code, but run `php artisan ...` commands from the
 inner folder.
 
@@ -121,7 +121,7 @@ Extensions improve editing but are not required to run the application.
 
 ## First-Time Setup
 
-1. Clone `https://github.com/krstnkye/le-charme-suites-ihms.git`.
+1. Clone `https://github.com/krstnkye/le-charme-suites-ihmp.git`.
 2. Open the cloned outer folder in VS Code.
 3. Run `setup-and-run.bat` from the outer folder.
 4. Wait for Composer and database setup to finish.
@@ -181,7 +181,7 @@ If the error says `database/database.sqlite does not exist`, close the Laravel
 server and run `setup-and-run.bat` from the outer repository folder. The setup
 script creates the local SQLite file before applying the database migrations.
 
-To repair it manually, open PowerShell in the inner `le-charme-suites-ihms`
+To repair it manually, open PowerShell in the inner `le-charme-suites-ihmp`
 application folder and run:
 
 ```powershell

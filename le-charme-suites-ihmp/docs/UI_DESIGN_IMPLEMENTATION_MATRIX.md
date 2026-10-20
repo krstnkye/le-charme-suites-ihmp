@@ -1,4 +1,4 @@
-# Le Charmé Suites IHMS UI Design Implementation Matrix
+# Le Charmé Suites IHMP UI Design Implementation Matrix
 
 This checklist maps the supplied interface references to the running Laravel application. A page is marked **Integrated** only when its design is rendered by its real route and uses live application data where available.
 

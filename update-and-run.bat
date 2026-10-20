@@ -1,6 +1,6 @@
 @echo off
 setlocal
-title Le Charme Suites IHMS Update
+title Le Charme Suites IHMP Update
 
 cd /d "%~dp0"
 

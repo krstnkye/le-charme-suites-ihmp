@@ -1,6 +1,6 @@
-# Le Charme Suites IHMS
+# Le Charme Suites IHMP
 
-The Laravel application is inside the `le-charme-suites-ihms` folder.
+The Laravel application is inside the `le-charme-suites-ihmp` folder.
 
 ## Windows Quick Start
 
@@ -23,4 +23,4 @@ database on the same private Wi-Fi network, double-click
 the terminal. Keep that terminal and the host laptop running during use.
 
 Detailed setup and troubleshooting instructions are in
-[`le-charme-suites-ihms/GROUPMATES_SETUP.md`](le-charme-suites-ihms/GROUPMATES_SETUP.md).
+[`le-charme-suites-ihmp/GROUPMATES_SETUP.md`](le-charme-suites-ihmp/GROUPMATES_SETUP.md).
