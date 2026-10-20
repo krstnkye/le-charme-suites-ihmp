@@ -52,7 +52,10 @@
                     <p class="mt-2 text-sm text-slate-600">Five official room types and published starting rates from Le Charmé Suites.</p>
                     <div class="mt-5 grid gap-4 md:grid-cols-2">
                         @foreach ($roomTypes as $name => $details)
-                            <article class="overflow-hidden rounded-lg border border-[#ded7cc] bg-white shadow-sm">
+                            <article @class([
+                                'overflow-hidden rounded-lg border border-[#ded7cc] bg-white shadow-sm',
+                                'md:col-span-2 md:mx-auto md:w-[calc(50%-0.5rem)]' => $loop->last && $loop->count % 2 !== 0,
+                            ])>
                                 <figure class="relative aspect-[3/2] overflow-hidden bg-slate-100">
                                     <img src="{{ asset($details['image']) }}" alt="{{ $name }} at Le Charmé Suites" class="h-full w-full object-cover transition duration-300 hover:scale-[1.02]" loading="lazy">
                                     <figcaption class="absolute bottom-3 left-3 rounded bg-[#01162d]/85 px-2.5 py-1 text-xs font-bold text-white">{{ $name }}</figcaption>

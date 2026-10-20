@@ -11,6 +11,13 @@ class OnlineBookingTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_unmatched_final_room_card_is_centered_on_wider_screens(): void
+    {
+        $this->get(route('booking.create'))
+            ->assertOk()
+            ->assertSee('md:col-span-2 md:mx-auto md:w-[calc(50%-0.5rem)]', false);
+    }
+
     public function test_guest_can_submit_online_booking_that_appears_in_shared_database(): void
     {
         $room = Room::factory()->create([

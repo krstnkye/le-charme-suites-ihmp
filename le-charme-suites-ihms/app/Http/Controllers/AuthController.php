@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\AuthActivityLog;
 use App\Models\User;
 use App\Rules\WorkEmail;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password as PasswordBroker;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
@@ -23,6 +25,90 @@ class AuthController extends Controller
     public function showRegister(): View
     {
         return view('auth.register');
+    }
+
+    public function showForgotPassword(): View
+    {
+        return view('auth.forgot-password');
+    }
+
+    public function showResetPassword(Request $request, string $token): View
+    {
+        return view('auth.reset-password', [
+            'email' => $request->string('email')->toString(),
+            'token' => $token,
+        ]);
+    }
+
+    public function sendPasswordResetLink(Request $request): RedirectResponse
+    {
+        $request->merge([
+            'email' => Str::lower(trim((string) $request->input('email'))),
+        ]);
+
+        $credentials = $request->validate([
+            'email' => ['required', 'email', new WorkEmail],
+        ]);
+
+        $user = User::where('email', $credentials['email'])->first();
+        $status = PasswordBroker::sendResetLink($credentials);
+
+        $this->recordActivity(
+            $request,
+            'PASSWORD_RESET_REQUESTED',
+            $status === PasswordBroker::RESET_LINK_SENT,
+            $user,
+            'Password reset instructions requested.',
+        );
+
+        return back()->with(
+            'status',
+            'If that work email belongs to an account, password reset instructions have been sent.'
+        );
+    }
+
+    public function resetPassword(Request $request): RedirectResponse
+    {
+        $request->merge([
+            'email' => Str::lower(trim((string) $request->input('email'))),
+        ]);
+
+        $credentials = $request->validate([
+            'token' => ['required'],
+            'email' => ['required', 'email', new WorkEmail],
+            'password' => ['required', 'confirmed', Password::min(8)],
+        ], [
+            'password.confirmed' => 'Passwords do not match.',
+        ]);
+
+        $status = PasswordBroker::reset(
+            $credentials,
+            function (User $user, string $password): void {
+                $user->forceFill([
+                    'password' => $password,
+                    'remember_token' => Str::random(60),
+                ])->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        if ($status !== PasswordBroker::PASSWORD_RESET) {
+            return back()
+                ->withInput($request->only('email'))
+                ->withErrors(['email' => __($status)]);
+        }
+
+        $user = User::where('email', $credentials['email'])->first();
+        $this->recordActivity(
+            $request,
+            'PASSWORD_RESET_COMPLETED',
+            true,
+            $user,
+            'Staff account password was reset.',
+        );
+
+        return redirect()->route('login')->with('status', 'Your password has been reset. You can now sign in.');
     }
 
     public function login(Request $request): RedirectResponse

@@ -177,7 +177,7 @@
                         <input name="remember" class="rounded border-outline-variant text-primary focus:ring-secondary" type="checkbox" checked>
                         <span>Remember me</span>
                     </label>
-                    <a class="font-semibold text-secondary hover:underline" href="mailto:{{ config('hotel.email') }}?subject=IHMP%20Password%20Reset%20Request">Forgot password?</a>
+                    <a class="font-semibold text-secondary hover:underline" href="{{ route('password.request') }}">Forgot password?</a>
                 </div>
 
                 <button class="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-secondary/20 bg-primary py-3 font-title-md text-title-md text-white shadow-md transition hover:bg-primary-container" type="submit">
