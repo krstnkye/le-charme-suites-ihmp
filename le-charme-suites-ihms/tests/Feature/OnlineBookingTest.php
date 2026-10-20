@@ -139,6 +139,23 @@ class OnlineBookingTest extends TestCase
         $this->assertSame('occupied', $room->fresh()->status);
 
         $checkIn = CheckIn::firstOrFail();
+        $this->actingAs($receptionist)
+            ->get(route('check-outs.create'))
+            ->assertOk()
+            ->assertSee(json_encode(route('check-outs.bill-preview', ['checkIn' => $checkIn, 'print' => 1])), false)
+            ->assertDontSee('onclick="window.print()"', false);
+
+        $this->actingAs($receptionist)
+            ->get(route('check-outs.bill-preview', $checkIn))
+            ->assertOk()
+            ->assertSeeText('GUEST BILL')
+            ->assertSeeText('FOR REVIEW BEFORE CHECKOUT')
+            ->assertSeeText('Online Guest')
+            ->assertSeeText('Room 105')
+            ->assertSeeText('PHP 17,528.00')
+            ->assertSee('@page { size:A4 portrait;', false)
+            ->assertDontSeeText('Guest Bills & Checkout');
+
         $response = $this->actingAs($receptionist)
             ->post(route('check-outs.store'), [
                 'check_in_id' => $checkIn->id,

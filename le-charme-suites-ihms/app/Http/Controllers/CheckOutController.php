@@ -127,6 +127,7 @@ class CheckOutController extends Controller
             ->where('reservation_id', $checkOut->reservation_id)
             ->whereNotIn('transaction_type', ['reservation', 'check_in', 'check_out'])
             ->where('status', '!=', 'void')
+            ->where('amount', '>', 0)
             ->orderBy('transaction_date')
             ->get();
         $additionalTotal = round((float) $additionalCharges->sum('amount'), 2);
@@ -143,6 +144,37 @@ class CheckOutController extends Controller
             'totalCharges' => $totalCharges,
             'amountPaid' => $amountPaid,
             'balance' => max(0, round($totalCharges - $amountPaid, 2)),
+        ]);
+    }
+
+    public function billPreview(CheckIn $checkIn): View
+    {
+        $checkIn->load(['guest', 'room', 'reservation']);
+
+        abort_if($checkIn->status !== 'active', 404);
+
+        $reservation = $checkIn->reservation;
+        $nights = $reservation?->check_in_date && $reservation?->check_out_date
+            ? max(1, (int) $reservation->check_in_date->diffInDays($reservation->check_out_date))
+            : 1;
+        $roomCharges = round((float) ($checkIn->room?->rate ?? 0) * $nights, 2);
+        $additionalCharges = HotelTransaction::query()
+            ->where('reservation_id', $checkIn->reservation_id)
+            ->whereNotIn('transaction_type', ['reservation', 'check_in', 'check_out'])
+            ->where('status', '!=', 'void')
+            ->where('amount', '>', 0)
+            ->orderBy('transaction_date')
+            ->get();
+        $additionalTotal = round((float) $additionalCharges->sum('amount'), 2);
+
+        return view('check_outs.bill-preview', [
+            'checkIn' => $checkIn,
+            'reservation' => $reservation,
+            'nights' => $nights,
+            'roomCharges' => $roomCharges,
+            'additionalCharges' => $additionalCharges,
+            'additionalTotal' => $additionalTotal,
+            'totalCharges' => round($roomCharges + $additionalTotal, 2),
         ]);
     }
 

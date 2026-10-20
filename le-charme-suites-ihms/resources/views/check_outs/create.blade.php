@@ -28,6 +28,7 @@
             'check_in' => $checkInDate?->format('M d, Y') ?: 'Not recorded',
             'check_out' => $checkOutDate?->format('M d, Y') ?: 'Pending',
             'folio' => 'BILL-' . now()->format('Y') . '-' . str_pad((string) $checkIn->id, 5, '0', STR_PAD_LEFT),
+            'bill_preview_url' => route('check-outs.bill-preview', ['checkIn' => $checkIn, 'print' => 1]),
         ];
     })->values();
     $activeBalance = $activeCheckIns->sum('balance');
@@ -94,7 +95,7 @@
                         <p class="mt-2 text-sm leading-6 text-blue-100">Review active guest bills, extra charges, taxes, deposits, payments, and checkout records.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
-                        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">layers</span>Print Guest Bills</button>
+                        <button id="printSelectedBillButton" type="button" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">print</span>Print Selected Guest Bill</button>
                         <button type="button" onclick="document.getElementById('settlementForm')?.scrollIntoView({ behavior: 'smooth', block: 'center' })" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">price_check</span>Pay Selected Balance</button>
                     </div>
                 </div>
@@ -112,7 +113,7 @@
                     <div class="border-b border-line p-5">
                         <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                             <div><h3 class="font-serif text-2xl font-bold">Guest Billing Records</h3><p class="text-sm text-slate-500">Review room charges, confirm deposits, and prepare official receipts.</p></div>
-                            <div class="flex flex-wrap items-center gap-2"><button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-base">print</span>Print Master Bill</button><a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-base">tune</span>Full Transaction Filter</a></div>
+                            <div class="flex flex-wrap items-center gap-2"><button id="printSelectedBillHeaderButton" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-base">print</span>Print Selected Guest Bill</button><a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-base">tune</span>Full Transaction Filter</a></div>
                         </div>
                     </div>
 
@@ -132,7 +133,7 @@
                                         <td class="px-3 py-3.5 text-right font-mono font-semibold text-emerald-800">-PHP {{ number_format($stay['deposit'], 2) }}</td>
                                         <td class="px-4 py-3.5 text-right"><div class="font-mono text-base font-bold text-primary">PHP {{ number_format($stay['balance'], 2) }}</div><span class="text-[10px] font-bold uppercase text-secondary">Payment Pending</span></td>
                                         <td class="px-3 py-3.5 text-center"><span class="rounded-full bg-secondary-fixed px-2 py-1 text-xs font-bold text-primary">Pre-Auth</span></td>
-                                        <td class="px-4 py-3.5 text-center"><div class="flex items-center justify-center gap-1 text-slate-500"><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-primary" data-stay-id="{{ $stay['id'] }}" title="View detailed guest bill"><span class="material-symbols-outlined text-base">visibility</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-secondary" data-stay-id="{{ $stay['id'] }}" title="Post payment"><span class="material-symbols-outlined text-base">payments</span></button><button type="button" onclick="window.print()" class="rounded p-1 hover:bg-surface-mid hover:text-primary" title="Print invoice"><span class="material-symbols-outlined text-base">print</span></button></div></td>
+                                        <td class="px-4 py-3.5 text-center"><div class="flex items-center justify-center gap-1 text-slate-500"><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-primary" data-stay-id="{{ $stay['id'] }}" title="View detailed guest bill"><span class="material-symbols-outlined text-base">visibility</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-secondary" data-stay-id="{{ $stay['id'] }}" title="Post payment"><span class="material-symbols-outlined text-base">payments</span></button><a href="{{ $stay['bill_preview_url'] }}" target="_blank" rel="noopener" class="inline-flex rounded p-1 hover:bg-surface-mid hover:text-primary" title="Print guest bill"><span class="material-symbols-outlined text-base">print</span></a></div></td>
                                     </tr>
                                 @empty
                                     <tr><td colspan="9" class="px-4 py-12 text-center font-semibold text-slate-500">No active guest bills are waiting for Billing right now.</td></tr>
@@ -178,7 +179,7 @@
 
                         <div class="mt-5 flex flex-wrap gap-3 border-t border-line pt-4">
                             <button class="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900" @disabled($activeCheckIns->isEmpty())><span class="material-symbols-outlined text-secondary-fixed">price_check</span>Settle Guest Bill / Checkout</button>
-                            <button id="openFolioButton" type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-3 text-sm font-bold text-primary shadow-sm transition hover:border-secondary"><span class="material-symbols-outlined">receipt_long</span>Receipt</button>
+                            <button id="openFolioButton" type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-3 text-sm font-bold text-primary shadow-sm transition hover:border-secondary"><span class="material-symbols-outlined">receipt_long</span>View Guest Bill</button>
                         </div>
                     </form>
 
@@ -190,14 +191,14 @@
 
     <div id="folioModal" class="no-print fixed inset-0 z-50 hidden items-center justify-center bg-primary/70 px-4 py-8">
         <div class="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl">
-            <div class="flex items-center justify-between border-b border-line px-6 py-4"><div><p class="text-xs font-bold uppercase tracking-[0.2em] text-secondary">Guest Bill Receipt Preview</p><h2 class="mt-1 font-serif text-2xl font-bold">Guest Payment Receipt</h2></div><button id="closeFolioButton" type="button" class="rounded-lg p-2 text-slate-500 transition hover:bg-surface-low hover:text-primary" aria-label="Close receipt preview"><span class="material-symbols-outlined">close</span></button></div>
+            <div class="flex items-center justify-between border-b border-line px-6 py-4"><div><p class="text-xs font-bold uppercase tracking-[0.2em] text-secondary">Guest Bill Preview</p><h2 class="mt-1 font-serif text-2xl font-bold">Charges Before Checkout</h2></div><button id="closeFolioButton" type="button" class="rounded-lg p-2 text-slate-500 transition hover:bg-surface-low hover:text-primary" aria-label="Close guest bill preview"><span class="material-symbols-outlined">close</span></button></div>
             <div id="folioReceipt" class="bg-white p-6 text-primary">
-                <div class="border-b border-line pb-5 text-center"><div class="mx-auto max-w-xs">@include('partials.brand-logo', ['class' => 'h-auto w-full object-contain'])</div><p class="mt-1 text-xs font-bold uppercase tracking-[0.24em] text-secondary">Subic Bay Philippines</p><p class="mt-3 text-sm text-slate-500">Official guest bill prepared by Billing</p></div>
+                <div class="border-b border-line pb-5 text-center"><div class="mx-auto max-w-xs">@include('partials.brand-logo', ['class' => 'h-auto w-full object-contain'])</div><p class="mt-1 text-xs font-bold uppercase tracking-[0.24em] text-secondary">Subic Bay Philippines</p><p class="mt-3 text-sm text-slate-500">Guest bill preview prepared before checkout</p></div>
                 <div class="grid gap-4 border-b border-line py-5 sm:grid-cols-2"><div><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Guest</p><p id="receiptGuest" class="mt-1 text-lg font-bold">No guest selected</p><p id="receiptEmail" class="text-sm text-slate-500">--</p></div><div class="sm:text-right"><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Bill Number</p><p id="receiptFolio" class="mt-1 font-mono text-lg font-bold">--</p><p class="text-sm text-slate-500">{{ now(config('app.timezone'))->format('M d, Y - h:i A') }}</p></div></div>
                 <div class="space-y-3 py-5"><div class="flex justify-between text-sm"><span>Room charges</span><span id="receiptRoomCharges" class="font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Extra charges</span><span id="receiptIncidentals" class="font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Tax</span><span id="receiptTax" class="font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Amount paid</span><span id="receiptAmountPaid" class="font-bold">PHP 0.00</span></div><div class="flex justify-between border-t border-line pt-4 text-lg"><span class="font-bold">Remaining balance</span><span id="receiptBalance" class="font-serif text-2xl font-bold">PHP 0.00</span></div><div class="flex justify-between text-sm"><span>Payment status</span><span id="receiptPaymentStatus" class="font-bold uppercase">Unpaid</span></div></div>
                 <div class="rounded-lg border border-line bg-surface-low p-4"><p class="text-xs font-bold uppercase tracking-wide text-slate-500">Billing Notes</p><p id="receiptNotes" class="mt-2 text-sm leading-6 text-slate-700">No notes entered.</p></div>
             </div>
-            <div class="no-print flex flex-wrap items-center justify-end gap-3 border-t border-line px-6 py-4"><button id="cancelFolioButton" type="button" class="rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-bold text-primary transition hover:border-secondary">Close</button><button id="printReceiptButton" type="button" class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-primary-container"><span class="material-symbols-outlined text-[18px]">print</span>Print Receipt</button></div>
+            <div class="no-print flex flex-wrap items-center justify-end gap-3 border-t border-line px-6 py-4"><button id="cancelFolioButton" type="button" class="rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-bold text-primary transition hover:border-secondary">Close</button><button id="printReceiptButton" type="button" class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-primary-container"><span class="material-symbols-outlined text-[18px]">print</span>Print Guest Bill</button></div>
         </div>
     </div>
 
@@ -280,7 +281,15 @@
         });
         document.getElementById('closeFolioButton').addEventListener('click', () => { folioModal.classList.add('hidden'); folioModal.classList.remove('flex'); });
         document.getElementById('cancelFolioButton').addEventListener('click', () => { folioModal.classList.add('hidden'); folioModal.classList.remove('flex'); });
-        document.getElementById('printReceiptButton').addEventListener('click', () => window.print());
+        function printSelectedGuestBill() {
+            const stay = selectedStay();
+            if (!stay) return showFolioMessage('Please select an active guest bill first.');
+            window.open(stay.bill_preview_url, '_blank', 'noopener');
+        }
+
+        document.getElementById('printSelectedBillButton').addEventListener('click', printSelectedGuestBill);
+        document.getElementById('printSelectedBillHeaderButton').addEventListener('click', printSelectedGuestBill);
+        document.getElementById('printReceiptButton').addEventListener('click', printSelectedGuestBill);
         folioModal.addEventListener('click', (event) => { if (event.target === folioModal) { folioModal.classList.add('hidden'); folioModal.classList.remove('flex'); } });
 
         function updateBillingClock() {

@@ -39,6 +39,7 @@
                 'hotel_website_api' => 'Official Website API',
                 default => str($reservation->source ?: 'front_desk')->replace('_', ' ')->title()->toString(),
             },
+            'registration_card_url' => route('reservations.registration-card', ['reservation' => $reservation, 'print' => 1]),
         ];
     })->values();
 @endphp
@@ -429,7 +430,7 @@
                                             </button>
                                             <button id="printArrivalButton" type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-outline-variant bg-white px-4 py-3 text-sm font-bold text-primary shadow-sm transition hover:border-secondary disabled:cursor-not-allowed disabled:opacity-50" disabled>
                                                 <span class="material-symbols-outlined text-[18px]">print</span>
-                                                Print Registration Card & Receipt
+                                                Print Registration Card
                                             </button>
                                         </div>
                                         <a href="{{ route('check-ins.index') }}" class="px-3 py-2 text-sm font-bold text-slate-500 transition hover:text-error">Cancel</a>
@@ -721,53 +722,7 @@
                 return;
             }
 
-            const keycards = [
-                document.getElementById('keycardOne').value.trim(),
-                document.getElementById('keycardTwo').value.trim(),
-            ].filter(Boolean);
-            const notes = document.getElementById('notes').value.trim();
-            const preparedBy = @json($currentUser?->name ?? 'Front Desk Staff');
-            const preparedAt = new Intl.DateTimeFormat('en-PH', {
-                timeZone: @json(config('app.timezone')),
-                dateStyle: 'medium',
-                timeStyle: 'short',
-            }).format(new Date());
-            const identityVerified = document.getElementById('identityVerified').checked;
-            const guaranteeConfirmed = document.getElementById('guaranteeConfirmed').checked;
-            const roomReady = document.getElementById('roomReady').checked;
-
-            setCardText('cardReference', selected.booking_reference);
-            setCardText('cardBarcodeText', selected.booking_reference);
-            setCardText('cardPreparedAt', `Printed ${preparedAt}`);
-            setCardText('cardGuest', selected.guest);
-            setCardText('cardEmail', selected.email);
-            setCardText('cardPhone', selected.phone);
-            setCardText('cardAddress', selected.address);
-            setCardText('cardIdentification', selected.identification);
-            setCardText('cardIdentityBadge', identityVerified ? 'Identity verified' : 'Verification pending');
-            setCardText('cardSource', selected.source);
-            setCardText('cardArrival', selected.check_in);
-            setCardText('cardDeparture', selected.check_out);
-            setCardText('cardRoom', `Room ${selected.room} - ${selected.room_type}`);
-            setCardText('cardRoomCapacity', `Capacity ${selected.capacity} ${Number(selected.capacity) === 1 ? 'guest' : 'guests'}`);
-            setCardText('cardStay', `${selected.guests} ${Number(selected.guests) === 1 ? 'guest' : 'guests'} / ${selected.nights} ${Number(selected.nights) === 1 ? 'night' : 'nights'}`);
-            setCardText('cardRate', currency(selected.room_rate));
-            setCardText('cardTotal', currency(selected.room_total));
-            setCardText('cardDeposit', currency(selected.deposit));
-            setCardText('cardKeycards', keycards.length ? keycards.join(' / ') : 'Not assigned');
-            setCardText('cardNotes', notes || 'None recorded.');
-            setCardText('cardPreparedBy', preparedBy);
-            setCardText('cardPreparedByTop', `Prepared by ${preparedBy}`);
-            setCardText('cardIdentityStatus', verificationMark(identityVerified, 'Identity verified'));
-            setCardText('cardGuaranteeStatus', verificationMark(guaranteeConfirmed, 'Deposit or guarantee confirmed'));
-            setCardText('cardRoomStatus', verificationMark(roomReady, 'Room and keycards ready'));
-            setCardText('cardCounterRoom', selected.room);
-            setCardText('cardCounterGuest', selected.guest);
-            setCardText('cardCounterStay', `${selected.check_in} to ${selected.check_out} - ${selected.room_type}`);
-            setCardText('cardCounterReference', selected.booking_reference);
-            setCardText('cardAuditReference', `${selected.booking_reference} - PRINTED ${preparedAt}`);
-
-            window.print();
+            window.open(selected.registration_card_url, '_blank', 'noopener');
         }
 
         function normalizeSearch(value) {

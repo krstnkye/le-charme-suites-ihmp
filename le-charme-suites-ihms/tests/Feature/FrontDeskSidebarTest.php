@@ -144,7 +144,14 @@ class FrontDeskSidebarTest extends TestCase
             ->assertSeeText('Guest signature')
             ->assertSee('@page { size:A4 portrait;', false)
             ->assertSee('PAGE 1 OF 1')
-            ->assertSee("window.print()", false)
+            ->assertSee('window.print()', false)
             ->assertDontSee('aria-label="Front Desk Sidebar"', false);
+
+        $this->actingAs($receptionist)
+            ->get(route('check-ins.create', ['reservation_id' => $reservation]))
+            ->assertOk()
+            ->assertSee(json_encode(route('reservations.registration-card', ['reservation' => $reservation, 'print' => 1])), false)
+            ->assertSeeText('Print Registration Card')
+            ->assertDontSeeText('Print Registration Card & Receipt');
     }
 }
