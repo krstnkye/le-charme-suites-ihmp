@@ -15,7 +15,9 @@ class OnlineBookingTest extends TestCase
     {
         $this->get(route('booking.create'))
             ->assertOk()
-            ->assertSee('md:col-span-2 md:mx-auto md:w-[calc(50%-0.5rem)]', false);
+            ->assertSee('sm:col-span-2 sm:mx-auto sm:w-[calc(50%-0.625rem)]', false)
+            ->assertSeeText('Bike-Friendly Destination:')
+            ->assertSeeText('Direct booking request');
     }
 
     public function test_guest_can_submit_online_booking_that_appears_in_shared_database(): void
