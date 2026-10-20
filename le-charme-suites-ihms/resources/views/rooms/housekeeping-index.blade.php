@@ -186,18 +186,19 @@
 
                 <section class="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-5">
                     @foreach ([
-                        ['Total Rooms', $totalRooms, 'domain', 'text-primary'],
-                        ['Available', $availableRooms, 'check_circle', 'text-emerald-700'],
-                        ['Reserved', $reservedRooms, 'event_available', 'text-secondary'],
-                        ['Occupied', $occupiedRooms, 'king_bed', 'text-primary'],
-                        ['Maintenance', $maintenanceRooms, 'construction', 'text-red-700'],
-                    ] as [$label, $value, $icon, $color])
+                        ['Property Rooms', $publishedRoomCount, 'domain', 'text-primary', 'Hotel total'],
+                        ['Available', $availableRooms, 'check_circle', 'text-emerald-700', 'Encoded inventory'],
+                        ['Reserved', $reservedRooms, 'event_available', 'text-secondary', 'Encoded inventory'],
+                        ['Occupied', $occupiedRooms, 'king_bed', 'text-primary', 'Encoded inventory'],
+                        ['Maintenance', $maintenanceRooms, 'construction', 'text-red-700', 'Encoded inventory'],
+                    ] as [$label, $value, $icon, $color, $caption])
                         <article class="rounded-lg border border-line bg-white p-4 shadow-sm">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">{{ $label }}</span>
                                 <span class="material-symbols-outlined {{ $color }} text-lg">{{ $icon }}</span>
                             </div>
                             <p class="mt-3 font-serif text-3xl font-bold {{ $color }}">{{ $value }}</p>
+                            <p class="mt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{{ $caption }}</p>
                         </article>
                     @endforeach
                 </section>

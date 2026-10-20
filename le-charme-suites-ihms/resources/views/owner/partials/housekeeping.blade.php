@@ -37,7 +37,7 @@
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-3 rounded-xl border border-white/10 bg-white/10 p-4 sm:grid-cols-4 xl:min-w-[620px]">
             <div class="border-r border-white/10 pr-3"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Occupancy</p><p class="mt-1 font-serif text-2xl font-bold">{{ $occupancyRate }}%</p></div>
-            <div class="border-r border-white/10 pr-3"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Total Rooms</p><p class="mt-1 font-serif text-2xl font-bold">{{ $totalRooms }}</p></div>
+            <div class="border-r border-white/10 pr-3"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Property Rooms</p><p class="mt-1 font-serif text-2xl font-bold">{{ $publishedRoomCount }}</p><p class="text-[10px] text-blue-100/70">{{ $totalRooms }} encoded</p></div>
             <div class="border-r border-white/10 pr-3"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Attendants</p><p class="mt-1 font-serif text-2xl font-bold">{{ min(count($attendants), max($totalRooms, 1)) }}</p></div>
             <div><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Queue</p><p class="mt-1 font-serif text-2xl font-bold text-secondary-fixed">{{ $turnoverQueue + $maintenanceQueue }}</p></div>
         </div>

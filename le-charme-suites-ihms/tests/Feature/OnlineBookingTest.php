@@ -81,6 +81,28 @@ class OnlineBookingTest extends TestCase
         $this->assertDatabaseHas('reservations', ['source' => 'hotel_website_api', 'status' => 'pending']);
     }
 
+    public function test_hotel_website_api_retries_are_idempotent(): void
+    {
+        config(['integrations.api_key' => 'booking-secret']);
+        Room::factory()->create([
+            'room_number' => '104',
+            'room_type' => 'Deluxe King',
+            'capacity' => 3,
+        ]);
+
+        $payload = $this->bookingPayload([
+            'external_reference' => 'LECHARME-WEB-10001',
+        ]);
+
+        $first = $this->withToken('booking-secret')->postJson('/api/v1/bookings', $payload);
+        $second = $this->withToken('booking-secret')->postJson('/api/v1/bookings', $payload);
+
+        $first->assertCreated();
+        $second->assertCreated();
+        $this->assertSame($first->json('booking_reference'), $second->json('booking_reference'));
+        $this->assertSame(1, Reservation::where('external_reference', 'LECHARME-WEB-10001')->count());
+    }
+
     /** @param array<string, mixed> $overrides
      * @return array<string, mixed>
      */

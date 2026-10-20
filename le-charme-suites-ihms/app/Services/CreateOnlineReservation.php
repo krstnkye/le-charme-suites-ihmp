@@ -17,6 +17,22 @@ class CreateOnlineReservation
     public function handle(array $data, string $source, ?string $ipAddress = null): Reservation
     {
         return DB::transaction(function () use ($data, $source, $ipAddress): Reservation {
+            $externalReference = filled($data['external_reference'] ?? null)
+                ? trim((string) $data['external_reference'])
+                : null;
+
+            if ($externalReference) {
+                $existingReservation = Reservation::query()
+                    ->where('external_reference', $externalReference)
+                    ->where('source', $source)
+                    ->with(['guest', 'room'])
+                    ->first();
+
+                if ($existingReservation) {
+                    return $existingReservation;
+                }
+            }
+
             $room = Room::query()
                 ->where('room_type', $data['room_type'])
                 ->whereNotIn('status', ['maintenance'])
@@ -55,6 +71,7 @@ class CreateOnlineReservation
 
             $reservation = Reservation::create([
                 'booking_reference' => $this->reference(),
+                'external_reference' => $externalReference,
                 'guest_id' => $guest->id,
                 'room_id' => $room->id,
                 'check_in_date' => $data['check_in_date'],
@@ -82,11 +99,12 @@ class CreateOnlineReservation
                 'format' => 'json',
                 'record_count' => 1,
                 'status' => 'completed',
-                'endpoint' => '/api/v1/bookings',
+                'endpoint' => $source === 'public_website' ? '/book' : '/api/v1/bookings',
                 'metadata' => [
                     'ip_address' => $ipAddress,
                     'source' => $source,
                     'booking_reference' => $reservation->booking_reference,
+                    'external_reference' => $externalReference,
                 ],
                 'occurred_at' => now(),
             ]);

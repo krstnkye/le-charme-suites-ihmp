@@ -11,6 +11,7 @@ class OnlineBookingApiController extends Controller
     public function store(Request $request, CreateOnlineReservation $creator): JsonResponse
     {
         $data = $request->validate([
+            'external_reference' => ['nullable', 'string', 'max:100'],
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:255'],
@@ -28,6 +29,7 @@ class OnlineBookingApiController extends Controller
         return response()->json([
             'message' => 'Booking request received and sent to the Le Charmé front desk.',
             'booking_reference' => $reservation->booking_reference,
+            'external_reference' => $reservation->external_reference,
             'status' => $reservation->status,
             'room_type' => $reservation->room->room_type,
             'check_in_date' => $reservation->check_in_date->toDateString(),

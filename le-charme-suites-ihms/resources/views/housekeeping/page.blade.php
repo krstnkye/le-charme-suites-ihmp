@@ -47,11 +47,11 @@
 
     <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         @foreach ([
-            ['label' => 'Total Rooms', 'value' => $totalRooms, 'icon' => 'domain'],
-            ['label' => 'Available', 'value' => $availableRooms, 'icon' => 'check_circle'],
-            ['label' => 'Occupied', 'value' => $occupiedRooms, 'icon' => 'king_bed'],
-            ['label' => 'Cleaning', 'value' => $cleaningRooms->count(), 'icon' => 'mop'],
-            ['label' => 'Maintenance', 'value' => $maintenanceQueue->count(), 'icon' => 'construction'],
+            ['label' => 'Property Rooms', 'value' => $publishedRoomCount, 'icon' => 'domain', 'caption' => 'Hotel total'],
+            ['label' => 'Available', 'value' => $availableRooms, 'icon' => 'check_circle', 'caption' => 'Encoded inventory'],
+            ['label' => 'Occupied', 'value' => $occupiedRooms, 'icon' => 'king_bed', 'caption' => 'Encoded inventory'],
+            ['label' => 'Cleaning', 'value' => $cleaningRooms->count(), 'icon' => 'mop', 'caption' => 'Encoded inventory'],
+            ['label' => 'Maintenance', 'value' => $maintenanceQueue->count(), 'icon' => 'construction', 'caption' => 'Encoded inventory'],
         ] as $stat)
             <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
                 <div class="flex items-center justify-between">
@@ -59,6 +59,7 @@
                     <span class="material-symbols-outlined text-secondary">{{ $stat['icon'] }}</span>
                 </div>
                 <p class="mt-3 font-serif text-3xl font-bold">{{ $stat['value'] }}</p>
+                <p class="mt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{{ $stat['caption'] }}</p>
             </div>
         @endforeach
     </section>

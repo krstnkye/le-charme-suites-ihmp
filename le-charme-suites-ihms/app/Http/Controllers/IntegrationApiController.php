@@ -26,7 +26,8 @@ class IntegrationApiController extends Controller
             'server_time' => now(config('app.timezone'))->toIso8601String(),
             'record_counts' => [
                 'guests' => Guest::count(),
-                'rooms' => Room::count(),
+                'property_rooms' => (int) config('hotel.published_room_count', Room::count()),
+                'rooms_encoded' => Room::count(),
                 'reservations' => Reservation::count(),
                 'transactions' => HotelTransaction::count(),
             ],

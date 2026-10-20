@@ -34,7 +34,11 @@
             'deposit' => $deposit,
             'folio' => 'RES-' . str_pad((string) $reservation->id, 5, '0', STR_PAD_LEFT),
             'booking_reference' => $reservation->booking_reference ?: 'RES-' . str_pad((string) $reservation->id, 5, '0', STR_PAD_LEFT),
-            'source' => str($reservation->source ?: 'front_desk')->replace('_', ' ')->title()->toString(),
+            'source' => match ($reservation->source) {
+                'public_website' => 'IHMP Direct Booking',
+                'hotel_website_api' => 'Official Website API',
+                default => str($reservation->source ?: 'front_desk')->replace('_', ' ')->title()->toString(),
+            },
         ];
     })->values();
 @endphp

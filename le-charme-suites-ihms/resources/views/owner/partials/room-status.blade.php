@@ -45,7 +45,7 @@
             </p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-0 overflow-hidden rounded-xl border border-white/10 bg-white/10 sm:grid-cols-4 xl:min-w-[600px]">
-            <div class="border-b border-r border-white/10 p-4 sm:border-b-0"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Rooms</p><p class="mt-1 font-serif text-2xl font-bold">{{ $totalRooms }}</p></div>
+            <div class="border-b border-r border-white/10 p-4 sm:border-b-0"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Property Rooms</p><p class="mt-1 font-serif text-2xl font-bold">{{ $publishedRoomCount }}</p><p class="text-[10px] text-blue-100/70">{{ $totalRooms }} encoded</p></div>
             <div class="border-b border-white/10 p-4 sm:border-b-0 sm:border-r"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Clean & Ready</p><p class="mt-1 font-serif text-2xl font-bold text-secondary-fixed">{{ $vacantCleanRooms }}</p></div>
             <div class="border-r border-white/10 p-4"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Occupied</p><p class="mt-1 font-serif text-2xl font-bold">{{ $occupiedRooms }}</p></div>
             <div class="p-4"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Readiness</p><p class="mt-1 font-serif text-2xl font-bold text-secondary-fixed">{{ $readinessRate }}%</p></div>
@@ -60,7 +60,7 @@
             <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-low text-secondary"><span class="material-symbols-outlined">bed</span></span>
         </div>
         <p class="mt-4 font-serif text-3xl font-bold">{{ $availableRooms }}</p>
-        <p class="mt-1 text-sm text-slate-500">Available of {{ $totalRooms }} rooms ({{ $occupiedRooms }} occupied)</p>
+        <p class="mt-1 text-sm text-slate-500">{{ $availableRooms }} available of {{ $totalRooms }} encoded rooms ({{ $publishedRoomCount }} property total)</p>
     </div>
     <div class="owner-card rounded-xl p-5">
         <div class="flex items-center justify-between">

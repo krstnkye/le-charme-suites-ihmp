@@ -32,10 +32,38 @@
                 </div>
             </section>
 
-            <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+            <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
                 @foreach ($recordCounts as $label => $count)
                     <div class="rounded-lg border border-line bg-white p-4 shadow-sm"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ $label }}</p><p class="mt-2 font-serif text-3xl font-bold">{{ number_format($count) }}</p><p class="mt-1 text-xs text-slate-500">Shared central records</p></div>
                 @endforeach
+            </section>
+
+            <section class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
+                <div class="border-b border-line px-5 py-4">
+                    <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Website To IHMP Reservation Pipeline</p>
+                    <h3 class="mt-1 font-serif text-2xl font-bold">What Is Integrated Now</h3>
+                    <p class="mt-1 text-sm text-slate-500">Separates the working school-project integration from the official hotel connection that still requires authorization.</p>
+                </div>
+                <div class="grid gap-4 p-5 lg:grid-cols-3">
+                    <article class="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+                        <div class="flex items-center justify-between gap-3"><strong>IHMP Direct Booking Page</strong><span class="rounded-full bg-emerald-700 px-2.5 py-1 text-[10px] font-bold uppercase text-white">Active</span></div>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">The public <a class="font-bold text-primary underline" href="{{ route('booking.create') }}">booking page</a> validates availability and saves guest, reservation, transaction, and audit records in the shared database.</p>
+                        <p class="mt-3 text-xs font-bold text-emerald-800">{{ number_format($onlineBookingCount) }} online request(s) recorded</p>
+                    </article>
+                    <article class="rounded-lg border {{ $apiEnabled ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50' }} p-4">
+                        <div class="flex items-center justify-between gap-3"><strong>Secured Booking API</strong><span class="rounded-full {{ $apiEnabled ? 'bg-emerald-700' : 'bg-amber-700' }} px-2.5 py-1 text-[10px] font-bold uppercase text-white">{{ $apiEnabled ? 'Enabled' : 'Awaiting key' }}</span></div>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">An approved website can submit JSON to the key-protected endpoint. External references are idempotent, so retries do not duplicate bookings.</p>
+                        <code class="mt-3 block break-all rounded bg-white/80 p-2 text-[11px]">POST {{ route('api.v1.bookings.store') }}</code>
+                    </article>
+                    <article class="rounded-lg border {{ $websiteConnector['connection_approved'] ? 'border-emerald-200 bg-emerald-50' : 'border-slate-300 bg-slate-50' }} p-4">
+                        <div class="flex items-center justify-between gap-3"><strong>Official Le Charmé Website</strong><span class="rounded-full {{ $websiteConnector['connection_approved'] ? 'bg-emerald-700' : 'bg-slate-700' }} px-2.5 py-1 text-[10px] font-bold uppercase text-white">{{ $websiteConnector['connection_approved'] ? 'Approved' : 'Permission required' }}</span></div>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">{{ $websiteConnector['note'] }}</p>
+                        <a class="mt-3 inline-flex items-center gap-1 text-xs font-bold text-primary underline" href="{{ $websiteConnector['booking_url'] }}" target="_blank" rel="noopener">View official booking flow <span class="material-symbols-outlined text-sm">open_in_new</span></a>
+                    </article>
+                </div>
+                <div class="border-t border-line bg-[#fcf9f3] px-5 py-4 text-sm text-slate-600">
+                    <strong class="text-primary">Demonstration path:</strong> guest submits through IHMP → reservation enters the Front Desk queue → staff confirms and checks in → the shared room status changes → checkout creates the housekeeping turnover workflow. A live official-site connection uses the same API only after Le Charmé supplies permission and credentials.
+                </div>
             </section>
 
             <section class="grid gap-5 xl:grid-cols-3">

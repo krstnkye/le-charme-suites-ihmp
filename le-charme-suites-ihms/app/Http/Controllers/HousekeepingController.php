@@ -164,6 +164,7 @@ class HousekeepingController extends Controller
         return [
             'allRooms' => $allRooms,
             'totalRooms' => $allRooms->count(),
+            'publishedRoomCount' => (int) config('hotel.published_room_count', $allRooms->count()),
             'availableRooms' => $allRooms->where('status', 'available')->count(),
             'reservedRooms' => $allRooms->where('status', 'reserved')->count(),
             'occupiedRooms' => $allRooms->where('status', 'occupied')->count(),

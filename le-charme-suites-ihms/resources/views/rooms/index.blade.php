@@ -195,18 +195,19 @@
 
             <section class="grid grid-cols-2 gap-3 md:grid-cols-5">
                 @foreach ([
-                    ['Total Rooms', $totalRooms, 'apartment', 'text-primary'],
-                    ['Available', $availableRooms, 'check_circle', 'text-emerald-800'],
-                    ['Reserved', $reservedRooms, 'event_available', 'text-secondary'],
-                    ['Occupied', $occupiedRooms, 'king_bed', 'text-primary'],
-                    ['Maintenance', $maintenanceRooms, 'build', 'text-error'],
-                ] as [$label, $value, $icon, $color])
+                    ['Property Rooms', $publishedRoomCount, 'apartment', 'text-primary', 'Hotel total'],
+                    ['Available', $availableRooms, 'check_circle', 'text-emerald-800', 'Encoded inventory'],
+                    ['Reserved', $reservedRooms, 'event_available', 'text-secondary', 'Encoded inventory'],
+                    ['Occupied', $occupiedRooms, 'king_bed', 'text-primary', 'Encoded inventory'],
+                    ['Maintenance', $maintenanceRooms, 'build', 'text-error', 'Encoded inventory'],
+                ] as [$label, $value, $icon, $color, $caption])
                     <article class="rounded-xl border border-surface-variant bg-white p-4 shadow-sm">
                         <div class="flex items-center justify-between">
                             <span class="text-[11px] font-bold uppercase tracking-wider text-outline">{{ $label }}</span>
                             <span class="material-symbols-outlined {{ $color }} text-lg">{{ $icon }}</span>
                         </div>
                         <p class="mt-2 font-headline text-3xl font-semibold {{ $color }}">{{ $value }}</p>
+                        <p class="mt-1 text-[10px] font-semibold uppercase tracking-wider text-outline">{{ $caption }}</p>
                     </article>
                 @endforeach
             </section>
@@ -342,7 +343,7 @@
 
                 <div class="flex flex-col gap-3 border-t border-surface-variant bg-surface-container p-4 text-sm text-outline sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span>Total Units: <strong class="text-on-surface">{{ $totalRooms }} Monitored Rooms</strong></span>
+                        <span>Live Inventory: <strong class="text-on-surface">{{ $totalRooms }} of {{ $publishedRoomCount }} Property Rooms Encoded</strong></span>
                         <span>Available Rate: <strong class="text-emerald-700">{{ $availableRate }}%</strong></span>
                         <span>Occupancy Rate: <strong class="text-primary">{{ $occupancyRate }}%</strong></span>
                     </div>
