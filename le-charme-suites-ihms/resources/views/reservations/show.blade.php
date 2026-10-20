@@ -121,10 +121,10 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2.5">
-                    <button onclick="window.print()" class="flex items-center gap-2 rounded-lg border border-surface-variant bg-white px-3.5 py-2.5 text-sm font-bold text-primary shadow-sm transition hover:bg-surface-container">
+                    <a href="{{ route('reservations.registration-card', ['reservation' => $reservation, 'print' => 1]) }}" target="_blank" rel="noopener" class="flex items-center gap-2 rounded-lg border border-surface-variant bg-white px-3.5 py-2.5 text-sm font-bold text-primary shadow-sm transition hover:bg-surface-container">
                         <span class="material-symbols-outlined text-base text-secondary">print</span>
                         Print Registration Card
-                    </button>
+                    </a>
                     <a href="{{ route('reservations.edit', $reservation) }}" class="flex items-center gap-1.5 rounded-lg border border-error/40 bg-white px-3.5 py-2.5 text-sm font-bold text-error shadow-sm transition hover:bg-error-container/40">
                         <span class="material-symbols-outlined text-base">cancel</span>
                         Edit / Cancel

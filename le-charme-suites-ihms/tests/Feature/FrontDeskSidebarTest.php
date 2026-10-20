@@ -93,4 +93,58 @@ class FrontDeskSidebarTest extends TestCase
             ->assertSee('id="cardCounterReference"', false)
             ->assertSee('function printRegistrationCard()', false);
     }
+
+    public function test_registration_card_button_prints_a_dedicated_single_page_card(): void
+    {
+        $receptionist = User::factory()->create([
+            'name' => 'Maria Santos',
+            'role' => 'receptionist',
+        ]);
+        $guest = Guest::create([
+            'first_name' => 'Juan',
+            'last_name' => 'Dela Cruz',
+            'email' => 'juan@example.com',
+            'phone' => '09171234567',
+            'address' => 'Olongapo City, Zambales',
+            'identification_type' => 'Driver License',
+            'identification_number' => 'N01-23-456789',
+        ]);
+        $room = Room::factory()->create([
+            'room_number' => '202',
+            'room_type' => 'Charmé Suite',
+            'rate' => 19500,
+        ]);
+        $reservation = Reservation::create([
+            'guest_id' => $guest->id,
+            'room_id' => $room->id,
+            'booking_reference' => 'LCS-TEST-0001',
+            'check_in_date' => now()->toDateString(),
+            'check_out_date' => now()->addDays(2)->toDateString(),
+            'number_of_guests' => 2,
+            'status' => 'reserved',
+            'source' => 'front_desk',
+            'created_by' => $receptionist->id,
+            'confirmed_by' => $receptionist->id,
+            'confirmed_at' => now(),
+        ]);
+
+        $this->actingAs($receptionist)
+            ->get(route('reservations.show', $reservation))
+            ->assertOk()
+            ->assertSee(route('reservations.registration-card', ['reservation' => $reservation, 'print' => 1]), false)
+            ->assertSeeText('Print Registration Card');
+
+        $this->actingAs($receptionist)
+            ->get(route('reservations.registration-card', ['reservation' => $reservation, 'print' => 1]))
+            ->assertOk()
+            ->assertSeeText('GUEST REGISTRATION CARD')
+            ->assertSeeText('Juan Dela Cruz')
+            ->assertSeeText('Room 202')
+            ->assertSeeText('PHP 19,500.00')
+            ->assertSeeText('Guest signature')
+            ->assertSee('@page { size:A4 portrait;', false)
+            ->assertSee('PAGE 1 OF 1')
+            ->assertSee("window.print()", false)
+            ->assertDontSee('aria-label="Front Desk Sidebar"', false);
+    }
 }

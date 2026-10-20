@@ -134,6 +134,13 @@ class ReservationController extends Controller
         return view('reservations.show', compact('reservation', 'transactions', 'roomStatusLogs'));
     }
 
+    public function registrationCard(Reservation $reservation): View
+    {
+        $reservation->load(['guest', 'room', 'checkIn', 'creator', 'confirmer']);
+
+        return view('reservations.registration-card', compact('reservation'));
+    }
+
     public function edit(Reservation $reservation): View
     {
         return view('reservations.edit', [

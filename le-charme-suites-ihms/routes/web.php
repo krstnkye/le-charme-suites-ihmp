@@ -62,6 +62,8 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:receptionist')->group(function () {
         Route::resource('guests', GuestController::class);
+        Route::get('/reservations/{reservation}/registration-card', [ReservationController::class, 'registrationCard'])
+            ->name('reservations.registration-card');
         Route::resource('reservations', ReservationController::class);
         Route::get('/check-ins', [CheckInController::class, 'index'])->name('check-ins.index');
         Route::get('/check-ins/create', [CheckInController::class, 'create'])->name('check-ins.create');
