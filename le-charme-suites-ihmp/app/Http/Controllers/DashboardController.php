@@ -50,7 +50,17 @@ class DashboardController extends Controller
         }
 
         if (auth()->user()?->role === 'receptionist') {
-            return view('dashboard.front-desk', $data);
+            return view('dashboard.front-desk', [
+                ...$data,
+                'taskRooms' => Room::orderBy('room_number')->get(),
+                'housekeepingStaff' => User::where('role', 'housekeeping')->orderBy('name')->get(),
+                'housekeepingTasks' => HousekeepingTask::with(['room', 'assignee'])
+                    ->whereNotIn('status', ['completed', 'cancelled'])
+                    ->orderByRaw("CASE priority WHEN 'urgent' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END")
+                    ->latest()
+                    ->take(10)
+                    ->get(),
+            ]);
         }
 
         if (auth()->user()?->role === 'housekeeping') {

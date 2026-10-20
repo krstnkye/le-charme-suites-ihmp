@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Exists;
 
 class HousekeepingTaskController extends Controller
 {
@@ -16,10 +17,7 @@ class HousekeepingTaskController extends Controller
     {
         $data = $request->validate([
             'room_id' => ['required', 'exists:rooms,id'],
-            'assigned_to' => [
-                'nullable',
-                Rule::exists('users', 'id')->where(fn ($query) => $query->where('role', 'housekeeping')),
-            ],
+            'assigned_to' => ['nullable', $this->assignableStaffRule($request)],
             'task_type' => ['required', 'in:turnover,stayover,inspection,guest_request,deep_cleaning,maintenance_follow_up'],
             'title' => ['required', 'string', 'max:255'],
             'instructions' => ['nullable', 'string', 'max:2000'],
@@ -43,10 +41,7 @@ class HousekeepingTaskController extends Controller
     {
         $data = $request->validate([
             'status' => ['required', 'in:queued,in_progress,inspection,completed,cancelled'],
-            'assigned_to' => [
-                'nullable',
-                Rule::exists('users', 'id')->where(fn ($query) => $query->where('role', 'housekeeping')),
-            ],
+            'assigned_to' => ['nullable', $this->assignableStaffRule($request, $housekeepingTask->assigned_to)],
             'completion_notes' => ['nullable', 'string', 'max:2000'],
         ]);
 
@@ -81,5 +76,17 @@ class HousekeepingTaskController extends Controller
         });
 
         return back()->with('status', 'Housekeeping task updated.');
+    }
+
+    /**
+     * A task can go to any housekeeper, to the staff member creating it (so front desk
+     * staff can take a task themselves), or stay with whoever already holds it.
+     */
+    private function assignableStaffRule(Request $request, ?int $currentAssigneeId = null): Exists
+    {
+        return Rule::exists('users', 'id')->where(fn ($query) => $query
+            ->where('role', 'housekeeping')
+            ->orWhere('id', $request->user()->id)
+            ->when($currentAssigneeId, fn ($query) => $query->orWhere('id', $currentAssigneeId)));
     }
 }

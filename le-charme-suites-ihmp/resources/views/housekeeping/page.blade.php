@@ -87,6 +87,7 @@
                                                 @csrf @method('PATCH')
                                                 <select name="assigned_to" aria-label="Housekeeper assigned to Room {{ $task->room->room_number }}" class="max-w-44 rounded border-line py-1.5 text-xs font-bold">
                                                     <option value="">Unassigned</option>
+                                                    @if ($task?->assignee && $task->assignee->role !== 'housekeeping')<option value="{{ $task->assignee->id }}" selected>{{ $task->assignee->name }} ({{ ucfirst($task->assignee->role) }})</option>@endif
                                                     @foreach ($housekeepingStaff as $staff)<option value="{{ $staff->id }}" @selected($task->assigned_to === $staff->id)>{{ $staff->name }}</option>@endforeach
                                                 </select>
                                                 <select name="status" class="rounded border-line py-1.5 text-xs font-bold">

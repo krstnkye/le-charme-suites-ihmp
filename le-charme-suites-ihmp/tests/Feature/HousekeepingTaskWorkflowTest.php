@@ -98,4 +98,92 @@ class HousekeepingTaskWorkflowTest extends TestCase
             ->assertSee('Assigned Staff')
             ->assertSee('Assign Task');
     }
+
+    public function test_receptionist_can_assign_a_cleaning_task_to_themselves(): void
+    {
+        $receptionist = User::factory()->create(['role' => 'receptionist']);
+        $room = Room::factory()->create(['status' => 'cleaning']);
+
+        $response = $this->actingAs($receptionist)->post(route('housekeeping-tasks.store'), [
+            'room_id' => $room->id,
+            'assigned_to' => $receptionist->id,
+            'task_type' => 'turnover',
+            'title' => 'Room cleaning after check-out',
+            'priority' => 'high',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('housekeeping_tasks', [
+            'room_id' => $room->id,
+            'assigned_to' => $receptionist->id,
+            'created_by' => $receptionist->id,
+            'status' => 'queued',
+        ]);
+    }
+
+    public function test_receptionist_can_assign_a_cleaning_task_to_a_housekeeper(): void
+    {
+        $receptionist = User::factory()->create(['role' => 'receptionist']);
+        $housekeeper = User::factory()->create(['role' => 'housekeeping']);
+        $room = Room::factory()->create(['status' => 'cleaning']);
+
+        $response = $this->actingAs($receptionist)->post(route('housekeeping-tasks.store'), [
+            'room_id' => $room->id,
+            'assigned_to' => $housekeeper->id,
+            'task_type' => 'turnover',
+            'title' => 'Room cleaning after check-out',
+            'priority' => 'normal',
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('housekeeping_tasks', ['room_id' => $room->id, 'assigned_to' => $housekeeper->id]);
+    }
+
+    public function test_tasks_cannot_be_assigned_to_other_front_desk_or_billing_staff(): void
+    {
+        $receptionist = User::factory()->create(['role' => 'receptionist']);
+        $otherReceptionist = User::factory()->create(['role' => 'receptionist']);
+        $room = Room::factory()->create(['status' => 'cleaning']);
+
+        $response = $this->actingAs($receptionist)->post(route('housekeeping-tasks.store'), [
+            'room_id' => $room->id,
+            'assigned_to' => $otherReceptionist->id,
+            'task_type' => 'turnover',
+            'title' => 'Room cleaning after check-out',
+            'priority' => 'normal',
+        ]);
+
+        $response->assertSessionHasErrors('assigned_to');
+        $this->assertDatabaseCount('housekeeping_tasks', 0);
+    }
+
+    public function test_housekeeper_can_update_a_task_that_front_desk_kept_for_themselves(): void
+    {
+        $receptionist = User::factory()->create(['role' => 'receptionist']);
+        $housekeeper = User::factory()->create(['role' => 'housekeeping']);
+        $task = HousekeepingTask::factory()->create(['assigned_to' => $receptionist->id]);
+
+        $response = $this->actingAs($housekeeper)->patch(route('housekeeping-tasks.update', $task), [
+            'status' => 'inspection',
+            'assigned_to' => $receptionist->id,
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame('inspection', $task->fresh()->status);
+        $this->assertSame($receptionist->id, $task->fresh()->assigned_to);
+    }
+
+    public function test_front_desk_dashboard_offers_self_assignment(): void
+    {
+        $receptionist = User::factory()->create(['role' => 'receptionist', 'name' => 'Callista Bree']);
+        $housekeeper = User::factory()->create(['role' => 'housekeeping', 'name' => 'Cyrene Lagman']);
+
+        $response = $this->actingAs($receptionist)->get(route('dashboard'));
+
+        $response->assertOk();
+        $response->assertSeeText('Cleaning Task Assignments');
+        $response->assertSee('<option value="'.$receptionist->id.'" >Myself (Callista Bree)</option>', false);
+        $response->assertSeeText('Cyrene Lagman');
+    }
 }

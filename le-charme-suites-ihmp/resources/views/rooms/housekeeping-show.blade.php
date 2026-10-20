@@ -198,6 +198,7 @@
                                     Assign housekeeper
                                     <select name="assigned_to" required class="mt-1 block min-w-56 rounded-lg border-line bg-white px-3 py-2 text-sm text-primary focus:border-secondary focus:ring-secondary">
                                         <option value="">Select staff</option>
+                                        @if ($activeTask?->assignee && $activeTask->assignee->role !== 'housekeeping')<option value="{{ $activeTask->assignee->id }}" selected>{{ $activeTask->assignee->name }} ({{ ucfirst($activeTask->assignee->role) }})</option>@endif
                                         @foreach ($housekeepingStaff as $staff)
                                             <option value="{{ $staff->id }}" @selected($activeTask?->assigned_to === $staff->id)>{{ $staff->name }}</option>
                                         @endforeach

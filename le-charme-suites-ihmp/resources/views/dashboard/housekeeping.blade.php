@@ -207,6 +207,7 @@
                                     </div>
                                     <select name="assigned_to" class="rounded-lg border-line bg-white px-3 py-2 text-sm focus:border-secondary focus:ring-secondary">
                                         <option value="">Unassigned</option>
+                                        @if ($task?->assignee && $task->assignee->role !== 'housekeeping')<option value="{{ $task->assignee->id }}" selected>{{ $task->assignee->name }} ({{ ucfirst($task->assignee->role) }})</option>@endif
                                         @foreach ($housekeepingStaff as $staff)
                                             <option value="{{ $staff->id }}" @selected($task->assigned_to === $staff->id)>{{ $staff->name }}</option>
                                         @endforeach
