@@ -44,6 +44,30 @@ class FrontDeskSidebarTest extends TestCase
         }
     }
 
+    public function test_admin_keeps_the_front_desk_sidebar_on_billing_pages(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        foreach ([route('check-outs.index'), route('check-outs.history'), route('check-outs.create')] as $url) {
+            $this->actingAs($admin)
+                ->get($url)
+                ->assertOk()
+                ->assertSee('aria-label="Front Desk Sidebar"', false)
+                ->assertDontSee('aria-label="Billing Sidebar"', false);
+        }
+    }
+
+    public function test_billing_staff_keep_the_billing_sidebar_on_billing_pages(): void
+    {
+        $cashier = User::factory()->create(['role' => 'cashier']);
+
+        $response = $this->actingAs($cashier)->get(route('check-outs.index'));
+
+        $response->assertOk();
+        $response->assertSee('aria-label="Billing Sidebar"', false);
+        $response->assertDontSee('aria-label="Front Desk Sidebar"', false);
+    }
+
     public function test_billing_user_keeps_the_billing_sidebar_on_shared_checkout_pages(): void
     {
         $billingUser = User::factory()->create(['role' => 'cashier']);
