@@ -20,8 +20,27 @@ class Guest extends Model
         'address',
         'identification_type',
         'identification_number',
+        'identification_photo_path',
+        'identification_reminded_at',
         'notes',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'identification_reminded_at' => 'datetime',
+        ];
+    }
+
+    public function hasCompleteIdentification(): bool
+    {
+        return filled($this->identification_type)
+            && filled($this->identification_number)
+            && filled($this->identification_photo_path);
+    }
 
     public function getFullNameAttribute(): string
     {

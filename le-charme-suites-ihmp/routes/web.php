@@ -12,6 +12,7 @@ use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentMessageController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\GuestIdentificationController;
 use App\Http\Controllers\HousekeepingController;
 use App\Http\Controllers\HousekeepingTaskController;
 use App\Http\Controllers\OnlineBookingFeedController;
@@ -62,6 +63,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/system-manual', SystemManualController::class)->name('system-manual');
 
     Route::middleware('role:receptionist')->group(function () {
+        Route::post('/guests/{guest}/identification', [GuestIdentificationController::class, 'update'])
+            ->middleware('permission:guests.write')
+            ->name('guests.identification.update');
+        Route::get('/guests/{guest}/identification-photo', [GuestIdentificationController::class, 'photo'])
+            ->middleware('permission:guests.read')
+            ->name('guests.identification.photo');
+        Route::post('/reservations/{reservation}/identification-reminder', [GuestIdentificationController::class, 'remind'])
+            ->middleware(['permission:guests.write', 'throttle:10,1'])
+            ->name('reservations.identification-reminder');
         Route::get('/online-booking-requests', OnlineBookingFeedController::class)
             ->middleware('permission:reservations.read')
             ->name('online-booking-requests.feed');

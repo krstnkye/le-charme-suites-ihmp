@@ -250,16 +250,9 @@
                                     {{ $guest?->address ?: 'No address on file' }}
                                 </span>
                             </div>
-                            <div class="rounded-lg border border-surface-variant bg-surface-container-low p-3 md:col-span-2">
-                                <span class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Identification Documents On File</span>
-                                <div class="mt-1 flex flex-wrap items-center gap-2">
-                                    <span class="rounded border border-outline-variant/30 bg-white px-2 py-0.5 text-xs font-semibold">{{ $guest?->identification_type ?: 'ID type not provided' }}</span>
-                                    <span class="flex items-center gap-1 rounded border border-secondary/40 bg-white px-2 py-0.5 text-xs font-bold text-primary">
-                                        <span class="material-symbols-outlined text-xs text-secondary">verified_user</span>
-                                        {{ $guest?->identification_number ?: 'ID number not provided' }}
-                                    </span>
-                                </div>
-                            </div>
+                            @if ($guest)
+                                @include('reservations.partials.guest-identification', ['guest' => $guest, 'reservation' => $reservation])
+                            @endif
                         </div>
                     </div>
                     <div class="mt-4 flex items-center justify-between border-t border-surface-variant pt-3 text-xs text-on-surface-variant">
