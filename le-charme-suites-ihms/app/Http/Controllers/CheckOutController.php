@@ -187,10 +187,20 @@ class CheckOutController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
-        $checkOut = DB::transaction(function () use ($data) {
+        [$checkOut, $alreadyCompleted] = DB::transaction(function () use ($data) {
             $checkIn = CheckIn::with(['reservation', 'room'])->lockForUpdate()->findOrFail($data['check_in_id']);
 
-            abort_if($checkIn->status !== 'active', 422, 'Only active check-ins can be checked out.');
+            if ($checkIn->status !== 'active') {
+                $existingCheckOut = CheckOut::where('check_in_id', $checkIn->id)->first();
+
+                if ($existingCheckOut) {
+                    return [$existingCheckOut, true];
+                }
+
+                return [redirect()
+                    ->route('check-outs.create')
+                    ->withErrors(['check_in_id' => 'This guest stay is no longer active and cannot be checked out.']), false];
+            }
 
             $checkOut = CheckOut::create([
                 'check_in_id' => $checkIn->id,
@@ -233,11 +243,17 @@ class CheckOutController extends Controller
                 'description' => 'Guest checked out.',
             ]);
 
-            return $checkOut;
+            return [$checkOut, false];
         });
+
+        if ($checkOut instanceof RedirectResponse) {
+            return $checkOut;
+        }
 
         return redirect()
             ->route('check-outs.receipt', ['checkOut' => $checkOut, 'print' => 1])
-            ->with('status', 'Guest checked out. The receipt is ready to print.');
+            ->with('status', $alreadyCompleted
+                ? 'This guest was already checked out. The saved receipt is ready to print.'
+                : 'Guest checked out. The receipt is ready to print.');
     }
 }

@@ -177,6 +177,17 @@ class OnlineBookingTest extends TestCase
             ->assertDontSeeText('Folio')
             ->assertDontSeeText('POS');
 
+        $this->actingAs($receptionist)
+            ->post(route('check-outs.store'), [
+                'check_in_id' => $checkIn->id,
+                'amount_paid' => 27500,
+                'payment_status' => 'paid',
+            ])
+            ->assertRedirect(route('check-outs.receipt', ['checkOut' => $checkOut, 'print' => 1]))
+            ->assertSessionHas('status', 'This guest was already checked out. The saved receipt is ready to print.');
+
+        $this->assertSame(1, CheckOut::count());
+
         $this->assertSame('cleaning', $room->fresh()->status);
         $this->assertDatabaseHas('housekeeping_tasks', [
             'room_id' => $room->id,
