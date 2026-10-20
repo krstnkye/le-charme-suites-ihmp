@@ -28,6 +28,8 @@ class OwnerController extends Controller
         return view('owner.index', [
             'page' => $page,
             'totalRooms' => Room::count(),
+            'publishedRoomCount' => (int) config('hotel.published_room_count', Room::count()),
+            'officialRoomTypeCount' => count(config('hotel.room_types', [])),
             'availableRooms' => Room::where('status', 'available')->count(),
             'occupiedRooms' => Room::where('status', 'occupied')->count(),
             'reservedRooms' => Room::where('status', 'reserved')->count(),

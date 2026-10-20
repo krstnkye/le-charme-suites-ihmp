@@ -67,7 +67,8 @@
             <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Inventory</span>
             <span class="material-symbols-outlined text-secondary">domain</span>
         </div>
-        <p class="mt-3 font-serif text-3xl font-extrabold">{{ $totalRooms }} Rooms</p>
+        <p class="mt-3 font-serif text-3xl font-extrabold">{{ $publishedRoomCount }} Rooms</p>
+        <p class="mt-1 text-xs text-slate-500">{{ $totalRooms }} rooms currently encoded in IHMP</p>
         <p class="mt-1 text-xs text-slate-500">{{ $roomTypes->count() }} room categories encoded</p>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-[11px]">
             <span class="text-slate-400">Active portfolios</span>

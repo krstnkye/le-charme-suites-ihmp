@@ -135,6 +135,28 @@
                     <span class="material-symbols-outlined flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 text-[#9c7938]">directions_bike</span>
                     <p><strong>Bike-Friendly Destination:</strong> Le Charmé Suites features in-room bike racks and dedicated support tailored for triathletes and leisure cyclists.</p>
                 </div>
+
+                <section class="mt-8 border-t border-slate-200 pt-7" aria-labelledby="hotel-services-title">
+                    <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#9c7938]">On-property experience</p>
+                            <h2 id="hotel-services-title" class="mt-1 font-display text-2xl font-bold text-[#112235]">Hotel Facilities & Dining</h2>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-500">Established {{ config('hotel.established_since') }}</span>
+                    </div>
+                    <div class="mt-5 grid gap-2 sm:grid-cols-2">
+                        @foreach (config('hotel.facilities', []) as $facility)
+                            <div class="flex min-w-0 items-center gap-3 rounded-lg border border-slate-200 bg-white px-3.5 py-3 transition hover:border-[#c5a36a]/70 hover:shadow-sm">
+                                <span class="material-symbols-outlined flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-amber-50 text-lg text-[#9c7938]">{{ $facility['icon'] }}</span>
+                                <div class="min-w-0">
+                                    <p class="truncate text-sm font-bold text-[#112235]">{{ $facility['name'] }}</p>
+                                    <p class="mt-0.5 text-[11px] text-slate-500">{{ $facility['category'] }} · {{ $facility['hours'] }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <p class="mt-3 text-[11px] leading-5 text-slate-500">Facility hours and availability may change. Contact the Front Desk for current schedules, reservations, and pricing.</p>
+                </section>
             </div>
 
             <aside id="booking-form" class="h-fit scroll-mt-28 rounded-2xl border-2 border-[#c5a36a]/50 bg-white p-6 shadow-xl sm:p-7 lg:sticky lg:top-24 lg:col-span-5">

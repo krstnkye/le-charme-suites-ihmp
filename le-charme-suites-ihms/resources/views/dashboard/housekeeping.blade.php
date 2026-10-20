@@ -82,6 +82,7 @@
                         <div>
                             <p class="text-xs font-bold uppercase text-slate-300">Ready Rooms</p>
                             <p class="mt-1 text-2xl font-bold">{{ $availableRooms }} / {{ $totalRooms }}</p>
+                            <p class="mt-1 text-[11px] text-slate-300">Encoded inventory · {{ $publishedRoomCount }}-room property</p>
                         </div>
                         <div>
                             <p class="text-xs font-bold uppercase text-slate-300">Readiness</p>
@@ -101,7 +102,7 @@
 
             <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
                 @foreach ([
-                    ['label' => 'Total Rooms', 'value' => $totalRooms, 'icon' => 'domain'],
+                    ['label' => 'Rooms Encoded', 'value' => $totalRooms.' / '.$publishedRoomCount, 'icon' => 'domain'],
                     ['label' => 'Ready / Available', 'value' => $availableRooms, 'icon' => 'check_circle'],
                     ['label' => 'Occupied Rooms', 'value' => $occupiedRooms, 'icon' => 'king_bed'],
                     ['label' => 'Cleaning Queue', 'value' => $cleaningCount, 'icon' => 'mop'],

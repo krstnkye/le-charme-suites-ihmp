@@ -22,11 +22,28 @@ class OfficialHotelProfileTest extends TestCase
         $this->assertSame(45, config('hotel.published_room_count'));
         $this->assertSame(5, config('hotel.published_room_type_count'));
         $this->assertCount(5, config('hotel.room_types'));
+        $this->assertSame(2016, config('hotel.established_since'));
+        $this->assertCount(10, config('hotel.facilities'));
+        $this->assertSame('Roof Deck', config('hotel.facilities.0.name'));
+        $this->assertSame('Le Charmé Café', config('hotel.facilities.9.name'));
 
         foreach (config('hotel.room_types') as $roomType) {
             $this->assertFileExists(public_path($roomType['image']));
             $this->assertStringStartsWith('https://lecharmehotels.com/img/rooms/', $roomType['image_source']);
         }
+    }
+
+    public function test_public_booking_page_shows_the_verified_property_profile(): void
+    {
+        $this->get(route('booking.create'))
+            ->assertOk()
+            ->assertSee('45 rooms')
+            ->assertSee('5 types')
+            ->assertSee('Hotel Facilities & Dining', false)
+            ->assertSee('Roof Deck')
+            ->assertSee('Mi Tapas')
+            ->assertSee('Teppan 101')
+            ->assertSee('Le Charmé Café');
     }
 
     public function test_shared_interaction_styles_are_available_offline(): void

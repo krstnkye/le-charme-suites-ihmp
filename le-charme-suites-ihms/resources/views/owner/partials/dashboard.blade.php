@@ -25,7 +25,7 @@
             <h2 class="max-w-4xl font-serif text-4xl font-semibold leading-tight">Hotel Ownership & Executive Performance Portal</h2>
             <p class="max-w-4xl text-sm leading-6 text-blue-100">
                 Executive read-only command view with <strong class="text-white">{{ number_format($operationalHealth, 1) }}% Operational Health Index</strong>,
-                <strong class="text-secondary-fixed">{{ $totalRooms }} managed rooms</strong>, live occupancy, room readiness, and revenue visibility.
+                a <strong class="text-secondary-fixed">{{ $publishedRoomCount }}-room property</strong> with {{ $totalRooms }} rooms currently encoded for live occupancy, readiness, and revenue visibility.
             </p>
         </div>
         <div class="flex flex-wrap items-center gap-3">
@@ -56,7 +56,7 @@
         <div class="absolute left-0 top-0 h-1 w-full bg-primary"></div>
         <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Property Occupancy</span><span class="rounded-lg bg-surface-mid p-2 text-primary"><span class="material-symbols-outlined">meeting_room</span></span></div>
         <p class="mt-3 font-serif text-2xl font-bold">{{ $occupiedPercent }}%</p>
-        <p class="mt-2 text-xs text-slate-500">Occupied: <strong>{{ $occupiedRooms }} / {{ $totalRooms }}</strong> rooms</p>
+        <p class="mt-2 text-xs text-slate-500">Occupied: <strong>{{ $occupiedRooms }} / {{ $totalRooms }}</strong> encoded rooms · {{ $publishedRoomCount }} property total</p>
     </div>
     <div class="owner-card relative overflow-hidden rounded-xl p-5">
         <div class="absolute left-0 top-0 h-1 w-full bg-secondary"></div>

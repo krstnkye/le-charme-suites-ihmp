@@ -52,7 +52,8 @@
             </div>
             <div class="border-l border-white/10 pl-5">
                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Rooms</p>
-                <p class="mt-1 text-2xl font-extrabold">{{ $totalRooms }} <span class="text-xs font-normal text-slate-400">Active</span></p>
+                <p class="mt-1 text-2xl font-extrabold">{{ $publishedRoomCount }} <span class="text-xs font-normal text-slate-400">Property Total</span></p>
+                <p class="mt-1 text-[11px] text-slate-400">{{ $totalRooms }} operational records encoded</p>
             </div>
             <div class="border-l border-white/10 pl-5">
                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Guests</p>
@@ -210,7 +211,7 @@
                 <h4 class="font-serif text-xl font-bold text-primary">Wing Distribution & Architectural Breakdown</h4>
                 <p class="text-xs text-slate-500">Inventory allocation by room type using live encoded room categories.</p>
             </div>
-            <span class="rounded border border-secondary/20 bg-secondary-fixed/30 px-2 py-1 text-xs font-semibold text-secondary">Property Total: {{ $totalRooms }} Active Units</span>
+            <span class="rounded border border-secondary/20 bg-secondary-fixed/30 px-2 py-1 text-xs font-semibold text-secondary">Property Total: {{ $publishedRoomCount }} Rooms · {{ $totalRooms }} Encoded</span>
         </div>
         <div class="space-y-4 text-xs">
             @forelse ($roomTypes as $type => $typeRooms)
