@@ -241,7 +241,7 @@
 
                     <section id="lost-found" class="rounded-xl border border-line bg-white p-5 shadow-sm">
                         <h3 class="font-serif text-2xl font-bold">Lost &amp; Found</h3>
-                        <p class="mt-3 text-sm text-slate-600">No lost-and-found entries are stored yet. Use room status notes to record recovered items until the dedicated ledger is added.</p>
+                        <p class="mt-3 text-sm text-slate-600">No lost-and-found entries are stored yet. Use room status notes to record recovered items until a separate lost-and-found record page is added.</p>
                     </section>
 
                     <section id="linen-supplies" class="rounded-xl border border-line bg-white p-5 shadow-sm">

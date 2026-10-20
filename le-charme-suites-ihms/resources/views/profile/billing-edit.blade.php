@@ -15,7 +15,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Billing Profile &amp; Terminal Credentials - Le Charmé Suites IHMP</title>
+    <title>Billing Profile &amp; Account - Le Charmé Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = { theme: { extend: {
@@ -40,14 +40,14 @@
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
             <div>
                 <div class="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
-                    <span>POS Registry</span><span>/</span><span class="text-secondary">Billing &amp; Cashier Terminal</span>
+                    <span>Cash Register</span><span>/</span><span class="text-secondary">Billing &amp; Cashier Dashboard</span>
                 </div>
-                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Cashier Profile &amp; Terminal Credentials</h1>
+                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Cashier Profile &amp; Account</h1>
             </div>
             <div class="flex flex-wrap items-center justify-end gap-3">
-                <span class="hidden items-center gap-2 rounded-full border border-line bg-surface-low px-3 py-1.5 text-xs font-bold text-slate-600 md:inline-flex"><span class="h-2 w-2 rounded-full bg-emerald-600"></span>Station POS-REG-02</span>
+                <span class="hidden items-center gap-2 rounded-full border border-line bg-surface-low px-3 py-1.5 text-xs font-bold text-slate-600 md:inline-flex"><span class="h-2 w-2 rounded-full bg-emerald-600"></span>Register 02</span>
                 <button type="button" onclick="alert('Cash drawer access has been logged for audit review.')" class="hidden items-center gap-2 rounded-lg border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-container/30 md:flex"><span class="material-symbols-outlined text-base">point_of_sale</span>Open Cash Drawer</button>
-                <button type="button" onclick="alert('End of shift reconciliation has been queued for supervisor review.')" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex"><span class="material-symbols-outlined text-base text-secondary-fixed">receipt_long</span>End of Shift Reconciliation</button>
+                <button type="button" onclick="alert('The end-of-shift summary is ready for supervisor review.')" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex"><span class="material-symbols-outlined text-base text-secondary-fixed">receipt_long</span>End-of-Shift Summary</button>
                 <div class="rounded-lg border border-line bg-white px-4 py-2 text-right shadow-sm">
                     <p id="billing-date" class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Loading date</p>
                     <p id="billing-clock" class="font-mono text-sm font-bold text-primary">--:--:-- PHT</p>
@@ -71,7 +71,7 @@
                     <div class="max-w-4xl">
                         <span class="rounded border border-secondary-fixed/30 bg-secondary/30 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Billing Identity Vault</span>
                         <h2 class="mt-3 font-serif text-4xl font-bold leading-tight">{{ $user->name }}</h2>
-                        <p class="mt-2 text-sm leading-6 text-blue-100">Manage cashier account credentials, authorized POS terminal access, shift alerts, and billing department security preferences.</p>
+                        <p class="mt-2 text-sm leading-6 text-blue-100">Manage the cashier account, cash register access, shift alerts, and billing department security settings.</p>
                         <div class="mt-4 flex flex-wrap gap-2">
                             <span class="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-1 text-xs font-bold"><span class="material-symbols-outlined text-sm text-secondary-fixed">verified_user</span>{{ $roleLabel }} Active</span>
                             <span class="inline-flex items-center gap-1 rounded bg-white/10 px-2 py-1 text-xs font-bold"><span class="material-symbols-outlined text-sm text-secondary-fixed">badge</span>{{ $employeeId }}</span>
@@ -84,11 +84,11 @@
                             <div>
                                 <p class="text-sm font-bold text-white">{{ $user->email }}</p>
                                 <p class="mt-1 text-xs text-blue-100/80">Primary billing work account</p>
-                                <span class="mt-3 inline-flex rounded bg-secondary-fixed px-2.5 py-1 text-xs font-bold text-primary">Terminal credentials active</span>
+                                <span class="mt-3 inline-flex rounded bg-secondary-fixed px-2.5 py-1 text-xs font-bold text-primary">Account access active</span>
                             </div>
                         </div>
                         <dl class="mt-5 space-y-2 border-t border-white/10 pt-4 text-sm text-blue-100">
-                            <div class="flex justify-between gap-4"><dt>Register</dt><dd class="font-bold text-white">POS-REG-02</dd></div>
+                            <div class="flex justify-between gap-4"><dt>Register</dt><dd class="font-bold text-white">Register 02</dd></div>
                             <div class="flex justify-between gap-4"><dt>Authority</dt><dd class="font-bold text-white">Cashier & Billing</dd></div>
                             <div class="flex justify-between gap-4"><dt>Member Since</dt><dd class="font-bold text-white">{{ $user->created_at?->timezone(config('app.timezone'))->format('M d, Y') }}</dd></div>
                         </dl>
@@ -128,7 +128,7 @@
                             </div>
                             <div class="space-y-1">
                                 <span class="block text-xs font-bold uppercase tracking-wider text-slate-500">Department Assignment</span>
-                                <div class="rounded-lg border border-line bg-surface-low px-3 py-2.5 text-sm font-bold text-secondary">Billing Department - Cashier Terminal</div>
+                                <div class="rounded-lg border border-line bg-surface-low px-3 py-2.5 text-sm font-bold text-secondary">Billing Department - Cashier</div>
                             </div>
                         </div>
                     </section>
@@ -161,15 +161,15 @@
                             <div class="flex items-center gap-3">
                                 <span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-secondary">key</span>
                                 <div>
-                                    <h3 class="font-serif text-2xl font-bold">POS Terminal Security</h3>
-                                    <p class="text-sm text-slate-500">Cash drawer, guest bill settlement, and audit access bound to the cashier identity.</p>
+                                    <h3 class="font-serif text-2xl font-bold">Cash Register Security</h3>
+                                    <p class="text-sm text-slate-500">Cash drawer, guest bill payment, and record access assigned to this cashier account.</p>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-4 grid gap-3 md:grid-cols-3">
                             @foreach ([
                                 ['icon' => 'point_of_sale', 'title' => 'Cash Drawer', 'meta' => 'Access logged per shift'],
-                                ['icon' => 'receipt_long', 'title' => 'Guest Bill Settlement', 'meta' => 'Manager override required'],
+                                ['icon' => 'receipt_long', 'title' => 'Guest Bill Payment', 'meta' => 'Manager approval required'],
                                 ['icon' => 'fact_check', 'title' => 'Audit Exports', 'meta' => 'End-of-shift sealed'],
                             ] as $item)
                                 <div class="rounded-lg border border-line bg-surface-low p-4">
@@ -193,7 +193,7 @@
                         </div>
                         <div class="mt-4 space-y-3">
                             @foreach ([
-                                ['icon' => 'point_of_sale', 'title' => 'POS-REG-02', 'meta' => 'Subic Central billing station', 'state' => 'This Terminal', 'active' => true],
+                                ['icon' => 'point_of_sale', 'title' => 'Register 02', 'meta' => 'Main billing desk', 'state' => 'This Register', 'active' => true],
                                 ['icon' => 'computer', 'title' => 'Back Office Cashier Console', 'meta' => 'Revenue review station', 'state' => 'Idle', 'active' => false],
                                 ['icon' => 'tablet_mac', 'title' => 'Mobile Billing Tablet', 'meta' => 'Supervisor checkout assist', 'state' => 'Standby', 'active' => false],
                             ] as $terminal)
@@ -217,9 +217,9 @@
                         </div>
                         <div class="mt-4 space-y-3">
                             @foreach ([
-                                ['title' => 'Shift reconciliation reminders', 'meta' => 'Prompt before daily close', 'checked' => true],
-                                ['title' => 'Manager override notifications', 'meta' => 'High-value settlement approvals', 'checked' => true],
-                                ['title' => 'Cash drawer variance alerts', 'meta' => 'Immediate terminal warning', 'checked' => true],
+                                ['title' => 'End-of-shift reminders', 'meta' => 'Reminder before daily closing', 'checked' => true],
+                                ['title' => 'Manager approval notices', 'meta' => 'Approval for high-value payments', 'checked' => true],
+                                ['title' => 'Cash difference alerts', 'meta' => 'Immediate cash register warning', 'checked' => true],
                                 ['title' => 'Daily report summary', 'meta' => 'Email at end of shift', 'checked' => false],
                             ] as $trigger)
                                 <div class="flex items-center justify-between gap-4 border-t border-line pt-3 first:border-t-0 first:pt-0">
@@ -239,7 +239,7 @@
                             <div><h3 class="font-serif text-xl font-bold">Billing Access Scope</h3><p class="text-sm text-blue-100">Current cashier permissions are active.</p></div>
                         </div>
                         <div class="mt-4 flex flex-wrap gap-2">
-                            @foreach (['Guest Bill settlement', 'Transaction posting', 'Cash drawer audit', 'Reports center'] as $grant)
+                            @foreach (['Guest bill payment', 'Record transactions', 'Review cash drawer', 'Reports'] as $grant)
                                 <span class="rounded border border-white/10 bg-white/10 px-2.5 py-1 text-xs font-bold text-blue-50">{{ $grant }}</span>
                             @endforeach
                         </div>
@@ -250,7 +250,7 @@
                     <div class="flex items-center gap-3">
                         <span class="flex h-10 w-10 items-center justify-center rounded-full bg-secondary-fixed/50 text-secondary"><span class="material-symbols-outlined">enhanced_encryption</span></span>
                         <div>
-                            <p class="text-sm font-bold">Billing account changes are recorded in the IHMP audit ledger.</p>
+                            <p class="text-sm font-bold">Billing account changes are saved in the IHMP activity history.</p>
                             <p class="font-mono text-xs text-slate-500">Session Hash: {{ substr(sha1($user->email), 0, 8) }}-{{ substr(sha1((string) $user->id), -8) }}</p>
                         </div>
                     </div>

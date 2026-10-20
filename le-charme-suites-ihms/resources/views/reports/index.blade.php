@@ -12,7 +12,7 @@
     $reportRows = [
         ['title' => 'Shift Cashier Balance Report', 'code' => 'LCS-BIL-SHFT-01', 'category' => 'Financial', 'cadence' => 'End of shift', 'status' => 'Ready', 'formats' => ['PDF', 'XLSX']],
         ['title' => 'Daily Revenue Z-Reading', 'code' => 'LCS-BIL-ZREAD-02', 'category' => 'Revenue', 'cadence' => 'Daily close', 'status' => 'Scheduled', 'formats' => ['PDF']],
-        ['title' => 'Guest Bill Settlement Exceptions', 'code' => 'LCS-BIL-EXC-03', 'category' => 'Audit', 'cadence' => 'Live review', 'status' => $balancedCount === $postedCount ? 'Balanced' : 'Review', 'formats' => ['PDF', 'CSV']],
+        ['title' => 'Guest Bill Payment Issues', 'code' => 'LCS-BIL-EXC-03', 'category' => 'Review', 'cadence' => 'Current', 'status' => $balancedCount === $postedCount ? 'Balanced' : 'Review', 'formats' => ['PDF', 'CSV']],
         ['title' => 'Room & Reservation Revenue Snapshot', 'code' => 'LCS-BIL-RMS-04', 'category' => 'Rooms', 'cadence' => 'Hourly', 'status' => 'Synced', 'formats' => ['PDF', 'XLSX']],
     ];
 @endphp
@@ -46,11 +46,11 @@
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
             <div>
                 <div class="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500"><span>Billing Operations</span><span>/</span><span class="text-secondary">Reports Center</span></div>
-                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMP <span class="font-sans text-sm font-semibold text-slate-500">| Shift Financial Reconciliation</span></h1>
+                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMP <span class="font-sans text-sm font-semibold text-slate-500">| Shift Financial Summary</span></h1>
             </div>
             <div class="flex flex-wrap items-center justify-end gap-3">
                 <button type="button" onclick="alert('Cash drawer access has been logged for audit review.')" class="hidden items-center gap-2 rounded-lg border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-container/30 md:flex"><span class="material-symbols-outlined text-base">lock_open</span>Open Cash Drawer</button>
-                <button type="button" onclick="alert('End of shift reconciliation has been queued for supervisor review.')" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex"><span class="material-symbols-outlined text-base text-secondary-fixed">schedule</span>End of Shift Reconciliation</button>
+                <button type="button" onclick="alert('The end-of-shift summary is ready for supervisor review.')" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex"><span class="material-symbols-outlined text-base text-secondary-fixed">schedule</span>End-of-Shift Summary</button>
                 <div class="rounded-lg border border-line bg-white px-4 py-2 text-right shadow-sm">
                     <p id="billing-date" class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Loading date</p>
                     <p id="billing-clock" class="font-mono text-sm font-bold text-primary">--:--:-- PHT</p>
@@ -64,13 +64,13 @@
                     <div class="mb-2 flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-secondary">
                         <span>Cashier &amp; Billing Operations</span>
                         <span class="material-symbols-outlined text-sm">chevron_right</span>
-                        <span class="text-primary">Cashier Reports &amp; Reconciliation</span>
+                        <span class="text-primary">Cashier Reports &amp; Daily Summary</span>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <h2 class="font-serif text-4xl font-bold leading-tight">Shift Financial &amp; Cashier Reports</h2>
                         <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-secondary">Shift A • 06:00 - 14:30</span>
                     </div>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Generate, review, and export billing department financial reports using live guest bill transactions, room inventory, and reservation ledger data.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Generate, review, and export billing reports using guest bill transactions, room records, and reservation data.</p>
                 </div>
                 <div class="no-print flex flex-wrap items-center gap-3">
                     <button type="button" onclick="document.getElementById('standard-report-directory').scrollIntoView({ behavior: 'smooth' })" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900"><span class="material-symbols-outlined text-secondary-fixed">play_arrow</span>Run Shift Balance Report</button>
@@ -83,9 +83,9 @@
                 <div class="pointer-events-none absolute -bottom-20 -right-16 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
                 <div class="relative z-10 grid gap-6 xl:grid-cols-[1fr_420px] xl:items-center">
                     <div>
-                        <span class="rounded border border-secondary-fixed/30 bg-secondary/30 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Authorized Revenue Terminal</span>
+                        <span class="rounded border border-secondary-fixed/30 bg-secondary/30 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Authorized Billing Reports</span>
                         <h3 class="mt-3 font-serif text-4xl font-bold leading-tight">Financial Reporting Command Console</h3>
-                        <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">Consolidated cashier reports for daily collections, guest bill settlements, room revenue, reservation movements, and audit reconciliation.</p>
+                        <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">Cashier reports for daily collections, guest bill payments, room income, reservation changes, and record review.</p>
                     </div>
                     <div class="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-white/10 p-4">
                         <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Today Collections</p><p class="mt-1 font-serif text-2xl font-bold">PHP {{ number_format($todayLedgerAmount, 2) }}</p></div>
@@ -97,10 +97,10 @@
             </section>
 
             <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <div class="rounded-xl border border-line bg-white p-4 shadow-sm"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Gross Ledger Total</span><span class="material-symbols-outlined rounded-lg bg-secondary-container/40 p-1.5 text-secondary">payments</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($totalLedgerAmount, 2) }}</p><p class="mt-1 text-xs text-slate-500">All visible billing records</p></div>
+                <div class="rounded-xl border border-line bg-white p-4 shadow-sm"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Billing Amount</span><span class="material-symbols-outlined rounded-lg bg-secondary-container/40 p-1.5 text-secondary">payments</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($totalLedgerAmount, 2) }}</p><p class="mt-1 text-xs text-slate-500">All visible billing records</p></div>
                 <div class="rounded-xl border border-line bg-white p-4 shadow-sm"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Today Reported</span><span class="material-symbols-outlined rounded-lg bg-emerald-50 p-1.5 text-emerald-700">task_alt</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $todayTransactions->count() }}</p><p class="mt-1 text-xs text-slate-500">Transactions posted today</p></div>
                 <div class="rounded-xl border border-line bg-white p-4 shadow-sm"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Balanced Records</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-1.5 text-primary">verified_user</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $balancedCount }}</p><p class="mt-1 text-xs text-slate-500">Paid, completed, or recorded</p></div>
-                <div class="rounded-xl border border-line bg-white p-4 shadow-sm"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Audit Hash</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-1.5 text-primary">fingerprint</span></div><p class="mt-3 font-mono text-2xl font-bold">{{ $auditHash }}</p><p class="mt-1 text-xs text-slate-500">Generated from current ledger set</p></div>
+                <div class="rounded-xl border border-line bg-white p-4 shadow-sm"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Report Security Code</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-1.5 text-primary">fingerprint</span></div><p class="mt-3 font-mono text-2xl font-bold">{{ $auditHash }}</p><p class="mt-1 text-xs text-slate-500">Generated from the current records</p></div>
             </section>
 
             <div class="grid gap-6 xl:grid-cols-12">
@@ -110,7 +110,7 @@
                             <span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-secondary">tune</span>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-wider text-secondary">Active Parameter Console</p>
-                                <h3 class="font-serif text-2xl font-bold">Daily Manager's Operational Flash &amp; Revenue Ledger</h3>
+                                <h3 class="font-serif text-2xl font-bold">Daily Manager's Operations &amp; Income Report</h3>
                             </div>
                         </div>
                         <span class="rounded bg-surface-mid px-3 py-1 text-xs font-bold text-slate-600">Doc ID: LCS-BIL-REP-{{ now()->format('Ymd') }}</span>
@@ -127,9 +127,9 @@
                         <label class="inline-flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked class="rounded border-line text-primary focus:ring-secondary">Manager signature seal</label>
                     </div>
                     <div class="mt-6 flex flex-col justify-between gap-4 border-t border-line pt-5 md:flex-row md:items-center">
-                        <p class="inline-flex items-center gap-2 text-sm text-slate-600"><span class="material-symbols-outlined text-base text-emerald-700">check_circle</span>{{ $postedCount }} ledger records available for compilation</p>
+                        <p class="inline-flex items-center gap-2 text-sm text-slate-600"><span class="material-symbols-outlined text-base text-emerald-700">check_circle</span>{{ $postedCount }} billing records available for the report</p>
                         <div class="no-print flex flex-wrap gap-3">
-                            <button type="button" onclick="alert('Report preview generated from current ledger data.')" class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface-low px-4 py-2.5 text-sm font-bold text-primary transition hover:bg-white"><span class="material-symbols-outlined">visibility</span>Preview</button>
+                            <button type="button" onclick="alert('Report preview generated from current billing data.')" class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface-low px-4 py-2.5 text-sm font-bold text-primary transition hover:bg-white"><span class="material-symbols-outlined">visibility</span>Preview</button>
                             <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-secondary/90"><span class="material-symbols-outlined">picture_as_pdf</span>PDF Download</button>
                             <button type="button" onclick="alert('The report has been prepared for email routing to management.')" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-slate-900"><span class="material-symbols-outlined">forward_to_inbox</span>Email to Board &amp; GM</button>
                         </div>
@@ -154,7 +154,7 @@
                 <div class="flex flex-col justify-between gap-3 border-b border-line p-5 sm:flex-row sm:items-center">
                     <div>
                         <h3 class="font-serif text-2xl font-bold">Standard Cashier Report Directory</h3>
-                        <p class="text-sm text-slate-500">Mandatory financial, settlement, room revenue, and audit reports scheduled for billing department compliance.</p>
+                        <p class="text-sm text-slate-500">Required payment, room income, and record review reports for the Billing department.</p>
                     </div>
                     <div class="no-print flex flex-wrap gap-2">
                         <input id="report-filter" class="rounded-lg border-line bg-surface-low text-sm focus:border-secondary focus:ring-secondary" placeholder="Filter by report name">
@@ -185,7 +185,7 @@
 
             <section class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
                 <div class="flex flex-col justify-between gap-3 border-b border-line bg-surface-low p-5 sm:flex-row sm:items-center">
-                    <div><h3 class="font-serif text-2xl font-bold">Recent Billing Ledger Records</h3><p class="text-sm text-slate-500">Latest hotel transactions included in report compilation.</p></div>
+                    <div><h3 class="font-serif text-2xl font-bold">Recent Billing Records</h3><p class="text-sm text-slate-500">Latest hotel transactions included in the report.</p></div>
                     <span class="rounded-full bg-surface-mid px-3 py-1 text-xs font-bold text-primary">{{ $transactions->total() }} total records</span>
                 </div>
                 <div class="custom-scrollbar overflow-x-auto">

@@ -21,7 +21,7 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get('/dashboard')
             ->assertOk()
-            ->assertSee('Front Desk Operations Center');
+            ->assertSee('Front Desk Dashboard');
     }
 
     public function test_admin_sees_admin_dashboard(): void
@@ -752,10 +752,10 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get('/dashboard')
             ->assertOk()
-            ->assertSee('Cashier & Billing Operations Console', false)
+            ->assertSee('Cashier &amp; Billing Dashboard', false)
             ->assertSee('Billing Department Access')
-            ->assertSee('Active Departures & Guest Bill Settlement Queue', false)
-            ->assertSee('Live Transaction Stream')
+            ->assertSee('Departures &amp; Guest Bills for Payment', false)
+            ->assertSee('Recent Transactions')
             ->assertSee('Dashboard')
             ->assertSee('Billing')
             ->assertSee('Transactions')
@@ -772,17 +772,17 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get('/check-outs')
             ->assertOk()
-            ->assertSee('POS Incidentals &amp; Direct Charge Terminal', false);
+            ->assertSee('Guest Charges &amp; Payments', false);
     }
 
-    public function test_cashier_can_view_transaction_history_ledger(): void
+    public function test_cashier_can_view_transaction_history(): void
     {
         $user = User::factory()->create(['role' => 'cashier']);
 
         $this->actingAs($user)
             ->get('/check-outs/history')
             ->assertOk()
-            ->assertSee('Historical Transactions &amp; Cryptographic Audit Ledger', false);
+            ->assertSee('Transaction &amp; Payment History', false);
     }
 
     public function test_cashier_profile_uses_billing_department_workspace(): void
@@ -795,7 +795,7 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get(route('profile.edit'))
             ->assertOk()
-            ->assertSee('Cashier Profile &amp; Terminal Credentials', false)
+            ->assertSee('Cashier Profile &amp; Account', false)
             ->assertSee('Billing Identity Vault')
             ->assertSee('Billing Department Access')
             ->assertSee('Authorized Billing Terminals')

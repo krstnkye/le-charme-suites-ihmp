@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Charme Suites - IHMP Terminal Authentication</title>
+    <title>Le Charme Suites - IHMP Staff Login</title>
 
     @include('partials.offline-assets')
     <script>

@@ -122,7 +122,7 @@
                     <div class="mb-1 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-secondary">
                         <span>IPT101 Integrated Hospitality Courseware</span>
                         <span>•</span>
-                        <span>Live PMS Terminal</span>
+                        <span>Room Records Updated</span>
                     </div>
                     <h2 class="font-headline text-3xl font-semibold tracking-tight text-primary">Room Management & Availability Grid</h2>
                     <p class="text-sm text-on-surface-variant">Real-time room occupancy states, quick room assignments, and inventory booking matrix.</p>

@@ -55,12 +55,12 @@ class UiDesignPlacementTest extends TestCase
         $cashier = User::factory()->create(['role' => 'cashier']);
 
         $pages = [
-            route('dashboard') => 'Cashier & Billing Operations Console',
-            route('check-outs.index') => 'POS Incidentals & Direct Charge Terminal',
-            route('check-outs.create') => 'Guest Bill Ledger & Invoicing Management',
-            route('check-outs.history') => 'Historical Transactions & Cryptographic Audit Ledger',
+            route('dashboard') => 'Cashier & Billing Dashboard',
+            route('check-outs.index') => 'Guest Charges & Payments',
+            route('check-outs.create') => 'Guest Bills & Checkout',
+            route('check-outs.history') => 'Transaction & Payment History',
             route('reports.index') => 'Shift Financial & Cashier Reports',
-            route('profile.edit') => 'Cashier Profile & Terminal Credentials',
+            route('profile.edit') => 'Cashier Profile & Account',
         ];
 
         foreach ($pages as $url => $signature) {
@@ -69,6 +69,38 @@ class UiDesignPlacementTest extends TestCase
                 ->assertOk()
                 ->assertSeeText($signature)
                 ->assertSee('aria-label="Billing Sidebar"', false);
+        }
+    }
+
+    public function test_billing_pages_use_clear_everyday_terms(): void
+    {
+        $cashier = User::factory()->create(['role' => 'cashier']);
+
+        $pages = [
+            route('dashboard'),
+            route('check-outs.index'),
+            route('check-outs.create'),
+            route('check-outs.history'),
+            route('reports.index'),
+            route('profile.edit'),
+        ];
+
+        $technicalTerms = [
+            'Cash In Register Till',
+            'Guest Bill Ledger',
+            'POS Incidentals',
+            'Settlement State',
+            'End of Shift Reconciliation',
+            'Electronic EFT',
+            'PMS synchronized record',
+        ];
+
+        foreach ($pages as $url) {
+            $response = $this->actingAs($cashier)->get($url)->assertOk();
+
+            foreach ($technicalTerms as $term) {
+                $response->assertDontSeeText($term);
+            }
         }
     }
 

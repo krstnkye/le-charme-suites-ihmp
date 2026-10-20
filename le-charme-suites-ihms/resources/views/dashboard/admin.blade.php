@@ -167,7 +167,7 @@
                 <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
                     <div>
                         <h2 class="font-serif text-2xl font-bold">Operational Governance & Subsystems</h2>
-                        <p class="mt-1 text-sm text-slate-500">Direct administrative access and real-time ledger verification.</p>
+                        <p class="mt-1 text-sm text-slate-500">Direct administrative access and real-time record checking.</p>
                     </div>
                     <span class="rounded-full bg-surface-container-highest px-3 py-1 text-xs font-bold text-slate-600">Synchronized with local Laravel IHMP database</span>
                 </div>
@@ -213,8 +213,8 @@
 
                     <div class="command-card rounded-xl p-6">
                         <div class="flex items-start justify-between gap-4">
-                            <div class="flex items-center gap-3"><span class="flex h-11 w-11 items-center justify-center rounded-lg border border-outline-variant bg-surface-container text-primary"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span></span><div><h3 class="text-lg font-bold">Financial Ledger & Audit Control</h3><p class="text-sm text-slate-500">Transactions, guest bills, and reports</p></div></div>
-                            <span class="rounded-full bg-secondary-fixed/40 px-2.5 py-1 text-xs font-bold text-secondary">Live Ledger</span>
+                            <div class="flex items-center gap-3"><span class="flex h-11 w-11 items-center justify-center rounded-lg border border-outline-variant bg-surface-container text-primary"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span></span><div><h3 class="text-lg font-bold">Financial Records &amp; Review</h3><p class="text-sm text-slate-500">Transactions, guest bills, and reports</p></div></div>
+                            <span class="rounded-full bg-secondary-fixed/40 px-2.5 py-1 text-xs font-bold text-secondary">Live Records</span>
                         </div>
                         <div class="my-5 space-y-2 border-y border-surface-container py-3 text-sm">
                             <div class="flex justify-between"><span>Recent Transactions</span><strong>{{ $recentTransactions->count() }}</strong></div>

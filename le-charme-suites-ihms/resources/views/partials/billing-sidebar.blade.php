@@ -60,7 +60,7 @@
     </div>
 
     <div class="border-t border-white/10 bg-[#01162d]/20 p-3">
-        <div class="mb-2 flex items-center justify-between px-3 py-1.5 text-xs text-blue-100/70"><span>SBMA Station</span><span class="font-bold text-[#ffdeaa]">POS-REG-02</span></div>
+        <div class="mb-2 flex items-center justify-between px-3 py-1.5 text-xs text-blue-100/70"><span>Billing Desk</span><span class="font-bold text-[#ffdeaa]">Register 02</span></div>
         <a href="{{ route('profile.edit') }}" @class([
             'flex items-center gap-3 rounded-r-lg border-l-[3px] px-4 py-3 text-sm font-semibold transition',
             'border-[#ffdeaa] bg-[#01162d]/60 text-white' => $active === 'profile',

@@ -25,7 +25,7 @@
             'label' => 'Cashier',
             'tier' => 'Tier 2',
             'department' => 'Finance & Billing',
-            'scope' => 'Payment handling, guest bill settlement, transaction records, and cashier reports.',
+            'scope' => 'Payment handling, guest bill payment, transaction records, and cashier reports.',
             'icon' => 'payments',
             'accent' => 'border-[#c5a36a] bg-[#fff8ea]',
             'badge' => 'bg-[#8a6420] text-white',

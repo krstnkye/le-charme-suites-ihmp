@@ -501,7 +501,7 @@
                                             <span class="material-symbols-outlined">sync_alt</span>
                                         </div>
                                         <div>
-                                            <p class="text-xs font-bold uppercase tracking-wide text-secondary-fixed">Automatic PMS Room Status Trigger</p>
+                                            <p class="text-xs font-bold uppercase tracking-wide text-secondary-fixed">Automatic Room Status Update</p>
                                             <p class="mt-1 text-xs leading-6 text-surface-container">Submitting this check-in will mark the selected room as occupied and record the action in room status logs and transactions.</p>
                                         </div>
                                     </div>
@@ -608,7 +608,7 @@
                 <div style="column-gap: 6mm; columns: 2; color: #475569; font-size: 6.8pt; line-height: 1.45; margin-top: 2mm;">
                     <p style="margin: 0 0 1.5mm;"><strong>Stay details.</strong> The guest confirms the room, occupancy, arrival date, departure date, and estimated charges shown above.</p>
                     <p style="margin: 0 0 1.5mm;"><strong>Hotel policies.</strong> The guest agrees to observe published hotel rules, the non-smoking policy, property-care requirements, and the standard {{ config('hotel.check_out_time') }} check-out time.</p>
-                    <p style="margin: 0 0 1.5mm;"><strong>Settlement.</strong> Final charges may include authorized room, service, incidental, damage, adjustment, or payment records posted to the guest bill.</p>
+                    <p style="margin: 0 0 1.5mm;"><strong>Final payment.</strong> Final charges may include approved room, service, extra, damage, adjustment, or payment records added to the guest bill.</p>
                     <p style="margin: 0;"><strong>Privacy.</strong> Personal information is processed for reservations, guest service, security, billing, reporting, and legally required hotel records. Access remains role-controlled within IHMP.</p>
                 </div>
             </section>

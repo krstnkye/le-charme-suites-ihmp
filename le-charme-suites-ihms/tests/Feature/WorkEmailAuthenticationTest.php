@@ -207,8 +207,8 @@ class WorkEmailAuthenticationTest extends TestCase
     {
         $dashboards = [
             'admin' => 'Property Systems Integrity & Control',
-            'receptionist' => 'Front Desk Operations Center',
-            'cashier' => 'Cashier & Billing Operations Console',
+            'receptionist' => 'Front Desk Dashboard',
+            'cashier' => 'Cashier &amp; Billing Dashboard',
             'housekeeping' => 'Daily Rooms Readiness & Turnover Control',
         ];
 

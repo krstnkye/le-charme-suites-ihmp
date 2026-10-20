@@ -2,8 +2,8 @@
     $currentUser = auth()->user();
     $roleMeta = [
         'admin' => ['label' => 'System Admin', 'tier' => 'Tier 1', 'department' => 'IT Infrastructure', 'terminal' => 'Primary Host', 'mfa' => 'Hardware Key', 'icon' => 'admin_panel_settings', 'badge' => 'bg-primary/10 text-primary'],
-        'receptionist' => ['label' => 'Front Desk', 'tier' => 'Tier 2', 'department' => 'Front Office', 'terminal' => 'Front Desk Terminal', 'mfa' => 'Authenticator App', 'icon' => 'concierge', 'badge' => 'bg-secondary-container/50 text-secondary'],
-        'cashier' => ['label' => 'Cashier', 'tier' => 'Tier 2', 'department' => 'Finance & Billing', 'terminal' => 'Cashier Terminal', 'mfa' => 'POS PIN + OTP', 'icon' => 'payments', 'badge' => 'bg-secondary-container/50 text-secondary'],
+        'receptionist' => ['label' => 'Front Desk', 'tier' => 'Tier 2', 'department' => 'Front Office', 'terminal' => 'Front Desk Computer', 'mfa' => 'Security App', 'icon' => 'concierge', 'badge' => 'bg-secondary-container/50 text-secondary'],
+        'cashier' => ['label' => 'Cashier', 'tier' => 'Tier 2', 'department' => 'Finance & Billing', 'terminal' => 'Cashier Computer', 'mfa' => 'Cashier PIN + Code', 'icon' => 'payments', 'badge' => 'bg-secondary-container/50 text-secondary'],
         'housekeeping' => ['label' => 'Housekeeping', 'tier' => 'Tier 4', 'department' => 'Rooms & Facilities', 'terminal' => 'Mobile Tablet', 'mfa' => 'SMS OTP', 'icon' => 'cleaning_services', 'badge' => 'bg-surface-container text-slate-700'],
     ];
     $roleOrder = ['admin', 'receptionist', 'cashier', 'housekeeping'];
@@ -121,7 +121,7 @@
                         <h1 class="font-serif text-4xl font-semibold tracking-tight">Role-Based Access Control Console</h1>
                         <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#5b4313]">{{ $totalUsers }} Active Personnel</span>
                     </div>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Configure security clearance rings, terminal authorization, role assignments, and audit segregation across the hotel system.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage access levels, authorized computers, staff roles, and activity review across the hotel system.</p>
                 </div>
                 <div class="flex flex-wrap gap-3">
                     <button class="inline-flex items-center gap-2 rounded-lg border border-secondary bg-white px-4 py-2.5 text-sm font-bold text-secondary shadow-sm transition hover:bg-secondary/10" onclick="window.print()" type="button">
@@ -170,14 +170,14 @@
                                     <th class="px-4 py-3">User Details</th>
                                     <th class="px-4 py-3">Role & Tier</th>
                                     <th class="px-4 py-3">Department</th>
-                                    <th class="px-4 py-3">Terminal / Shift</th>
+                                    <th class="px-4 py-3">Assigned Computer / Shift</th>
                                     <th class="px-4 py-3">Security & MFA</th>
                                     <th class="px-4 py-3 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-surface-container-highest/60 text-sm">
                                 @forelse ($users as $employee)
-                                    @php($meta = $roleMeta[$employee->role] ?? ['label' => ucfirst($employee->role), 'tier' => 'Staff', 'department' => 'General Operations', 'terminal' => 'Assigned Terminal', 'mfa' => 'Password Login', 'icon' => 'badge', 'badge' => 'bg-surface-container text-slate-700'])
+                                    @php($meta = $roleMeta[$employee->role] ?? ['label' => ucfirst($employee->role), 'tier' => 'Staff', 'department' => 'General Operations', 'terminal' => 'Assigned Computer', 'mfa' => 'Password Login', 'icon' => 'badge', 'badge' => 'bg-surface-container text-slate-700'])
                                     <tr @class(['transition hover:bg-surface-container-low', 'bg-secondary-container/10' => $employee->is($currentUser)])>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center gap-3">

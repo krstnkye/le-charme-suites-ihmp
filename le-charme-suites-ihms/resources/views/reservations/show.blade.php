@@ -185,7 +185,7 @@
                     </div>
                     <div class="mt-6 flex items-center justify-between border-t border-surface-variant pt-3 text-xs text-on-surface-variant">
                         <span>Guaranteed Channel</span>
-                        <span class="font-bold text-primary">PMS Terminal Intake</span>
+                        <span class="font-bold text-primary">Reservation Details</span>
                     </div>
                 </section>
 
@@ -328,7 +328,7 @@
                     </div>
                     <div class="mt-5 flex items-center justify-between border-t border-surface-variant pt-3 text-xs text-on-surface-variant">
                         <span>Billing Method</span>
-                        <span class="font-bold text-primary">Front Desk settlement / card guarantee</span>
+                        <span class="font-bold text-primary">Front Desk payment / card guarantee</span>
                     </div>
                 </section>
 
@@ -388,7 +388,7 @@
                                 <div class="flex items-center justify-between">
                                     <span class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-on-surface-variant">
                                         <span class="material-symbols-outlined text-base text-secondary">account_balance_wallet</span>
-                                        Transaction Ledger
+                                        Transaction History
                                     </span>
                                     <span class="text-xs font-bold text-secondary">{{ $transactions->count() }} record(s)</span>
                                 </div>

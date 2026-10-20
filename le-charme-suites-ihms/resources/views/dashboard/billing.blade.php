@@ -77,7 +77,7 @@
                 </div>
                 <a href="{{ route('check-outs.create') }}" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex">
                     <span class="material-symbols-outlined text-secondary-fixed">post_add</span>
-                    New Charge / Bill Post
+                    Add Charge / Guest Bill
                 </a>
             </div>
         </header>
@@ -94,16 +94,16 @@
                 <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
                     <div class="max-w-3xl">
                         <div class="mb-2 flex flex-wrap items-center gap-2">
-                            <span class="rounded border border-secondary-fixed/30 bg-secondary-container/20 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Authorized Revenue Terminal</span>
+                            <span class="rounded border border-secondary-fixed/30 bg-secondary-container/20 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Authorized Billing Dashboard</span>
                             <span class="text-xs font-semibold text-blue-100/70">SBMA Act 7227 Compliant</span>
                         </div>
-                        <h2 class="font-serif text-4xl font-bold leading-tight">Cashier & Billing Operations Console</h2>
-                        <p class="mt-2 text-sm leading-6 text-blue-100">Real-time guest bills, settlement verification, point-of-sale charging, and statutory revenue ledger monitoring for the Billing department.</p>
+                        <h2 class="font-serif text-4xl font-bold leading-tight">Cashier &amp; Billing Dashboard</h2>
+                        <p class="mt-2 text-sm leading-6 text-blue-100">Review guest bills, verify payments, add charges, and monitor hotel income for the Billing department.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <a href="{{ route('check-outs.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-amber-700">
                             <span class="material-symbols-outlined">payments</span>
-                            Settle Guest Bill / Checkout
+                        Pay Guest Bill / Check Out
                         </a>
                         <a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20">
                             <span class="material-symbols-outlined text-secondary-fixed">receipt_long</span>
@@ -111,7 +111,7 @@
                         </a>
                         <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-primary/40 px-3.5 py-2.5 text-sm font-semibold text-blue-100 transition hover:bg-primary hover:text-white">
                             <span class="material-symbols-outlined">print</span>
-                            Print Cashier Audit
+                        Print Cashier Report
                         </button>
                     </div>
                 </div>
@@ -124,7 +124,7 @@
                             <span class="rounded-lg bg-secondary-container/40 p-2 text-secondary"><span class="material-symbols-outlined">monetization_on</span></span>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Daily Collections</p>
-                                <p class="text-xs font-semibold text-secondary">Shift A + prior night audit</p>
+                            <p class="text-xs font-semibold text-secondary">Shift A + previous night report</p>
                             </div>
                         </div>
                         <span class="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700">Live</span>
@@ -146,15 +146,15 @@
 
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
                     <div class="mb-2 flex items-center justify-between"><span class="rounded-lg border border-secondary/20 bg-amber-50 p-2 text-secondary"><span class="material-symbols-outlined">luggage</span></span><span class="rounded bg-amber-100 px-2 py-1 text-xs font-bold text-secondary">Action Required</span></div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Pending Settlements</p>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Pending Payments</p>
                     <p class="mt-2 font-serif text-2xl font-bold text-secondary">{{ $departuresToday }} Departures</p>
                     <p class="mt-3 border-t border-line pt-3 text-xs text-slate-500">Ready for check-out bill clearing</p>
                 </div>
 
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
                     <div class="mb-2 flex items-center justify-between"><span class="rounded-lg bg-emerald-50 p-2 text-emerald-700"><span class="material-symbols-outlined">check_circle</span></span><span class="rounded bg-emerald-100 px-2 py-1 text-xs font-bold text-emerald-800">Balanced</span></div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Discrepancy / Voids</p>
-                    <p class="mt-2 font-serif text-2xl font-bold text-emerald-700">0 Unreconciled</p>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Cash Differences / Cancelled</p>
+                    <p class="mt-2 font-serif text-2xl font-bold text-emerald-700">0 Not Balanced</p>
                     <p class="mt-3 border-t border-line pt-3 text-xs text-slate-500">Deposit pool: <strong class="text-primary">PHP {{ number_format($depositPool, 2) }}</strong></p>
                 </div>
             </section>
@@ -165,14 +165,14 @@
                         <div class="flex flex-col justify-between gap-4 border-b border-line bg-surface-low/60 p-5 sm:flex-row sm:items-center">
                             <div>
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <h3 class="font-serif text-2xl font-bold text-primary">Active Departures & Guest Bill Settlement Queue</h3>
+                                    <h3 class="font-serif text-2xl font-bold text-primary">Departures &amp; Guest Bills for Payment</h3>
                                     <span class="rounded-full bg-secondary-fixed px-2 py-1 text-xs font-bold text-primary">{{ $settlementQueue->count() }} Today</span>
                                 </div>
-                                <p class="mt-1 text-sm text-slate-600">Pre-cleared room guest bills pending tender presentation, invoice issuance, or tax reconciliation.</p>
+                                <p class="mt-1 text-sm text-slate-600">Guest bills waiting for payment, receipt printing, or tax review.</p>
                             </div>
                             <a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-sm font-bold text-primary transition hover:border-secondary">
-                                <span class="material-symbols-outlined text-base text-secondary">filter_list</span>
-                                Full Roster
+                                    <span class="material-symbols-outlined text-base text-secondary">filter_list</span>
+                                    View All Guest Bills
                             </a>
                         </div>
 
@@ -211,8 +211,8 @@
                                     </div>
                                     <div class="grid gap-3 py-3 text-sm sm:grid-cols-4">
                                         <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Room charges</span><strong>PHP {{ number_format($roomRate, 2) }}</strong></div>
-                                        <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Incidentals</span><strong>PHP 0.00</strong></div>
-                                        <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Statutory tax</span><strong>PHP {{ number_format($tax, 2) }}</strong></div>
+                                        <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Extra Charges</span><strong>PHP 0.00</strong></div>
+                                        <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Tax</span><strong>PHP {{ number_format($tax, 2) }}</strong></div>
                                         <div class="rounded border border-emerald-200 bg-emerald-50 p-2"><span class="block text-xs text-emerald-800">Deposit paid</span><strong class="text-emerald-700">- PHP {{ number_format($deposit, 2) }}</strong></div>
                                     </div>
                                     <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
@@ -233,9 +233,9 @@
                         <div class="mb-4 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-secondary">add_shopping_cart</span>
-                                <h3 class="text-base font-bold text-primary">Direct Guest Bill Charge / POS Incidentals</h3>
+                                <h3 class="text-base font-bold text-primary">Add Guest Bill Charge</h3>
                             </div>
-                            <span class="text-xs font-semibold text-slate-500">Fast-entry terminal</span>
+                            <span class="text-xs font-semibold text-slate-500">Quick entry</span>
                         </div>
                         <form class="grid gap-3 sm:grid-cols-4" action="{{ route('check-outs.index') }}" method="GET">
                             <div>
@@ -271,7 +271,7 @@
                         <div class="flex items-center justify-between border-b border-line bg-surface-low/60 p-4">
                             <div class="flex items-center gap-2">
                                 <span class="relative flex h-2.5 w-2.5"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-600"></span></span>
-                                <h3 class="font-bold text-primary">Live Transaction Stream</h3>
+                            <h3 class="font-bold text-primary">Recent Transactions</h3>
                             </div>
                             <span class="text-xs font-bold text-secondary">Auto-syncing</span>
                         </div>
@@ -282,7 +282,7 @@
                                         <div class="mt-0.5 rounded border border-secondary/20 bg-amber-50 p-2 text-secondary"><span class="material-symbols-outlined text-sm">payments</span></div>
                                         <div>
                                             <div class="flex items-center gap-1.5"><span class="font-bold text-primary">Room {{ $transaction->room?->room_number ?? 'N/A' }}</span><span class="text-xs text-slate-400">/</span><span class="text-xs text-slate-600">{{ str_replace('_', ' ', ucfirst($transaction->transaction_type)) }}</span></div>
-                                            <p class="text-xs text-slate-600">{{ $transaction->description ?: 'Billing ledger entry' }}</p>
+                                            <p class="text-xs text-slate-600">{{ $transaction->description ?: 'Billing record' }}</p>
                                             <span class="text-xs text-slate-400">{{ $transaction->transaction_date?->format('h:i A') }} / {{ $transaction->guest?->full_name ?? 'Guest record' }}</span>
                                         </div>
                                     </div>
@@ -292,35 +292,35 @@
                                     </div>
                                 </div>
                             @empty
-                                <div class="p-8 text-center text-sm font-semibold text-slate-500">No billing ledger activity has been recorded yet.</div>
+                                <div class="p-8 text-center text-sm font-semibold text-slate-500">No billing activity has been recorded yet.</div>
                             @endforelse
                         </div>
                         <div class="border-t border-line bg-surface-low p-3 text-center">
-                            <a class="text-sm font-bold text-secondary hover:underline" href="{{ route('check-outs.history') }}">View Full Transaction Audit Stream</a>
+                        <a class="text-sm font-bold text-secondary hover:underline" href="{{ route('check-outs.history') }}">View Transaction History</a>
                         </div>
                     </div>
 
                     <div class="space-y-4 rounded-xl border border-line bg-white p-5 shadow-sm">
                         <div class="flex items-center justify-between border-b border-line pb-3">
-                            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary">inventory_2</span><h3 class="font-serif text-lg font-bold text-primary">Register & Drawer Health</h3></div>
+                        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary">inventory_2</span><h3 class="font-serif text-lg font-bold text-primary">Cash Register Summary</h3></div>
                             <span class="rounded border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700">100% In Balance</span>
                         </div>
                         <div class="space-y-2 text-sm">
-                            <div class="flex items-center justify-between rounded bg-surface-low p-2"><span class="text-slate-600">Float opening cash</span><strong>PHP 15,000.00</strong></div>
-                            <div class="flex items-center justify-between rounded bg-surface-low p-2"><span class="text-slate-600">Net shift cash collected</span><strong class="text-emerald-700">PHP {{ number_format($cashOnHand, 2) }}</strong></div>
-                            <div class="flex items-center justify-between rounded border-l-2 border-secondary bg-surface-low p-2"><span class="font-semibold">Expected cash in till</span><strong class="text-secondary">PHP {{ number_format(15000 + $cashOnHand, 2) }}</strong></div>
+                            <div class="flex items-center justify-between rounded bg-surface-low p-2"><span class="text-slate-600">Starting cash</span><strong>PHP 15,000.00</strong></div>
+                            <div class="flex items-center justify-between rounded bg-surface-low p-2"><span class="text-slate-600">Cash collected this shift</span><strong class="text-emerald-700">PHP {{ number_format($cashOnHand, 2) }}</strong></div>
+                            <div class="flex items-center justify-between rounded border-l-2 border-secondary bg-surface-low p-2"><span class="font-semibold">Expected cash in register</span><strong class="text-secondary">PHP {{ number_format(15000 + $cashOnHand, 2) }}</strong></div>
                         </div>
                         <div class="grid grid-cols-2 gap-2 pt-2">
-                            <a href="{{ route('reports.index') }}" class="flex items-center justify-center gap-1 rounded border border-line bg-surface-low px-3 py-2 text-sm font-bold text-primary transition hover:bg-line"><span class="material-symbols-outlined text-sm">receipt</span>X-Reading</a>
-                            <a href="{{ route('reports.index') }}" class="flex items-center justify-center gap-1 rounded border border-line bg-surface-low px-3 py-2 text-sm font-bold text-primary transition hover:bg-line"><span class="material-symbols-outlined text-sm">fact_check</span>Y-Reading</a>
+                            <a href="{{ route('reports.index') }}" class="flex items-center justify-center gap-1 rounded border border-line bg-surface-low px-3 py-2 text-sm font-bold text-primary transition hover:bg-line"><span class="material-symbols-outlined text-sm">receipt</span>Current Cash Report</a>
+                            <a href="{{ route('reports.index') }}" class="flex items-center justify-center gap-1 rounded border border-line bg-surface-low px-3 py-2 text-sm font-bold text-primary transition hover:bg-line"><span class="material-symbols-outlined text-sm">fact_check</span>End-of-Day Report</a>
                         </div>
                     </div>
 
                     <div class="flex items-start gap-3 rounded-xl border border-line bg-surface-mid p-4">
                         <span class="material-symbols-outlined text-2xl text-secondary">verified_user</span>
                         <div>
-                            <p class="font-bold text-primary">Subic Bay Tax Exemption Ledger</p>
-                            <p class="mt-1 text-sm text-slate-600">Guest settlements are digitally logged for revenue audit review under the Le Charmé Suites billing workspace.</p>
+                            <p class="font-bold text-primary">Subic Bay Tax Records</p>
+                            <p class="mt-1 text-sm text-slate-600">Guest payments are saved for manager review in the Le Charmé Suites billing dashboard.</p>
                         </div>
                     </div>
                 </aside>

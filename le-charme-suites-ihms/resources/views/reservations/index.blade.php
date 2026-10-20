@@ -307,7 +307,7 @@
                             @if ($selected)
                                 <div class="bg-primary p-5 text-white">
                                     <div class="flex items-center justify-between gap-3">
-                                        <span class="rounded bg-secondary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">Ledger Preview</span>
+                                        <span class="rounded bg-secondary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">Record Preview</span>
                                         <span class="font-mono text-xs font-bold text-secondary-fixed">#LC-{{ str_pad($selected->id, 5, '0', STR_PAD_LEFT) }}</span>
                                     </div>
                                     <h4 class="mt-3 font-serif text-2xl font-semibold">{{ $selectedGuest?->full_name ?? 'Guest Profile Missing' }}</h4>
