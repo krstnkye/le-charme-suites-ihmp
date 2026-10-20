@@ -1,5 +1,6 @@
 @php
     $currentUser = auth()->user();
+    $selectedReservationId = old('reservation_id', request()->integer('reservation_id'));
     $reservationPreview = $reservations->map(function ($reservation) {
         $guest = $reservation->guest;
         $room = $reservation->room;
@@ -164,6 +165,32 @@
                                                 Browse all arrivals
                                             </a>
                                         </div>
+                                        @if ($reservations->isNotEmpty())
+                                            <div class="mb-3">
+                                                <label for="reservation_search" class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Find a guest or booking</label>
+                                                <div class="flex flex-col gap-2 sm:flex-row">
+                                                    <div class="relative min-w-0 flex-1">
+                                                        <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-slate-400">person_search</span>
+                                                        <input
+                                                            id="reservation_search"
+                                                            type="search"
+                                                            class="w-full rounded-lg border border-outline-variant bg-white py-2.5 pl-11 pr-3 text-sm shadow-sm focus:border-secondary focus:ring-secondary"
+                                                            placeholder="Guest name, reservation, email, phone, or room"
+                                                            autocomplete="off"
+                                                        >
+                                                    </div>
+                                                    <button id="reservationSearchButton" type="button" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-primary-container focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2">
+                                                        <span class="material-symbols-outlined text-[18px]">search</span>
+                                                        Search
+                                                    </button>
+                                                    <button id="reservationSearchClear" type="button" class="hidden shrink-0 items-center justify-center gap-2 rounded-lg border border-outline-variant bg-white px-3 py-2.5 text-sm font-bold text-primary transition hover:bg-surface-container" aria-label="Clear reservation search">
+                                                        <span class="material-symbols-outlined text-[18px]">close</span>
+                                                        Clear
+                                                    </button>
+                                                </div>
+                                                <p id="reservationSearchStatus" class="mt-1.5 text-xs text-slate-500" role="status" aria-live="polite">Search across {{ $reservations->count() }} confirmed {{ Str::plural('reservation', $reservations->count()) }}.</p>
+                                            </div>
+                                        @endif
                                         <div class="relative">
                                             <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-secondary">book_online</span>
                                             <select id="reservation_id" name="reservation_id" class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest py-3 pl-11 pr-10 text-sm shadow-sm focus:border-secondary focus:ring-secondary" required>
@@ -174,7 +201,19 @@
                                                         $room = $reservation->room;
                                                         $nights = max(1, $reservation->check_in_date && $reservation->check_out_date ? $reservation->check_in_date->diffInDays($reservation->check_out_date) : 1);
                                                     @endphp
-                                                    <option value="{{ $reservation->id }}" @selected(old('reservation_id') == $reservation->id)>
+                                                    <option
+                                                        value="{{ $reservation->id }}"
+                                                        data-search="{{ Str::lower(implode(' ', [
+                                                            'RES-' . str_pad((string) $reservation->id, 5, '0', STR_PAD_LEFT),
+                                                            $reservation->booking_reference,
+                                                            $guest?->full_name,
+                                                            $guest?->email,
+                                                            $guest?->phone,
+                                                            $room?->room_number,
+                                                            $room?->room_type,
+                                                        ])) }}"
+                                                        @selected((string) $selectedReservationId === (string) $reservation->id)
+                                                    >
                                                         RES-{{ str_pad((string) $reservation->id, 5, '0', STR_PAD_LEFT) }} - {{ $guest?->full_name ?? 'Guest profile unavailable' }} (Room {{ $room?->room_number ?? 'N/A' }} - {{ $nights }} {{ Str::plural('night', $nights) }})
                                                     </option>
                                                 @endforeach
@@ -380,6 +419,10 @@
     <script>
         const reservations = @json($reservationPreview);
         const reservationSelect = document.getElementById('reservation_id');
+        const reservationSearch = document.getElementById('reservation_search');
+        const reservationSearchButton = document.getElementById('reservationSearchButton');
+        const reservationSearchClear = document.getElementById('reservationSearchClear');
+        const reservationSearchStatus = document.getElementById('reservationSearchStatus');
 
         const currency = (value) => new Intl.NumberFormat('en-PH', {
             style: 'currency',
@@ -431,7 +474,74 @@
             document.getElementById('depositPreview').textContent = currency(data.deposit);
         }
 
+        function normalizeSearch(value) {
+            return String(value || '').trim().toLocaleLowerCase();
+        }
+
+        function filterReservations() {
+            if (!reservationSearch) {
+                return;
+            }
+
+            const query = normalizeSearch(reservationSearch.value);
+            const options = Array.from(reservationSelect.options).slice(1);
+            let matches = 0;
+            let onlyMatch = null;
+
+            options.forEach((option) => {
+                const matchesQuery = !query || normalizeSearch(option.dataset.search).includes(query);
+                option.hidden = !matchesQuery;
+                option.disabled = !matchesQuery;
+
+                if (matchesQuery) {
+                    matches += 1;
+                    onlyMatch = option;
+                }
+            });
+
+            if (query && matches === 1 && onlyMatch) {
+                reservationSelect.value = onlyMatch.value;
+                updatePreview();
+            } else if (query && reservationSelect.selectedOptions[0]?.disabled) {
+                reservationSelect.value = '';
+                updatePreview();
+            }
+
+            reservationSelect.options[0].textContent = matches === 0
+                ? 'No matching reserved bookings'
+                : 'Select reserved booking';
+
+            reservationSearchStatus.textContent = query
+                ? `${matches} matching ${matches === 1 ? 'reservation' : 'reservations'} found.`
+                : `Search across ${options.length} confirmed ${options.length === 1 ? 'reservation' : 'reservations'}.`;
+            reservationSearchClear.classList.toggle('hidden', !query);
+            reservationSearchClear.classList.toggle('inline-flex', Boolean(query));
+
+            if (matches > 1) {
+                reservationSelect.focus();
+            }
+        }
+
+        function clearReservationSearch() {
+            reservationSearch.value = '';
+            filterReservations();
+            reservationSearch.focus();
+        }
+
         reservationSelect.addEventListener('change', updatePreview);
+        reservationSearchButton?.addEventListener('click', filterReservations);
+        reservationSearchClear?.addEventListener('click', clearReservationSearch);
+        reservationSearch?.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                filterReservations();
+            }
+        });
+        reservationSearch?.addEventListener('input', () => {
+            if (!reservationSearch.value) {
+                filterReservations();
+            }
+        });
         document.getElementById('printArrivalButton').addEventListener('click', () => window.print());
 
         updatePreview();

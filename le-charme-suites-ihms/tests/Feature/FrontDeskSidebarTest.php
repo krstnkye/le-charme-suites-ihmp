@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Guest;
+use App\Models\Reservation;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -51,5 +54,37 @@ class FrontDeskSidebarTest extends TestCase
             ->assertDontSee('aria-label="Front Desk Sidebar"', false)
             ->assertSee('aria-label="Billing Sidebar"', false)
             ->assertSee('data-sidebar-toggle', false);
+    }
+
+    public function test_check_in_form_includes_a_searchable_reservation_picker(): void
+    {
+        $receptionist = User::factory()->create(['role' => 'receptionist']);
+        $guest = Guest::create([
+            'first_name' => 'Markin Nate',
+            'last_name' => 'Turla',
+            'email' => 'markin@example.com',
+            'phone' => '09171234567',
+        ]);
+        $room = Room::factory()->create(['room_number' => '202']);
+        $reservation = Reservation::create([
+            'guest_id' => $guest->id,
+            'room_id' => $room->id,
+            'check_in_date' => now()->toDateString(),
+            'check_out_date' => now()->addDays(2)->toDateString(),
+            'number_of_guests' => 2,
+            'status' => 'reserved',
+        ]);
+
+        $this->actingAs($receptionist)
+            ->get(route('check-ins.create', ['reservation_id' => $reservation->id]))
+            ->assertOk()
+            ->assertSee('id="reservation_search"', false)
+            ->assertSee('id="reservationSearchButton"', false)
+            ->assertSee('Guest name, reservation, email, phone, or room')
+            ->assertSee('Markin Nate Turla')
+            ->assertSee('data-search="res-00001', false)
+            ->assertSee('value="'.$reservation->id.'"', false)
+            ->assertSee('selected', false)
+            ->assertSee('function filterReservations()', false);
     }
 }
