@@ -106,6 +106,21 @@ class GuestDepositTest extends TestCase
      *
      * @param  array<string, mixed>  $attributes
      */
+    public function test_guest_bill_rows_offer_view_payment_and_deposit_actions(): void
+    {
+        $cashier = User::factory()->create(['role' => 'cashier']);
+        $reservation = $this->twoNightStandardStay(['status' => 'checked_in']);
+        CheckIn::factory()->forReservation($reservation)->create();
+
+        $response = $this->actingAs($cashier)->get(route('check-outs.create'));
+
+        $response->assertOk();
+        $response->assertSee('data-folio-action="view"', false);
+        $response->assertSee('data-folio-action="pay"', false);
+        $response->assertSee('data-folio-action="deposit"', false);
+        $response->assertSee(json_encode(route('reservations.deposits.store', $reservation)), false);
+    }
+
     private function twoNightStandardStay(array $attributes = []): Reservation
     {
         return Reservation::factory()

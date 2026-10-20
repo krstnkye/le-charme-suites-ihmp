@@ -136,7 +136,7 @@
                                         <td class="px-3 py-3.5 text-right font-mono font-semibold text-emerald-800">-PHP {{ number_format($stay['deposit'], 2) }}</td>
                                         <td class="px-4 py-3.5 text-right"><div class="font-mono text-base font-bold text-primary">PHP {{ number_format($stay['balance'], 2) }}</div><span class="text-[10px] font-bold uppercase text-secondary">Payment Pending</span></td>
                                         <td class="px-3 py-3.5 text-center"><span class="rounded-full {{ $stay['deposit'] > 0 ? 'bg-emerald-50 text-emerald-800' : 'bg-secondary-fixed text-primary' }} px-2 py-1 text-xs font-bold">{{ $stay['deposit'] > 0 ? 'Deposit Received' : 'No Deposit' }}</span></td>
-                                        <td class="px-4 py-3.5 text-center"><div class="flex items-center justify-center gap-1 text-slate-500"><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-primary" data-stay-id="{{ $stay['id'] }}" title="View detailed guest bill"><span class="material-symbols-outlined text-base">visibility</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-secondary" data-stay-id="{{ $stay['id'] }}" title="Post payment"><span class="material-symbols-outlined text-base">payments</span></button><a href="{{ $stay['bill_preview_url'] }}" target="_blank" rel="noopener" class="inline-flex rounded p-1 hover:bg-surface-mid hover:text-primary" title="Print guest bill"><span class="material-symbols-outlined text-base">print</span></a></div></td>
+                                        <td class="px-4 py-3.5 text-center"><div class="flex items-center justify-center gap-1 text-slate-500"><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-primary" data-stay-id="{{ $stay['id'] }}" data-folio-action="view" title="View detailed guest bill" aria-label="View guest bill for Room {{ $stay['room'] }}"><span class="material-symbols-outlined text-base">visibility</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-secondary" data-stay-id="{{ $stay['id'] }}" data-folio-action="pay" title="Post payment" aria-label="Post payment for Room {{ $stay['room'] }}"><span class="material-symbols-outlined text-base">payments</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-emerald-700" data-stay-id="{{ $stay['id'] }}" data-folio-action="deposit" title="Record deposit / downpayment" aria-label="Record deposit for Room {{ $stay['room'] }}"><span class="material-symbols-outlined text-base">savings</span></button><a href="{{ $stay['bill_preview_url'] }}" target="_blank" rel="noopener" class="inline-flex rounded p-1 hover:bg-surface-mid hover:text-primary" title="Print guest bill"><span class="material-symbols-outlined text-base">print</span></a></div></td>
                                     </tr>
                                 @empty
                                     <tr><td colspan="8" class="px-4 py-12 text-center font-semibold text-slate-500">No active guest bills are waiting for Billing right now.</td></tr>
@@ -256,12 +256,36 @@
             renderStay(stay);
         }
 
-        document.getElementById('toggleDepositForm').addEventListener('click', () => {
-            const fields = document.getElementById('depositFields');
-            fields.classList.toggle('hidden');
-            fields.classList.toggle('grid');
-        });
-        document.querySelectorAll('.select-folio').forEach((button) => button.addEventListener('click', () => chooseStay(button.dataset.stayId)));
+        const depositFields = document.getElementById('depositFields');
+        const setDepositFieldsOpen = (open) => {
+            depositFields.classList.toggle('hidden', !open);
+            depositFields.classList.toggle('grid', open);
+        };
+        const spotlight = (element) => {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            element.classList.add('ring-2', 'ring-secondary');
+            setTimeout(() => element.classList.remove('ring-2', 'ring-secondary'), 1600);
+        };
+
+        document.getElementById('toggleDepositForm').addEventListener('click', () => setDepositFieldsOpen(depositFields.classList.contains('hidden')));
+        document.querySelectorAll('.select-folio').forEach((button) => button.addEventListener('click', () => {
+            chooseStay(button.dataset.stayId);
+            const stay = selectedStay();
+
+            if (button.dataset.folioAction === 'pay') {
+                if (stay) amountInput.value = Number(stay.balance).toFixed(2);
+                spotlight(amountInput);
+                amountInput.focus({ preventScroll: true });
+                amountInput.select();
+            } else if (button.dataset.folioAction === 'deposit') {
+                setDepositFieldsOpen(true);
+                const depositAmount = depositFields.querySelector('[name="amount"]');
+                spotlight(depositFields);
+                depositAmount.focus({ preventScroll: true });
+            } else {
+                spotlight(document.getElementById('settlementForm'));
+            }
+        }));
         checkInSelect.addEventListener('change', () => chooseStay(checkInSelect.value));
         document.getElementById('payInFullButton').addEventListener('click', () => { const stay = selectedStay(); amountInput.value = stay ? Number(stay.balance).toFixed(2) : '0.00'; if (stay) paymentStatusSelect.value = 'paid'; });
 
