@@ -94,9 +94,8 @@
                         <p class="mt-2 text-sm leading-6 text-blue-100">Review active guest bills, extra charges, taxes, deposits, payments, and checkout records.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
-                        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">layers</span>Batch Guest Bill Invoicing</button>
-                        <button type="button" onclick="document.getElementById('settlementForm')?.scrollIntoView({ behavior: 'smooth', block: 'center' })" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">price_check</span>Settle Selected Balance</button>
-                        <a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-2 rounded-lg bg-secondary-fixed px-4 py-2.5 text-sm font-bold text-primary shadow-md transition hover:bg-secondary-container"><span class="material-symbols-outlined">add_card</span>Open Transactions</a>
+                        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">layers</span>Print Guest Bills</button>
+                        <button type="button" onclick="document.getElementById('settlementForm')?.scrollIntoView({ behavior: 'smooth', block: 'center' })" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">price_check</span>Pay Selected Balance</button>
                     </div>
                 </div>
             </section>

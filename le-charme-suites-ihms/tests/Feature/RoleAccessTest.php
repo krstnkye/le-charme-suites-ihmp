@@ -798,7 +798,7 @@ class RoleAccessTest extends TestCase
             ->assertSee('Cashier Profile &amp; Account', false)
             ->assertSee('Billing Identity Vault')
             ->assertSee('Billing Department Access')
-            ->assertSee('Authorized Billing Terminals')
+            ->assertSee('Authorized Billing Devices')
             ->assertSee('Billing Alerts')
             ->assertSee('Billing Staff');
     }

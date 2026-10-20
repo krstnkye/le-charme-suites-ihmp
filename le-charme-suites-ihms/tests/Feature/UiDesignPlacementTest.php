@@ -102,6 +102,12 @@ class UiDesignPlacementTest extends TestCase
                 $response->assertDontSeeText($term);
             }
         }
+
+        $this->actingAs($cashier)
+            ->get(route('check-outs.create'))
+            ->assertOk()
+            ->assertDontSeeText('Open POS Terminal')
+            ->assertDontSeeText('Open Transactions');
     }
 
     public function test_public_booking_uses_the_official_hotel_identity_and_room_catalog(): void

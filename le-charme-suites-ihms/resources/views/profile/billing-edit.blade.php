@@ -187,7 +187,7 @@
                         <div class="flex items-center justify-between border-b border-line pb-4">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-secondary">devices</span>
-                                <h3 class="text-lg font-bold">Authorized Billing Terminals</h3>
+                                <h3 class="text-lg font-bold">Authorized Billing Devices</h3>
                             </div>
                             <span class="rounded-full bg-secondary-container px-2.5 py-1 text-xs font-bold text-secondary">3 Active</span>
                         </div>
