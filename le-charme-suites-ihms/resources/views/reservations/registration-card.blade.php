@@ -85,9 +85,21 @@
             html, body { width:210mm; height:297mm; background:#fff !important; print-color-adjust:exact; -webkit-print-color-adjust:exact; }
             .no-print { display:none !important; }
             .workspace { padding:0; }
-            .card { width:196mm; min-height:0; height:auto; margin:0; padding:7mm 8mm 5mm; border:0; border-radius:0; box-shadow:none; }
+            .card { width:196mm; min-height:0; height:auto; margin:0; padding:5mm 7mm 4mm; border:0; border-radius:0; box-shadow:none; }
+            .header { grid-template-columns:42mm 1fr 42mm; gap:4mm; padding-bottom:3mm; text-align:initial; }
+            .reference { text-align:left; }
+            .code { display:block; }
+            .guest-grid { grid-template-columns:2fr 1fr 1fr; }
+            .contact-grid { grid-template-columns:1fr 1.5fr; }
+            .address-grid { grid-template-columns:1.6fr 1fr; }
+            .stay-grid,.charge-grid { grid-template-columns:repeat(4,1fr); }
+            .terms,.signatures { grid-template-columns:1fr 1fr; }
+            .stay-cell { border-right:1px solid var(--line); border-bottom:0; }
+            .stay-cell:last-child { border-right:0; }
             .section { margin-top:2.4mm; }
-            .guest-copy { margin-top:4mm; }
+            .signatures { margin-top:4mm; }
+            .signature { min-height:14mm; padding-top:7mm; }
+            .guest-copy { margin-top:3mm; padding:3mm; }
             .footer { margin-top:2mm; }
         }
     </style>
@@ -103,7 +115,7 @@
 
     <main class="workspace">
         <article class="card" aria-label="Guest registration card">
-            <div class="watermark"><img src="{{ asset('images/le-charme-logo-white.png') }}" alt=""></div>
+            <div class="watermark"><img src="/images/le-charme-logo-white.png" alt=""></div>
             <div class="content">
                 <header class="header">
                     <div class="reference">
@@ -113,7 +125,7 @@
                         Prepared by: {{ $agent }}
                     </div>
                     <div class="brand">
-                        <img src="{{ asset('images/le-charme-logo-white.png') }}" alt="Le Charme Suites and Hotel">
+                        <img src="/images/le-charme-logo-white.png" alt="Le Charme Suites and Hotel">
                         <h1>LE CHARME SUITES SUBIC</h1>
                         <p>Subic Bay Freeport Zone, Philippines · Integrated Hotel Management Portal</p>
                     </div>

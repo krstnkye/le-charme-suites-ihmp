@@ -267,9 +267,15 @@
                                         </td>
                                         <td class="px-4 py-3 text-right">
                                             <div class="flex justify-end gap-1">
-                                                <button type="button" onclick="window.print()" class="rounded p-1 text-primary hover:bg-surface-mid" title="Print slip">
-                                                    <span class="material-symbols-outlined text-base">print</span>
-                                                </button>
+                                                @if ($receipt = $receiptsByReservation->get($transaction->reservation_id))
+                                                    <a href="{{ route('check-outs.receipt', ['checkOut' => $receipt, 'print' => 1]) }}" target="_blank" rel="noopener" class="rounded p-1 text-primary hover:bg-surface-mid" title="Print guest receipt">
+                                                        <span class="material-symbols-outlined text-base">print</span>
+                                                    </a>
+                                                @else
+                                                    <span class="cursor-not-allowed rounded p-1 text-slate-300" title="Receipt is available after checkout">
+                                                        <span class="material-symbols-outlined text-base">print</span>
+                                                    </span>
+                                                @endif
                                                 <button type="button" onclick="alert('Void request noted for audit review: TXN-{{ str_pad($transaction->id, 5, '0', STR_PAD_LEFT) }}')" class="rounded p-1 text-rose-700 hover:bg-rose-50" title="Void or adjust">
                                                     <span class="material-symbols-outlined text-base">cancel</span>
                                                 </button>

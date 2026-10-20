@@ -71,11 +71,6 @@
         .footer { margin-top:18px; padding-top:9px; border-top:1px solid var(--line); color:var(--muted); font-size:9px; text-align:center; }
         .footer strong { color:var(--navy); }
         @page { size: A4 portrait; margin: 0; }
-        @media print {
-            html, body { background:#fff; }
-            .no-print { display:none!important; }
-            .sheet { width:210mm; min-height:297mm; margin:0; box-shadow:none; print-color-adjust:exact; -webkit-print-color-adjust:exact; }
-        }
         @media (max-width: 820px) {
             .toolbar { align-items:flex-start; flex-direction:column; }
             .sheet { width:100%; min-height:auto; margin:0; padding:22px 16px; }
@@ -83,6 +78,31 @@
             .receipt-heading { text-align:left; }
             .payment-box { grid-template-columns:1fr; }
             .brand { align-items:flex-start; flex-direction:column; }
+        }
+        @media print {
+            html, body { background:#fff; font-size:10px; }
+            .no-print { display:none!important; }
+            .sheet { width:210mm; min-height:297mm; margin:0; padding:8mm 10mm 6mm; box-shadow:none; print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+            .receipt-header { grid-template-columns:1.2fr .8fr; gap:12px; padding-bottom:9px; }
+            .brand { align-items:center; flex-direction:row; gap:10px; }
+            .brand img { width:126px; height:56px; }
+            .hotel-name { font-size:18px; }
+            .receipt-heading { text-align:right; }
+            h1 { font-size:22px; }
+            .section { margin-top:10px; }
+            .section-title { margin-bottom:5px; padding-bottom:4px; }
+            .info-grid { grid-template-columns:1fr 1fr; gap:8px; }
+            .info-card { padding:7px 8px; }
+            .detail { padding:3px 0; }
+            th, td { padding:5px 6px; }
+            .summary-wrap { grid-template-columns:1fr 250px; gap:12px; margin-top:9px; }
+            .notes { min-height:0; padding:8px; }
+            .summary-row { padding:6px 8px; }
+            .payment-box { grid-template-columns:repeat(3, 1fr); gap:6px; margin-top:8px; }
+            .payment-item { padding:6px 7px; }
+            .signatures { grid-template-columns:1fr 1fr; margin-top:20px; }
+            .signature { padding-top:18px; }
+            .footer { margin-top:9px; padding-top:6px; }
         }
     </style>
 </head>
@@ -101,7 +121,7 @@
     <main class="sheet">
         <header class="receipt-header">
             <div class="brand">
-                <img src="{{ asset('images/le-charme-logo-white.png') }}" alt="Le Charme Suites logo">
+                <img src="/images/le-charme-logo-white.png" alt="Le Charme Suites logo">
                 <div>
                     <h2 class="hotel-name">Le Charme Suites Subic</h2>
                     <div class="hotel-details">

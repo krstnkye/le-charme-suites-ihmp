@@ -45,13 +45,21 @@ class CheckOutController extends Controller
             ->latest('checked_in_at')
             ->first();
 
+        $folioTransactions = HotelTransaction::with(['guest', 'room'])
+            ->latest('transaction_date')
+            ->limit(6)
+            ->get();
+
+        $receiptsByReservation = CheckOut::whereIn(
+            'reservation_id',
+            $folioTransactions->pluck('reservation_id')->filter()->unique()
+        )->get()->keyBy('reservation_id');
+
         return view('check_outs.index', [
             'activeCheckIn' => $activeCheckIn,
             'checkOuts' => $checkOuts,
-            'folioTransactions' => HotelTransaction::with(['guest', 'room'])
-                ->latest('transaction_date')
-                ->limit(6)
-                ->get(),
+            'folioTransactions' => $folioTransactions,
+            'receiptsByReservation' => $receiptsByReservation,
             'paymentStatus' => $paymentStatus,
             'search' => $search,
             'settledToday' => CheckOut::whereDate('checked_out_at', today())->count(),

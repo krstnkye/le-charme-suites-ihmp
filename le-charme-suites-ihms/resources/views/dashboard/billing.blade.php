@@ -218,7 +218,7 @@
                                     <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
                                         <div class="flex items-center gap-2 text-xs font-semibold text-secondary"><span class="h-2 w-2 rounded-full bg-amber-500"></span>Guest Bill pending Billing review</div>
                                         <div class="flex flex-wrap gap-2">
-                                            <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 rounded border border-line bg-white px-3 py-1.5 text-xs font-bold text-primary transition hover:border-secondary"><span class="material-symbols-outlined text-sm">print</span>Print Itemized Bill</button>
+                                            <a href="{{ route('check-outs.bill-preview', ['checkIn' => $checkIn, 'print' => 1]) }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 rounded border border-line bg-white px-3 py-1.5 text-xs font-bold text-primary transition hover:border-secondary"><span class="material-symbols-outlined text-sm">print</span>Print Itemized Bill</a>
                                             <a href="{{ route('check-outs.create') }}" class="inline-flex items-center gap-1.5 rounded bg-primary px-4 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900"><span class="material-symbols-outlined text-sm text-secondary-fixed">payments</span>Process Payment</a>
                                         </div>
                                     </div>

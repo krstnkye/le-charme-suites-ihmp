@@ -53,8 +53,26 @@
         .signature-label { margin-top:5px; color:var(--muted); font-size:9px; text-align:center; }
         footer { margin-top:22px; padding-top:9px; border-top:1px solid var(--line); color:var(--muted); font-size:9px; text-align:center; line-height:1.5; }
         @page { size:A4 portrait; margin:0; }
-        @media print { html,body { background:#fff; } .no-print { display:none!important; } .sheet { margin:0; box-shadow:none; print-color-adjust:exact; -webkit-print-color-adjust:exact; } }
         @media(max-width:820px) { .toolbar { align-items:flex-start; flex-direction:column; } .sheet { width:100%; min-height:auto; margin:0; padding:22px 16px; } .header,.info { grid-template-columns:1fr; } .document { text-align:left; } .brand { align-items:flex-start; flex-direction:column; } }
+        @media print {
+            html,body { background:#fff; font-size:10px; }
+            .no-print { display:none!important; }
+            .sheet { width:210mm; min-height:297mm; margin:0; padding:9mm 11mm 6mm; box-shadow:none; print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+            .header { grid-template-columns:1.15fr .85fr; gap:12px; padding-bottom:9px; }
+            .brand { align-items:center; flex-direction:row; gap:10px; }
+            .brand img { width:126px; height:56px; }
+            .document { text-align:right; }
+            .document h1 { font-size:23px; }
+            .section { margin-top:10px; }
+            .section-title { margin-bottom:5px; padding-bottom:4px; }
+            .info { grid-template-columns:1fr 1fr; gap:8px; }
+            .card { padding:7px 8px; }
+            .field { padding:3px 0; }
+            th,td { padding:5px 6px; }
+            .summary { margin-top:9px; }
+            .signatures { margin-top:18px; }
+            footer { margin-top:9px; padding-top:6px; }
+        }
     </style>
 </head>
 <body>
@@ -66,7 +84,7 @@
     <main class="sheet">
         <header class="header">
             <div class="brand">
-                <img src="{{ asset('images/le-charme-logo-white.png') }}" alt="Le Charme Suites logo">
+                <img src="/images/le-charme-logo-white.png" alt="Le Charme Suites logo">
                 <div><h2 class="hotel-name">Le Charme Suites Subic</h2><div class="hotel-details">Le Charme Bldg., 1131 Palm Street<br>Subic Bay Freeport Zone, Philippines 2200<br>+63 (047) 250-3333 · frontoffice@lecharmehotels.com</div></div>
             </div>
             <div class="document"><small>INTEGRATED HOTEL MANAGEMENT PORTAL</small><h1>GUEST BILL</h1><div class="reference">{{ $reference }}</div><div class="preview">FOR REVIEW BEFORE CHECKOUT</div></div>
