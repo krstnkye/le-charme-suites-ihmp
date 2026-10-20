@@ -172,15 +172,13 @@ class AuthController extends Controller
 
         $this->recordActivity($request, 'ACCOUNT_REGISTERED', true, $user, 'New staff account registered.');
 
-        Auth::login($user);
-        $request->session()->regenerate();
-        $this->recordActivity($request, 'LOGIN_SUCCESS', true, $user, 'Staff member signed in after registration.');
-
         return redirect()
-            ->route('dashboard')
-            ->with('status', 'Welcome to the IHMP workspace.')
-            ->with('account_created', true)
-            ->with('account_created_prompt_id', (string) Str::uuid());
+            ->route('login')
+            ->with('status', 'Account created successfully. Please sign in with your new work account to continue.')
+            ->withInput([
+                'email' => $user->email,
+                'role' => $user->role,
+            ]);
     }
 
     public function logout(Request $request): RedirectResponse

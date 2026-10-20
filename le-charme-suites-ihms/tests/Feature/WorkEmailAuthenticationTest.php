@@ -38,17 +38,20 @@ class WorkEmailAuthenticationTest extends TestCase
             'password_confirmation' => 'password',
         ]);
 
-        $response->assertRedirect(route('dashboard'));
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHas('status', 'Account created successfully. Please sign in with your new work account to continue.');
+        $response->assertSessionHasInput('email', 'sample@lecharmehotel.com');
+        $response->assertSessionHasInput('role', 'receptionist');
+        $this->assertGuest();
         $this->assertDatabaseHas('users', ['email' => 'sample@lecharmehotel.com']);
         $this->assertDatabaseHas('auth_activity_logs', [
             'email' => 'sample@lecharmehotel.com',
             'event_type' => 'ACCOUNT_REGISTERED',
             'successful' => true,
         ]);
-        $this->assertDatabaseHas('auth_activity_logs', [
+        $this->assertDatabaseMissing('auth_activity_logs', [
             'email' => 'sample@lecharmehotel.com',
             'event_type' => 'LOGIN_SUCCESS',
-            'successful' => true,
         ]);
     }
 
@@ -218,9 +221,17 @@ class WorkEmailAuthenticationTest extends TestCase
                 'role' => $role,
                 'password' => 'password',
                 'password_confirmation' => 'password',
-            ])->assertRedirect(route('dashboard'));
+            ])->assertRedirect(route('login'));
 
             $this->assertDatabaseHas('users', ['email' => $email, 'role' => $role]);
+            $this->assertGuest();
+
+            $this->post(route('login.store'), [
+                'email' => $email,
+                'role' => $role,
+                'password' => 'password',
+            ])->assertRedirect(route('dashboard'));
+
             $this->get(route('dashboard'))->assertOk()->assertSee($signature, false);
             $this->post(route('logout'))->assertRedirect(route('login'));
         }
