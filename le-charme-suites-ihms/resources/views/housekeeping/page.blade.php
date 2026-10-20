@@ -83,12 +83,15 @@
                                     <td class="px-4 py-3 text-xs">{{ $task->due_at?->format('M d, h:i A') ?? 'No deadline' }}</td>
                                     <td class="px-4 py-3">
                                         @if (! in_array($task->status, ['completed', 'cancelled'], true))
-                                            <form method="POST" action="{{ route('housekeeping-tasks.update', $task) }}" class="flex items-center gap-2">
+                                            <form method="POST" action="{{ route('housekeeping-tasks.update', $task) }}" class="flex flex-wrap items-center gap-2">
                                                 @csrf @method('PATCH')
+                                                <select name="assigned_to" aria-label="Housekeeper assigned to Room {{ $task->room->room_number }}" class="max-w-44 rounded border-line py-1.5 text-xs font-bold">
+                                                    <option value="">Unassigned</option>
+                                                    @foreach ($housekeepingStaff as $staff)<option value="{{ $staff->id }}" @selected($task->assigned_to === $staff->id)>{{ $staff->name }}</option>@endforeach
+                                                </select>
                                                 <select name="status" class="rounded border-line py-1.5 text-xs font-bold">
                                                     @foreach (['queued' => 'Queued', 'in_progress' => 'Start / In Progress', 'inspection' => 'Ready for Inspection', 'completed' => 'Complete'] as $value => $label)<option value="{{ $value }}" @selected($task->status === $value)>{{ $label }}</option>@endforeach
                                                 </select>
-                                                <input type="hidden" name="assigned_to" value="{{ $task->assigned_to }}">
                                                 <button class="rounded bg-primary px-2.5 py-1.5 text-xs font-bold text-white">Save</button>
                                             </form>
                                         @else
@@ -108,11 +111,12 @@
                 @csrf
                 <div><p class="text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Task Assignment</p><h3 class="mt-1 font-serif text-xl font-bold">Create Work Order</h3></div>
                 <label class="block text-xs font-bold">Room<select name="room_id" required class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm"><option value="">Select room</option>@foreach ($allRooms as $room)<option value="{{ $room->id }}">Room {{ $room->room_number }} · {{ $room->status }}</option>@endforeach</select></label>
+                <label class="block text-xs font-bold">Assign housekeeper<select name="assigned_to" required class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm"><option value="">Select housekeeping staff</option>@foreach ($housekeepingStaff as $staff)<option value="{{ $staff->id }}" @selected(auth()->id() === $staff->id)>{{ $staff->name }}</option>@endforeach</select></label>
                 <label class="block text-xs font-bold">Task type<select name="task_type" required class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm">@foreach (['turnover' => 'Departure Turnover', 'stayover' => 'Occupied Room Service', 'inspection' => 'Room Inspection', 'guest_request' => 'Guest Request', 'deep_cleaning' => 'Deep Cleaning', 'maintenance_follow_up' => 'Maintenance Follow-up'] as $value => $label)<option value="{{ $value }}">{{ $label }}</option>@endforeach</select></label>
                 <label class="block text-xs font-bold">Task title<input name="title" required maxlength="255" class="mt-1 w-full rounded-lg border-line px-3 py-2.5 text-sm" placeholder="Example: Prepare room for arrival"></label>
                 <label class="block text-xs font-bold">Instructions<textarea name="instructions" rows="3" class="mt-1 w-full rounded-lg border-line px-3 py-2.5 text-sm"></textarea></label>
                 <div class="grid grid-cols-2 gap-3"><label class="text-xs font-bold">Priority<select name="priority" class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm"><option value="normal">Normal</option><option value="high">High</option><option value="urgent">Urgent</option><option value="low">Low</option></select></label><label class="text-xs font-bold">Due by<input name="due_at" type="datetime-local" class="mt-1 w-full rounded-lg border-line px-3 py-2.5 text-sm"></label></div>
-                <button class="flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-3 text-sm font-bold text-white"><span class="material-symbols-outlined text-lg">assignment_add</span>Assign to me</button>
+                <button class="flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-3 text-sm font-bold text-white"><span class="material-symbols-outlined text-lg">assignment_add</span>Create Assignment</button>
             </form>
         </section>
     @endif
@@ -1636,24 +1640,17 @@
                     </div>
 
                     <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-bold text-primary">Duty Engineer On-Call</h3>
-                            <span class="rounded bg-[#f6f3ed] px-2 py-1 text-[11px] font-bold text-secondary">07:00 - 15:30</span>
-                        </div>
-                        <div class="mt-4 flex items-center gap-3">
-                            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-sm font-bold text-[#ffdeaa]">DR</div>
-                            <div>
-                                <p class="font-bold text-primary">Engr. Danilo Ramos</p>
-                                <p class="text-xs text-slate-500">Chief Plant Operations &amp; HVAC</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
-                            <span class="rounded bg-amber-100 px-2 py-1 font-bold text-secondary">Radio Ch. 2</span>
-                            <span class="rounded bg-[#f6f3ed] px-2 py-1 font-bold text-primary">Ext 4088</span>
-                        </div>
-                        <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs font-bold">
-                            <a href="{{ route('housekeeping.page', 'report-issue') }}" class="text-secondary hover:underline">Instant Radio Ping</a>
-                            <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="text-primary hover:underline">View Reported Issues</a>
+                        <h3 class="font-bold text-primary">Maintenance Coordination</h3>
+                        <p class="mt-2 text-sm leading-6 text-slate-500">The portal does not claim a radio or engineering staff connection. Reported room issues are saved in the shared room records and can be discussed through department messages.</p>
+                        <div class="mt-4 grid gap-2">
+                            <a href="{{ route('messages.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white hover:bg-primary/90">
+                                <span class="material-symbols-outlined text-base text-[#ffdeaa]">chat</span>
+                                Open Department Messages
+                            </a>
+                            <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-4 py-2.5 text-xs font-bold text-secondary hover:bg-[#ffdeaa]/20">
+                                <span class="material-symbols-outlined text-base">construction</span>
+                                View Reported Issues
+                            </a>
                         </div>
                     </div>
 
@@ -1864,24 +1861,24 @@
 
                 <aside class="space-y-5 xl:col-span-4">
                     <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                        <div class="mb-3 flex items-center justify-between">
-                            <span class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-secondary"><span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>Lead Engineer On Duty</span>
-                            <span class="rounded bg-[#f6f3ed] px-2 py-0.5 text-[11px] font-mono text-slate-500">07:00 - 15:30</span>
-                        </div>
-                        <div class="flex items-center gap-3 border-b border-line pb-3">
-                            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-sm font-bold text-[#ffdeaa]">DR</div>
+                        <div class="flex items-start gap-3 border-b border-line pb-4">
+                            <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-[#ffdeaa]">
+                                <span class="material-symbols-outlined">engineering</span>
+                            </div>
                             <div>
-                                <h4 class="font-bold text-primary">Engr. Danilo Rodriguez</h4>
-                                <p class="text-xs text-slate-500">Chief of Plant Operations &amp; HVAC</p>
-                                <div class="mt-1 flex flex-wrap gap-1">
-                                    <span class="rounded bg-[#ffdeaa]/60 px-2 py-0.5 text-[11px] font-bold text-secondary">Radio Ch. 2</span>
-                                    <span class="rounded bg-[#f6f3ed] px-2 py-0.5 text-[11px] font-mono text-primary">Ext 402</span>
-                                </div>
+                                <h3 class="font-bold text-primary">Maintenance Coordination</h3>
+                                <p class="mt-1 text-xs leading-5 text-slate-500">No radio or hotel engineering system is connected. Use the portal message page to contact another department and keep a written record.</p>
                             </div>
                         </div>
-                        <div class="mt-3 flex items-center justify-between">
-                            <button type="button" class="text-xs font-bold text-secondary hover:underline">Instant Radio Ping</button>
-                            <button type="button" class="text-xs font-bold text-primary hover:text-secondary">Direct Terminal Message</button>
+                        <div class="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
+                            <a href="{{ route('messages.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white hover:bg-primary/90">
+                                <span class="material-symbols-outlined text-base text-[#ffdeaa]">chat</span>
+                                Open Department Messages
+                            </a>
+                            <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-4 py-2.5 text-xs font-bold text-secondary hover:bg-[#ffdeaa]/20">
+                                <span class="material-symbols-outlined text-base">construction</span>
+                                View Reported Issues
+                            </a>
                         </div>
                     </div>
 

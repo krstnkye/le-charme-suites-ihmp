@@ -46,17 +46,56 @@ class HousekeepingTaskWorkflowTest extends TestCase
         ]);
     }
 
-    public function test_housekeeper_cannot_update_task_assigned_to_another_housekeeper(): void
+    public function test_housekeeper_can_reassign_task_to_another_housekeeper(): void
     {
         $assignedHousekeeper = User::factory()->create(['role' => 'housekeeping']);
         $otherHousekeeper = User::factory()->create(['role' => 'housekeeping']);
         $task = HousekeepingTask::factory()->create(['assigned_to' => $assignedHousekeeper->id]);
 
-        $response = $this->actingAs($otherHousekeeper)->patch(route('housekeeping-tasks.update', $task), [
+        $response = $this->actingAs($assignedHousekeeper)->patch(route('housekeeping-tasks.update', $task), [
             'status' => 'in_progress',
+            'assigned_to' => $otherHousekeeper->id,
         ]);
 
-        $response->assertForbidden();
-        $this->assertSame('queued', $task->fresh()->status);
+        $response->assertRedirect();
+        $this->assertSame('in_progress', $task->fresh()->status);
+        $this->assertSame($otherHousekeeper->id, $task->fresh()->assigned_to);
+    }
+
+    public function test_housekeeping_room_page_uses_real_task_assignee(): void
+    {
+        $housekeeper = User::factory()->create(['role' => 'housekeeping', 'name' => 'Test Housekeeper']);
+        $room = Room::factory()->create(['status' => 'cleaning']);
+        HousekeepingTask::factory()->create([
+            'room_id' => $room->id,
+            'assigned_to' => $housekeeper->id,
+            'status' => 'queued',
+        ]);
+
+        $this->actingAs($housekeeper)
+            ->get(route('rooms.show', $room))
+            ->assertOk()
+            ->assertSee('Test Housekeeper')
+            ->assertSee('Update Assignment');
+    }
+
+    public function test_housekeeping_dashboard_shows_real_task_assignment_controls(): void
+    {
+        $housekeeper = User::factory()->create(['role' => 'housekeeping', 'name' => 'Assigned Staff']);
+        $room = Room::factory()->create(['status' => 'cleaning', 'room_number' => '305']);
+        HousekeepingTask::factory()->create([
+            'room_id' => $room->id,
+            'assigned_to' => $housekeeper->id,
+            'title' => 'Prepare Room 305',
+            'status' => 'queued',
+        ]);
+
+        $this->actingAs($housekeeper)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('Housekeeping Task Assignments')
+            ->assertSee('Prepare Room 305')
+            ->assertSee('Assigned Staff')
+            ->assertSee('Assign Task');
     }
 }

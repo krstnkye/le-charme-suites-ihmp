@@ -26,7 +26,7 @@ class HousekeepingTaskController extends Controller
             'due_at' => ['nullable', 'date'],
         ]);
 
-        if ($request->user()->role === 'housekeeping') {
+        if ($request->user()->role === 'housekeeping' && empty($data['assigned_to'])) {
             $data['assigned_to'] = $request->user()->id;
         }
 
@@ -49,13 +49,8 @@ class HousekeepingTaskController extends Controller
             'completion_notes' => ['nullable', 'string', 'max:2000'],
         ]);
 
-        if ($request->user()->role === 'housekeeping') {
-            abort_if(
-                $housekeepingTask->assigned_to !== null
-                && $housekeepingTask->assigned_to !== $request->user()->id,
-                403,
-            );
-            $data['assigned_to'] = $request->user()->id;
+        if (! array_key_exists('assigned_to', $data)) {
+            $data['assigned_to'] = $housekeepingTask->assigned_to;
         }
 
         DB::transaction(function () use ($data, $housekeepingTask): void {

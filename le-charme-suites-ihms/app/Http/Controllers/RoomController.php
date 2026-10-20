@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\RoomStatusLog;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -98,10 +99,19 @@ class RoomController extends Controller
 
     public function show(Room $room): View
     {
-        $room->load(['reservations.guest', 'statusLogs' => fn ($query) => $query->latest('changed_at')]);
+        $room->load([
+            'reservations.guest',
+            'statusLogs' => fn ($query) => $query->latest('changed_at'),
+            'housekeepingTasks' => fn ($query) => $query
+                ->with('assignee')
+                ->latest(),
+        ]);
 
         if (request()->user()?->role === 'housekeeping') {
-            return view('rooms.housekeeping-show', compact('room'));
+            return view('rooms.housekeeping-show', [
+                'room' => $room,
+                'housekeepingStaff' => User::where('role', 'housekeeping')->orderBy('name')->get(),
+            ]);
         }
 
         return view('rooms.show', compact('room'));

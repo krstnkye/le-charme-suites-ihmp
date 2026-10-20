@@ -6,6 +6,7 @@ use App\Models\CheckIn;
 use App\Models\CheckOut;
 use App\Models\Guest;
 use App\Models\HotelTransaction;
+use App\Models\HousekeepingTask;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Models\RoomStatusLog;
@@ -53,10 +54,14 @@ class DashboardController extends Controller
                 ...$data,
                 'cleaningRooms' => Room::where('status', 'cleaning')->orderBy('room_number')->get(),
                 'maintenanceQueue' => Room::where('status', 'maintenance')->orderBy('room_number')->get(),
-                'assignedRooms' => Room::whereIn('status', ['cleaning', 'maintenance', 'occupied'])
-                    ->orderByRaw("CASE status WHEN 'cleaning' THEN 1 WHEN 'maintenance' THEN 2 WHEN 'occupied' THEN 3 ELSE 4 END")
+                'assignedRooms' => Room::whereHas('housekeepingTasks', fn ($query) => $query
+                    ->where('assigned_to', auth()->id())
+                    ->whereNotIn('status', ['completed', 'cancelled']))
                     ->orderBy('room_number')
                     ->take(12)
+                    ->get(),
+                'taskRooms' => Room::whereIn('status', ['cleaning', 'maintenance', 'occupied'])
+                    ->orderBy('room_number')
                     ->get(),
                 'inspectionRooms' => Room::whereIn('status', ['cleaning', 'maintenance'])
                     ->orderBy('room_number')
@@ -80,6 +85,15 @@ class DashboardController extends Controller
                 'recentRoomLogs' => RoomStatusLog::with('room')
                     ->latest('changed_at')
                     ->take(10)
+                    ->get(),
+                'housekeepingTasks' => HousekeepingTask::with(['room', 'assignee'])
+                    ->whereNotIn('status', ['completed', 'cancelled'])
+                    ->orderByRaw("CASE priority WHEN 'urgent' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END")
+                    ->orderBy('due_at')
+                    ->take(12)
+                    ->get(),
+                'housekeepingStaff' => User::where('role', 'housekeeping')
+                    ->orderBy('name')
                     ->get(),
             ]);
         }

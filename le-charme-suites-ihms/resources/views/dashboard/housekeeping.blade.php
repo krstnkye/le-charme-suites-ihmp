@@ -152,9 +152,75 @@
                     </section>
 
                     <section id="cleaning-tasks" class="rounded-xl border border-line bg-white shadow-sm">
-                        <div class="border-b border-line p-5">
-                            <h3 class="font-serif text-2xl font-bold">Housekeeping Tasks</h3>
-                            <p class="mt-1 text-sm text-slate-500">Cleaning queue, priorities, and completed room-status work.</p>
+                        <div class="flex flex-wrap items-start justify-between gap-3 border-b border-line p-5">
+                            <div>
+                                <h3 class="font-serif text-2xl font-bold">Housekeeping Task Assignments</h3>
+                                <p class="mt-1 text-sm text-slate-500">Assign rooms to housekeeping staff and monitor the work status.</p>
+                            </div>
+                            <a href="{{ route('housekeeping.page', 'cleaning-tasks') }}" class="rounded-lg border border-secondary px-4 py-2 text-sm font-bold text-secondary hover:bg-secondary/10">Open All Tasks</a>
+                        </div>
+                        <div class="border-b border-line bg-stone-50 p-5">
+                            <form method="POST" action="{{ route('housekeeping-tasks.store') }}" class="grid gap-3 lg:grid-cols-[1fr_1fr_0.8fr_auto] lg:items-end">
+                                @csrf
+                                <input type="hidden" name="task_type" value="turnover">
+                                <input type="hidden" name="title" value="Room cleaning and preparation">
+                                <input type="hidden" name="instructions" value="Clean, restock, and prepare the assigned room for inspection.">
+                                <label class="text-xs font-bold text-slate-600">Room
+                                    <select name="room_id" required class="mt-1 block w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm text-primary focus:border-secondary focus:ring-secondary">
+                                        <option value="">Select room</option>
+                                        @foreach ($taskRooms as $room)
+                                            <option value="{{ $room->id }}">Room {{ $room->room_number }} - {{ $room->room_type }} ({{ ucfirst($room->status) }})</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                                <label class="text-xs font-bold text-slate-600">Housekeeper
+                                    <select name="assigned_to" required class="mt-1 block w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm text-primary focus:border-secondary focus:ring-secondary">
+                                        <option value="">Select staff</option>
+                                        @foreach ($housekeepingStaff as $staff)
+                                            <option value="{{ $staff->id }}" @selected($staff->id === auth()->id())>{{ $staff->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                                <label class="text-xs font-bold text-slate-600">Priority
+                                    <select name="priority" required class="mt-1 block w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm text-primary focus:border-secondary focus:ring-secondary">
+                                        <option value="normal">Normal</option>
+                                        <option value="high">High</option>
+                                        <option value="urgent">Urgent</option>
+                                        <option value="low">Low</option>
+                                    </select>
+                                </label>
+                                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-slate-900">
+                                    <span class="material-symbols-outlined text-base text-[#ffdeaa]">assignment_add</span>
+                                    Assign Task
+                                </button>
+                            </form>
+                        </div>
+                        <div class="space-y-3 border-b border-line p-5">
+                            <h4 class="font-bold">Active Assignments</h4>
+                            @forelse ($housekeepingTasks as $task)
+                                <form method="POST" action="{{ route('housekeeping-tasks.update', $task) }}" class="grid gap-3 rounded-lg border border-line bg-white p-3 md:grid-cols-[1fr_1fr_0.8fr_auto] md:items-center">
+                                    @csrf
+                                    @method('PATCH')
+                                    <div>
+                                        <p class="font-bold">Room {{ $task->room?->room_number ?? 'N/A' }} - {{ $task->title }}</p>
+                                        <p class="text-xs text-slate-500">Priority: {{ ucfirst($task->priority) }}</p>
+                                    </div>
+                                    <select name="assigned_to" class="rounded-lg border-line bg-white px-3 py-2 text-sm focus:border-secondary focus:ring-secondary">
+                                        <option value="">Unassigned</option>
+                                        @foreach ($housekeepingStaff as $staff)
+                                            <option value="{{ $staff->id }}" @selected($task->assigned_to === $staff->id)>{{ $staff->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <select name="status" required class="rounded-lg border-line bg-white px-3 py-2 text-sm focus:border-secondary focus:ring-secondary">
+                                        @foreach (['queued' => 'Waiting', 'in_progress' => 'In Progress', 'inspection' => 'For Inspection', 'completed' => 'Completed', 'cancelled' => 'Cancelled'] as $value => $label)
+                                            <option value="{{ $value }}" @selected($task->status === $value)>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="submit" class="rounded-lg border border-secondary px-4 py-2 text-sm font-bold text-secondary hover:bg-secondary hover:text-white">Save</button>
+                                </form>
+                            @empty
+                                <p class="rounded-lg border border-dashed border-line p-5 text-center text-sm text-slate-500">No active task assignments yet.</p>
+                            @endforelse
                         </div>
                         <div class="grid gap-4 p-5 lg:grid-cols-3">
                             <div>

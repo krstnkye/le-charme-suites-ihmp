@@ -43,8 +43,8 @@
         $assetId = 'LCS-RM-' . str_pad((string) $room->room_number, 3, '0', STR_PAD_LEFT) . '-' . strtoupper(substr($room->room_type, 0, 3));
         $lockId = 'VNC-' . str_pad((string) (900 + (int) $room->id), 4, '0', STR_PAD_LEFT) . '-A';
         $extension = '1' . str_pad((string) $room->room_number, 3, '0', STR_PAD_LEFT);
-        $attendants = ['Seanne Alonzo', 'Carlos Reyes', 'Maria Santos', 'Rowena Dalisay', 'Elena Cruz'];
-        $attendant = $attendants[max(0, ((int) $room->id - 1) % count($attendants))];
+        $activeTask = $room->housekeepingTasks->first(fn ($task) => ! in_array($task->status, ['completed', 'cancelled'], true));
+        $attendant = $activeTask?->assignee?->name ?? 'Not assigned';
         $capacityLabel = $room->capacity === 1 ? 'guest' : 'guests';
         $guestName = $guest?->full_name ?? $guest?->name ?? 'No active guest linked';
         $guestEmail = $guest?->email ?? 'No contact email on file';
@@ -117,6 +117,7 @@
                             <div class="rounded-lg border border-line bg-white p-4">
                                 <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Assigned Attendant</p>
                                 <p class="mt-2 text-lg font-bold">{{ $attendant }}</p>
+                                <p class="mt-1 text-xs text-slate-500">{{ $activeTask ? ucfirst(str_replace('_', ' ', $activeTask->status)) : 'No active task' }}</p>
                             </div>
                         </div>
                     </div>
@@ -176,12 +177,36 @@
                     </div>
 
                     <div class="mt-5 rounded-lg border border-line bg-cream p-4">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex flex-wrap items-end justify-between gap-4">
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Floor Attendant Assignment</p>
-                                <p class="mt-1 font-bold text-primary">{{ $attendant }} / Morning Operations</p>
+                                <p class="mt-1 font-bold text-primary">{{ $attendant }}</p>
                             </div>
-                            <a href="{{ route('housekeeping.page', 'cleaning-tasks') }}" class="rounded-lg border border-secondary px-4 py-2 text-sm font-bold text-secondary transition hover:bg-secondary hover:text-white">Open Cleaning Tasks</a>
+                            <form method="POST" action="{{ $activeTask ? route('housekeeping-tasks.update', $activeTask) : route('housekeeping-tasks.store') }}" class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-end">
+                                @csrf
+                                @if ($activeTask)
+                                    @method('PATCH')
+                                    <input type="hidden" name="status" value="{{ $activeTask->status }}">
+                                @else
+                                    <input type="hidden" name="room_id" value="{{ $room->id }}">
+                                    <input type="hidden" name="task_type" value="turnover">
+                                    <input type="hidden" name="title" value="Clean and prepare Room {{ $room->room_number }}">
+                                    <input type="hidden" name="instructions" value="Complete room cleaning, restocking, and readiness inspection.">
+                                    <input type="hidden" name="priority" value="normal">
+                                @endif
+                                <label class="text-xs font-bold text-slate-600">
+                                    Assign housekeeper
+                                    <select name="assigned_to" required class="mt-1 block min-w-56 rounded-lg border-line bg-white px-3 py-2 text-sm text-primary focus:border-secondary focus:ring-secondary">
+                                        <option value="">Select staff</option>
+                                        @foreach ($housekeepingStaff as $staff)
+                                            <option value="{{ $staff->id }}" @selected($activeTask?->assigned_to === $staff->id)>{{ $staff->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                                <button type="submit" class="rounded-lg bg-secondary px-4 py-2 text-sm font-bold text-white transition hover:bg-[#5b4313]">
+                                    {{ $activeTask ? 'Update Assignment' : 'Assign Task' }}
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
