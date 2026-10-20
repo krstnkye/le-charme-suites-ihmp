@@ -32,9 +32,11 @@
     @if (session('identification_status'))
         <p class="mt-2 rounded border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-800">{{ session('identification_status') }}</p>
     @endif
-    @if ($errors->any())
+    @if ($errors->hasAny(['identification', 'identification_type', 'identification_number', 'identification_photo']))
         <ul class="mt-2 list-disc rounded border border-red-200 bg-red-50 py-1 pl-6 pr-2 text-xs font-semibold text-red-800">
-            @foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach
+            @foreach (['identification', 'identification_type', 'identification_number', 'identification_photo'] as $field)
+                @error($field)<li>{{ $message }}</li>@enderror
+            @endforeach
         </ul>
     @endif
 

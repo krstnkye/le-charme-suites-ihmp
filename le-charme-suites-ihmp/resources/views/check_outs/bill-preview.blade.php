@@ -103,7 +103,7 @@
                     <tr><td>{{ $charge->transaction_date?->format('M d, Y') ?? 'Not recorded' }}</td><td><div class="description">{{ $charge->description ?: 'Additional hotel charge' }}</div><div class="sub">{{ ucfirst(str_replace('_', ' ', $charge->transaction_type)) }}</div></td><td>TRX-{{ str_pad($charge->id, 5, '0', STR_PAD_LEFT) }}</td><td class="amount">PHP {{ number_format((float) $charge->amount, 2) }}</td></tr>
                 @endforeach
             </tbody></table>
-            <div class="summary"><div class="summary-row"><span>Room charges</span><strong>PHP {{ number_format($roomCharges, 2) }}</strong></div><div class="summary-row"><span>Additional recorded charges</span><strong>PHP {{ number_format($additionalTotal, 2) }}</strong></div><div class="summary-row"><span>Total recorded charges</span><strong>PHP {{ number_format($totalCharges, 2) }}</strong></div></div>
+            <div class="summary"><div class="summary-row"><span>Room charges</span><strong>PHP {{ number_format($roomCharges, 2) }}</strong></div><div class="summary-row"><span>Additional recorded charges</span><strong>PHP {{ number_format($additionalTotal, 2) }}</strong></div><div class="summary-row"><span>Total recorded charges</span><strong>PHP {{ number_format($totalCharges, 2) }}</strong></div><div class="summary-row"><span>Less: deposit / downpayment</span><strong>- PHP {{ number_format($depositTotal, 2) }}</strong></div><div class="summary-row total"><span>Balance due</span><strong>PHP {{ number_format($balanceDue, 2) }}</strong></div></div>
         </section>
 
         <div class="notice"><strong>This is a guest bill preview, not a payment receipt.</strong> Complete the checkout and record the payment to generate the final guest checkout receipt.</div>

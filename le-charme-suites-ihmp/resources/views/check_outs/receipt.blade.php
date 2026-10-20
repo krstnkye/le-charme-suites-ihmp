@@ -214,6 +214,7 @@
                 <div class="summary-row"><span>Room charges</span><strong>PHP {{ number_format($roomCharges, 2) }}</strong></div>
                 <div class="summary-row"><span>Additional recorded charges</span><strong>PHP {{ number_format($additionalTotal, 2) }}</strong></div>
                 <div class="summary-row total"><span>Total recorded charges</span><strong>PHP {{ number_format($totalCharges, 2) }}</strong></div>
+                <div class="summary-row"><span>Less: deposit / downpayment</span><strong>- PHP {{ number_format($depositTotal, 2) }}</strong></div>
                 <div class="summary-row"><span>Payment received</span><strong>- PHP {{ number_format($amountPaid, 2) }}</strong></div>
                 <div class="summary-row balance {{ $balance <= 0 ? 'zero' : '' }}"><span>Remaining balance</span><strong>PHP {{ number_format($balance, 2) }}</strong></div>
             </div>

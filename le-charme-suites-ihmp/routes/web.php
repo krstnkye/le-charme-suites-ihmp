@@ -21,6 +21,7 @@ use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReservationConfirmationController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ReservationDepositController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SystemManualController;
 use App\Http\Controllers\UiPreferenceController;
@@ -133,6 +134,9 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:receptionist,cashier')->group(function () {
+        Route::post('/reservations/{reservation}/deposits', [ReservationDepositController::class, 'store'])
+            ->middleware('permission:guest_bills.write')
+            ->name('reservations.deposits.store');
         Route::get('/check-outs', [CheckOutController::class, 'index'])->middleware('permission:guest_bills.read')->name('check-outs.index');
         Route::get('/check-outs/history', [CheckOutController::class, 'history'])->middleware('permission:guest_bills.read')->name('check-outs.history');
         Route::get('/check-outs/create', [CheckOutController::class, 'create'])->middleware('permission:guest_bills.write')->name('check-outs.create');

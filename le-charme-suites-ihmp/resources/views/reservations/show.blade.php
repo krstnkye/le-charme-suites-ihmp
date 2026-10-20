@@ -5,11 +5,13 @@
     $nights = $reservation->check_in_date && $reservation->check_out_date
         ? max(1, $reservation->check_in_date->diffInDays($reservation->check_out_date))
         : 1;
-    $roomTotal = ($room?->rate ?? 0) * $nights;
-    $taxes = round($roomTotal * 0.12, 2);
-    $totalStay = $roomTotal + $taxes;
-    $deposit = round($totalStay * 0.5, 2);
-    $balance = max(0, $totalStay - $deposit);
+    $guestBill = app(\App\Services\GuestBillService::class)->forReservation($reservation, $room);
+    $roomTotal = $guestBill['roomCharges'];
+    $extraCharges = $guestBill['additionalTotal'];
+    $totalStay = $guestBill['totalCharges'];
+    $deposit = $guestBill['depositTotal'];
+    $balance = $guestBill['balanceDue'];
+    $canRecordDeposit = in_array($reservation->status, ['pending', 'reserved', 'checked_in'], true) && $user?->hasPermissionTo('guest_bills.write');
     $statusLabels = [
         'pending' => 'Pending Verification',
         'reserved' => 'Reserved',
@@ -317,9 +319,10 @@
                                 <span class="font-semibold">PHP {{ number_format($roomTotal, 2) }}</span>
                             </div>
                             <div class="flex justify-between text-sm text-on-surface-variant">
-                                <span>Estimated VAT & hospitality surcharge</span>
-                                <span class="font-semibold">PHP {{ number_format($taxes, 2) }}</span>
+                                <span>Extra charges</span>
+                                <span class="font-semibold">PHP {{ number_format($extraCharges, 2) }}</span>
                             </div>
+                            <p class="text-[11px] text-on-surface-variant">Room rates are tax-inclusive.</p>
                             <div class="flex justify-between border-t border-surface-variant pt-2 font-bold text-primary">
                                 <span>Total Stay Charge</span>
                                 <span>PHP {{ number_format($totalStay, 2) }}</span>
@@ -327,14 +330,35 @@
                             <div class="flex items-center justify-between rounded bg-surface-container-low px-3 py-2 text-sm">
                                 <span class="flex items-center gap-1.5 font-semibold">
                                     <span class="material-symbols-outlined text-sm text-secondary">credit_card</span>
-                                    Estimated Deposit / Guarantee
+                                    Deposit / Downpayment Received
                                 </span>
                                 <span class="font-bold text-primary">- PHP {{ number_format($deposit, 2) }}</span>
                             </div>
+                            @foreach ($guestBill['deposits'] as $depositRecord)
+                                <p class="pl-3 text-[11px] text-on-surface-variant">{{ $depositRecord->transaction_date?->format('M d, Y h:i A') }} · PHP {{ number_format((float) $depositRecord->amount, 2) }} · {{ $depositRecord->description }}</p>
+                            @endforeach
                             <div class="flex items-center justify-between pt-2 text-lg font-bold text-secondary">
                                 <span>Remaining Guest Bill Balance</span>
                                 <span>PHP {{ number_format($balance, 2) }}</span>
                             </div>
+                            @if ($canRecordDeposit && $balance > 0)
+                                <details class="rounded-lg border border-surface-variant bg-white p-3" @if ($errors->hasAny(['amount', 'payment_method', 'payment_reference'])) open @endif>
+                                    <summary class="cursor-pointer text-xs font-bold text-secondary">Record a deposit / downpayment</summary>
+                                    @if ($errors->hasAny(['amount', 'payment_method', 'payment_reference']))
+                                        <p class="mt-2 text-xs font-semibold text-red-700">{{ $errors->first('amount') ?: $errors->first('payment_method') ?: $errors->first('payment_reference') }}</p>
+                                    @endif
+                                    <form method="POST" action="{{ route('reservations.deposits.store', $reservation) }}" class="mt-3 grid gap-2 sm:grid-cols-3">
+                                        @csrf
+                                        <label class="text-[11px] font-bold uppercase text-on-surface-variant">Amount<input name="amount" type="number" step="0.01" min="1" max="{{ $balance }}" required value="{{ old('amount') }}" class="mt-1 w-full rounded-lg border-outline-variant py-2 text-sm"></label>
+                                        <label class="text-[11px] font-bold uppercase text-on-surface-variant">Paid via<select name="payment_method" class="mt-1 w-full rounded-lg border-outline-variant py-2 text-sm">@foreach (\App\Services\GuestBillService::PAYMENT_METHODS as $value => $label)<option value="{{ $value }}" @selected(old('payment_method') === $value)>{{ $label }}</option>@endforeach</select></label>
+                                        <label class="text-[11px] font-bold uppercase text-on-surface-variant">Reference no.<input name="payment_reference" maxlength="100" value="{{ old('payment_reference') }}" placeholder="Optional" class="mt-1 w-full rounded-lg border-outline-variant py-2 text-sm"></label>
+                                        <button type="submit" class="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white sm:col-span-3">Save Deposit</button>
+                                    </form>
+                                </details>
+                            @endif
+                            @if (session('status'))
+                                <p class="rounded border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-800">{{ session('status') }}</p>
+                            @endif
                         </div>
                     </div>
                     <div class="mt-5 flex items-center justify-between border-t border-surface-variant pt-3 text-xs text-on-surface-variant">

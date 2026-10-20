@@ -6,12 +6,10 @@ use App\Models\CheckIn;
 use App\Models\CheckOut;
 use App\Models\HotelTransaction;
 use App\Models\HousekeepingTask;
-use App\Models\Reservation;
-use App\Models\Room;
 use App\Models\RoomStatusLog;
+use App\Services\GuestBillService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -77,11 +75,16 @@ class CheckOutController extends Controller
 
     public function create(): View
     {
+        $checkIns = CheckIn::with(['guest', 'room', 'reservation'])
+            ->where('status', 'active')
+            ->latest('checked_in_at')
+            ->get();
+
         return view('check_outs.create', [
-            'checkIns' => CheckIn::with(['guest', 'room', 'reservation'])
-                ->where('status', 'active')
-                ->latest('checked_in_at')
-                ->get(),
+            'checkIns' => $checkIns,
+            'guestBills' => $checkIns->mapWithKeys(fn (CheckIn $checkIn): array => [
+                $checkIn->id => app(GuestBillService::class)->forReservation($checkIn->reservation, $checkIn->room),
+            ]),
         ]);
     }
 
@@ -133,8 +136,7 @@ class CheckOutController extends Controller
         $checkOut->load(['guest', 'room', 'checkIn', 'reservation']);
 
         $reservation = $checkOut->reservation;
-        $folio = $this->folio($reservation, $checkOut->room);
-        $totalCharges = $folio['totalCharges'];
+        $folio = app(GuestBillService::class)->forReservation($reservation, $checkOut->room);
         $amountPaid = round((float) $checkOut->amount_paid, 2);
 
         return view('check_outs.receipt', [
@@ -142,7 +144,7 @@ class CheckOutController extends Controller
             'reservation' => $reservation,
             ...$folio,
             'amountPaid' => $amountPaid,
-            'balance' => max(0, round($totalCharges - $amountPaid, 2)),
+            'balance' => max(0, round($folio['balanceDue'] - $amountPaid, 2)),
         ]);
     }
 
@@ -155,44 +157,15 @@ class CheckOutController extends Controller
         return view('check_outs.bill-preview', [
             'checkIn' => $checkIn,
             'reservation' => $checkIn->reservation,
-            ...$this->folio($checkIn->reservation, $checkIn->room),
+            ...app(GuestBillService::class)->forReservation($checkIn->reservation, $checkIn->room),
         ]);
     }
 
-    /**
-     * Room charges for the booked nights plus any extra folio charges.
-     *
-     * @return array{nights: int, roomCharges: float, additionalCharges: Collection<int, HotelTransaction>, additionalTotal: float, totalCharges: float}
-     */
-    private function folio(?Reservation $reservation, ?Room $room): array
-    {
-        $nights = $reservation?->check_in_date && $reservation?->check_out_date
-            ? max(1, (int) $reservation->check_in_date->diffInDays($reservation->check_out_date))
-            : 1;
-        $roomCharges = round((float) ($room?->rate ?? 0) * $nights, 2);
-        $additionalCharges = HotelTransaction::query()
-            ->where('reservation_id', $reservation?->id)
-            ->whereNotIn('transaction_type', ['reservation', 'check_in', 'check_out'])
-            ->where('status', '!=', 'void')
-            ->where('amount', '>', 0)
-            ->orderBy('transaction_date')
-            ->get();
-        $additionalTotal = round((float) $additionalCharges->sum('amount'), 2);
-
-        return [
-            'nights' => $nights,
-            'roomCharges' => $roomCharges,
-            'additionalCharges' => $additionalCharges,
-            'additionalTotal' => $additionalTotal,
-            'totalCharges' => round($roomCharges + $additionalTotal, 2),
-        ];
-    }
-
-    private function ensurePaymentMatchesStatus(float $amountPaid, string $paymentStatus, float $totalCharges): void
+    private function ensurePaymentMatchesStatus(float $amountPaid, string $paymentStatus, float $balanceDue): void
     {
         $message = match (true) {
-            $paymentStatus === 'paid' && $amountPaid < $totalCharges => 'A paid bill must collect the full PHP '.number_format($totalCharges, 2).'. Choose Partial if the guest paid less.',
-            $paymentStatus === 'partial' && ($amountPaid <= 0 || $amountPaid >= $totalCharges) => 'A partial payment must be more than zero and less than the PHP '.number_format($totalCharges, 2).' total.',
+            $paymentStatus === 'paid' && $amountPaid < $balanceDue => 'A paid bill must collect the full PHP '.number_format($balanceDue, 2).' balance due. Choose Partial if the guest paid less.',
+            $paymentStatus === 'partial' && ($amountPaid <= 0 || $amountPaid >= $balanceDue) => 'A partial payment must be more than zero and less than the PHP '.number_format($balanceDue, 2).' balance due.',
             $paymentStatus === 'unpaid' && $amountPaid > 0 => 'An unpaid bill cannot record a payment. Choose Partial or Paid instead.',
             default => null,
         };
@@ -229,7 +202,7 @@ class CheckOutController extends Controller
             $this->ensurePaymentMatchesStatus(
                 round((float) ($data['amount_paid'] ?? 0), 2),
                 $data['payment_status'],
-                $this->folio($checkIn->reservation, $checkIn->room)['totalCharges'],
+                app(GuestBillService::class)->forReservation($checkIn->reservation, $checkIn->room)['balanceDue'],
             );
 
             $checkOut = CheckOut::create([
