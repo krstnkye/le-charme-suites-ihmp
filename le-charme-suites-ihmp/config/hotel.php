@@ -11,7 +11,65 @@ return [
     'established_since' => 2016,
     'published_room_count' => 45,
     'published_room_type_count' => 5,
-    'room_inventory_note' => 'Le Charmé Suites has 45 rooms across five published room types. Exact room numbers and the quantity assigned to each type still require hotel management confirmation before all rooms can be encoded as operational inventory.',
+    'room_inventory_note' => 'Le Charmé Suites has 45 rooms across five published room types. Room numbers and the quantity per type follow a sample layout until hotel management confirms the actual assignment.',
+
+    /*
+    | Sample 45-room layout (5 floors x 9 rooms) used for the academic prototype:
+    | 15 Standard, 10 Deluxe King, 8 Deluxe Twin, 6 Charmé Suite, 6 Family Room.
+    | Replace with the hotel's confirmed room list when it becomes available.
+    */
+    'sample_room_layout' => [
+        // Floor 1
+        '101' => 'Standard Room',
+        '102' => 'Deluxe King',
+        '103' => 'Standard Room',
+        '104' => 'Standard Room',
+        '105' => 'Standard Room',
+        '106' => 'Deluxe King',
+        '107' => 'Standard Room',
+        '108' => 'Standard Room',
+        '109' => 'Deluxe King',
+        // Floor 2
+        '201' => 'Deluxe Twin',
+        '202' => 'Charmé Suite',
+        '203' => 'Standard Room',
+        '204' => 'Standard Room',
+        '205' => 'Deluxe King',
+        '206' => 'Deluxe King',
+        '207' => 'Deluxe Twin',
+        '208' => 'Standard Room',
+        '209' => 'Standard Room',
+        // Floor 3
+        '301' => 'Family Room',
+        '302' => 'Standard Room',
+        '303' => 'Standard Room',
+        '304' => 'Deluxe King',
+        '305' => 'Deluxe King',
+        '306' => 'Deluxe Twin',
+        '307' => 'Deluxe Twin',
+        '308' => 'Charmé Suite',
+        '309' => 'Family Room',
+        // Floor 4
+        '401' => 'Standard Room',
+        '402' => 'Standard Room',
+        '403' => 'Standard Room',
+        '404' => 'Deluxe King',
+        '405' => 'Deluxe King',
+        '406' => 'Deluxe Twin',
+        '407' => 'Deluxe Twin',
+        '408' => 'Charmé Suite',
+        '409' => 'Family Room',
+        // Floor 5
+        '501' => 'Deluxe King',
+        '502' => 'Deluxe Twin',
+        '503' => 'Deluxe Twin',
+        '504' => 'Charmé Suite',
+        '505' => 'Charmé Suite',
+        '506' => 'Charmé Suite',
+        '507' => 'Family Room',
+        '508' => 'Family Room',
+        '509' => 'Family Room',
+    ],
     'check_in_time' => '2:00 PM',
     'check_out_time' => '12:00 PM',
     'extra_guest_rate' => 1165.00,

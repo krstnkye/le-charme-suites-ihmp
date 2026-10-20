@@ -59,13 +59,13 @@
     @include('partials.favicon')
 </head>
 <body class="min-h-screen bg-surface font-sans text-primary antialiased">
-    @if ($currentUser?->role === 'receptionist')
-        @include('partials.front-desk-sidebar', ['active' => 'check-outs'])
-    @else
+    @if ($currentUser?->role === 'cashier')
         @include('partials.billing-sidebar', ['active' => 'billing'])
+    @else
+        @include('partials.front-desk-sidebar', ['active' => 'check-outs'])
     @endif
 
-    <div class="flex min-h-screen flex-col {{ $currentUser?->role === 'receptionist' ? 'lg:ml-64' : 'lg:ml-72' }}">
+    <div class="flex min-h-screen flex-col {{ $currentUser?->role === 'cashier' ? 'lg:ml-72' : 'lg:ml-64' }}">
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
             <div>
                 <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"><span>Billing Operations</span><span>/</span><span class="text-secondary">Guest Billing</span></div>

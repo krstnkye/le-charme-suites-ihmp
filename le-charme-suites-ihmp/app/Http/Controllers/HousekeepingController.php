@@ -6,6 +6,7 @@ use App\Models\HousekeepingTask;
 use App\Models\Room;
 use App\Models\RoomStatusLog;
 use App\Models\User;
+use App\Services\RoomAvailabilityService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -133,6 +134,7 @@ class HousekeepingController extends Controller
     private function data(): array
     {
         $allRooms = Room::orderBy('room_number')->get();
+        $availability = app(RoomAvailabilityService::class)->summary();
         $cleaningRooms = $allRooms->where('status', 'cleaning')->values();
         $maintenanceQueue = $allRooms->where('status', 'maintenance')->values();
         $priorityRooms = $allRooms
@@ -144,9 +146,10 @@ class HousekeepingController extends Controller
             'allRooms' => $allRooms,
             'totalRooms' => $allRooms->count(),
             'publishedRoomCount' => (int) config('hotel.published_room_count', $allRooms->count()),
-            'availableRooms' => $allRooms->where('status', 'available')->count(),
-            'reservedRooms' => $allRooms->where('status', 'reserved')->count(),
-            'occupiedRooms' => $allRooms->where('status', 'occupied')->count(),
+            'roomAvailability' => $availability,
+            'availableRooms' => $availability['available'],
+            'reservedRooms' => $availability['reserved'],
+            'occupiedRooms' => $availability['occupied'],
             'cleaningRooms' => $cleaningRooms,
             'maintenanceQueue' => $maintenanceQueue,
             'assignedRooms' => $allRooms

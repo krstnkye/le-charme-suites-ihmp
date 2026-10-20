@@ -11,20 +11,24 @@ use App\Models\Reservation;
 use App\Models\Room;
 use App\Models\RoomStatusLog;
 use App\Models\User;
+use App\Services\RoomAvailabilityService;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(RoomAvailabilityService $roomAvailability): View
     {
+        $availability = $roomAvailability->summary();
+
         $data = [
+            'roomAvailability' => $availability,
             'totalRooms' => Room::count(),
             'publishedRoomCount' => (int) config('hotel.published_room_count', Room::count()),
             'officialRoomTypeCount' => count(config('hotel.room_types', [])),
-            'availableRooms' => Room::where('status', 'available')->count(),
-            'occupiedRooms' => Room::where('status', 'occupied')->count(),
-            'reservedRooms' => Room::where('status', 'reserved')->count(),
-            'maintenanceRooms' => Room::whereIn('status', ['maintenance', 'cleaning'])->count(),
+            'availableRooms' => $availability['available'],
+            'occupiedRooms' => $availability['occupied'],
+            'reservedRooms' => $availability['reserved'],
+            'maintenanceRooms' => $availability['out_of_service'],
             'activeReservations' => Reservation::whereIn('status', ['reserved', 'checked_in'])->count(),
             'currentGuests' => Guest::whereHas('reservations', fn ($query) => $query->where('status', 'checked_in'))->count(),
             'arrivalsToday' => Reservation::where('status', 'reserved')->whereDate('check_in_date', now(config('app.timezone'))->toDateString())->count(),

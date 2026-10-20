@@ -317,7 +317,7 @@ class RoleAccessTest extends TestCase
             ->get(route('admin.audit-logs.index'))
             ->assertOk()
             ->assertSeeText('Security & Compliance Activity Log')
-            ->assertSee('Cryptographic Audit Records Stream')
+            ->assertSee('Protected Activity History')
             ->assertSeeText('IHMP Access Control & Security Policies')
             ->assertSee('Active Sessions');
     }
@@ -634,15 +634,15 @@ class RoleAccessTest extends TestCase
             ->get(route('housekeeping.page', 'guest-requests'))
             ->assertOk()
             ->assertSee('Guest Service Requests &amp; In-Room Amenities Delivery', false)
-            ->assertSee('Live Request Dispatch Board')
+            ->assertSee('Live Request Assignment Board')
             ->assertSee('Completed Requests Log &amp; Confirmation Signatures', false)
             ->assertSee('Room 703');
 
         $this->actingAs($user)
             ->get(route('housekeeping.page', 'special-cleaning'))
             ->assertOk()
-            ->assertSee('Specialized Cleaning &amp; Environmental Sanitization Protocol', false)
-            ->assertSee('Active Specialized Cleanings')
+            ->assertSee('Special Cleaning &amp; Room Sanitation', false)
+            ->assertSee('Active Special Cleaning Tasks')
             ->assertSee('Safety &amp; Compliance', false)
             ->assertSee('Room 701')
             ->assertSee('Room 702');
@@ -650,8 +650,8 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get(route('housekeeping.page', 'completed-tasks'))
             ->assertOk()
-            ->assertSee('Completed Tasks &amp; Shift Turnover History', false)
-            ->assertSee('Shift 1 Completed Units Ledger')
+            ->assertSee('Completed Tasks &amp; Shift Cleaning History', false)
+            ->assertSee('Shift 1 Completed Units Records')
             ->assertSee('Audit Certificate Preview')
             ->assertSee('Turnover certified by housekeeping supervisor.')
             ->assertSee('701');
@@ -670,7 +670,7 @@ class RoleAccessTest extends TestCase
             ->get(route('housekeeping.page', 'reported-issues'))
             ->assertOk()
             ->assertSee('Reported Issues &amp; Facilities Work Orders Log', false)
-            ->assertSee('Open Housekeeping Tickets')
+            ->assertSee('Open Housekeeping Reports')
             ->assertSee('Verify &amp; Clear Room', false)
             ->assertSee('Return-to-Service Dossier')
             ->assertSee('Room 702');
@@ -678,26 +678,26 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get(route('housekeeping.page', 'lost-found'))
             ->assertOk()
-            ->assertSee('Lost &amp; Found Vault &amp; Chain of Custody Registry', false)
+            ->assertSee('Lost &amp; Found Storage and Item History', false)
             ->assertSee('Items Currently in Custody')
-            ->assertSee('Chain of Custody Record')
+            ->assertSee('Item Records')
             ->assertSee('Room 701');
 
         $this->actingAs($user)
             ->get(route('housekeeping.page', 'reports'))
             ->assertOk()
-            ->assertSee('Housekeeping Operational Reports &amp; SLA Analytics', false)
-            ->assertSee('Attendant Productivity &amp; Quality Audit Ledger', false)
-            ->assertSee('Daily Housekeeper Performance &amp; Pacing Ledger', false)
+            ->assertSee('Housekeeping Operational Reports &amp; Response Time Analytics', false)
+            ->assertSee('Attendant Productivity &amp; Quality Audit Records', false)
+            ->assertSee('Daily Housekeeper Performance &amp; Pacing Records', false)
             ->assertSee('Custom Report Builder');
 
         $this->actingAs($user)
             ->get(route('housekeeping.page', 'notifications'))
             ->assertOk()
-            ->assertSee('Housekeeping Dispatch Notifications &amp; Operational Alerts', false)
-            ->assertSee('Live Dispatch Center')
+            ->assertSee('Housekeeping Assignment Notifications &amp; Operational Alerts', false)
+            ->assertSee('Live Assignment Center')
             ->assertSee('Radio Broadcast Log')
-            ->assertSee('Supervisor Dispatch Summary');
+            ->assertSee('Supervisor Assignment Summary');
 
         foreach (['linen-supplies', 'linen-records', 'housekeeping-supplies'] as $removedPage) {
             $this->actingAs($user)

@@ -59,7 +59,9 @@ class OfficialHotelProfileTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $this->assertDatabaseCount('rooms', 5);
+        $this->assertDatabaseCount('rooms', 45);
+        $this->assertSame(15, Room::where('room_type', 'Standard Room')->count());
+        $this->assertSame(6, Room::where('room_type', 'Family Room')->count());
         $this->assertDatabaseHas('rooms', [
             'room_number' => '102',
             'room_type' => 'Deluxe King',

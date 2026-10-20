@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\RoomStatusLog;
 use App\Models\User;
+use App\Services\RoomAvailabilityService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -32,6 +33,7 @@ class RoomController extends Controller
             ->withQueryString();
 
         $allRooms = Room::orderBy('room_number')->get();
+        $availability = app(RoomAvailabilityService::class)->summary();
 
         $view = $request->user()?->role === 'housekeeping'
             ? 'rooms.housekeeping-index'
@@ -47,10 +49,11 @@ class RoomController extends Controller
             'totalRooms' => $allRooms->count(),
             'publishedRoomCount' => (int) config('hotel.published_room_count', $allRooms->count()),
             'officialRoomTypeCount' => count(config('hotel.room_types', [])),
-            'availableRooms' => $allRooms->where('status', 'available')->count(),
-            'reservedRooms' => $allRooms->where('status', 'reserved')->count(),
-            'occupiedRooms' => $allRooms->where('status', 'occupied')->count(),
-            'maintenanceRooms' => $allRooms->whereIn('status', ['maintenance', 'cleaning'])->count(),
+            'roomAvailability' => $availability,
+            'availableRooms' => $availability['available'],
+            'reservedRooms' => $availability['reserved'],
+            'occupiedRooms' => $availability['occupied'],
+            'maintenanceRooms' => $availability['out_of_service'],
             'availableRecommendations' => $allRooms->where('status', 'available')->take(3),
             'roomMatrix' => $allRooms->groupBy(fn (Room $room) => substr($room->room_number, 0, 1)),
         ]);
