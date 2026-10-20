@@ -85,11 +85,12 @@
         </div>
     </section>
 
-    <form id="profile-form" method="POST" action="{{ route('profile.update') }}" class="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)]">
+    <form id="profile-form" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)]">
         @csrf
         @method('PUT')
 
         <div class="space-y-6">
+            @include('profile.partials.photo-field')
             <section class="rounded-xl border border-line bg-white shadow-sm">
                 <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line px-6 py-5">
                     <div>
@@ -218,4 +219,5 @@
             </div>
         </aside>
     </form>
+    @include('profile.partials.photo-script')
 @endsection

@@ -96,11 +96,12 @@
                 </div>
             </section>
 
-            <form method="POST" action="{{ route('profile.update') }}" class="grid gap-6 xl:grid-cols-12">
+            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="grid gap-6 xl:grid-cols-12">
                 @csrf
                 @method('PUT')
 
                 <div class="space-y-6 xl:col-span-7">
+                    @include('profile.partials.photo-field')
                     <section class="profile-card rounded-xl p-6">
                         <div class="flex items-center justify-between border-b border-line pb-4">
                             <div class="flex items-center gap-3">
@@ -272,5 +273,6 @@
         updateBillingClock();
         setInterval(updateBillingClock, 1000);
     </script>
+    @include('profile.partials.photo-script')
 </body>
 </html>

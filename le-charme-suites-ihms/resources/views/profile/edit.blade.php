@@ -167,11 +167,12 @@
                     </div>
                 </section>
 
-                <form method="POST" action="{{ route('profile.update') }}" class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="grid grid-cols-1 gap-6 lg:grid-cols-12">
                     @csrf
                     @method('PUT')
 
                     <div class="space-y-6 lg:col-span-7">
+                        @include('profile.partials.photo-field')
                         <section class="hotel-card rounded-xl p-6">
                             <div class="flex items-center justify-between border-b border-surface-container-highest pb-3">
                                 <div class="flex items-center gap-2.5">
@@ -432,7 +433,13 @@
                             <div class="absolute inset-x-0 top-0 h-1.5 bg-[#755a28]"></div>
                             <div class="flex flex-col gap-5 border-b border-[#e5e2dc] pb-5 sm:flex-row sm:items-center">
                                 <div class="relative shrink-0">
-                                    <span class="flex h-24 w-24 items-center justify-center rounded-xl border-2 border-[#755a28] bg-[#01162d] font-serif text-3xl font-bold text-[#ffdeaa] shadow-md">{{ $initials }}</span>
+                                    @if ($user->profile_photo_path)
+                                        <img src="{{ route('profile.photo', ['v' => $user->updated_at?->timestamp]) }}" alt="{{ $user->name }} profile photo" class="h-24 w-24 rounded-xl border-2 border-[#755a28] object-cover shadow-md" data-profile-photo-preview>
+                                        <span class="hidden h-24 w-24 items-center justify-center rounded-xl border-2 border-[#755a28] bg-[#01162d] font-serif text-3xl font-bold text-[#ffdeaa] shadow-md" data-profile-photo-placeholder>{{ $initials }}</span>
+                                    @else
+                                        <img src="" alt="New profile photo preview" class="hidden h-24 w-24 rounded-xl border-2 border-[#755a28] object-cover shadow-md" data-profile-photo-preview>
+                                        <span class="flex h-24 w-24 items-center justify-center rounded-xl border-2 border-[#755a28] bg-[#01162d] font-serif text-3xl font-bold text-[#ffdeaa] shadow-md" data-profile-photo-placeholder>{{ $initials }}</span>
+                                    @endif
                                     <span class="absolute -bottom-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#755a28] text-white shadow-sm"><span class="material-symbols-outlined text-base">verified</span></span>
                                 </div>
                                 <div class="min-w-0 flex-1">
@@ -448,9 +455,10 @@
                                 </div>
                             </div>
 
-                            <form method="POST" action="{{ route('profile.update') }}" class="mt-6">
+                            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6">
                                 @csrf
                                 @method('PUT')
+                                @include('profile.partials.photo-field')
                                 <div class="mb-5 flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f0eee8] text-[#755a28]"><span class="material-symbols-outlined">manage_accounts</span></span><div><h3 class="font-bold text-[#01162d]">Official Personnel Details</h3><p class="text-xs text-slate-500">Update your own account record and sign-in credentials.</p></div></div>
                                 <div class="grid gap-5 sm:grid-cols-2">
                                     <label class="sm:col-span-2"><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Full name</span><input name="name" value="{{ old('name', $user->name) }}" required autocomplete="name" class="w-full rounded-lg border border-[#c4c6cd] bg-white px-3 py-2.5 text-sm text-[#01162d] outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20"></label>
@@ -521,5 +529,6 @@
             setInterval(refreshProfileClock, 1000);
         </script>
     @endif
+    @include('profile.partials.photo-script')
 </body>
 </html>
