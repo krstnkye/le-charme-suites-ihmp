@@ -75,8 +75,17 @@ class CreateOnlineReservation
                 'check_in_date' => $data['check_in_date'],
                 'check_out_date' => $data['check_out_date'],
                 'number_of_guests' => $data['number_of_guests'],
+                'adult_guests' => $data['adults'] ?? null,
+                'child_guests' => $data['children'] ?? 0,
                 'status' => 'pending',
                 'source' => $source,
+                'official_booking_status' => $data['official_booking_status'] ?? null,
+                'payment_status' => $data['payment_status'] ?? null,
+                'currency' => $data['currency'] ?? null,
+                'gross_amount' => $data['gross_amount'] ?? null,
+                'discount_amount' => $data['discount_amount'] ?? null,
+                'total_amount' => $data['total_amount'] ?? null,
+                'rate_plan' => $data['rate_plan'] ?? null,
                 'notes' => $data['notes'] ?? null,
             ]);
 
@@ -111,6 +120,9 @@ class CreateOnlineReservation
                     'source' => $source,
                     'booking_reference' => $reservation->booking_reference,
                     'external_reference' => $externalReference,
+                    'official_booking_status' => $data['official_booking_status'] ?? null,
+                    'payment_status' => $data['payment_status'] ?? null,
+                    'total_amount' => $data['total_amount'] ?? null,
                 ],
                 'occurred_at' => now(),
             ]);

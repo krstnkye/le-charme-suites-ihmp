@@ -25,6 +25,6 @@ class RoomPropertyDataTest extends TestCase
             ->assertSeeText('Property Rooms')
             ->assertSeeText('1 of 45')
             ->assertSeeText('Hotel total')
-            ->assertSeeText('Encoded inventory');
+            ->assertSeeText('Rooms added');
     }
 }

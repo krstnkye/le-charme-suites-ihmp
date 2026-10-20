@@ -9,11 +9,11 @@
     $certifications = [
         ['icon' => 'verified', 'title' => 'Five-Star Room Presentation Standard', 'issuer' => 'Le Charme QA Academy', 'status' => 'Certified', 'validity' => 'Valid until Oct 2027'],
         ['icon' => 'health_and_safety', 'title' => 'Chemical Handling & Safety', 'issuer' => 'Facilities Operations', 'status' => 'Cleared', 'validity' => 'Annual refresher complete'],
-        ['icon' => 'key', 'title' => 'RFID Master Key Custody', 'issuer' => 'Security Desk', 'status' => 'Authorized', 'validity' => 'Shift-supervisor access'],
+        ['icon' => 'key', 'title' => 'Keycard Master Key Custody', 'issuer' => 'Security Desk', 'status' => 'Authorized', 'validity' => 'Shift-supervisor access'],
     ];
 @endphp
 
-@section('title', 'My Profile & Attendant Credentials Console - Housekeeping')
+@section('title', 'My Profile & Attendant Login Details Console - Housekeeping')
 
 @section('content')
     <section class="flex flex-col gap-5 border-b border-line pb-6 lg:flex-row lg:items-end lg:justify-between">
@@ -26,7 +26,7 @@
                 <span class="text-primary">Housekeeping Account</span>
             </div>
             <div class="mt-3 flex flex-wrap items-center gap-3">
-                <h2 class="font-serif text-4xl font-bold leading-tight text-primary">Executive Housekeeper Profile &amp; Digital Duty Credentials</h2>
+                <h2 class="font-serif text-4xl font-bold leading-tight text-primary">Executive Housekeeper Profile &amp; Digital Duty Login Details</h2>
                 <span class="rounded-full bg-[#ffdeaa] px-3 py-1 text-xs font-bold text-secondary">Live Staff Console</span>
             </div>
             <p class="mt-3 max-w-4xl text-sm leading-6 text-slate-600">
@@ -36,7 +36,7 @@
         <div class="flex flex-wrap gap-3">
             <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-secondary bg-white px-4 py-2.5 text-sm font-bold text-secondary shadow-sm transition hover:bg-[#fff7e8]">
                 <span class="material-symbols-outlined text-base">download</span>
-                Download Credential Sheet
+                Download Login Detail Sheet
             </button>
             <a href="#profile-form" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#172b42]">
                 <span class="material-symbols-outlined text-base">edit</span>
@@ -70,7 +70,7 @@
                     <p class="mt-2 text-lg font-extrabold">{{ $shiftWindow }}</p>
                 </div>
                 <div class="border-b border-white/10 p-5">
-                    <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-[#b4c8e5]">Terminal</p>
+                    <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-[#b4c8e5]">Station</p>
                     <p class="mt-2 text-lg font-extrabold">HK Mobile</p>
                 </div>
                 <div class="border-r border-white/10 p-5">
@@ -78,7 +78,7 @@
                     <p class="mt-2 text-lg font-extrabold">Ch. 2</p>
                 </div>
                 <div class="p-5">
-                    <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-[#b4c8e5]">Credential</p>
+                    <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-[#b4c8e5]">Login Detail</p>
                     <p class="mt-2 text-lg font-extrabold">Verified</p>
                 </div>
             </div>
@@ -121,8 +121,8 @@
 
             <section class="rounded-xl border border-line bg-white shadow-sm">
                 <div class="border-b border-line px-6 py-5">
-                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-secondary">Secure Access &amp; Digital Credentials</p>
-                    <h3 class="mt-1 font-serif text-2xl font-bold">Password &amp; Terminal Security</h3>
+                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-secondary">Secure Access &amp; Digital Login Details</p>
+                    <h3 class="mt-1 font-serif text-2xl font-bold">Password &amp; Station Security</h3>
                     <p class="mt-2 text-sm text-slate-600">Leave the password fields blank when you only want to update your name or email.</p>
                 </div>
                 <div class="grid gap-5 p-6 md:grid-cols-2">
@@ -142,7 +142,7 @@
                         <div class="flex items-center gap-3">
                             <span class="material-symbols-outlined text-secondary">fingerprint</span>
                             <div>
-                                <p class="text-sm font-bold">Biometric Terminal</p>
+                                <p class="text-sm font-bold">Biometric Station</p>
                                 <p class="text-xs text-slate-600">Enabled for housekeeping station access</p>
                             </div>
                         </div>
@@ -151,7 +151,7 @@
                         <div class="flex items-center gap-3">
                             <span class="material-symbols-outlined text-secondary">vpn_key</span>
                             <div>
-                                <p class="text-sm font-bold">RFID Key Ledger</p>
+                                <p class="text-sm font-bold">Keycard Key Records</p>
                                 <p class="text-xs text-slate-600">Authorized for assigned room floors only</p>
                             </div>
                         </div>
@@ -187,8 +187,8 @@
 
             <section class="rounded-xl border border-line bg-white p-6 shadow-sm">
                 <div>
-                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-secondary">Certifications &amp; Hospitality Ledger</p>
-                    <h3 class="mt-1 font-serif text-2xl font-bold">Active Credentials</h3>
+                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-secondary">Certifications &amp; Hospitality Records</p>
+                    <h3 class="mt-1 font-serif text-2xl font-bold">Active Login Details</h3>
                 </div>
                 <div class="mt-5 space-y-3">
                     @foreach ($certifications as $certification)

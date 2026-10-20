@@ -56,7 +56,7 @@ class AdminOperationsController extends Controller
 
         return [
             'title' => 'Check-in Administration', 'subtitle' => 'Supervise arrivals, active stays, and front-office check-in records.', 'icon' => 'login',
-            'stats' => [['label' => 'Arrival queue', 'value' => Reservation::where('status', 'reserved')->count()], ['label' => 'Active stays', 'value' => CheckIn::where('status', 'active')->count()], ['label' => 'Completed today', 'value' => CheckIn::whereDate('checked_in_at', today())->count()], ['label' => 'Available rooms', 'value' => Room::where('status', 'available')->count()]],
+            'stats' => [['label' => 'Arrival list', 'value' => Reservation::where('status', 'reserved')->count()], ['label' => 'Active stays', 'value' => CheckIn::where('status', 'active')->count()], ['label' => 'Completed today', 'value' => CheckIn::whereDate('checked_in_at', today())->count()], ['label' => 'Available rooms', 'value' => Room::where('status', 'available')->count()]],
             'records' => $records->map(fn ($record) => [$record->id, $record->guest?->full_name ?? 'Unknown guest', $record->room?->room_number ?? 'Unassigned', optional($record->checked_in_at)->format('M d, Y h:i A'), ucfirst($record->status)]),
             'headers' => ['Check-in', 'Guest', 'Room', 'Checked in', 'Status'],
         ];
@@ -67,7 +67,7 @@ class AdminOperationsController extends Controller
         $records = CheckOut::with(['guest', 'room'])->latest('checked_out_at')->limit(25)->get();
 
         return [
-            'title' => 'Check-out Administration', 'subtitle' => 'Review departures, settlement status, room turnover, and receipt records.', 'icon' => 'logout',
+            'title' => 'Check-out Administration', 'subtitle' => 'Review departures, payment status, room cleaning, and receipt records.', 'icon' => 'logout',
             'stats' => [['label' => 'Pending departures', 'value' => CheckIn::where('status', 'active')->count()], ['label' => 'Completed today', 'value' => CheckOut::whereDate('checked_out_at', today())->count()], ['label' => 'Paid today', 'value' => number_format((float) CheckOut::whereDate('checked_out_at', today())->sum('amount_paid'), 2)], ['label' => 'Rooms in cleaning', 'value' => Room::where('status', 'cleaning')->count()]],
             'records' => $records->map(fn ($record) => [$record->id, $record->guest?->full_name ?? 'Unknown guest', $record->room?->room_number ?? 'Unassigned', optional($record->checked_out_at)->format('M d, Y h:i A'), ucfirst($record->payment_status)]),
             'headers' => ['Check-out', 'Guest', 'Room', 'Checked out', 'Payment'],
@@ -79,7 +79,7 @@ class AdminOperationsController extends Controller
         $records = Room::orderBy('room_number')->limit(50)->get();
 
         return [
-            'title' => 'Housekeeping & Room Status Administration', 'subtitle' => 'Monitor room readiness, cleaning queues, and inventory status across the property.', 'icon' => 'cleaning_services',
+            'title' => 'Housekeeping & Room Status Administration', 'subtitle' => 'Monitor rooms that are ready, cleaning lists, and room status across the hotel.', 'icon' => 'cleaning_services',
             'stats' => [['label' => 'Total rooms', 'value' => Room::count()], ['label' => 'Available', 'value' => Room::where('status', 'available')->count()], ['label' => 'Cleaning', 'value' => Room::where('status', 'cleaning')->count()], ['label' => 'Maintenance', 'value' => Room::where('status', 'maintenance')->count()]],
             'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, $record->capacity.' guests', 'PHP '.number_format((float) $record->rate, 2), ucfirst($record->status)]),
             'headers' => ['Room', 'Type', 'Capacity', 'Rate', 'Status'],
@@ -91,7 +91,7 @@ class AdminOperationsController extends Controller
         $records = HotelTransaction::with(['guest', 'room'])->latest('transaction_date')->limit(25)->get();
 
         return [
-            'title' => 'Transactions & Billing Administration', 'subtitle' => 'Inspect hotel charges, settlements, guest bills, and financial activity across all departments.', 'icon' => 'receipt_long',
+            'title' => 'Transactions & Billing Administration', 'subtitle' => 'Review hotel charges, payments, guest bills, and billing activity across all departments.', 'icon' => 'receipt_long',
             'stats' => [['label' => 'Recorded transactions', 'value' => HotelTransaction::count()], ['label' => 'Collected amount', 'value' => 'PHP '.number_format((float) HotelTransaction::sum('amount'), 2)], ['label' => 'Reservation entries', 'value' => HotelTransaction::where('transaction_type', 'reservation')->count()], ['label' => 'Check-out entries', 'value' => HotelTransaction::where('transaction_type', 'check_out')->count()]],
             'records' => $records->map(fn ($record) => [$record->id, $record->guest?->full_name ?? 'Unknown guest', ucfirst(str_replace('_', ' ', $record->transaction_type)), 'PHP '.number_format((float) $record->amount, 2), optional($record->transaction_date)->format('M d, Y h:i A')]),
             'headers' => ['Transaction', 'Guest', 'Type', 'Amount', 'Date'],
@@ -103,7 +103,7 @@ class AdminOperationsController extends Controller
         $records = Room::orderBy('room_number')->limit(50)->get();
 
         return [
-            'title' => 'Room Inventory Administration', 'subtitle' => 'Inspect encoded rooms, categories, capacity, rates, and inventory readiness from the administrator workspace.', 'icon' => 'inventory_2',
+            'title' => 'Room Inventory Administration', 'subtitle' => 'Review added rooms, room types, capacity, rates, and booking status from the administrator page.', 'icon' => 'inventory_2',
             'stats' => [['label' => 'Total rooms', 'value' => Room::count()], ['label' => 'Standard rooms', 'value' => Room::where('room_type', 'like', 'Standard%')->count()], ['label' => 'Available rooms', 'value' => Room::where('status', 'available')->count()], ['label' => 'Average rate', 'value' => 'PHP '.number_format((float) Room::avg('rate'), 2)]],
             'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, $record->capacity.' guests', 'PHP '.number_format((float) $record->rate, 2), ucfirst($record->status)]),
             'headers' => ['Room', 'Type', 'Capacity', 'Rate', 'Status'],
@@ -120,11 +120,11 @@ class AdminOperationsController extends Controller
 
         return [
             'title' => 'Room Types Administration',
-            'subtitle' => 'Review each room category, capacity profile, assigned inventory, and readiness for booking configuration.',
+            'subtitle' => 'Review each room type, guest capacity, assigned rooms, and booking availability.',
             'icon' => 'hotel',
             'stats' => [
                 ['label' => 'Room type groups', 'value' => $rooms->count()],
-                ['label' => 'Total encoded rooms', 'value' => Room::count()],
+                ['label' => 'Total rooms added', 'value' => Room::count()],
                 ['label' => 'Available inventory', 'value' => Room::where('status', 'available')->count()],
                 ['label' => 'Highest capacity', 'value' => (Room::max('capacity') ?? 0).' guests'],
             ],
@@ -173,7 +173,7 @@ class AdminOperationsController extends Controller
         $records = Room::orderBy('status')->orderBy('room_number')->limit(50)->get();
 
         return [
-            'title' => 'Room Status Administration', 'subtitle' => 'Monitor availability, occupancy, reserved rooms, maintenance, and housekeeping readiness without leaving the admin portal.', 'icon' => 'bed',
+            'title' => 'Room Status Administration', 'subtitle' => 'Monitor available, occupied, reserved, maintenance, and cleaned rooms from the admin portal.', 'icon' => 'bed',
             'stats' => [['label' => 'Available', 'value' => Room::where('status', 'available')->count()], ['label' => 'Reserved', 'value' => Room::where('status', 'reserved')->count()], ['label' => 'Occupied', 'value' => Room::where('status', 'occupied')->count()], ['label' => 'Maintenance', 'value' => Room::whereIn('status', ['maintenance', 'cleaning'])->count()]],
             'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, ucfirst($record->status), $record->capacity.' guests', 'PHP '.number_format((float) $record->rate, 2)]),
             'headers' => ['Room', 'Type', 'Status', 'Capacity', 'Rate'],
@@ -186,7 +186,7 @@ class AdminOperationsController extends Controller
 
         return [
             'title' => 'Reports Administration', 'subtitle' => 'Review room, reservation, and financial summaries from the administrator command sidebar.', 'icon' => 'monitoring',
-            'stats' => [['label' => 'Rooms tracked', 'value' => Room::count()], ['label' => 'Reservations tracked', 'value' => Reservation::count()], ['label' => 'Transaction records', 'value' => HotelTransaction::count()], ['label' => 'Ledger total', 'value' => 'PHP '.number_format((float) HotelTransaction::sum('amount'), 2)]],
+            'stats' => [['label' => 'Rooms tracked', 'value' => Room::count()], ['label' => 'Reservations tracked', 'value' => Reservation::count()], ['label' => 'Transaction records', 'value' => HotelTransaction::count()], ['label' => 'Transaction total', 'value' => 'PHP '.number_format((float) HotelTransaction::sum('amount'), 2)]],
             'records' => $records->map(fn ($record) => [optional($record->transaction_date)->format('M d, Y h:i A'), ucfirst(str_replace('_', ' ', $record->transaction_type)), $record->guest?->full_name ?? 'N/A', $record->room?->room_number ?? 'N/A', 'PHP '.number_format((float) $record->amount, 2)]),
             'headers' => ['Date', 'Type', 'Guest', 'Room', 'Amount'],
         ];

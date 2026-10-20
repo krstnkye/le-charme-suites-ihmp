@@ -65,23 +65,23 @@
         'dashboard' => ['Executive Owner Dashboard', 'View-only property command overview for Le Charmé Suites.'],
         'guests' => ['Guest Management Overview', 'Read-only guest registry and stay relationship monitoring.'],
         'rooms' => ['Room Management Overview', 'Room inventory, occupancy, and maintenance readiness visibility.'],
-        'room-inventory' => ['Room Inventory Overview', 'Read-only room asset registry and inventory readiness visibility.'],
+        'room-inventory' => ['Room Inventory Overview', 'Read-only room records and inventory readiness visibility.'],
         'room-availability' => ['Room Availability Overview', 'Read-only availability and capacity monitoring across room types.'],
         'room-status' => ['Room Status Overview', 'Read-only occupancy, maintenance, and readiness status monitoring.'],
         'reservations' => ['Reservations Overview', 'Booking pipeline and reservation status monitoring.'],
         'checkins' => ['Check-in / Check-out Overview', 'Arrival, in-house, and departure movement visibility.'],
         'checkin-records' => ['Check-in Records', 'Read-only registry of guest arrivals, active stays, and room key issuance.'],
-        'checkout-records' => ['Check-out Records', 'Audited departure archive, settlement status, and housekeeping turnover visibility.'],
-        'billing' => ['Billing & Transactions Overview', 'Revenue, settlement, and transaction monitoring.'],
-        'billing-records' => ['Billing Records', 'Grouped guest billing accounts, invoice totals, settlement status, and audit visibility.'],
-        'housekeeping' => ['Housekeeping Monitor', 'Room readiness and housekeeping activity oversight.'],
+        'checkout-records' => ['Check-out Records', 'Past departures, payment status, and housekeeping cleaning updates.'],
+        'billing' => ['Billing & Transactions Overview', 'Revenue, payments, and transaction monitoring.'],
+        'billing-records' => ['Billing Records', 'Grouped guest billing accounts, invoice totals, payment status, and activity history.'],
+        'housekeeping' => ['Housekeeping Monitor', 'Rooms Ready for Guests and housekeeping activity oversight.'],
         'housekeeping-requests' => ['Housekeeping Requests', 'Guest service, amenity, cleaning, and maintenance request monitoring.'],
         'reports' => ['Reports & Records Overview', 'Executive reporting shortcuts and operational records summary.'],
-        'operational-reports' => ['Operational Reports', 'Departmental telemetry, room readiness, occupancy, and workflow pacing.'],
-        'transaction-reports' => ['Transaction Reports', 'Settlement reports, payment channel totals, taxes, and financial audit exports.'],
-        'records' => ['Records Archive', 'Immutable owner-view archive of guests, stays, billing, rooms, and housekeeping records.'],
+        'operational-reports' => ['Operational Reports', 'Department updates, rooms ready for guests, occupancy, and work progress.'],
+        'transaction-reports' => ['Transaction Reports', 'Payment reports, payment channel totals, taxes, and financial audit exports.'],
+        'records' => ['Records Archive', 'Protected owner-view archive of guests, stays, billing, rooms, and housekeeping records.'],
         'messages' => ['Department Messages', 'Persistent interdepartment communication and management notices.'],
-        'profile' => ['Owner My Profile', 'Executive credentials, security posture, notification preferences, and access logs.'],
+        'profile' => ['Owner Profile', 'Account details, security settings, notification preferences, and access history.'],
     ];
     [$pageTitle, $pageSubtitle] = $titles[$activePage] ?? $titles['dashboard'];
 @endphp
@@ -115,7 +115,7 @@
         <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
             <div>
                 <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Owner Access / View Only</p>
-                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMP <span class="font-sans text-sm font-semibold text-slate-500">Executive Command Center</span></h1>
+                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMP <span class="font-sans text-sm font-semibold text-slate-500">Executive Dashboard</span></h1>
             </div>
             <div class="flex items-center gap-3">
                 <span class="hidden rounded-full border border-line bg-surface-low px-3 py-1.5 text-xs font-bold text-slate-600 md:inline-flex">No record editing privileges</span>
@@ -176,7 +176,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-white/10 p-4 sm:grid-cols-4 xl:w-[560px]">
                         <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Occupancy</p><p class="mt-1 font-serif text-2xl font-bold">{{ $occupancyRate }}%</p></div>
-                        <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Property Rooms</p><p class="mt-1 font-serif text-2xl font-bold">{{ $publishedRoomCount }}</p><p class="text-[10px] text-blue-100/70">{{ $totalRooms }} encoded</p></div>
+                        <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Property Rooms</p><p class="mt-1 font-serif text-2xl font-bold">{{ $publishedRoomCount }}</p><p class="text-[10px] text-blue-100/70">{{ $totalRooms }} rooms recorded</p></div>
                         <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Guests</p><p class="mt-1 font-serif text-2xl font-bold">{{ $currentGuests }}</p></div>
                         <div><p class="text-[11px] font-bold uppercase tracking-wider text-blue-100/70">Revenue</p><p class="mt-1 font-serif text-xl font-bold">PHP {{ number_format($recordedRevenue, 2) }}</p></div>
                     </div>
@@ -185,9 +185,9 @@
 
             <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Guest Management</span><span class="material-symbols-outlined text-secondary">badge</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $totalGuests }}</p><p class="mt-1 text-sm text-slate-500">Registered guest profiles</p></div>
-                <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Room Management</span><span class="material-symbols-outlined text-secondary">bed</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $availableRooms }}</p><p class="mt-1 text-sm text-slate-500">Available of {{ $totalRooms }} encoded rooms · {{ $publishedRoomCount }} property total</p></div>
+                <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Room Management</span><span class="material-symbols-outlined text-secondary">bed</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $availableRooms }}</p><p class="mt-1 text-sm text-slate-500">Available of {{ $totalRooms }} added rooms · {{ $publishedRoomCount }} property total</p></div>
                 <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Reservations</span><span class="material-symbols-outlined text-secondary">calendar_month</span></div><p class="mt-3 font-serif text-3xl font-bold">{{ $activeReservations }}</p><p class="mt-1 text-sm text-slate-500">{{ $arrivalsToday }} arrivals today</p></div>
-                <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Billing & Transactions</span><span class="material-symbols-outlined text-secondary">payments</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($collectedToday, 2) }}</p><p class="mt-1 text-sm text-slate-500">{{ $settledToday }} settled today</p></div>
+                <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Billing & Transactions</span><span class="material-symbols-outlined text-secondary">payments</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($collectedToday, 2) }}</p><p class="mt-1 text-sm text-slate-500">{{ $settledToday }} paid today</p></div>
             </section>
             @endif
         </main>

@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security & Audit Logs - Le Charme Suites IHMP</title>
+    <title>Security & Activity Logs - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -64,7 +64,7 @@
             <div class="flex items-center gap-5">
                 <div>
                     <p class="text-xs font-bold uppercase tracking-wider text-secondary">Administration</p>
-                    <h1 class="font-serif text-xl font-bold">Security & Compliance Audit Log</h1>
+                    <h1 class="font-serif text-xl font-bold">Security & Compliance Activity Log</h1>
                 </div>
                 <span class="hidden items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800 lg:inline-flex">
                     <span class="relative flex h-2.5 w-2.5">
@@ -99,14 +99,14 @@
                     <div class="mb-1 flex items-center gap-2 text-xs font-semibold text-slate-500">
                         <span>Administration</span>
                         <span class="material-symbols-outlined text-xs">chevron_right</span>
-                        <span class="text-secondary">Security & Audit Logs</span>
+                        <span class="text-secondary">Security & Activity Logs</span>
                     </div>
-                    <h2 class="font-serif text-4xl font-semibold tracking-tight">Security & Audit Logs Command Console</h2>
+                    <h2 class="font-serif text-4xl font-semibold tracking-tight">Security & Activity Logs Command Console</h2>
                     <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Monitor role access, privileged changes, guest bill events, room updates, active sessions, and compliance proof records for the IHMP portal.</p>
                 </div>
                 <span class="inline-flex w-fit items-center gap-2 rounded-full border border-secondary/30 bg-secondary-fixed/40 px-3 py-1.5 text-xs font-bold text-secondary">
                     <span class="material-symbols-outlined text-sm">lock</span>
-                    Cryptographic Audit Node
+                    Protected Activity Records
                 </span>
             </section>
 
@@ -169,7 +169,7 @@
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-primary">dataset</span>
                         <div>
-                            <h3 class="font-serif text-2xl font-semibold">Cryptographic Audit Ledger Stream</h3>
+                            <h3 class="font-serif text-2xl font-semibold">Protected Activity History</h3>
                             <p class="text-sm text-slate-500">Recent system records formatted for compliance review.</p>
                         </div>
                     </div>
@@ -184,7 +184,7 @@
                                 <th class="px-4 py-3">User / Actor</th>
                                 <th class="px-4 py-3">Action / Event</th>
                                 <th class="px-4 py-3">Target Entity</th>
-                                <th class="px-4 py-3">IP & Terminal</th>
+                                <th class="px-4 py-3">IP & Station</th>
                                 <th class="px-4 py-3">Details / Diff</th>
                                 <th class="px-4 py-3 text-right">Proof Verification</th>
                             </tr>
@@ -279,7 +279,7 @@
                         </div>
                     </div>
                     <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50/70 p-3 text-sm text-amber-950">
-                        <strong>Security Rule Notice:</strong> All privileged actions should be replicated to an off-site audit ledger before production deployment.
+                        <strong>Security Notice:</strong> All privileged actions should be replicated to an off-site protected activity record before production deployment.
                     </div>
                 </div>
 
@@ -321,7 +321,7 @@
                 return;
             }
 
-            const csvRows = [['Timestamp', 'Actor', 'Event', 'Target', 'Terminal', 'Details']];
+            const csvRows = [['Timestamp', 'Actor', 'Event', 'Target', 'Station', 'Details']];
             rows.forEach((row) => {
                 const cells = Array.from(row.querySelectorAll('td')).slice(0, 6).map((cell) => cell.innerText.replace(/\s+/g, ' ').trim());
                 csvRows.push(cells);

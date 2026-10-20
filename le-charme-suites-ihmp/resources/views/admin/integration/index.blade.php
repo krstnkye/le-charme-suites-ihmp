@@ -40,7 +40,7 @@
 
             <section class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
                 <div class="border-b border-line px-5 py-4">
-                    <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Website To IHMP Reservation Pipeline</p>
+                    <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Website To IHMP Reservation Upcoming Bookings</p>
                     <h3 class="mt-1 font-serif text-2xl font-bold">What Is Integrated Now</h3>
                     <p class="mt-1 text-sm text-slate-500">Separates the working school-project integration from the official hotel connection that still requires authorization.</p>
                 </div>
@@ -67,7 +67,7 @@
                     </article>
                 </div>
                 <div class="border-t border-line bg-[#fcf9f3] px-5 py-4 text-sm text-slate-600">
-                    <strong class="text-primary">Demonstration path:</strong> guest submits through IHMP → reservation enters the Front Desk queue → staff confirms and checks in → the shared room status changes → checkout creates the housekeeping turnover workflow. A live official-site connection uses the same API only after Le Charmé supplies permission and credentials.
+                    <strong class="text-primary">Demonstration process:</strong> guest submits through IHMP → reservation appears on the Front Desk waiting list → staff confirms and checks in → the room status changes → check-out creates a housekeeping cleaning task. A live official website connection can use the same API after Le Charmé provides permission and connection details.
                 </div>
             </section>
 

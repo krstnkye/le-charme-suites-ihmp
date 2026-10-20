@@ -35,7 +35,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Status & Live Floor Matrix - Le Charme Suites IHMP</title>
+    <title>Room Status & Live Floor Table - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -76,7 +76,7 @@
             </form>
 
             <div class="hidden items-center gap-1 rounded-lg border border-line bg-[#f6f3ed] p-1 xl:flex">
-                @foreach (['Main Wing' => $totalRooms, 'Ready' => $availableRooms, 'Turnover' => $turnoverCount] as $label => $count)
+                @foreach (['Main Wing' => $totalRooms, 'Ready' => $availableRooms, 'Room Preparation' => $turnoverCount] as $label => $count)
                     <span class="{{ $loop->first ? 'bg-white text-primary shadow-sm' : 'text-slate-500' }} rounded-md px-3 py-1 text-xs font-bold">
                         {{ $label }} <span class="ml-1 text-secondary">{{ $count }}</span>
                     </span>
@@ -108,7 +108,7 @@
                     <div class="mb-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">{{ session('status') }}</div>
                 @endif
                 <div class="mb-5 flex flex-col justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950 sm:flex-row sm:items-center">
-                    <span><strong>{{ $totalRooms }} of {{ $publishedRoomCount }}</strong> published hotel rooms are encoded in this shared inventory.</span>
+                    <span><strong>{{ $totalRooms }} of {{ $publishedRoomCount }}</strong> published hotel rooms are added to this shared room list.</span>
                     <span class="text-xs font-bold uppercase tracking-wider">{{ $officialRoomTypeCount }} official room types</span>
                 </div>
 
@@ -119,8 +119,8 @@
                             <span>•</span>
                             <span>Live Room Status</span>
                         </div>
-                        <h2 class="font-serif text-3xl font-bold leading-tight text-primary lg:text-4xl">Room Status & Live Floor Matrix</h2>
-                        <p class="mt-2 max-w-3xl text-sm text-slate-600">Room Management for housekeeping personnel with readiness, turnover, inspection, and maintenance visibility.</p>
+                        <h2 class="font-serif text-3xl font-bold leading-tight text-primary lg:text-4xl">Room Status & Live Floor Table</h2>
+                        <p class="mt-2 max-w-3xl text-sm text-slate-600">Room Management for housekeeping personnel with room cleaning, preparation, and inspection, and maintenance visibility.</p>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2 rounded-lg border border-line bg-white p-2 shadow-sm">
@@ -187,10 +187,10 @@
                 <section class="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-5">
                     @foreach ([
                         ['Property Rooms', $publishedRoomCount, 'domain', 'text-primary', 'Hotel total'],
-                        ['Available', $availableRooms, 'check_circle', 'text-emerald-700', 'Encoded inventory'],
-                        ['Reserved', $reservedRooms, 'event_available', 'text-secondary', 'Encoded inventory'],
-                        ['Occupied', $occupiedRooms, 'king_bed', 'text-primary', 'Encoded inventory'],
-                        ['Maintenance', $maintenanceRooms, 'construction', 'text-red-700', 'Encoded inventory'],
+                        ['Available', $availableRooms, 'check_circle', 'text-emerald-700', 'Added inventory'],
+                        ['Reserved', $reservedRooms, 'event_available', 'text-secondary', 'Added inventory'],
+                        ['Occupied', $occupiedRooms, 'king_bed', 'text-primary', 'Added inventory'],
+                        ['Maintenance', $maintenanceRooms, 'construction', 'text-red-700', 'Added inventory'],
                     ] as [$label, $value, $icon, $color, $caption])
                         <article class="rounded-lg border border-line bg-white p-4 shadow-sm">
                             <div class="flex items-center justify-between">
@@ -208,7 +208,7 @@
                         <div>
                             <h3 class="flex items-center gap-2 text-lg font-bold">
                                 <span class="material-symbols-outlined text-secondary">grid_view</span>
-                                Live Availability Selection Matrix
+                                Live Availability Selection Table
                             </h3>
                             <p class="text-xs text-slate-500">Showing operational room cards from the housekeeping room status page.</p>
                         </div>
@@ -220,7 +220,7 @@
                             <div class="flex items-center justify-between border-b border-line pb-2">
                                 <div class="flex items-center gap-2">
                                     <span class="h-2.5 w-2.5 rounded-sm bg-secondary"></span>
-                                    <h4 class="font-bold">Floor {{ $floor }} • Housekeeping Matrix</h4>
+                                    <h4 class="font-bold">Floor {{ $floor }} • Housekeeping Table</h4>
                                     <span class="text-xs text-slate-500">• {{ $floorRooms->count() }} total rooms</span>
                                 </div>
                                 <span class="text-xs font-bold text-secondary">{{ $floorRooms->where('status', 'available')->count() }} Ready • {{ $floorRooms->where('status', 'cleaning')->count() }} Cleaning</span>
@@ -261,7 +261,7 @@
                             </div>
                         </div>
                     @empty
-                        <div class="rounded-lg border border-line bg-white p-8 text-center text-sm text-slate-500">No room matrix available.</div>
+                        <div class="rounded-lg border border-line bg-white p-8 text-center text-sm text-slate-500">No room list available.</div>
                     @endforelse
                 </section>
 
@@ -324,7 +324,7 @@
                     <div class="flex items-center justify-between">
                         <span class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-red-700">
                             <span class="h-2.5 w-2.5 rounded-full bg-red-600"></span>
-                            Priority Telemetry
+                            Priority System Status
                         </span>
                         <a href="{{ route('housekeeping.page', 'notifications') }}" class="rounded p-1 text-slate-500 hover:bg-white hover:text-primary" title="Notifications">
                             <span class="material-symbols-outlined text-lg">notifications</span>
@@ -347,7 +347,7 @@
                                 <span class="rounded-full border px-2 py-0.5 text-[11px] font-bold {{ $statusStyles[$priorityRoom->status] ?? 'border-line bg-slate-50 text-slate-700' }}">{{ ucfirst($priorityRoom->status) }}</span>
                             </div>
                             <div class="mt-4 rounded-lg border border-line bg-white p-3 text-sm">
-                                <div class="flex justify-between"><span class="text-slate-500">Readiness target</span><strong>{{ $priorityRoom->status === 'maintenance' ? 'Engineering Hold' : 'Release Review' }}</strong></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Ready Status target</span><strong>{{ $priorityRoom->status === 'maintenance' ? 'Engineering Hold' : 'Release Review' }}</strong></div>
                                 <div class="mt-2 flex justify-between"><span class="text-slate-500">Rate</span><strong>PHP {{ number_format($priorityRoom->rate, 2) }}</strong></div>
                             </div>
                             <div class="mt-4 flex gap-2">
@@ -367,15 +367,15 @@
                         </div>
                         <div class="mt-4 space-y-2 text-sm">
                             <div class="flex justify-between"><span>Available rooms</span><strong>{{ $availableRooms }}</strong></div>
-                            <div class="flex justify-between"><span>Cleaning queue</span><strong>{{ $statusCounts['cleaning'] ?? 0 }}</strong></div>
-                            <div class="flex justify-between"><span>Maintenance queue</span><strong>{{ $statusCounts['maintenance'] ?? 0 }}</strong></div>
+                            <div class="flex justify-between"><span>Cleaning list</span><strong>{{ $statusCounts['cleaning'] ?? 0 }}</strong></div>
+                            <div class="flex justify-between"><span>Maintenance list</span><strong>{{ $statusCounts['maintenance'] ?? 0 }}</strong></div>
                         </div>
                     </section>
 
                     <section class="rounded-lg border border-line p-4">
                         <h4 class="text-xs font-bold uppercase tracking-wider">Quick Housekeeping Actions</h4>
                         <div class="mt-3 grid gap-2">
-                            <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="rounded-lg border border-line px-3 py-2 text-sm font-bold hover:bg-[#f6f3ed]">Open Inspection Queue</a>
+                            <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="rounded-lg border border-line px-3 py-2 text-sm font-bold hover:bg-[#f6f3ed]">Open Inspection List</a>
                             <a href="{{ route('housekeeping.page', 'maintenance-requests') }}" class="rounded-lg border border-line px-3 py-2 text-sm font-bold hover:bg-[#f6f3ed]">Review Maintenance</a>
                         </div>
                     </section>
@@ -385,7 +385,7 @@
 
         <footer class="hidden h-8 shrink-0 items-center justify-between border-t border-line bg-[#ebe8e2] px-5 text-[11px] text-slate-500 lg:flex">
             <span><strong class="text-primary">Le Charme Suites Subic</strong> • IHMP Housekeeping Module</span>
-            <span class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-emerald-600"></span>PMS Database Connected</span>
+            <span class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-emerald-600"></span>IHMP Database Connected</span>
         </footer>
     </div>
 

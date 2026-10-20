@@ -11,8 +11,8 @@
     $statusStyles = [
         'available' => ['label' => 'Ready / Inspected', 'badge' => 'border-emerald-200 bg-emerald-50 text-emerald-700', 'dot' => 'bg-emerald-600', 'event' => 'Room released for guest assignment'],
         'occupied' => ['label' => 'Occupied', 'badge' => 'border-primary-container/20 bg-primary-container/10 text-primary-container', 'dot' => 'bg-primary-container', 'event' => 'In-stay monitoring active'],
-        'reserved' => ['label' => 'Pre-arrival Hold', 'badge' => 'border-blue-200 bg-blue-50 text-blue-700', 'dot' => 'bg-blue-500', 'event' => 'Arrival preparation queued'],
-        'cleaning' => ['label' => 'Turnover Cleaning', 'badge' => 'border-sky-200 bg-sky-50 text-sky-700', 'dot' => 'bg-sky-500', 'event' => 'Cleaning cycle in progress'],
+        'reserved' => ['label' => 'Reserved for Arrival', 'badge' => 'border-blue-200 bg-blue-50 text-blue-700', 'dot' => 'bg-blue-500', 'event' => 'Room preparation waiting'],
+        'cleaning' => ['label' => 'Room Preparation Cleaning', 'badge' => 'border-sky-200 bg-sky-50 text-sky-700', 'dot' => 'bg-sky-500', 'event' => 'Cleaning cycle in progress'],
         'maintenance' => ['label' => 'Maintenance Hold', 'badge' => 'border-amber-300 bg-amber-50 text-amber-800', 'dot' => 'bg-amber-600', 'event' => 'Engineering inspection required'],
     ];
     $floorSummary = $rooms->groupBy(fn ($room) => substr((string) $room->room_number, 0, 1) ?: '1')->map(fn ($floorRooms, $floor) => [
@@ -32,29 +32,29 @@
             </span>
             <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Housekeeping Department Overview</h2>
             <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">
-                Consolidated executive telemetry for floor operations, room readiness, attendant assignments, guest amenity requests, and maintenance coordination.
+                Consolidated management information for floor operations, rooms ready for guests, attendant assignments, guest amenity requests, and maintenance coordination.
             </p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-3 rounded-xl border border-white/10 bg-white/10 p-4 sm:grid-cols-4 xl:min-w-[620px]">
             <div class="border-r border-white/10 pr-3"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Occupancy</p><p class="mt-1 font-serif text-2xl font-bold">{{ $occupancyRate }}%</p></div>
-            <div class="border-r border-white/10 pr-3"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Property Rooms</p><p class="mt-1 font-serif text-2xl font-bold">{{ $publishedRoomCount }}</p><p class="text-[10px] text-blue-100/70">{{ $totalRooms }} encoded</p></div>
+            <div class="border-r border-white/10 pr-3"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Property Rooms</p><p class="mt-1 font-serif text-2xl font-bold">{{ $publishedRoomCount }}</p><p class="text-[10px] text-blue-100/70">{{ $totalRooms }} rooms recorded</p></div>
             <div class="border-r border-white/10 pr-3"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Attendants</p><p class="mt-1 font-serif text-2xl font-bold">{{ min(count($attendants), max($totalRooms, 1)) }}</p></div>
-            <div><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Queue</p><p class="mt-1 font-serif text-2xl font-bold text-secondary-fixed">{{ $turnoverQueue + $maintenanceQueue }}</p></div>
+            <div><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">List</p><p class="mt-1 font-serif text-2xl font-bold text-secondary-fixed">{{ $turnoverQueue + $maintenanceQueue }}</p></div>
         </div>
     </div>
 </section>
 
 <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
     <div class="owner-card rounded-xl p-5">
-        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Readiness Score</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Ready Status Score</p>
         <div class="mt-3 flex items-end justify-between"><span class="font-serif text-3xl font-bold">{{ $readinessRate }}%</span><span class="material-symbols-outlined text-secondary">verified</span></div>
         <div class="mt-4 h-2 rounded-full bg-surface-mid"><div class="h-2 rounded-full bg-secondary" style="width: {{ min($readinessRate, 100) }}%"></div></div>
         <p class="mt-3 text-xs text-slate-500">{{ $availableRooms }} rooms ready for assignment</p>
     </div>
     <div class="owner-card rounded-xl p-5">
-        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Turnover Queue</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Room Preparation List</p>
         <div class="mt-3 flex items-end justify-between"><span class="font-serif text-3xl font-bold">{{ $turnoverQueue }}</span><span class="material-symbols-outlined text-secondary">cycle</span></div>
-        <p class="mt-4 border-t border-line pt-3 text-xs font-semibold text-secondary">{{ $turnoverQueue ? 'Rooms are awaiting release' : 'No active turnover queue' }}</p>
+        <p class="mt-4 border-t border-line pt-3 text-xs font-semibold text-secondary">{{ $turnoverQueue ? 'Rooms are awaiting release' : 'No active room cleaning list' }}</p>
     </div>
     <div class="owner-card rounded-xl p-5">
         <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Open Requests</p>
@@ -72,21 +72,21 @@
     <div class="owner-card rounded-xl p-6">
         <div class="flex items-start justify-between gap-4">
             <div>
-                <p class="text-xs font-bold uppercase tracking-[0.16em] text-secondary">Room Status & Hygiene Matrix</p>
-                <h3 class="mt-2 font-serif text-2xl font-bold">Readiness Control Board</h3>
-                <p class="mt-1 text-sm text-slate-500">Owner view of clean rooms, occupied rooms, turnover workload, and maintenance holds.</p>
+                <p class="text-xs font-bold uppercase tracking-[0.16em] text-secondary">Room Status & Hygiene Table</p>
+                <h3 class="mt-2 font-serif text-2xl font-bold">Ready Status Control Board</h3>
+                <p class="mt-1 text-sm text-slate-500">Owner view of clean rooms, occupied rooms, room cleaning workload, and maintenance holds.</p>
             </div>
             <span class="flex h-11 w-11 items-center justify-center rounded-lg border border-line bg-surface-low text-secondary"><span class="material-symbols-outlined">table_chart</span></span>
         </div>
         <div class="mt-5 grid grid-cols-2 gap-3 text-sm">
             <div class="rounded-lg bg-surface-low p-3"><p class="text-xs font-bold uppercase text-slate-500">Ready</p><p class="font-serif text-2xl font-bold">{{ $availableRooms }}</p></div>
             <div class="rounded-lg bg-surface-low p-3"><p class="text-xs font-bold uppercase text-slate-500">Occupied</p><p class="font-serif text-2xl font-bold">{{ $occupiedRooms }}</p></div>
-            <div class="rounded-lg bg-surface-low p-3"><p class="text-xs font-bold uppercase text-slate-500">Turnover</p><p class="font-serif text-2xl font-bold">{{ $turnoverQueue }}</p></div>
+            <div class="rounded-lg bg-surface-low p-3"><p class="text-xs font-bold uppercase text-slate-500">Room Preparation</p><p class="font-serif text-2xl font-bold">{{ $turnoverQueue }}</p></div>
             <div class="rounded-lg bg-surface-low p-3"><p class="text-xs font-bold uppercase text-slate-500">Maintenance</p><p class="font-serif text-2xl font-bold">{{ $maintenanceQueue }}</p></div>
         </div>
         <button type="button" data-hk-scroll="#housekeeping-room-status" class="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-primary-container">
             <span class="material-symbols-outlined text-lg text-secondary-fixed">visibility</span>
-            View Room Status Matrix
+            View Room Status Table
         </button>
     </div>
 
@@ -101,12 +101,12 @@
         </div>
         <div class="mt-5 grid grid-cols-3 gap-3 text-sm">
             <div class="rounded-lg bg-surface-low p-3"><p class="text-xs font-bold uppercase text-slate-500">Requests</p><p class="font-serif text-2xl font-bold">{{ $openRequestCount }}</p></div>
-            <div class="rounded-lg bg-surface-low p-3"><p class="text-xs font-bold uppercase text-slate-500">SLA Flags</p><p class="font-serif text-2xl font-bold">{{ $slaBreaches }}</p></div>
+            <div class="rounded-lg bg-surface-low p-3"><p class="text-xs font-bold uppercase text-slate-500">Response Time Flags</p><p class="font-serif text-2xl font-bold">{{ $slaBreaches }}</p></div>
             <div class="rounded-lg bg-surface-low p-3"><p class="text-xs font-bold uppercase text-slate-500">Logs</p><p class="font-serif text-2xl font-bold">{{ $housekeepingLogs->count() }}</p></div>
         </div>
         <button type="button" id="hkShowRequests" class="mt-5 inline-flex items-center gap-2 rounded-lg border border-secondary bg-white px-4 py-2.5 text-sm font-bold text-secondary transition hover:bg-secondary-fixed/30">
             <span class="material-symbols-outlined text-lg">filter_alt</span>
-            View Requests Ledger
+            View Requests Records
         </button>
     </div>
 </section>
@@ -115,8 +115,8 @@
     <div class="space-y-4 border-b border-line bg-white p-5">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-                <h3 class="font-serif text-2xl font-bold text-primary">Housekeeping Activity & Turnover Monitor</h3>
-                <p class="mt-1 text-sm text-slate-500">Real-time room readiness, sanitization events, and attendant logs across all resort units.</p>
+                <h3 class="font-serif text-2xl font-bold text-primary">Housekeeping Activity & Room Preparation Monitor</h3>
+                <p class="mt-1 text-sm text-slate-500">Real-time rooms ready for guests, sanitization events, and attendant logs across all resort units.</p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
                 <button type="button" id="hkExport" class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface-low px-3.5 py-2 text-sm font-bold text-primary transition hover:border-secondary">
@@ -145,7 +145,7 @@
                     <th class="px-4 py-3">Assigned Attendant</th>
                     <th class="px-4 py-3">Notes & Operational Event</th>
                     <th class="px-4 py-3">Changed / Inspection</th>
-                    <th class="px-4 py-3 text-right">Telemetry</th>
+                    <th class="px-4 py-3 text-right">System Status</th>
                 </tr>
             </thead>
             <tbody id="hkRows" class="divide-y divide-line">
@@ -199,7 +199,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="px-6 py-12 text-center text-sm text-slate-500">No rooms are currently encoded for housekeeping monitoring.</td>
+                        <td colspan="7" class="px-6 py-12 text-center text-sm text-slate-500">No rooms are currently added for housekeeping monitoring.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -213,8 +213,8 @@
 
 <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">
     <div class="owner-card rounded-xl p-5">
-        <p class="text-xs font-bold uppercase tracking-wider text-secondary">Turnover Velocity</p>
-        <h3 class="mt-2 font-serif text-2xl font-bold">Floor Readiness</h3>
+        <p class="text-xs font-bold uppercase tracking-wider text-secondary">Room Preparation Velocity</p>
+        <h3 class="mt-2 font-serif text-2xl font-bold">Floor Ready Status</h3>
         <div class="mt-4 space-y-3">
             @forelse ($floorSummary as $floor)
                 @php $floorReadyRate = $floor['total'] ? round(($floor['ready'] / $floor['total']) * 100) : 0; @endphp
@@ -228,16 +228,16 @@
         </div>
     </div>
     <div class="owner-card rounded-xl p-5">
-        <p class="text-xs font-bold uppercase tracking-wider text-secondary">SLA / Service Requests</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-secondary">Response Time / Service Requests</p>
         <h3 class="mt-2 font-serif text-2xl font-bold">{{ $openRequestCount }} Open Signals</h3>
         <p class="mt-3 text-sm leading-6 text-slate-600">Guest service notes, maintenance mentions, and room-readiness changes are surfaced here for management visibility without editing access.</p>
-        <div class="mt-4 rounded-lg bg-surface-low p-3 text-xs font-semibold text-slate-600">SLA flags detected: <span class="font-bold text-primary">{{ $slaBreaches }}</span></div>
+        <div class="mt-4 rounded-lg bg-surface-low p-3 text-xs font-semibold text-slate-600">Response Time flags detected: <span class="font-bold text-primary">{{ $slaBreaches }}</span></div>
     </div>
     <div class="owner-card rounded-xl p-5">
-        <p class="text-xs font-bold uppercase tracking-wider text-secondary">Maintenance Risk / Governance</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-secondary">Maintenance Risk / Management</p>
         <h3 class="mt-2 font-serif text-2xl font-bold">{{ $maintenanceQueue }} Rooms On Hold</h3>
         <p class="mt-3 text-sm leading-6 text-slate-600">Maintenance holds remain visible to ownership, while issue resolution and record edits stay with authorized departments.</p>
-        <div class="mt-4 rounded-lg border border-line bg-white p-3 text-xs font-bold text-primary">Read-only governance mode active</div>
+        <div class="mt-4 rounded-lg border border-line bg-white p-3 text-xs font-bold text-primary">Read-only view-only mode active</div>
     </div>
 </section>
 
@@ -288,7 +288,7 @@
         exportButton?.addEventListener('click', () => {
             const visibleRows = rows.filter((row) => !row.classList.contains('hidden'));
             const csv = [
-                ['Room', 'Type', 'Status', 'Attendant', 'Notes', 'Changed At', 'Telemetry'],
+                ['Room', 'Type', 'Status', 'Attendant', 'Notes', 'Changed At', 'System Status'],
                 ...visibleRows.map((row) => Array.from(row.children).map((cell) => cell.innerText.replace(/\s+/g, ' ').trim())),
             ].map((line) => line.map((value) => `"${value.replace(/"/g, '""')}"`).join(',')).join('\n');
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

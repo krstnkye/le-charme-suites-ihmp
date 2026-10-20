@@ -24,10 +24,10 @@
         <div class="max-w-4xl">
             <div class="flex flex-wrap items-center gap-3">
                 <span class="rounded-full border border-secondary-fixed/30 bg-secondary-fixed/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Live Audit Feed</span>
-                <span class="inline-flex items-center gap-1 text-xs font-semibold text-blue-100/80"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>Terminal desks and central ledger active</span>
+                <span class="inline-flex items-center gap-1 text-xs font-semibold text-blue-100/80"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>Station desks and central billing records active</span>
             </div>
             <h2 class="mt-3 font-serif text-4xl font-bold leading-tight">Billing & Transactions Overview</h2>
-            <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">Revenue, settlement, and transaction monitoring across guest billing accounts, department terminals, and cashier drawers in real time.</p>
+            <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">Revenue, settlement, and transaction monitoring across guest billing accounts, department computers, and cashier drawers in real time.</p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-3 rounded-xl border border-white/10 bg-white/10 p-4 sm:grid-cols-4 xl:min-w-[620px]">
             <div class="border-r border-white/10 pr-3"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Occupancy</p><p class="mt-1 font-serif text-2xl font-bold">{{ $occupancyRate }}%</p></div>
@@ -41,14 +41,14 @@
 <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
     <div class="owner-card rounded-xl p-5 transition hover:border-secondary">
         <div class="flex items-start justify-between">
-            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Recorded Intake Today</p><h3 class="mt-2 font-serif text-3xl font-bold text-primary">PHP {{ number_format($todayLedgerTotal, 2) }}</h3></div>
+            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Recorded Registration Today</p><h3 class="mt-2 font-serif text-3xl font-bold text-primary">PHP {{ number_format($todayLedgerTotal, 2) }}</h3></div>
             <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary/10 text-secondary"><span class="material-symbols-outlined">account_balance_wallet</span></span>
         </div>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>{{ $todayTransactions->count() }} posted today</span><span class="font-bold text-emerald-700">Live</span></div>
     </div>
     <div class="owner-card rounded-xl p-5 transition hover:border-secondary">
         <div class="flex items-start justify-between">
-            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Drawer & Vault Cash</p><h3 class="mt-2 font-serif text-3xl font-bold text-primary">PHP {{ number_format($cashLikeTotal, 2) }}</h3></div>
+            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Cash on Hand</p><h3 class="mt-2 font-serif text-3xl font-bold text-primary">PHP {{ number_format($cashLikeTotal, 2) }}</h3></div>
             <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary/10 text-secondary"><span class="material-symbols-outlined">payments</span></span>
         </div>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Cash-like records</span><span class="font-bold text-secondary">Audit view</span></div>
@@ -58,11 +58,11 @@
             <div><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Electronic Batch</p><h3 class="mt-2 font-serif text-3xl font-bold text-primary">PHP {{ number_format($electronicTotal, 2) }}</h3></div>
             <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary/10 text-secondary"><span class="material-symbols-outlined">credit_card</span></span>
         </div>
-        <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Card and account ledger</span><span class="font-bold text-secondary">{{ $settledTransactions->count() }} settled</span></div>
+        <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Card and account records</span><span class="font-bold text-secondary">{{ $settledTransactions->count() }} settled</span></div>
     </div>
     <div class="owner-card rounded-xl p-5 transition hover:border-secondary">
         <div class="flex items-start justify-between">
-            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Unreconciled Variance</p><h3 class="mt-2 font-serif text-3xl font-bold text-primary">PHP {{ number_format($pendingLedgerTotal, 2) }}</h3></div>
+            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Unreviewed Difference</p><h3 class="mt-2 font-serif text-3xl font-bold text-primary">PHP {{ number_format($pendingLedgerTotal, 2) }}</h3></div>
             <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700"><span class="material-symbols-outlined">verified</span></span>
         </div>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>{{ $varianceCount }} pending records</span><span class="font-bold text-secondary">{{ number_format($discrepancyRate, 2) }}%</span></div>
@@ -78,12 +78,12 @@
                     <span class="rounded bg-secondary-fixed/30 px-2 py-0.5 text-xs font-bold uppercase text-secondary">Audit Mode</span>
                     <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-600"></span>Live Connection</span>
                 </div>
-                <p class="mt-1 text-sm text-slate-500">Chronological finance journal across guest billing accounts, settlement activity, and department charges.</p>
+                <p class="mt-1 text-sm text-slate-500">Chronological billing history across guest billing accounts, settlement activity, and department charges.</p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
                 <button id="ownerTxnExport" type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface-low px-3.5 py-2 text-sm font-bold text-primary transition hover:border-secondary">
                     <span class="material-symbols-outlined text-lg text-secondary">file_download</span>
-                    Export Audit Ledger
+                    Export Audit Records
                 </button>
                 <button id="ownerTxnReset" type="button" class="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-bold text-white transition hover:bg-primary-container">
                     <span class="material-symbols-outlined text-lg text-secondary-fixed">refresh</span>
@@ -114,7 +114,7 @@
                     <th class="px-4 py-3">Guest / Invoice</th>
                     <th class="px-4 py-3">Room / Category</th>
                     <th class="px-4 py-3 text-right">Amount (PHP)</th>
-                    <th class="px-4 py-3 text-center">Settlement Status</th>
+                    <th class="px-4 py-3 text-center">Payment Status</th>
                     <th class="px-4 py-3 text-right">Audit Hash</th>
                     <th class="px-4 py-3 text-right">Action</th>
                 </tr>
@@ -131,9 +131,9 @@
                         $invoiceRef = 'INV-'.$transaction->transaction_date?->timezone('Asia/Manila')->format('Ym').'-'.str_pad((string) ($transaction->reservation_id ?: $transaction->id), 4, '0', STR_PAD_LEFT);
                         $source = match ($category) {
                             'room' => 'Front Office',
-                            'food' => 'Outlet Terminal',
+                            'food' => 'Outlet Station',
                             'deposit' => 'Billing Counter',
-                            default => 'Ledger Desk',
+                            default => 'Records Desk',
                         };
                         $audit = substr(strtoupper(hash('crc32b', $txnRef.$transaction->amount.$status)), 0, 8);
                         $searchText = strtolower(implode(' ', [$txnRef, $invoiceRef, $typeLabel, $transaction->guest?->full_name, $transaction->guest?->email, $transaction->room?->room_number, $transaction->amount, $transaction->status, $transaction->description, $source]));
@@ -170,7 +170,7 @@
                         </td>
                         <td class="px-4 py-3.5 align-top">
                             <span class="rounded border border-line bg-surface-low px-2.5 py-1 text-xs font-semibold text-primary">Room {{ $transaction->room?->room_number ?? 'N/A' }}</span>
-                            <span class="mt-1 block text-[11px] text-slate-400">{{ ucfirst($category) }} ledger</span>
+                            <span class="mt-1 block text-[11px] text-slate-400">{{ ucfirst($category) }} transaction record</span>
                         </td>
                         <td class="whitespace-nowrap px-4 py-3.5 text-right align-top">
                             <span class="font-serif text-lg font-bold text-primary">{{ number_format((float) $transaction->amount, 2) }}</span>
@@ -184,7 +184,7 @@
                         </td>
                         <td class="px-4 py-3.5 text-right align-top">
                             <p class="font-mono text-xs font-bold text-primary">{{ $audit }}</p>
-                            <p class="mt-1 text-[11px] text-slate-500">{{ $transaction->description ?: 'Synced ledger entry' }}</p>
+                            <p class="mt-1 text-[11px] text-slate-500">{{ $transaction->description ?: 'Synced billing entry' }}</p>
                         </td>
                         <td class="px-4 py-3.5 text-right align-top">
                             <button type="button" class="rounded border border-line bg-white px-2.5 py-1 text-xs font-bold text-primary transition hover:border-secondary" data-owner-txn-details="{{ $txnRef }}">Details</button>
@@ -215,28 +215,28 @@
     </div>
 
     <div class="flex flex-col justify-between gap-3 border-t border-line bg-surface-low p-4 text-sm text-slate-600 md:flex-row md:items-center">
-        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-secondary">shield</span><span>Showing <strong class="font-bold text-primary" data-owner-txn-visible>{{ $transactions->count() }}</strong> recent transactions • Recorded Shift Intake: <strong class="font-bold text-primary">PHP {{ number_format($recordedLedgerTotal, 2) }}</strong></span></div>
-        <div class="flex items-center gap-3"><span class="font-mono text-xs text-slate-500">Audit Hash: {{ $auditHash }}</span><span class="rounded bg-secondary-fixed/30 px-2 py-0.5 text-xs font-bold text-secondary">Verified Ledger</span></div>
+        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-secondary">shield</span><span>Showing <strong class="font-bold text-primary" data-owner-txn-visible>{{ $transactions->count() }}</strong> recent transactions • Recorded Shift Registration: <strong class="font-bold text-primary">PHP {{ number_format($recordedLedgerTotal, 2) }}</strong></span></div>
+        <div class="flex items-center gap-3"><span class="font-mono text-xs text-slate-500">Audit Hash: {{ $auditHash }}</span><span class="rounded bg-secondary-fixed/30 px-2 py-0.5 text-xs font-bold text-secondary">Verified Records</span></div>
     </div>
 </section>
 
 <section class="grid grid-cols-1 gap-5 md:grid-cols-3">
     <div class="owner-card rounded-xl p-5">
         <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Revenue Velocity</span><span class="material-symbols-outlined text-secondary">speed</span></div>
-        <h4 class="mt-3 font-serif text-2xl font-bold text-primary">Live Ledger</h4>
+        <h4 class="mt-3 font-serif text-2xl font-bold text-primary">Live Records</h4>
         <p class="mt-2 text-sm leading-6 text-slate-500">Average transaction posting and settlement visibility across all desk terminals.</p>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Discrepancy Rate</span><span class="font-bold text-emerald-700">{{ number_format($discrepancyRate, 2) }}%</span></div>
     </div>
     <div class="owner-card rounded-xl p-5">
-        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Settlement Balancing</span><span class="material-symbols-outlined text-secondary">account_balance_wallet</span></div>
-        <h4 class="mt-3 font-serif text-2xl font-bold text-primary">PHP {{ number_format($pendingLedgerTotal, 2) }} Variance</h4>
+        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Payment Balancing</span><span class="material-symbols-outlined text-secondary">account_balance_wallet</span></div>
+        <h4 class="mt-3 font-serif text-2xl font-bold text-primary">PHP {{ number_format($pendingLedgerTotal, 2) }} Difference</h4>
         <p class="mt-2 text-sm leading-6 text-slate-500">Open or unpaid records remain visible for owner review without correction controls.</p>
-        <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Pending queue</span><span class="font-bold text-secondary">{{ $varianceCount }}</span></div>
+        <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Pending list</span><span class="font-bold text-secondary">{{ $varianceCount }}</span></div>
     </div>
     <div class="owner-card rounded-xl p-5">
-        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Statutory Governance</span><span class="material-symbols-outlined text-secondary">gavel</span></div>
+        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Required Tax Management</span><span class="material-symbols-outlined text-secondary">gavel</span></div>
         <h4 class="mt-3 font-serif text-2xl font-bold text-primary">SBMA Tax Review</h4>
-        <p class="mt-2 text-sm leading-6 text-slate-500">Transaction records are available for executive monitoring and statutory revenue review.</p>
+        <p class="mt-2 text-sm leading-6 text-slate-500">Transaction records are available for executive monitoring and required tax review.</p>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs text-slate-500"><span>Certification ID</span><span class="font-mono font-bold text-primary">SBF-2026-TX88</span></div>
     </div>
 </section>

@@ -32,14 +32,14 @@ class RoleAccessTest extends TestCase
             ->get('/dashboard')
             ->assertOk()
             ->assertSee('Property Systems Integrity & Control', false)
-            ->assertSee('User & Role Governance', false)
+            ->assertSee('User & Role Management', false)
             ->assertSee('User &amp; Role Management', false)
             ->assertSee('Room Inventory')
             ->assertSee('Room Types')
             ->assertSee('Room Rates')
             ->assertSee('Transactions / Billing')
             ->assertSee('Reports')
-            ->assertSee('Audit Logs')
+            ->assertSee('Activity Logs')
             ->assertSee('System Settings')
             ->assertSee('My Profile');
     }
@@ -57,7 +57,7 @@ class RoleAccessTest extends TestCase
             ->assertOk()
             ->assertSee('Role-Based Access Control Console')
             ->assertSee('Active Personnel Directory')
-            ->assertSee('Permissions Matrix Inspector')
+            ->assertSee('Permissions Table Inspector')
             ->assertSee('Front Desk Sample');
     }
 
@@ -144,7 +144,7 @@ class RoleAccessTest extends TestCase
             ->assertSee('Role Directory & Access Tiers', false)
             ->assertSee('System Admin')
             ->assertSee('Front Desk')
-            ->assertSee('Open Permissions Matrix')
+            ->assertSee('Open Permissions Table')
             ->assertSee('My Profile');
     }
 
@@ -155,9 +155,9 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get(route('admin.permissions.index', ['role' => 'receptionist']))
             ->assertOk()
-            ->assertSee('Granular Permissions Matrix')
+            ->assertSee('Granular Permissions Table')
             ->assertSee('Front Desk Lead')
-            ->assertSee('Capability Matrix');
+            ->assertSee('Access Table');
 
         $this->actingAs($user)
             ->post(route('admin.permissions.save'), [
@@ -194,7 +194,7 @@ class RoleAccessTest extends TestCase
                 ->assertSee('Room Types')
                 ->assertSee('Room Rates')
                 ->assertSee('Reports')
-                ->assertSee('Audit Logs')
+                ->assertSee('Activity Logs')
                 ->assertSee('System Settings')
                 ->assertSee('My Profile');
 
@@ -214,8 +214,8 @@ class RoleAccessTest extends TestCase
                     ->assertSee('data-room-type-action="edit"', false);
             } elseif ($module === 'room-rates') {
                 $response
-                    ->assertSee('Room Rates &amp; Dynamic Tariffs', false)
-                    ->assertSee('Master Room Tariffs Matrix');
+                    ->assertSee('Room Rate Management', false)
+                    ->assertSee('Room Rates Table');
             } else {
                 $response
                     ->assertSee('Administrator-only workspace')
@@ -316,8 +316,8 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get(route('admin.audit-logs.index'))
             ->assertOk()
-            ->assertSeeText('Security & Compliance Audit Log')
-            ->assertSee('Cryptographic Audit Ledger Stream')
+            ->assertSeeText('Security & Compliance Activity Log')
+            ->assertSee('Cryptographic Audit Records Stream')
             ->assertSeeText('IHMP Access Control & Security Policies')
             ->assertSee('Active Sessions');
     }
@@ -363,8 +363,8 @@ class RoleAccessTest extends TestCase
             ->get(route('profile.edit'))
             ->assertOk()
             ->assertSee('My Profile')
-            ->assertSeeText('Front Desk Agent Profile & Station Authority')
-            ->assertSeeText('Station Authority')
+            ->assertSeeText('Front Desk Agent Profile & Station Access')
+            ->assertSeeText('Station Access')
             ->assertSeeText('Security & Account Status')
             ->assertSee('Front Desk Employee')
             ->assertSee('receptionist');
@@ -495,7 +495,7 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get(route('dashboard'))
             ->assertOk()
-            ->assertSee('Housekeeping Command Center')
+            ->assertSee('Housekeeping Dashboard')
             ->assertSee('Room Status')
             ->assertSee('My Assigned Rooms')
             ->assertSee('Room Inspection')
@@ -516,7 +516,7 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get('/rooms')
             ->assertOk()
-            ->assertSee('Room Status & Live Floor Matrix', false)
+            ->assertSee('Room Status & Live Floor Table', false)
             ->assertSee('Room Management')
             ->assertSee('Housekeeping Tasks')
             ->assertDontSee('Reservations');
@@ -549,11 +549,11 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get(route('profile.edit'))
             ->assertOk()
-            ->assertSee('Executive Housekeeper Profile &amp; Digital Duty Credentials', false)
+            ->assertSee('Executive Housekeeper Profile &amp; Digital Duty Login Details', false)
             ->assertSee('Personal Details &amp; Contact Information', false)
-            ->assertSee('Secure Access &amp; Digital Credentials', false)
+            ->assertSee('Secure Access &amp; Digital Login Details', false)
             ->assertSee('Shift &amp; Duty Roster Preferences', false)
-            ->assertSee('Certifications &amp; Hospitality Ledger', false);
+            ->assertSee('Certifications &amp; Hospitality Records', false);
     }
 
     public function test_housekeeping_sidebar_links_open_dedicated_housekeeping_pages(): void
@@ -616,7 +616,7 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get(route('housekeeping.page', 'cleaning-tasks'))
             ->assertOk()
-            ->assertSee('Unit Turnover &amp; Cleaning Tasks Queue', false)
+            ->assertSee('Unit Room Preparation &amp; Cleaning Tasks List', false)
             ->assertSee('Live Cleaning Task Board')
             ->assertSee('Attendant Workload')
             ->assertSee('Room 701');
@@ -624,9 +624,9 @@ class RoleAccessTest extends TestCase
         $this->actingAs($user)
             ->get(route('housekeeping.page', 'priority-rooms'))
             ->assertOk()
-            ->assertSee('Priority Rooms &amp; Expedited Turnovers', false)
-            ->assertSee('Rush Readiness Command')
-            ->assertSee('Front Desk Intercom Stream')
+            ->assertSee('Priority Rooms &amp; Fast Cleaning', false)
+            ->assertSee('Housekeeping Rush Ready Status Command')
+            ->assertSee('Front Desk Messages')
             ->assertSee('Room 701')
             ->assertSee('Room 702');
 

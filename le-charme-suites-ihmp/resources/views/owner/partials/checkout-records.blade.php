@@ -18,11 +18,11 @@
         <div class="max-w-4xl space-y-2">
             <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-secondary-fixed">
                 <span class="h-2 w-2 rounded-full bg-secondary-fixed"></span>
-                Executive Monitoring / Departures & Settlement
+                Executive Monitoring / Departures & Payment
             </div>
-            <h2 class="font-serif text-4xl font-extrabold leading-tight">Check-out Records & Turnover Archive</h2>
+            <h2 class="font-serif text-4xl font-extrabold leading-tight">Check-out Records & Room Preparation Archive</h2>
             <p class="max-w-3xl text-sm leading-6 text-blue-100">
-                Audited log of finalized departures, electronic key drops, billing balances, and automated housekeeping turnover dispatches.
+                Saved record of completed check-outs, returned keycards, billing balances, and automatic housekeeping cleaning assignments.
             </p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-3 sm:grid-cols-4 xl:min-w-[620px]">
@@ -37,12 +37,12 @@
                 <p class="text-[10px] text-blue-100/70">Posted departure value</p>
             </div>
             <div class="rounded-lg border border-white/10 bg-primary/70 px-3.5 py-2.5">
-                <p class="text-[10px] font-bold uppercase tracking-wider text-secondary-fixed">Turnover Sync</p>
+                <p class="text-[10px] font-bold uppercase tracking-wider text-secondary-fixed">Room Preparation Sync</p>
                 <p class="mt-1 font-serif text-2xl font-bold">{{ $turnoverSynced }}%</p>
                 <p class="text-[10px] text-blue-100/70">Room release monitoring</p>
             </div>
             <div class="rounded-lg border border-white/10 bg-primary/70 px-3.5 py-2.5">
-                <p class="text-[10px] font-bold uppercase tracking-wider text-secondary-fixed">Audit Variance</p>
+                <p class="text-[10px] font-bold uppercase tracking-wider text-secondary-fixed">Audit Difference</p>
                 <p class="mt-1 font-serif text-2xl font-bold text-emerald-200">{{ $disputedCheckOuts->count() }}</p>
                 <p class="text-[10px] text-blue-100/70">Flagged settlements</p>
             </div>
@@ -65,15 +65,15 @@
             <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary-container/40 text-secondary"><span class="material-symbols-outlined text-lg">payments</span></span>
         </div>
         <div class="mt-3 font-serif text-2xl font-bold text-primary">PHP {{ number_format($settledTotal, 2) }}</div>
-        <div class="mt-3 flex items-center gap-1.5 border-t border-line pt-3 text-xs text-slate-500"><span class="material-symbols-outlined text-sm text-secondary">verified</span><span>{{ $disputedCheckOuts->count() }} pending settlement review</span></div>
+        <div class="mt-3 flex items-center gap-1.5 border-t border-line pt-3 text-xs text-slate-500"><span class="material-symbols-outlined text-sm text-secondary">verified</span><span>{{ $disputedCheckOuts->count() }} pending payment review</span></div>
     </div>
     <div class="owner-card rounded-xl p-5">
         <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Housekeeping Turnover</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Housekeeping Room Preparation</span>
             <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary-container/40 text-secondary"><span class="material-symbols-outlined text-lg">cleaning_services</span></span>
         </div>
         <div class="mt-3 flex items-baseline gap-2"><span class="font-serif text-3xl font-bold text-primary">{{ $turnoverSynced }}%</span><span class="font-semibold text-slate-500">Synced</span></div>
-        <div class="mt-3 flex items-center gap-1.5 border-t border-line pt-3 text-xs text-slate-500"><span class="material-symbols-outlined text-sm text-emerald-700">sync</span><span>Turnover queue follows released rooms</span></div>
+        <div class="mt-3 flex items-center gap-1.5 border-t border-line pt-3 text-xs text-slate-500"><span class="material-symbols-outlined text-sm text-emerald-700">sync</span><span>Room cleaning list follows released rooms</span></div>
     </div>
     <div class="owner-card rounded-xl p-5">
         <div class="flex items-center justify-between">
@@ -161,14 +161,14 @@
                                 <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-secondary/20 bg-surface-mid text-xs font-bold text-primary">{{ $initials }}</span>
                                 <div>
                                     <div class="font-bold leading-snug text-primary">{{ $guestName }}</div>
-                                    <div class="mt-0.5 text-[11px] text-slate-500">{{ $checkOut->guest?->email ?? 'No email encoded' }}</div>
+                                    <div class="mt-0.5 text-[11px] text-slate-500">{{ $checkOut->guest?->email ?? 'No email added' }}</div>
                                     <span class="mt-1 inline-flex rounded border border-line bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-secondary">Completed departure record</span>
                                 </div>
                             </div>
                         </td>
                         <td class="px-4 py-4 align-top">
                             <div class="font-bold text-primary">Room {{ $checkOut->room?->room_number ?? 'N/A' }}</div>
-                            <div class="text-[11px] text-slate-500">{{ $roomType }} · Le Charmé Rooms Cluster</div>
+                            <div class="text-[11px] text-slate-500">{{ $roomType }} · Le Charmé Room System</div>
                             <div class="mt-1 text-[10px] font-semibold text-secondary">Stay {{ $reservation?->check_in_date?->format('M d') ?? 'N/A' }} - {{ $reservation?->check_out_date?->format('M d') ?? 'N/A' }}</div>
                         </td>
                         <td class="px-4 py-4 align-top">
@@ -197,7 +197,7 @@
                         <td class="px-4 py-4 align-top">
                             <div class="inline-flex items-center gap-1.5 rounded border border-secondary/20 bg-secondary-container/50 px-2 py-1 text-[11px] font-bold text-secondary">
                                 <span class="material-symbols-outlined text-xs">cleaning_services</span>
-                                Turnover Synced
+                                Room Preparation Synced
                             </div>
                             <div class="mt-1 text-[10px] text-slate-500">Room release monitoring only</div>
                         </td>
@@ -243,16 +243,16 @@
     </div>
     <div class="owner-card rounded-xl p-5">
         <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-secondary">Housekeeping Integration</span><span class="material-symbols-outlined text-slate-400">sanitizer</span></div>
-        <h3 class="mt-1 font-semibold text-primary">Turnover Inspection Sync</h3>
-        <p class="mt-1 text-sm text-slate-500">Automated handoff between departures and housekeeping release for resale.</p>
+        <h3 class="mt-1 font-semibold text-primary">Room Preparation Inspection Sync</h3>
+        <p class="mt-1 text-sm text-slate-500">Automatic update from check-out to housekeeping cleaning.</p>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3">
             <div class="flex items-center gap-3"><span class="font-serif text-2xl font-bold text-primary">{{ $turnoverSynced }}%</span><div><div class="text-xs font-bold text-primary">Departed keys released</div><div class="text-[10px] text-slate-500">Monitored from closed check-outs</div></div></div>
             <span class="material-symbols-outlined text-emerald-600">task_alt</span>
         </div>
     </div>
     <div class="rounded-xl border border-secondary/20 bg-secondary-container/30 p-5 shadow-sm">
-        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary">policy</span><span class="text-xs font-bold uppercase tracking-wider text-secondary">Executive Governance Protocol</span></div>
-        <h3 class="mt-1 font-semibold text-primary">Immutable SBMA Audit Chain</h3>
+        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary">policy</span><span class="text-xs font-bold uppercase tracking-wider text-secondary">Owner Access Rules</span></div>
+        <h3 class="mt-1 font-semibold text-primary">Protected SBMA Audit Chain</h3>
         <p class="mt-1 text-sm leading-6 text-slate-600">Express checkouts, keycard re-encodings, deposit release authorizations, and manual room status overrides are reserved for operational departments.</p>
         <div class="mt-4 flex items-center justify-between border-t border-secondary/20 pt-3 text-[11px] text-secondary"><span class="font-mono">SYS-OUT-2026.10</span><span class="inline-flex items-center gap-1 font-bold"><span class="material-symbols-outlined text-xs">verified_user</span>Read-Only Validated</span></div>
     </div>

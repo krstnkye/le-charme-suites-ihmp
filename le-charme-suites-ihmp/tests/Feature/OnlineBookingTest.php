@@ -107,6 +107,92 @@ class OnlineBookingTest extends TestCase
         $this->assertSame(1, Reservation::where('external_reference', 'LECHARME-WEB-10001')->count());
     }
 
+    public function test_hotel_website_can_update_and_cancel_its_booking(): void
+    {
+        config(['integrations.api_key' => 'booking-secret']);
+        Room::factory()->create([
+            'room_number' => '106',
+            'room_type' => 'Deluxe King',
+            'capacity' => 3,
+        ]);
+
+        $payload = $this->bookingPayload([
+            'external_reference' => 'LECHARME-WEB-10003',
+            'adults' => 2,
+            'children' => 0,
+            'number_of_guests' => 2,
+            'official_booking_status' => 'confirmed',
+            'payment_status' => 'paid',
+            'currency' => 'PHP',
+            'gross_amount' => 13750,
+            'discount_amount' => 8937.50,
+            'total_amount' => 4812.50,
+            'rate_plan' => 'Regular Discount',
+        ]);
+
+        $this->withToken('booking-secret')
+            ->postJson('/api/v1/bookings', $payload)
+            ->assertCreated()
+            ->assertJsonPath('payment_status', 'paid')
+            ->assertJsonPath('total_amount', '4812.50');
+
+        $updatedPayload = array_merge($payload, [
+            'check_out_date' => now()->addDays(13)->toDateString(),
+            'total_amount' => 9625,
+            'notes' => 'Guest extended the booking through the official website.',
+        ]);
+
+        $this->withToken('booking-secret')
+            ->putJson('/api/v1/bookings/LECHARME-WEB-10003', $updatedPayload)
+            ->assertOk()
+            ->assertJsonPath('check_out_date', now()->addDays(13)->toDateString())
+            ->assertJsonPath('total_amount', '9625.00');
+
+        $this->assertDatabaseHas('hotel_transactions', [
+            'transaction_type' => 'online_booking_update',
+            'amount' => 9625,
+        ]);
+
+        $this->withToken('booking-secret')
+            ->postJson('/api/v1/bookings/LECHARME-WEB-10003/cancel', [
+                'reason' => 'Guest changed travel plans.',
+            ])
+            ->assertOk()
+            ->assertJsonPath('status', 'cancelled');
+
+        $this->assertDatabaseHas('reservations', [
+            'external_reference' => 'LECHARME-WEB-10003',
+            'status' => 'cancelled',
+            'official_booking_status' => 'cancelled',
+        ]);
+        $this->assertDatabaseHas('integration_events', [
+            'endpoint' => '/api/v1/bookings/{external_reference}/cancel',
+            'status' => 'completed',
+        ]);
+    }
+
+    public function test_hotel_website_cannot_cancel_a_checked_in_guest(): void
+    {
+        config(['integrations.api_key' => 'booking-secret']);
+        $room = Room::factory()->create([
+            'room_number' => '107',
+            'room_type' => 'Deluxe King',
+            'capacity' => 3,
+        ]);
+        $reservation = Reservation::factory()->for($room)->create([
+            'external_reference' => 'LECHARME-WEB-10004',
+            'source' => 'hotel_website_api',
+            'status' => 'checked_in',
+        ]);
+
+        $this->withToken('booking-secret')
+            ->postJson('/api/v1/bookings/LECHARME-WEB-10004/cancel')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('external_reference');
+
+        $this->assertSame('checked_in', $reservation->fresh()->status);
+    }
+
     public function test_online_booking_flows_through_front_desk_and_into_housekeeping(): void
     {
         config(['integrations.api_key' => 'booking-secret']);
@@ -204,6 +290,7 @@ class OnlineBookingTest extends TestCase
     private function bookingPayload(array $overrides = []): array
     {
         return array_merge([
+            'external_reference' => 'LECHARME-WEB-DEFAULT',
             'first_name' => 'Online',
             'last_name' => 'Guest',
             'email' => 'guest@example.com',

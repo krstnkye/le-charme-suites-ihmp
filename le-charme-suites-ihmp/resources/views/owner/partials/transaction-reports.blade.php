@@ -18,22 +18,22 @@
         .'-'.substr(strtoupper(hash('sha256', 'tax-'.$taxDue)), 0, 4);
     $reportRows = collect([
         [
-            'title' => 'Daily Settlement & Terminal Balancing Report',
+            'title' => 'Daily Payment & Station Balancing Report',
             'code' => 'LCS-FIN-'.$reportDate->format('Ymd').'-01',
-            'category' => 'Settlement',
+            'category' => 'Payment',
             'amount' => $grossTotal,
             'breakdown' => 'Cash PHP '.number_format($cashTotal, 2).' / Card & Digital PHP '.number_format($cardDigitalTotal, 2),
             'officer' => 'Billing Department',
-            'status' => $variance == 0 ? 'Reconciled' : 'Variance Review',
+            'status' => $variance == 0 ? 'Reconciled' : 'Difference Review',
             'formats' => ['PDF', 'CSV'],
             'icon' => 'receipt_long',
         ],
         [
-            'title' => 'SBMA Freeport 5% Gross Revenue Ledger',
+            'title' => 'SBMA Freeport 5% Gross Revenue Records',
             'code' => 'LCS-TAX-'.$reportDate->format('Ymd').'-04',
-            'category' => 'Statutory',
+            'category' => 'Required Tax',
             'amount' => $taxDue,
-            'breakdown' => '5% statutory estimate from PHP '.number_format($grossTotal, 2).' gross revenue',
+            'breakdown' => '5% required tax estimate from PHP '.number_format($grossTotal, 2).' gross revenue',
             'officer' => 'Owner View-Only',
             'status' => 'Tax Ready',
             'formats' => ['PDF'],
@@ -45,26 +45,26 @@
             'category' => 'Payment Channel',
             'amount' => $cardDigitalTotal,
             'breakdown' => 'Non-cash payment channels compiled from transaction records',
-            'officer' => 'POS Terminal Sync',
+            'officer' => 'POS Station Sync',
             'status' => 'Synced',
             'formats' => ['PDF', 'XLSX'],
             'icon' => 'credit_card',
         ],
         [
-            'title' => 'Guest Billing Account Reconciliation',
+            'title' => 'Guest Billing Account Payment Review',
             'code' => 'LCS-BILL-'.$reportDate->format('Ymd').'-03',
             'category' => 'Accounts',
             'amount' => $pendingTotal,
             'breakdown' => $transactionCollection->count().' transaction line(s) visible to owner audit',
-            'officer' => 'IHMP Ledger Core',
+            'officer' => 'IHMP Records Core',
             'status' => $pendingTotal > 0 ? 'Open Review' : 'Cleared',
             'formats' => ['PDF', 'CSV'],
             'icon' => 'account_balance_wallet',
         ],
     ]);
     $categoryTone = [
-        'Settlement' => 'bg-blue-50 text-blue-700',
-        'Statutory' => 'bg-secondary-fixed/40 text-secondary',
+        'Payment' => 'bg-blue-50 text-blue-700',
+        'Required Tax' => 'bg-secondary-fixed/40 text-secondary',
         'Payment Channel' => 'bg-emerald-50 text-emerald-700',
         'Accounts' => 'bg-surface-mid text-slate-700',
     ];
@@ -74,7 +74,7 @@
         'Synced' => 'border-blue-200 bg-blue-50 text-blue-700',
         'Cleared' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
         'Open Review' => 'border-amber-200 bg-amber-50 text-amber-700',
-        'Variance Review' => 'border-error/20 bg-error-container text-error',
+        'Difference Review' => 'border-error/20 bg-error-container text-error',
     ];
 @endphp
 
@@ -91,12 +91,12 @@
             </div>
             <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Transaction Reports & Financial Audit Intelligence</h2>
             <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">
-                Consolidated settlement summaries, payment channel breakdowns, statutory tax estimates, and owner-ready financial report exports.
+                Consolidated settlement summaries, payment channel breakdowns, required tax estimates, and owner-ready financial report exports.
             </p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-3 sm:grid-cols-4 xl:min-w-[650px]">
-            <div class="rounded-lg border border-white/10 bg-white/10 p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Gross Settled</p><p class="mt-1 font-serif text-xl font-bold">PHP {{ number_format($grossTotal, 2) }}</p><p class="mt-1 text-[11px] text-blue-100/70">{{ $transactionCollection->count() }} ledger lines</p></div>
-            <div class="rounded-lg border border-white/10 bg-white/10 p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Cash Intake</p><p class="mt-1 font-serif text-xl font-bold text-secondary-fixed">PHP {{ number_format($cashTotal, 2) }}</p><p class="mt-1 text-[11px] text-blue-100/70">Cash-type entries</p></div>
+            <div class="rounded-lg border border-white/10 bg-white/10 p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Total Paid</p><p class="mt-1 font-serif text-xl font-bold">PHP {{ number_format($grossTotal, 2) }}</p><p class="mt-1 text-[11px] text-blue-100/70">{{ $transactionCollection->count() }} billing entries</p></div>
+            <div class="rounded-lg border border-white/10 bg-white/10 p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Cash Registration</p><p class="mt-1 font-serif text-xl font-bold text-secondary-fixed">PHP {{ number_format($cashTotal, 2) }}</p><p class="mt-1 text-[11px] text-blue-100/70">Cash-type entries</p></div>
             <div class="rounded-lg border border-white/10 bg-white/10 p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Card & Digital</p><p class="mt-1 font-serif text-xl font-bold">PHP {{ number_format($cardDigitalTotal, 2) }}</p><p class="mt-1 text-[11px] text-blue-100/70">All non-cash entries</p></div>
             <div class="rounded-lg border border-white/10 bg-white/10 p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Tax Estimate</p><p class="mt-1 font-serif text-xl font-bold text-secondary-fixed">PHP {{ number_format($taxDue, 2) }}</p><p class="mt-1 text-[11px] text-blue-100/70">SBMA 5% basis</p></div>
         </div>
@@ -107,16 +107,16 @@
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Transaction Volume</p><span class="material-symbols-outlined text-secondary">payments</span></div><p class="mt-4 font-serif text-3xl font-bold">PHP {{ number_format($grossTotal, 2) }}</p><p class="mt-1 text-sm text-slate-500">Compiled from real transaction rows</p></div>
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Settled Amount</p><span class="material-symbols-outlined text-secondary">task_alt</span></div><p class="mt-4 font-serif text-3xl font-bold">PHP {{ number_format($settledTotal, 2) }}</p><p class="mt-1 text-sm text-slate-500">Paid, recorded, cleared, or completed</p></div>
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Open Review</p><span class="material-symbols-outlined text-secondary">pending_actions</span></div><p class="mt-4 font-serif text-3xl font-bold">PHP {{ number_format($pendingTotal, 2) }}</p><p class="mt-1 text-sm text-slate-500">Visible but not marked settled</p></div>
-    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Variance / Audit Hash</p><span class="material-symbols-outlined text-secondary">fingerprint</span></div><p class="mt-4 font-serif text-3xl font-bold">PHP {{ number_format($variance, 2) }}</p><p class="mt-1 font-mono text-xs text-slate-500">{{ $statementHash }}</p></div>
+    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Difference / Audit Hash</p><span class="material-symbols-outlined text-secondary">fingerprint</span></div><p class="mt-4 font-serif text-3xl font-bold">PHP {{ number_format($variance, 2) }}</p><p class="mt-1 font-mono text-xs text-slate-500">{{ $statementHash }}</p></div>
 </section>
 
 <section class="owner-card rounded-xl border border-line p-4">
     <div class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
         <div class="owner-scroll flex flex-wrap gap-2">
             <button type="button" data-transaction-report-filter="all" class="rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white">All Transaction Reports</button>
-            <button type="button" data-transaction-report-filter="Settlement" class="rounded-lg bg-surface-low px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-primary">Daily Settlement</button>
+            <button type="button" data-transaction-report-filter="Payment" class="rounded-lg bg-surface-low px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-primary">Daily Payment</button>
             <button type="button" data-transaction-report-filter="Payment Channel" class="rounded-lg bg-surface-low px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-primary">Card & Digital</button>
-            <button type="button" data-transaction-report-filter="Statutory" class="rounded-lg bg-surface-low px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-primary">SBMA Tax</button>
+            <button type="button" data-transaction-report-filter="Required Tax" class="rounded-lg bg-surface-low px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-primary">SBMA Tax</button>
             <button type="button" data-transaction-report-filter="Accounts" class="rounded-lg bg-surface-low px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-primary">Billing Accounts</button>
         </div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -174,7 +174,7 @@
                         </td>
                         <td class="px-5 py-4 text-right">
                             <div class="flex justify-end gap-2">
-                                <button type="button" data-transaction-report-preview class="inline-flex items-center gap-1 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-surface-low"><span class="material-symbols-outlined text-sm">visibility</span>Preview Ledger</button>
+                                <button type="button" data-transaction-report-preview class="inline-flex items-center gap-1 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-surface-low"><span class="material-symbols-outlined text-sm">visibility</span>Preview Records</button>
                                 <button type="button" data-transaction-report-download class="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white transition hover:bg-primary-container"><span class="material-symbols-outlined text-sm text-secondary-fixed">download</span>Download CSV</button>
                             </div>
                         </td>
@@ -191,8 +191,8 @@
 
 <section class="grid grid-cols-1 gap-5 md:grid-cols-3">
     <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Audit Velocity</p><h3 class="mt-2 font-serif text-2xl font-bold">Owner Ready</h3><p class="mt-2 text-sm leading-6 text-slate-600">Reports are available for review and export without giving owner accounts record-editing permissions.</p></div>
-    <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Governance Protocol</p><h3 class="mt-2 font-serif text-2xl font-bold">Read-Only Control</h3><p class="mt-2 text-sm leading-6 text-slate-600">Financial corrections, voids, and postings remain restricted to department users and administrators.</p></div>
-    <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Immutable Report Chain</p><h3 class="mt-2 font-serif text-2xl font-bold">{{ $statementHash }}</h3><p class="mt-2 text-sm leading-6 text-blue-100">Hash generated from current totals, settled amount, tax estimate, and report date.</p></div>
+    <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Owner Access Rules</p><h3 class="mt-2 font-serif text-2xl font-bold">Read-Only Control</h3><p class="mt-2 text-sm leading-6 text-slate-600">Billing corrections, cancelled transactions, and added charges remain restricted to department users and administrators.</p></div>
+    <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Protected Report Chain</p><h3 class="mt-2 font-serif text-2xl font-bold">{{ $statementHash }}</h3><p class="mt-2 text-sm leading-6 text-blue-100">Hash generated from current totals, settled amount, tax estimate, and report date.</p></div>
 </section>
 
 <script>

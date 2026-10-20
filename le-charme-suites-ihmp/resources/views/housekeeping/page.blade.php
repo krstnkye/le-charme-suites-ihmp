@@ -48,10 +48,10 @@
     <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         @foreach ([
             ['label' => 'Property Rooms', 'value' => $publishedRoomCount, 'icon' => 'domain', 'caption' => 'Hotel total'],
-            ['label' => 'Available', 'value' => $availableRooms, 'icon' => 'check_circle', 'caption' => 'Encoded inventory'],
-            ['label' => 'Occupied', 'value' => $occupiedRooms, 'icon' => 'king_bed', 'caption' => 'Encoded inventory'],
-            ['label' => 'Cleaning', 'value' => $cleaningRooms->count(), 'icon' => 'mop', 'caption' => 'Encoded inventory'],
-            ['label' => 'Maintenance', 'value' => $maintenanceQueue->count(), 'icon' => 'construction', 'caption' => 'Encoded inventory'],
+            ['label' => 'Available', 'value' => $availableRooms, 'icon' => 'check_circle', 'caption' => 'Added inventory'],
+            ['label' => 'Occupied', 'value' => $occupiedRooms, 'icon' => 'king_bed', 'caption' => 'Added inventory'],
+            ['label' => 'Cleaning', 'value' => $cleaningRooms->count(), 'icon' => 'mop', 'caption' => 'Added inventory'],
+            ['label' => 'Maintenance', 'value' => $maintenanceQueue->count(), 'icon' => 'construction', 'caption' => 'Added inventory'],
         ] as $stat)
             <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
                 <div class="flex items-center justify-between">
@@ -90,7 +90,7 @@
                                                     @foreach ($housekeepingStaff as $staff)<option value="{{ $staff->id }}" @selected($task->assigned_to === $staff->id)>{{ $staff->name }}</option>@endforeach
                                                 </select>
                                                 <select name="status" class="rounded border-line py-1.5 text-xs font-bold">
-                                                    @foreach (['queued' => 'Queued', 'in_progress' => 'Start / In Progress', 'inspection' => 'Ready for Inspection', 'completed' => 'Complete'] as $value => $label)<option value="{{ $value }}" @selected($task->status === $value)>{{ $label }}</option>@endforeach
+                                                    @foreach (['queued' => 'Waiting', 'in_progress' => 'Start / In Progress', 'inspection' => 'Ready for Inspection', 'completed' => 'Complete'] as $value => $label)<option value="{{ $value }}" @selected($task->status === $value)>{{ $label }}</option>@endforeach
                                                 </select>
                                                 <button class="rounded bg-primary px-2.5 py-1.5 text-xs font-bold text-white">Save</button>
                                             </form>
@@ -112,7 +112,7 @@
                 <div><p class="text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Task Assignment</p><h3 class="mt-1 font-serif text-xl font-bold">Create Work Order</h3></div>
                 <label class="block text-xs font-bold">Room<select name="room_id" required class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm"><option value="">Select room</option>@foreach ($allRooms as $room)<option value="{{ $room->id }}">Room {{ $room->room_number }} · {{ $room->status }}</option>@endforeach</select></label>
                 <label class="block text-xs font-bold">Assign housekeeper<select name="assigned_to" required class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm"><option value="">Select housekeeping staff</option>@foreach ($housekeepingStaff as $staff)<option value="{{ $staff->id }}" @selected(auth()->id() === $staff->id)>{{ $staff->name }}</option>@endforeach</select></label>
-                <label class="block text-xs font-bold">Task type<select name="task_type" required class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm">@foreach (['turnover' => 'Departure Turnover', 'stayover' => 'Occupied Room Service', 'inspection' => 'Room Inspection', 'guest_request' => 'Guest Request', 'deep_cleaning' => 'Deep Cleaning', 'maintenance_follow_up' => 'Maintenance Follow-up'] as $value => $label)<option value="{{ $value }}">{{ $label }}</option>@endforeach</select></label>
+                <label class="block text-xs font-bold">Task type<select name="task_type" required class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm">@foreach (['turnover' => 'Departure Room Preparation', 'stayover' => 'Occupied Room Service', 'inspection' => 'Room Inspection', 'guest_request' => 'Guest Request', 'deep_cleaning' => 'Deep Cleaning', 'maintenance_follow_up' => 'Maintenance Follow-up'] as $value => $label)<option value="{{ $value }}">{{ $label }}</option>@endforeach</select></label>
                 <label class="block text-xs font-bold">Task title<input name="title" required maxlength="255" class="mt-1 w-full rounded-lg border-line px-3 py-2.5 text-sm" placeholder="Example: Prepare room for arrival"></label>
                 <label class="block text-xs font-bold">Instructions<textarea name="instructions" rows="3" class="mt-1 w-full rounded-lg border-line px-3 py-2.5 text-sm"></textarea></label>
                 <div class="grid grid-cols-2 gap-3"><label class="text-xs font-bold">Priority<select name="priority" class="mt-1 w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm"><option value="normal">Normal</option><option value="high">High</option><option value="urgent">Urgent</option><option value="low">Low</option></select></label><label class="text-xs font-bold">Due by<input name="due_at" type="datetime-local" class="mt-1 w-full rounded-lg border-line px-3 py-2.5 text-sm"></label></div>
@@ -128,7 +128,7 @@
                     <div>
                         <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-secondary">Housekeeping Assignment Deck</p>
                         <h3 class="mt-1 font-serif text-3xl font-bold">My Assigned Rooms</h3>
-                        <p class="mt-2 max-w-3xl text-sm text-slate-500">Personal room workload with turnover priority, current cleaning stage, and action shortcuts.</p>
+                        <p class="mt-2 max-w-3xl text-sm text-slate-500">Personal room workload with cleaning priority, current cleaning stage, and action shortcuts.</p>
                     </div>
                     <div class="flex flex-wrap gap-2">
                         <a href="{{ route('housekeeping.page', 'report-issue') }}" class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-bold text-red-700 hover:bg-red-100">
@@ -142,7 +142,7 @@
             <div class="grid gap-4 p-5 md:grid-cols-2 xl:grid-cols-4">
                 @foreach ([
                     ['Assigned Today', $assignedRooms->count(), 'assignment_ind', 'text-primary'],
-                    ['Cleaning Queue', $cleaningRooms->count(), 'cleaning_services', 'text-orange-700'],
+                    ['Cleaning List', $cleaningRooms->count(), 'cleaning_services', 'text-orange-700'],
                     ['Priority Rooms', $priorityRooms->count(), 'priority_high', 'text-red-700'],
                     ['Completed Logs', $completedTasks->count(), 'done_all', 'text-emerald-700'],
                 ] as [$label, $value, $icon, $color])
@@ -161,10 +161,10 @@
             <div class="space-y-5 xl:col-span-8">
                 <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                     <div class="flex items-center gap-2">
-                        <h3 class="font-serif text-2xl font-bold">Turnover Queue</h3>
+                        <h3 class="font-serif text-2xl font-bold">Room Preparation List</h3>
                         <span class="rounded bg-[#f6f3ed] px-2 py-0.5 text-xs font-semibold text-slate-600">{{ $assignedRooms->count() }} Rooms Allocated</span>
                     </div>
-                    <p class="text-xs text-slate-500">Sorted by: <strong class="text-primary">Priority & SLA Urgency</strong></p>
+                    <p class="text-xs text-slate-500">Sorted by: <strong class="text-primary">Priority & Response Time Urgency</strong></p>
                 </div>
 
                 @if ($activeAssignedRoom)
@@ -185,21 +185,21 @@
                                             </span>
                                             <span class="rounded border border-sky-200 bg-sky-100 px-2 py-0.5 text-[11px] font-bold text-sky-900">IN PROGRESS</span>
                                         </div>
-                                        <p class="mt-1 text-sm text-slate-500">{{ $activeAssignedRoom->description ?: 'Turnover checklist ready for housekeeping completion.' }}</p>
+                                        <p class="mt-1 text-sm text-slate-500">{{ $activeAssignedRoom->description ?: 'Room Preparation checklist ready for housekeeping completion.' }}</p>
                                     </div>
                                 </div>
                                 <div class="text-left lg:text-right">
                                     <p class="flex items-center gap-1.5 text-sm font-bold text-red-700 lg:justify-end">
                                         <span class="material-symbols-outlined text-lg">timer</span>
-                                        Live SLA Tracking
+                                        Live Response Time Tracking
                                     </p>
-                                    <p class="mt-1 text-[11px] text-slate-500">Target: next PMS readiness release</p>
+                                    <p class="mt-1 text-[11px] text-slate-500">Target: next IHMP readiness release</p>
                                 </div>
                             </div>
 
                             <div class="mt-4">
                                 <div class="mb-2 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-500">
-                                    <span>Sanitization & Turnover Milestones</span>
+                                    <span>Sanitization & Room Preparation Milestones</span>
                                     <span class="text-secondary">2 of 5 Completed</span>
                                 </div>
                                 <div class="grid gap-2 md:grid-cols-2">
@@ -208,7 +208,7 @@
                                         [true, 'Bathroom deep clean & fixtures'],
                                         [false, 'Glass, mirror, and balcony polish'],
                                         [false, 'Amenity and supply replenishment'],
-                                        [false, 'Final scent, lights, and PMS notes'],
+                                        [false, 'Final scent, lights, and IHMP notes'],
                                     ] as [$checked, $label])
                                         <label class="{{ $loop->last ? 'md:col-span-2' : '' }} flex cursor-pointer items-center gap-2.5 rounded-lg border {{ $checked ? 'border-line bg-[#f6f3ed]' : 'border-secondary/40 bg-white shadow-sm' }} p-2.5 text-sm hover:bg-[#f6f3ed]">
                                             <input type="checkbox" @checked($checked) class="h-4 w-4 rounded border-line text-secondary focus:ring-secondary">
@@ -280,10 +280,10 @@
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-primary">Completed Status Update</h4>
-                                        <p class="mt-1 text-xs text-slate-500">Released at {{ $log->changed_at?->format('h:i A') }} - {{ $log->notes ?: 'PMS synced.' }}</p>
+                                        <p class="mt-1 text-xs text-slate-500">Released at {{ $log->changed_at?->format('h:i A') }} - {{ $log->notes ?: 'IHMP synced.' }}</p>
                                     </div>
                                 </div>
-                                <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800"><span class="material-symbols-outlined text-base">verified_user</span>PMS Synced</span>
+                                <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800"><span class="material-symbols-outlined text-base">verified_user</span>IHMP Synced</span>
                             </div>
                         </article>
                     @endforeach
@@ -351,7 +351,7 @@
                         <span class="flex h-10 w-10 items-center justify-center rounded-full bg-red-700 text-white"><span class="material-symbols-outlined">sos</span></span>
                         <div>
                             <h4 class="text-sm font-bold text-red-800">Staff Duress & Medical Alert</h4>
-                            <p class="text-xs text-slate-600">Immediate notification to supervisor dispatch.</p>
+                            <p class="text-xs text-slate-600">Immediate notification to the supervisor.</p>
                         </div>
                     </div>
                     <a href="{{ route('housekeeping.page', 'notifications') }}" class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-red-700 px-3 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-red-800">
@@ -367,7 +367,7 @@
             <aside class="space-y-5 xl:col-span-4">
                 <div class="rounded-lg border border-line bg-white shadow-sm">
                     <div class="border-b border-line bg-[#f6f3ed] p-5">
-                        <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Inspection Queue</p>
+                        <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Inspection List</p>
                         <h3 class="mt-1 font-serif text-2xl font-bold">QA Release Command</h3>
                         <p class="mt-1 text-sm text-slate-500">Rooms awaiting final inspection before front desk release.</p>
                     </div>
@@ -389,7 +389,7 @@
                 <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">Readiness Score</p>
+                            <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">Ready Status Score</p>
                             <p class="mt-2 font-serif text-4xl font-bold text-secondary">{{ $inspectionScore }} / 100</p>
                         </div>
                         <span class="flex h-12 w-12 items-center justify-center rounded-lg bg-[#fff3dc] text-secondary">
@@ -399,7 +399,7 @@
                     <div class="mt-4 h-2 overflow-hidden rounded-full bg-line">
                         <div class="h-full rounded-full bg-secondary" style="width: {{ $inspectionScore }}%"></div>
                     </div>
-                    <p class="mt-3 text-sm text-slate-500">Inspection confidence based on current room turnover state.</p>
+                    <p class="mt-3 text-sm text-slate-500">Inspection confidence based on current room cleaning and preparation state.</p>
                 </div>
 
                 <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
@@ -439,7 +439,7 @@
                                 <span>|</span>
                                 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base text-secondary">timer</span> Target: 30 minute release</span>
                                 <span>|</span>
-                                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base text-secondary">nest_thermostat</span> PMS Status: Connected</span>
+                                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base text-secondary">nest_thermostat</span> IHMP Status: Connected</span>
                             </div>
                         </div>
                         <div class="rounded-lg border border-secondary/30 bg-white px-4 py-2 text-right shadow-sm">
@@ -452,7 +452,7 @@
                     <div class="space-y-6 p-6">
                         <div class="flex flex-col justify-between gap-2 md:flex-row md:items-center">
                             <h3 class="text-lg font-bold">Five-Star Quality Verification Criteria</h3>
-                            <span class="text-xs text-slate-500">All sections must be validated before PMS handoff</span>
+                            <span class="text-xs text-slate-500">All sections must be validated before IHMP update</span>
                         </div>
 
                         <div class="space-y-4">
@@ -488,7 +488,7 @@
                             <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
                                 <h4 class="flex items-center gap-2 font-bold">
                                     <span class="material-symbols-outlined text-secondary">add_photo_alternate</span>
-                                    Photographic Proof of Readiness
+                                    Photographic Proof of Ready Status
                                 </h4>
                                 <span class="text-xs text-slate-500">Attach sign-off proof before release</span>
                             </div>
@@ -510,7 +510,7 @@
                                 <span>Supervisor Quality Observations & Attendant Feedback</span>
                                 <span class="text-xs font-normal text-slate-500">Logged into inspection record</span>
                             </label>
-                            <textarea class="w-full rounded-lg border-line bg-[#f6f3ed] p-3 text-sm focus:border-secondary focus:ring-secondary" rows="3" placeholder="Enter turnover observations...">@if ($inspectionTarget)Room {{ $inspectionTarget->room_number }} reviewed for release. Validate all visible room standards before changing status to available.@endif</textarea>
+                            <textarea class="w-full rounded-lg border-line bg-[#f6f3ed] p-3 text-sm focus:border-secondary focus:ring-secondary" rows="3" placeholder="Enter room cleaning observations...">@if ($inspectionTarget)Room {{ $inspectionTarget->room_number }} reviewed for release. Check all room standards before changing the status to available.@endif</textarea>
                         </div>
 
                         <div class="flex flex-col items-center justify-between gap-4 border-t border-line pt-5 sm:flex-row">
@@ -526,7 +526,7 @@
                                     </a>
                                     <a href="{{ route('rooms.edit', $inspectionTarget) }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90">
                                         <span class="material-symbols-outlined text-lg text-[#ffdeaa]">check_circle</span>
-                                        Approve & Release to PMS
+                                        Approve & Release to IHMP
                                     </a>
                                 @else
                                     <a href="{{ route('rooms.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90">
@@ -544,11 +544,11 @@
                         <div class="flex items-center gap-3">
                             <span class="material-symbols-outlined text-secondary">verified_user</span>
                             <div>
-                                <p class="text-sm font-bold">Continuous QA Verification Pipeline</p>
+                                <p class="text-sm font-bold">Continuous QA Verification Upcoming Bookings</p>
                                 <p class="text-xs text-slate-500">Rooms released from this page remain inside housekeeping access until status is updated.</p>
                             </div>
                         </div>
-                        <span class="flex items-center gap-1 text-xs font-bold text-secondary"><span class="material-symbols-outlined text-base">database</span>PMS APIs Online</span>
+                        <span class="flex items-center gap-1 text-xs font-bold text-secondary"><span class="material-symbols-outlined text-base">database</span>IHMP APIs Online</span>
                     </div>
                 </div>
             </div>
@@ -587,8 +587,8 @@
             ];
             $intercomNotes = [
                 ['source' => 'Front Desk Station', 'body' => $primaryPriorityRoom ? 'Expedite Room '.$primaryPriorityRoom->room_number.' for priority release.' : 'No priority release requests currently open.', 'time' => now()->subMinutes(7)->format('h:i A')],
-                ['source' => 'Housekeeping Lead', 'body' => $maintenanceHoldCount > 0 ? $maintenanceHoldCount.' maintenance hold '.Str::plural('room', $maintenanceHoldCount).' awaiting clearance.' : 'Maintenance queue is clear.', 'time' => now()->subMinutes(14)->format('h:i A')],
-                ['source' => 'Linen Depot', 'body' => $rushTurnoverCount > 0 ? 'Rush cart prepared for '.$rushTurnoverCount.' active turnover '.Str::plural('unit', $rushTurnoverCount).'.' : 'Rush cart on standby.', 'time' => now()->subMinutes(22)->format('h:i A')],
+                ['source' => 'Housekeeping Lead', 'body' => $maintenanceHoldCount > 0 ? $maintenanceHoldCount.' maintenance hold '.Str::plural('room', $maintenanceHoldCount).' awaiting clearance.' : 'Maintenance list is clear.', 'time' => now()->subMinutes(14)->format('h:i A')],
+                ['source' => 'Linen Storage', 'body' => $rushTurnoverCount > 0 ? 'Rush cart prepared for '.$rushTurnoverCount.' active cleaning '.Str::plural('unit', $rushTurnoverCount).'.' : 'Rush cart on standby.', 'time' => now()->subMinutes(22)->format('h:i A')],
             ];
         @endphp
 
@@ -598,13 +598,13 @@
                     <div>
                         <div class="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[#ffdeaa]">
                             <span class="material-symbols-outlined text-base">priority_high</span>
-                            Housekeeping Rush Readiness Command
+                            Housekeeping Rush Ready Status Command
                         </div>
-                        <h3 class="font-serif text-3xl font-bold">Priority Rooms &amp; Expedited Turnovers</h3>
+                        <h3 class="font-serif text-3xl font-bold">Priority Rooms &amp; Fast Cleaning</h3>
                         <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-200">Fast-track cleaning, maintenance release, and supervisor QA for rooms that need immediate housekeeping attention.</p>
                     </div>
                     <div class="rounded-lg border border-white/15 bg-white/10 p-4">
-                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Priority Queue</p>
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Priority List</p>
                         <p class="mt-1 font-serif text-4xl font-bold text-[#ffdeaa]">{{ $priorityQueue->count() }}</p>
                         <p class="text-xs text-slate-300">live {{ Str::plural('room', $priorityQueue->count()) }}</p>
                     </div>
@@ -613,7 +613,7 @@
                 <div class="grid gap-4 p-5 md:grid-cols-2 xl:grid-cols-4">
                     @foreach ([
                         ['label' => 'Critical Holds', 'value' => $maintenanceHoldCount, 'icon' => 'engineering', 'tone' => 'text-red-700', 'bar' => min(100, $maintenanceHoldCount * 25)],
-                        ['label' => 'Rush Turnovers', 'value' => $rushTurnoverCount, 'icon' => 'cleaning_services', 'tone' => 'text-orange-700', 'bar' => min(100, $rushTurnoverCount * 20)],
+                        ['label' => 'Rush Cleaning', 'value' => $rushTurnoverCount, 'icon' => 'cleaning_services', 'tone' => 'text-orange-700', 'bar' => min(100, $rushTurnoverCount * 20)],
                         ['label' => 'Ready Rooms', 'value' => $availableRooms, 'icon' => 'verified', 'tone' => 'text-emerald-700', 'bar' => $totalRooms ? round(($availableRooms / max($totalRooms, 1)) * 100) : 0],
                         ['label' => 'Primary Progress', 'value' => $priorityCompletion.'%', 'icon' => 'speed', 'tone' => 'text-secondary', 'bar' => $priorityCompletion],
                     ] as $metric)
@@ -642,7 +642,7 @@
                     </div>
                     <a href="{{ route('housekeeping.page', 'cleaning-tasks') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary/90">
                         <span class="material-symbols-outlined text-base text-[#ffdeaa]">bolt</span>
-                        Dispatch Backup Attendants
+                        Assignment Backup Attendants
                     </a>
                 </div>
             </div>
@@ -652,12 +652,12 @@
                     <div class="rounded-lg border border-line bg-white shadow-sm">
                         <div class="flex flex-col gap-3 border-b border-line p-5 md:flex-row md:items-center md:justify-between">
                             <div>
-                                <h3 class="font-serif text-2xl font-bold">Expedited Room Release Board</h3>
+                                <h3 class="font-serif text-2xl font-bold">Priority Room Cleaning List</h3>
                                 <p class="mt-1 text-sm text-slate-500">Rooms are pulled from live room statuses marked cleaning or maintenance.</p>
                             </div>
                             <div class="flex flex-wrap gap-2">
                                 <a href="{{ route('rooms.index', ['status' => 'maintenance']) }}" class="rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-xs font-bold text-primary hover:bg-line">Maintenance Holds</a>
-                                <a href="{{ route('rooms.index', ['status' => 'cleaning']) }}" class="rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-xs font-bold text-primary hover:bg-line">Cleaning Queue</a>
+                                <a href="{{ route('rooms.index', ['status' => 'cleaning']) }}" class="rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-xs font-bold text-primary hover:bg-line">Cleaning List</a>
                             </div>
                         </div>
 
@@ -665,7 +665,7 @@
                             @forelse ($priorityQueue as $room)
                                 @php
                                     $isMaintenance = $room->status === 'maintenance';
-                                    $statusLabel = $isMaintenance ? 'Maintenance Hold' : 'Expedited Turnover';
+                                    $statusLabel = $isMaintenance ? 'Under Maintenance' : 'Priority Room Preparation';
                                     $statusClass = $isMaintenance ? 'border-red-200 bg-red-50 text-red-800' : 'border-amber-300 bg-amber-100 text-amber-900';
                                     $progress = $isMaintenance ? min(65, 20 + ($loop->iteration * 8)) : min(95, 55 + ($loop->iteration * 9));
                                     $team = $dispatchTeams[($loop->iteration - 1) % count($dispatchTeams)];
@@ -681,7 +681,7 @@
                                                 @endif
                                             </div>
                                             <h4 class="font-serif text-2xl font-bold text-primary">Room {{ $room->room_number }} - {{ $room->room_type }}</h4>
-                                            <p class="mt-1 text-sm text-slate-600">{{ $room->description ?: ($isMaintenance ? 'Resolve maintenance clearance before front desk assignment.' : 'Turnover clean requested for immediate release.') }}</p>
+                                            <p class="mt-1 text-sm text-slate-600">{{ $room->description ?: ($isMaintenance ? 'Resolve maintenance clearance before front desk assignment.' : 'Room Preparation clean requested for immediate release.') }}</p>
                                         </div>
                                         <div class="rounded-lg border border-line bg-white px-4 py-3 text-right">
                                             <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Target Release</p>
@@ -709,14 +709,14 @@
 
                                     <div class="mt-4 rounded-lg border border-line bg-white p-3">
                                         <div class="mb-2 flex items-center justify-between text-xs">
-                                            <span class="font-bold uppercase tracking-wider text-slate-500">Readiness Progress</span>
+                                            <span class="font-bold uppercase tracking-wider text-slate-500">Ready Status Progress</span>
                                             <span class="font-bold text-secondary">{{ $progress }}%</span>
                                         </div>
                                         <div class="h-2 overflow-hidden rounded-full bg-line"><div class="h-full rounded-full {{ $isMaintenance ? 'bg-red-600' : 'bg-secondary' }}" style="width: {{ $progress }}%"></div></div>
                                         <div class="mt-3 grid gap-2 text-xs md:grid-cols-3">
                                             <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f6f3ed] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Linen cart staged</span>
-                                            <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f6f3ed] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Supervisor QA required</span>
-                                            <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f6f3ed] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Front desk handoff pending</span>
+                                            <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f6f3ed] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Supervisor inspection required</span>
+                                            <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f6f3ed] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Front Desk update pending</span>
                                         </div>
                                     </div>
 
@@ -745,7 +745,7 @@
                 <aside class="space-y-5 xl:col-span-4">
                     <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
                         <div class="flex items-center justify-between border-b border-line pb-3">
-                            <h3 class="flex items-center gap-2 font-bold"><span class="material-symbols-outlined text-secondary">forum</span>Front Desk Intercom Stream</h3>
+                            <h3 class="flex items-center gap-2 font-bold"><span class="material-symbols-outlined text-secondary">forum</span>Front Desk Messages</h3>
                             <span class="rounded bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700">Live</span>
                         </div>
                         <div class="mt-4 space-y-3">
@@ -762,16 +762,16 @@
                     </div>
 
                     <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold"><span class="material-symbols-outlined text-secondary">room_service</span>Expedite Depot Carts</h3>
+                        <h3 class="flex items-center gap-2 font-bold"><span class="material-symbols-outlined text-secondary">room_service</span>Priority Supply Carts</h3>
                         <div class="mt-4 space-y-2 text-sm">
                             <div class="flex justify-between rounded-lg border border-line bg-[#f6f3ed] px-3 py-2"><span>Rush Linen Cart</span><strong class="text-emerald-700">{{ $rushTurnoverCount > 0 ? 'Ready' : 'Standby' }}</strong></div>
-                            <div class="flex justify-between rounded-lg border border-line bg-[#f6f3ed] px-3 py-2"><span>Maintenance Kit</span><strong class="{{ $maintenanceHoldCount > 0 ? 'text-red-700' : 'text-emerald-700' }}">{{ $maintenanceHoldCount > 0 ? 'Dispatch' : 'Clear' }}</strong></div>
-                            <div class="flex justify-between rounded-lg border border-line bg-[#f6f3ed] px-3 py-2"><span>QA Tablet</span><strong class="text-secondary">Synced</strong></div>
+                            <div class="flex justify-between rounded-lg border border-line bg-[#f6f3ed] px-3 py-2"><span>Maintenance Kit</span><strong class="{{ $maintenanceHoldCount > 0 ? 'text-red-700' : 'text-emerald-700' }}">{{ $maintenanceHoldCount > 0 ? 'Assignment' : 'Clear' }}</strong></div>
+                            <div class="flex justify-between rounded-lg border border-line bg-[#f6f3ed] px-3 py-2"><span>Inspection Tablet</span><strong class="text-secondary">Synced</strong></div>
                         </div>
                     </div>
 
                     <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">assignment_late</span>Priority SLA Summary</h3>
+                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">assignment_late</span>Priority Response Time Summary</h3>
                         <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
                             <div class="rounded-lg bg-white/10 p-3">
                                 <p class="text-[11px] uppercase tracking-wider text-slate-300">Open</p>
@@ -813,8 +813,8 @@
                             <span class="h-2.5 w-2.5 rounded-full bg-secondary"></span>
                             Subic Bay Operational Desk
                         </div>
-                        <h3 class="font-serif text-3xl font-bold text-primary">Unit Turnover &amp; Cleaning Tasks Queue</h3>
-                        <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Real-time room cleaning roster, turnover stages, housekeeping assignments, and sanitization progress from live room inventory.</p>
+                        <h3 class="font-serif text-3xl font-bold text-primary">Unit Room Preparation &amp; Cleaning Tasks List</h3>
+                        <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Current room cleaning list and work stages, housekeeping assignments, and sanitization progress from live room inventory.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
                         @foreach ([['Main Wing', $totalRooms], ['Ocean Wing', $occupiedRooms], ['Executive Villas', $maintenanceQueue->count()]] as [$wing, $count])
@@ -830,7 +830,7 @@
                     @foreach ([
                         ['label' => 'Active Cleaning Units', 'value' => $activeCleaningCount, 'icon' => 'cleaning_services', 'tone' => 'text-orange-700'],
                         ['label' => 'Rush / Priority Rooms', 'value' => $rushCount, 'icon' => 'notification_important', 'tone' => 'text-red-700'],
-                        ['label' => 'Pending QA Review', 'value' => $qaQueue, 'icon' => 'fact_check', 'tone' => 'text-secondary'],
+                        ['label' => 'Pending Room Inspection', 'value' => $qaQueue, 'icon' => 'fact_check', 'tone' => 'text-secondary'],
                         ['label' => 'Shift Completion', 'value' => $completionRate . '%', 'icon' => 'speed', 'tone' => 'text-emerald-700'],
                     ] as $metric)
                         <div class="rounded-lg border border-line bg-[#fdfcfa] p-4">
@@ -850,7 +850,7 @@
                         <div class="flex flex-col gap-3 border-b border-line p-4 lg:flex-row lg:items-center lg:justify-between">
                             <div>
                                 <h3 class="font-serif text-2xl font-bold">Live Cleaning Task Board</h3>
-                                <p class="mt-1 text-sm text-slate-500">Showing {{ $activeCleaningCount }} active room turnover {{ Str::plural('task', $activeCleaningCount) }} from the rooms table.</p>
+                                <p class="mt-1 text-sm text-slate-500">Showing {{ $activeCleaningCount }} active room cleaning and preparation {{ Str::plural('task', $activeCleaningCount) }} from the rooms table.</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
                                 <a href="{{ route('rooms.index', ['status' => 'cleaning']) }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-xs font-bold text-primary hover:bg-line">
@@ -881,7 +881,7 @@
                                     @forelse ($cleaningQueue as $room)
                                         @php
                                             $progress = min(95, 25 + ($loop->iteration * 15));
-                                            $stage = $loop->first ? 'In Progress' : ($loop->iteration % 3 === 0 ? 'Pending Inspection' : 'Queued');
+                                            $stage = $loop->first ? 'In Progress' : ($loop->iteration % 3 === 0 ? 'For Inspection' : 'Waiting');
                                             $stageClass = $stage === 'In Progress'
                                                 ? 'border-amber-300 bg-amber-100 text-amber-900'
                                                 : ($stage === 'Pending Inspection' ? 'border-purple-200 bg-purple-50 text-purple-900' : 'border-line bg-[#f6f3ed] text-slate-600');
@@ -899,12 +899,12 @@
                                             </td>
                                             <td class="px-3 py-3">
                                                 <p class="font-semibold text-primary">{{ $room->room_type }}</p>
-                                                <p class="text-xs text-slate-500">{{ $room->description ?: 'Vacant dirty turnover' }}</p>
+                                                <p class="text-xs text-slate-500">{{ $room->description ?: 'Vacant room for cleaning' }}</p>
                                             </td>
                                             <td class="px-3 py-3">
                                                 <span class="inline-flex items-center gap-1 font-bold text-primary">
                                                     <span class="material-symbols-outlined text-sm text-secondary">sanitizer</span>
-                                                    Full Turnover
+                                                    Full Room Preparation
                                                 </span>
                                             </td>
                                             <td class="px-3 py-3">
@@ -921,7 +921,7 @@
                                             </td>
                                             <td class="px-3 py-3">
                                                 <div class="w-28">
-                                                    <div class="mb-1 flex justify-between text-[11px] text-slate-500"><span>{{ $progress }}%</span><span>SLA</span></div>
+                                                    <div class="mb-1 flex justify-between text-[11px] text-slate-500"><span>{{ $progress }}%</span><span>Response Time</span></div>
                                                     <div class="h-1.5 overflow-hidden rounded-full bg-line"><div class="h-full rounded-full bg-secondary" style="width: {{ $progress }}%"></div></div>
                                                 </div>
                                             </td>
@@ -1001,7 +1001,7 @@
                 ['name' => 'Elena Dimaculangan', 'initials' => 'ED', 'tone' => 'bg-emerald-800'],
             ];
             $requestTemplates = [
-                ['priority' => 'Critical Priority', 'class' => 'border-red-200 bg-red-50 text-red-800', 'accent' => 'bg-red-600', 'sla' => '10 mins', 'remaining' => '05:40', 'item' => 'Extra Percale Duvet', 'detail' => 'King size linen set with hypoallergenic pillows', 'icon' => 'bed', 'source' => 'Front Desk Concierge'],
+                ['priority' => 'Critical Priority', 'class' => 'border-red-200 bg-red-50 text-red-800', 'accent' => 'bg-red-600', 'sla' => '10 mins', 'remaining' => '05:40', 'item' => 'Extra Percale Duvet', 'detail' => 'King size linen set with hypoallergenic pillows', 'icon' => 'bed', 'source' => 'Front Desk Guest Service'],
                 ['priority' => 'Moderate Priority', 'class' => 'border-amber-300 bg-amber-100 text-amber-900', 'accent' => 'bg-secondary', 'sla' => '15 mins', 'remaining' => '10:15', 'item' => 'Bathrobes & Premium Towels', 'detail' => 'Two robe sets with fresh bath towel bundle', 'icon' => 'dry_cleaning', 'source' => 'Guest Mobile Request'],
                 ['priority' => 'Standard Request', 'class' => 'border-line bg-[#f6f3ed] text-slate-700', 'accent' => 'bg-slate-400', 'sla' => '25 mins', 'remaining' => '18:30', 'item' => 'Toiletry Amenity Pack', 'detail' => 'Dental kits, shaving kit, slippers, and bottled water', 'icon' => 'styler', 'source' => 'In-Room Tablet'],
             ];
@@ -1013,12 +1013,12 @@
             <div class="flex flex-col gap-4 border-b border-line pb-5 xl:flex-row xl:items-center xl:justify-between">
                 <div>
                     <div class="mb-2 flex flex-wrap items-center gap-2">
-                        <span class="text-xs font-bold uppercase tracking-[0.22em] text-secondary">Housekeeping Command Terminal</span>
+                        <span class="text-xs font-bold uppercase tracking-[0.22em] text-secondary">Housekeeping Service Desk</span>
                         <span class="h-1 w-1 rounded-full bg-line"></span>
-                        <span class="rounded-full border border-amber-300 bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-800">Live SLA Active</span>
+                        <span class="rounded-full border border-amber-300 bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-800">Live Response Time Active</span>
                     </div>
                     <h3 class="font-serif text-3xl font-bold text-primary">Guest Service Requests &amp; In-Room Amenities Delivery</h3>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Live dispatch terminal for guest-requested linens, toiletries, extra duvets, and amenity deliveries. Occupied rooms are shown as eligible request channels.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Current request page for guest-requested linens, toiletries, extra duvets, and amenity deliveries. Occupied rooms are shown as eligible request channels.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     @foreach (['All', 'Urgent', 'Moderate', 'Standard'] as $filter)
@@ -1035,8 +1035,8 @@
 
             <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 @foreach ([
-                    ['label' => 'Active Requests', 'value' => $activeRequests, 'caption' => 'Queued from occupied rooms', 'icon' => 'pending_actions', 'tone' => 'text-primary', 'bar' => 'bg-primary'],
-                    ['label' => 'SLA Breach Risk', 'value' => $maintenanceQueue->count(), 'caption' => 'maintenance-linked risk', 'icon' => 'timer', 'tone' => 'text-secondary', 'bar' => 'bg-secondary'],
+                    ['label' => 'Active Requests', 'value' => $activeRequests, 'caption' => 'Waiting requests from occupied rooms', 'icon' => 'pending_actions', 'tone' => 'text-primary', 'bar' => 'bg-primary'],
+                    ['label' => 'Delayed Request Risk', 'value' => $maintenanceQueue->count(), 'caption' => 'maintenance-linked risk', 'icon' => 'timer', 'tone' => 'text-secondary', 'bar' => 'bg-secondary'],
                     ['label' => 'Most Requested Item', 'value' => 'Linen', 'caption' => 'Extra duvets and towels', 'icon' => 'bed', 'tone' => 'text-slate-700', 'bar' => 'bg-slate-500'],
                     ['label' => 'Attendants on Run', 'value' => $runnerCount, 'caption' => 'dedicated runners active', 'icon' => 'directions_walk', 'tone' => 'text-emerald-700', 'bar' => 'bg-emerald-600'],
                 ] as $metric)
@@ -1055,12 +1055,12 @@
             <section class="space-y-4">
                 <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                     <div class="flex flex-wrap items-center gap-2">
-                        <h3 class="font-serif text-2xl font-bold text-primary">Live Request Dispatch Board</h3>
-                        <span class="rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-white">{{ $activeRequests }} In Transit / Queued</span>
+                        <h3 class="font-serif text-2xl font-bold text-primary">Live Request Assignment Board</h3>
+                        <span class="rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-white">{{ $activeRequests }} Being Delivered / Waiting</span>
                     </div>
                     <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
                         <span class="material-symbols-outlined text-base text-emerald-600">sensors</span>
-                        Subic Bay IoT Dispatch Relay Connected
+                        Task update connection active
                     </div>
                 </div>
 
@@ -1108,7 +1108,7 @@
                             <div class="border-b border-line pb-4 lg:col-span-2 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-4">
                                 <p class="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-slate-500">
                                     <span class="material-symbols-outlined text-sm text-secondary">timer</span>
-                                    SLA Target: {{ $template['sla'] }}
+                                    Response Time Target: {{ $template['sla'] }}
                                 </p>
                                 <div class="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-3 py-1 text-amber-900">
                                     <span class="font-serif text-xl font-bold">{{ $template['remaining'] }}</span>
@@ -1118,7 +1118,7 @@
                                     <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Current Status</p>
                                     <p class="mt-1 flex items-center gap-1.5 text-xs font-bold text-primary">
                                         <span class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
-                                        Dispatched from Linen Depot
+                                        Dispatched from Linen Storage
                                     </p>
                                     <p class="mt-1 text-[11px] text-slate-500">Assigned: <strong class="text-primary">{{ $attendant['name'] }}</strong></p>
                                 </div>
@@ -1155,7 +1155,7 @@
                 <div class="flex flex-col gap-3 border-b border-line pb-4 md:flex-row md:items-center md:justify-between">
                     <div>
                         <h3 class="font-serif text-2xl font-bold text-primary">Completed Requests Log &amp; Confirmation Signatures</h3>
-                        <p class="mt-1 text-sm text-slate-500">Recent room updates are used as the housekeeping confirmation ledger until request records are separated into their own table.</p>
+                        <p class="mt-1 text-sm text-slate-500">Recent room updates are used as the housekeeping confirmation record until request records are separated into their own table.</p>
                     </div>
                     <div class="flex gap-2">
                         <button type="button" class="rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">Export Billing CSV</button>
@@ -1234,7 +1234,7 @@
             $protocols = [
                 ['label' => 'White Glove Ozone Deodorization', 'apparatus' => 'BioZone Pro UV/Ozone Generator', 'trigger' => 'Post-occupancy odor remediation', 'status' => 'Room Sealed - Safety Lock Active', 'class' => 'border-red-200 bg-red-50 text-red-800', 'accent' => 'bg-gradient-to-r from-red-600 via-secondary to-primary', 'progress' => 63],
                 ['label' => 'Carpet & Upholstery Hot-Water Extraction', 'apparatus' => 'Deep Extractor + Citrus pH Cleaner', 'trigger' => 'Scheduled deep-clean cycle', 'status' => 'Drying - Air Movers Active', 'class' => 'border-amber-300 bg-amber-100 text-amber-900', 'accent' => 'bg-secondary', 'progress' => 48],
-                ['label' => 'Post-Maintenance Allergen Shield Misting', 'apparatus' => 'BioCide Hypoallergenic Mist', 'trigger' => 'Engineering handoff sanitization', 'status' => 'Ready for Final Air Quality Inspection', 'class' => 'border-emerald-200 bg-emerald-50 text-emerald-800', 'accent' => 'bg-emerald-700', 'progress' => 86],
+                ['label' => 'Post-Maintenance Allergen Shield Misting', 'apparatus' => 'BioCide Hypoallergenic Mist', 'trigger' => 'Cleaning after maintenance', 'status' => 'Ready for Final Air Quality Inspection', 'class' => 'border-emerald-200 bg-emerald-50 text-emerald-800', 'accent' => 'bg-emerald-700', 'progress' => 86],
             ];
             $specialists = ['Danilo Ramos', 'Teresa Mendoza', 'Manuel Quezon', 'Elena Dimaculangan'];
         @endphp
@@ -1249,8 +1249,8 @@
                         <span class="material-symbols-outlined text-sm">chevron_right</span>
                         <span class="text-primary">Special Cleaning &amp; Sanitization</span>
                     </div>
-                    <h3 class="font-serif text-3xl font-bold text-primary">Specialized Cleaning &amp; Environmental Sanitization Protocol</h3>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Management of ozone treatments, upholstery extraction, hypoallergenic misting, post-maintenance deep scrubs, and room release certification.</p>
+                    <h3 class="font-serif text-3xl font-bold text-primary">Special Cleaning &amp; Room Sanitation</h3>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage ozone treatment, furniture cleaning, allergy-friendly cleaning, deep cleaning after repairs, and final room inspection.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <a href="{{ route('rooms.index', ['status' => 'maintenance']) }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-primary/90">
@@ -1262,7 +1262,7 @@
 
             <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 @foreach ([
-                    ['label' => 'Scheduled Treatments', 'value' => $scheduledTreatmentCount, 'caption' => 'rooms in cleaning or maintenance queue', 'icon' => 'event_note', 'tone' => 'text-primary', 'bar' => 'bg-primary'],
+                    ['label' => 'Scheduled Treatments', 'value' => $scheduledTreatmentCount, 'caption' => 'rooms in cleaning or maintenance list', 'icon' => 'event_note', 'tone' => 'text-primary', 'bar' => 'bg-primary'],
                     ['label' => 'In-Treatment Locked', 'value' => $inTreatmentCount, 'caption' => 'off-market maintenance holds', 'icon' => 'lock_clock', 'tone' => 'text-red-700', 'bar' => 'bg-red-600'],
                     ['label' => 'Completed Today', 'value' => $completedThisWeek, 'caption' => 'room status confirmations', 'icon' => 'task_alt', 'tone' => 'text-secondary', 'bar' => 'bg-secondary'],
                     ['label' => 'Air Quality Index', 'value' => $scheduledTreatmentCount > 0 ? '99.8%' : 'Clear', 'caption' => 'Subic CleanStandard sensor sync', 'icon' => 'air', 'tone' => 'text-emerald-700', 'bar' => 'bg-emerald-700'],
@@ -1285,11 +1285,11 @@
                 <div class="space-y-5 xl:col-span-8">
                     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <div class="flex flex-wrap items-center gap-2">
-                            <h3 class="font-serif text-2xl font-bold text-primary">Active Specialized Cleanings</h3>
+                            <h3 class="font-serif text-2xl font-bold text-primary">Active Special Cleaning Tasks</h3>
                             <span class="rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-[#ffdeaa]">Live Chamber Feeds</span>
                         </div>
                         <div class="flex flex-wrap gap-2 text-xs">
-                            @foreach (['All Protocols', 'Ozone Only', 'Bio-Extract'] as $filter)
+                            @foreach (['All Cleaning Methods', 'Ozone Only', 'Deep Cleaning'] as $filter)
                                 <button type="button" class="{{ $loop->first ? 'bg-white text-primary' : 'text-slate-500 hover:text-primary' }} rounded border {{ $loop->first ? 'border-line' : 'border-transparent' }} px-3 py-1.5 font-bold">{{ $filter }}</button>
                             @endforeach
                         </div>
@@ -1314,7 +1314,7 @@
                                             <h4 class="font-serif text-2xl font-bold text-primary">Room {{ $room->room_number }} - {{ $room->room_type }}</h4>
                                             <span class="rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase {{ $protocol['class'] }}">{{ ucfirst($room->status) }}</span>
                                         </div>
-                                        <p class="mt-1 text-sm text-slate-600"><strong class="text-primary">Protocol:</strong> {{ $protocol['label'] }}</p>
+                                        <p class="mt-1 text-sm text-slate-600"><strong class="text-primary">Cleaning Method:</strong> {{ $protocol['label'] }}</p>
                                     </div>
                                 </div>
                                 <div class="text-left md:text-right">
@@ -1335,7 +1335,7 @@
                                 <div class="rounded-lg border border-line bg-[#f6f3ed] p-3">
                                     <p class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500"><span class="material-symbols-outlined text-sm text-secondary">precision_manufacturing</span>Hardware Apparatus</p>
                                     <p class="mt-2 text-sm font-bold text-primary">{{ $protocol['apparatus'] }}</p>
-                                    <p class="mt-1 text-[11px] text-emerald-700">Telemetry: output optimal</p>
+                                    <p class="mt-1 text-[11px] text-emerald-700">System Status: output optimal</p>
                                 </div>
                                 <div class="rounded-lg border border-line bg-[#f6f3ed] p-3">
                                     <p class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500"><span class="material-symbols-outlined text-sm text-secondary">badge</span>Assigned Specialist</p>
@@ -1411,7 +1411,7 @@
                     </div>
 
                     <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">sensors</span>Environmental Telemetry</h3>
+                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">sensors</span>Environmental System Status</h3>
                         <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
                             <div class="rounded-lg bg-white/10 p-3">
                                 <p class="text-[11px] uppercase tracking-wider text-slate-300">Humidity</p>
@@ -1443,7 +1443,7 @@
             $occupiedCount = (int) $occupiedRooms;
             $issueCatalog = [
                 ['title' => 'HVAC Freon Compressor Leak / Thermostat Drift', 'icon' => 'ac_unit', 'category' => 'HVAC & Climate', 'note' => 'Ambient room temperature and air-conditioning readings need engineering verification before the room can be released.'],
-                ['title' => 'IoT Deadbolt Latch Mismatch', 'icon' => 'lock_clock', 'category' => 'IoT Lock & Keycard', 'note' => 'Door lock, RFID encoder, or latch telemetry requires a maintenance inspection and housekeeping clearance.'],
+                ['title' => 'Door Lock Problem', 'icon' => 'lock_clock', 'category' => 'Door Lock & Keycard', 'note' => 'Door lock, Keycard encoder, or door lock status requires a maintenance inspection and housekeeping clearance.'],
                 ['title' => 'Balcony Sliding Glass Track Jammed', 'icon' => 'door_sliding', 'category' => 'Furniture & Balcony', 'note' => 'Track, handle, or balcony hardware needs facilities follow-up before assigning the room to arriving guests.'],
             ];
             $engineers = ['Engr. Danilo Ramos', 'Engr. Patricia Velasco', 'Engr. Carlo Reyes'];
@@ -1460,13 +1460,13 @@
                                 Real-time Facilities Synced
                             </span>
                         </div>
-                        <h2 class="font-serif text-4xl font-bold leading-tight text-white">Maintenance Requests &amp; Engineering Dispatch Queue</h2>
+                        <h2 class="font-serif text-4xl font-bold leading-tight text-white">Maintenance Requests &amp; Engineering Assignment List</h2>
                         <p class="text-sm leading-6 text-slate-200">Defects, hardware anomalies, and out-of-order rooms reported for facilities and engineering follow-up.</p>
                     </div>
                     <div class="flex flex-wrap gap-3">
                         <a href="{{ route('housekeeping.page', 'room-status') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/15">
                             <span class="material-symbols-outlined text-base text-[#ffdeaa]">grid_view</span>
-                            Open Room Status Matrix
+                            Open Room Status Table
                         </a>
                         <a href="{{ route('housekeeping.page', 'report-issue') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#5b4313]">
                             <span class="material-symbols-outlined text-base">assignment_add</span>
@@ -1474,7 +1474,7 @@
                         </a>
                         <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-red-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-red-800">
                             <span class="material-symbols-outlined text-base">bolt</span>
-                            Emergency Dispatch
+                            Emergency Assignment
                         </a>
                     </div>
                 </div>
@@ -1483,11 +1483,11 @@
             <section class="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
                 @foreach ([
                     ['label' => 'Total Rooms', 'value' => $totalRooms, 'caption' => 'Housekeeping cohort', 'icon' => 'hotel', 'tone' => 'text-primary'],
-                    ['label' => 'Available', 'value' => $availableCount, 'caption' => $totalRooms ? round(($availableCount / max($totalRooms, 1)) * 100, 1) . '% fleet ready' : 'No rooms encoded', 'icon' => 'check_circle', 'tone' => 'text-emerald-700'],
+                    ['label' => 'Available', 'value' => $availableCount, 'caption' => $totalRooms ? round(($availableCount / max($totalRooms, 1)) * 100, 1) . '% fleet ready' : 'No rooms added', 'icon' => 'check_circle', 'tone' => 'text-emerald-700'],
                     ['label' => 'Occupied', 'value' => $occupiedCount, 'caption' => $occupiedRoom ? 'Stayover: Room ' . $occupiedRoom->room_number : 'No active stayovers', 'icon' => 'key', 'tone' => 'text-primary'],
                     ['label' => 'Cleaning', 'value' => $cleaningRooms->count(), 'caption' => $cleaningRooms->count() ? 'Active turns' : 'All turns complete', 'icon' => 'mop', 'tone' => 'text-secondary'],
                     ['label' => 'Active Tickets', 'value' => $activeTickets, 'caption' => $criticalRooms ? $criticalRooms . ' maintenance room' . ($criticalRooms === 1 ? '' : 's') : 'No frozen rooms', 'icon' => 'engineering', 'tone' => $activeTickets ? 'text-red-700' : 'text-emerald-700'],
-                    ['label' => 'Avg SLA Time', 'value' => $activeTickets ? '14m' : '0m', 'caption' => $activeTickets ? 'within target SLA' : 'no open queue', 'icon' => 'timer', 'tone' => 'text-primary'],
+                    ['label' => 'Average Response Time', 'value' => $activeTickets ? '14m' : '0m', 'caption' => $activeTickets ? 'within response target' : 'no open requests', 'icon' => 'timer', 'tone' => 'text-primary'],
                 ] as $metric)
                     <div class="rounded-lg border {{ $metric['label'] === 'Active Tickets' ? 'border-secondary/50' : 'border-line' }} bg-white p-4 shadow-sm">
                         <div class="flex items-center justify-between">
@@ -1516,7 +1516,7 @@
                                     <span class="material-symbols-outlined absolute left-2.5 top-2.5 text-sm text-secondary">search</span>
                                     <input type="text" class="w-56 rounded-md border border-line bg-white py-2 pl-8 pr-3 text-xs text-primary focus:border-secondary focus:ring-secondary" placeholder="Filter room or WO#">
                                 </div>
-                                <a href="{{ route('housekeeping.page', 'maintenance-requests') }}" class="rounded-md border border-line bg-white p-2 text-slate-500 hover:text-primary" title="Reload Queue">
+                                <a href="{{ route('housekeeping.page', 'maintenance-requests') }}" class="rounded-md border border-line bg-white p-2 text-slate-500 hover:text-primary" title="Reload List">
                                     <span class="material-symbols-outlined text-sm">sync</span>
                                 </a>
                             </div>
@@ -1582,7 +1582,7 @@
                                 <div class="px-6 py-16 text-center">
                                     <span class="material-symbols-outlined text-5xl text-slate-300">engineering</span>
                                     <h4 class="mt-3 font-serif text-2xl font-bold text-primary">No maintenance work orders waiting</h4>
-                                    <p class="mt-1 text-sm text-slate-500">New reports from housekeeping will appear in this queue.</p>
+                                    <p class="mt-1 text-sm text-slate-500">New reports from housekeeping will appear in this list.</p>
                                     <a href="{{ route('housekeeping.page', 'report-issue') }}" class="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#0d2238]">
                                         <span class="material-symbols-outlined text-base">assignment_add</span>
                                         Report First Issue
@@ -1598,7 +1598,7 @@
                         <div class="flex items-center justify-between border-b border-line pb-3">
                             <div>
                                 <p class="text-[11px] font-bold uppercase tracking-wider text-secondary">Express Incident Console</p>
-                                <h3 class="font-serif text-2xl font-bold text-primary">Dispatch Work Order</h3>
+                                <h3 class="font-serif text-2xl font-bold text-primary">Assignment Work Order</h3>
                             </div>
                             <span class="material-symbols-outlined text-secondary">construction</span>
                         </div>
@@ -1609,7 +1609,7 @@
                                     @forelse ($allRooms as $room)
                                         <option>Room {{ $room->room_number }} - {{ $room->room_type }} ({{ ucfirst($room->status) }})</option>
                                     @empty
-                                        <option>No rooms encoded</option>
+                                        <option>No rooms added</option>
                                     @endforelse
                                 </select>
                             </label>
@@ -1625,11 +1625,11 @@
                                 </div>
                             </div>
                             <label class="block">
-                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Defect Telemetry / Staff Note</span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Defect System Status / Staff Note</span>
                                 <textarea rows="4" class="mt-1 w-full rounded-lg border-line text-sm focus:border-secondary focus:ring-secondary" placeholder="Describe issue, affected fixture, guest impact, and urgency..."></textarea>
                             </label>
                             <label class="flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-primary">
-                                Immediate PMS Room Freeze
+                                Immediate IHMP Room Freeze
                                 <input type="checkbox" class="rounded border-line text-secondary focus:ring-secondary" checked>
                             </label>
                             <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#0d2238]">
@@ -1655,11 +1655,11 @@
                     </div>
 
                     <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">query_stats</span>Facilities Snapshot</h3>
+                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">query_stats</span>Facilities Summary</h3>
                         <div class="mt-4 space-y-3 text-sm">
                             <div class="flex justify-between border-b border-white/10 pb-2"><span>Total rooms</span><strong>{{ $totalRooms }}</strong></div>
-                            <div class="flex justify-between border-b border-white/10 pb-2"><span>Maintenance queue</span><strong>{{ $maintenanceQueue->count() }}</strong></div>
-                            <div class="flex justify-between border-b border-white/10 pb-2"><span>Cleaning queue</span><strong>{{ $cleaningRooms->count() }}</strong></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span>Maintenance list</span><strong>{{ $maintenanceQueue->count() }}</strong></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span>Cleaning list</span><strong>{{ $cleaningRooms->count() }}</strong></div>
                             <div class="flex justify-between"><span>Priority rooms</span><strong>{{ $priorityRooms->count() }}</strong></div>
                         </div>
                         <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#5b4313]">
@@ -1678,7 +1678,7 @@
             $categories = [
                 ['label' => 'HVAC & Climate', 'hint' => 'Aircon, thermostat, air', 'icon' => 'mode_fan', 'active' => true],
                 ['label' => 'Plumbing & Water', 'hint' => 'Pressure, drains, leaks', 'icon' => 'faucet', 'active' => false],
-                ['label' => 'IoT Lock & Keycard', 'hint' => 'Deadbolts, RFID, latch', 'icon' => 'lock_clock', 'active' => false],
+                ['label' => 'Door Lock & Keycard', 'hint' => 'Deadbolts, Keycard, latch', 'icon' => 'lock_clock', 'active' => false],
                 ['label' => 'Electrical & Lights', 'hint' => 'Fixtures, outlets, panels', 'icon' => 'lightbulb', 'active' => false],
                 ['label' => 'Furniture & Balcony', 'hint' => 'Joinery, glass sliders', 'icon' => 'deck', 'active' => false],
                 ['label' => 'Smart TV & Media', 'hint' => 'IPTV, casting, remote', 'icon' => 'tv', 'active' => false],
@@ -1694,7 +1694,7 @@
                         Maintenance Issue Report
                     </div>
                     <h3 class="font-serif text-3xl font-bold text-primary">Report Maintenance Defect or Room Discrepancy</h3>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Record a room problem and place the room in the maintenance queue shared with Front Desk and Housekeeping.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Record a room problem and place the room in the maintenance list shared with Front Desk and Housekeeping.</p>
                 </div>
                 <span class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-slate-600">
                     <span class="material-symbols-outlined text-base text-secondary">database</span>
@@ -1743,7 +1743,7 @@
                                 </div>
                                 <div class="mt-1.5 flex flex-col gap-1 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
                                     <span>Selected status: <strong id="reportSelectedStatus" class="font-semibold text-secondary">{{ $selectedReportRoom ? ucfirst($selectedReportRoom->status) : 'N/A' }}</strong></span>
-                                    <span>Submitting will move the room to maintenance queue.</span>
+                                    <span>Submitting will move the room to maintenance list.</span>
                                 </div>
                             </div>
 
@@ -1765,17 +1765,17 @@
 
                         <section class="rounded-lg border border-line bg-white p-5 shadow-sm">
                             <div class="mb-4 flex items-center justify-between border-b border-line pb-3">
-                                <h3 class="flex items-center gap-2 font-bold text-primary"><span class="material-symbols-outlined text-secondary">speed</span>Severity Matrix &amp; Incident Scope</h3>
+                                <h3 class="flex items-center gap-2 font-bold text-primary"><span class="material-symbols-outlined text-secondary">speed</span>Severity Table &amp; Incident Scope</h3>
                                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Step 2 of 3</span>
                             </div>
 
                             <div>
-                                <label class="mb-2.5 block text-sm font-bold text-primary">Dispatch Urgency Level <span class="text-red-700">*</span></label>
+                                <label class="mb-2.5 block text-sm font-bold text-primary">Assignment Urgency Level <span class="text-red-700">*</span></label>
                                 <div class="grid gap-3 sm:grid-cols-2">
                                     @foreach ([
                                         ['value' => 'low', 'title' => 'Low Priority', 'tag' => 'Routine PM', 'copy' => 'Non-intrusive cosmetic or scheduled preventative maintenance.', 'class' => 'border-line bg-white'],
-                                        ['value' => 'medium', 'title' => 'Medium Priority', 'tag' => 'Turnover Window', 'copy' => 'Rectify during room turnover before next guest arrival.', 'class' => 'border-line bg-white'],
-                                        ['value' => 'high', 'title' => 'High Priority', 'tag' => 'Guest In-House', 'copy' => 'Guest comfort impaired. Requires rapid dispatch.', 'class' => 'border-secondary bg-[#ffdeaa]/20'],
+                                        ['value' => 'medium', 'title' => 'Medium Priority', 'tag' => 'Room Preparation Window', 'copy' => 'Rectify during room cleaning and preparation before next guest arrival.', 'class' => 'border-line bg-white'],
+                                        ['value' => 'high', 'title' => 'High Priority', 'tag' => 'Guest In-House', 'copy' => 'Guest comfort impaired. Needs immediate attention.', 'class' => 'border-secondary bg-[#ffdeaa]/20'],
                                         ['value' => 'critical', 'title' => 'Critical Emergency', 'tag' => 'Stop Sales', 'copy' => 'Water flood, fire safety, or major structural failure.', 'class' => 'border-red-300 bg-red-50'],
                                     ] as $severity)
                                         <label class="flex cursor-pointer items-start gap-3 rounded-lg border p-3.5 {{ $severity['class'] }}">
@@ -1803,12 +1803,12 @@
                                         'Deadbolt sensor jammed and unable to lock',
                                         'Balcony sliding glass door stuck off track',
                                         'Bathroom vanity sink slow drain',
-                                        'Keycard RFID reader blinking red',
+                                        'Keycard Keycard reader blinking red',
                                     ] as $preset)
                                         <button type="button" class="issue-preset rounded-full border border-line bg-[#f6f3ed] px-2.5 py-1 text-xs text-slate-600 hover:border-secondary hover:text-secondary" data-preset="{{ $preset }}">+ {{ $preset }}</button>
                                     @endforeach
                                 </div>
-                                <textarea id="defectDescription" name="description" rows="4" required class="w-full rounded-lg border-line bg-white p-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="Specify observations, readings, sounds, error codes, and guest interaction notes...">Maintenance issue reported by housekeeping: HVAC/climate defect affecting guest comfort. Please dispatch Engineering for inspection.</textarea>
+                                <textarea id="defectDescription" name="description" rows="4" required class="w-full rounded-lg border-line bg-white p-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="Specify observations, readings, sounds, error codes, and guest interaction notes...">Maintenance issue reported by housekeeping: HVAC/climate defect affecting guest comfort. Please ask Maintenance to inspect it.</textarea>
                             </div>
 
                             <div class="mt-5">
@@ -1819,19 +1819,19 @@
                                     <p class="mt-1 text-xs text-slate-500">Evidence capture is represented here; image upload storage can be connected when file persistence is added.</p>
                                     <div class="mt-3 flex flex-wrap justify-center gap-2">
                                         <button type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-primary"><span class="material-symbols-outlined text-base text-secondary">photo_camera</span>Capture with Tablet Camera</button>
-                                        <button type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-primary"><span class="material-symbols-outlined text-base">link</span>Add IoT Diagnostic Dump</button>
+                                        <button type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-primary"><span class="material-symbols-outlined text-base">link</span>Add Device Check Details</button>
                                     </div>
                                 </div>
                             </div>
                         </section>
 
                         <section class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                            <h3 class="flex items-center gap-2 font-bold text-primary"><span class="material-symbols-outlined text-secondary">domain_verification</span>PMS Inventory Impact &amp; Protocol Enforcement</h3>
+                            <h3 class="flex items-center gap-2 font-bold text-primary"><span class="material-symbols-outlined text-secondary">domain_verification</span>Room Availability and Safety Actions</h3>
                             <div class="mt-4 space-y-3 rounded-lg border border-line bg-[#f6f3ed]/70 p-4">
                                 @foreach ([
-                                    ['label' => 'Take Room Out of Order immediately in Front Desk PMS', 'copy' => 'Freezes room inventory to prevent new arrivals until cleared.', 'checked' => true],
+                                    ['label' => 'Take Room Out of Order immediately in Front Desk IHMP', 'copy' => 'Freezes room inventory to prevent new arrivals until cleared.', 'checked' => true],
                                     ['label' => 'Require Supervisor Re-inspection before release', 'copy' => 'Engineering sign-off alone will not return room to inspected clean.', 'checked' => true],
-                                    ['label' => 'Notify Front Desk Concierge for guest recovery', 'copy' => 'Alerts Duty Manager if relocation or service recovery is needed.', 'checked' => false],
+                                    ['label' => 'Notify Front Desk Guest Service for guest recovery', 'copy' => 'Alerts Duty Manager if relocation or service recovery is needed.', 'checked' => false],
                                 ] as $impact)
                                     <label class="flex cursor-pointer items-start gap-3">
                                         <input class="mt-1 rounded border-line text-secondary focus:ring-secondary" type="checkbox" {{ $impact['checked'] ? 'checked' : '' }}>
@@ -1891,20 +1891,20 @@
                                         <span class="text-sm font-bold text-primary">Room {{ $room->room_number }}</span>
                                         <span class="rounded-full border px-2 py-0.5 text-[10px] font-bold {{ $statusTone[$room->status] ?? 'border-line' }}">{{ ucfirst($room->status) }}</span>
                                     </div>
-                                    <p class="mt-1 text-xs text-slate-500">{{ $room->description ?: 'Maintenance queue item awaiting engineering clearance.' }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ $room->description ?: 'Maintenance list item awaiting engineering clearance.' }}</p>
                                 </a>
                             @empty
-                                <p class="rounded-lg border border-line bg-[#fdfcfa] p-4 text-sm text-slate-500">No active maintenance rooms yet. New work orders submitted here will appear in this queue.</p>
+                                <p class="rounded-lg border border-line bg-[#fdfcfa] p-4 text-sm text-slate-500">No active maintenance rooms yet. New maintenance reports will appear in this list.</p>
                             @endforelse
                         </div>
                     </div>
 
                     <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">analytics</span>Floor Maintenance Snapshot</h3>
+                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">analytics</span>Floor Maintenance Summary</h3>
                         <div class="mt-4 space-y-3 text-sm">
                             <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Total rooms</span><strong>{{ $totalRooms }}</strong></div>
-                            <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Maintenance queue</span><strong>{{ $maintenanceQueue->count() }}</strong></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Cleaning queue</span><strong>{{ $cleaningRooms->count() }}</strong></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Maintenance list</span><strong>{{ $maintenanceQueue->count() }}</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Cleaning list</span><strong>{{ $cleaningRooms->count() }}</strong></div>
                         </div>
                         <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
                             <span class="material-symbols-outlined text-base">construction</span>
@@ -1964,13 +1964,13 @@
             $selectedIssueRoom = $reportedIssueRooms->first();
             $ticketStates = [
                 ['label' => 'Repaired - Pending HK Signoff', 'class' => 'bg-emerald-100 text-emerald-800', 'icon' => 'check_circle', 'priority' => 'Urgent Priority', 'priorityClass' => 'bg-red-100 text-red-800'],
-                ['label' => 'Technician Dispatched', 'class' => 'bg-blue-100 text-blue-900', 'icon' => 'directions_walk', 'priority' => 'High Priority', 'priorityClass' => 'bg-amber-100 text-amber-900'],
+                ['label' => 'Technician Sent', 'class' => 'bg-blue-100 text-blue-900', 'icon' => 'directions_walk', 'priority' => 'High Priority', 'priorityClass' => 'bg-amber-100 text-amber-900'],
                 ['label' => 'Awaiting Replacement Part', 'class' => 'bg-[#ffdeaa] text-secondary', 'icon' => 'inventory_2', 'priority' => 'Standard Priority', 'priorityClass' => 'bg-stone-200 text-stone-800'],
                 ['label' => 'Work Order Accepted', 'class' => 'bg-sky-100 text-sky-900', 'icon' => 'receipt', 'priority' => 'High Priority', 'priorityClass' => 'bg-amber-100 text-amber-900'],
             ];
             $defects = [
                 ['icon' => 'hvac', 'title' => 'HVAC Freon Compressor Leak', 'copy' => 'Guest-reported ambient temperature variance. Engineering diagnostics and air misting follow-up required.'],
-                ['icon' => 'lock_clock', 'title' => 'IoT Lock Sensor Mismatch', 'copy' => 'Gateway sensor state is inconsistent with the physical deadbolt. RFID sync verification required.'],
+                ['icon' => 'lock_clock', 'title' => 'IoT Lock Sensor Mismatch', 'copy' => 'Gateway sensor state is inconsistent with the physical deadbolt. Keycard sync verification required.'],
                 ['icon' => 'window', 'title' => 'Balcony Sliding Track Jammed', 'copy' => 'Saline corrosion and heavy resistance on lower roller carriage. Weather seal inspection required.'],
                 ['icon' => 'hot_tub', 'title' => 'Jacuzzi Jet Pressure Calibration', 'copy' => 'Pressure sensor trips circuit breaker during continuous cycle. Engineering reset required.'],
             ];
@@ -1987,7 +1987,7 @@
                         <span class="font-bold text-primary">Reported Issues</span>
                     </div>
                     <h3 class="font-serif text-3xl font-bold text-primary">Reported Issues &amp; Facilities Work Orders Log</h3>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Tracking status, engineering progress, technician dispatch, and return-to-service sign-offs for rooms currently marked for maintenance.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Track repair status, Engineering updates, assigned technicians, and final approval for rooms under maintenance.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">
@@ -2003,10 +2003,10 @@
 
             <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 @foreach ([
-                    ['label' => 'Open Housekeeping Tickets', 'value' => $reportedIssueRooms->count(), 'caption' => 'active in queue', 'icon' => 'report_problem', 'tone' => 'text-primary', 'badge' => 'Live'],
+                    ['label' => 'Open Housekeeping Reports', 'value' => $reportedIssueRooms->count(), 'caption' => 'waiting for action', 'icon' => 'report_problem', 'tone' => 'text-primary', 'badge' => 'Live'],
                     ['label' => 'Out of Order Units', 'value' => $reportedIssueRooms->count(), 'caption' => 'rooms blocked', 'icon' => 'do_not_disturb_on', 'tone' => 'text-red-700', 'badge' => 'Inventory Impact'],
                     ['label' => 'Average Time to Repair', 'value' => $reportedIssueRooms->count() ? '1h 42m' : '0m', 'caption' => 'rolling operational estimate', 'icon' => 'timelapse', 'tone' => 'text-secondary', 'badge' => 'Rolling 30D'],
-                    ['label' => 'Engineering Response SLA', 'value' => $reportedIssueRooms->count() ? '98%' : '100%', 'caption' => 'first response under target', 'icon' => 'verified', 'tone' => 'text-emerald-700', 'badge' => 'Compliant'],
+                    ['label' => 'Engineering Response Response Time', 'value' => $reportedIssueRooms->count() ? '98%' : '100%', 'caption' => 'first response under target', 'icon' => 'verified', 'tone' => 'text-emerald-700', 'badge' => 'Compliant'],
                 ] as $metric)
                     <div class="relative overflow-hidden rounded-lg border border-line bg-white p-5 shadow-sm">
                         <span class="material-symbols-outlined absolute -bottom-3 -right-3 text-7xl text-slate-100">{{ $metric['icon'] }}</span>
@@ -2071,7 +2071,7 @@
                                         <span class="rounded-full px-2.5 py-0.5 text-xs font-bold {{ $state['priorityClass'] }}">{{ $state['priority'] }}</span>
                                         <span class="rounded bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-700">OOO Active</span>
                                     </div>
-                                    <p class="mt-1 text-xs font-bold text-secondary">Ticket #{{ $ticket }} • {{ $wing }} Facilities Queue</p>
+                                    <p class="mt-1 text-xs font-bold text-secondary">Ticket #{{ $ticket }} • {{ $wing }} Facilities List</p>
                                 </div>
                                 <span class="text-xs text-slate-500">Reported {{ $loop->iteration * 18 }}m ago</span>
                             </div>
@@ -2165,11 +2165,11 @@
                         </div>
 
                         <div class="mt-5 rounded-lg border border-line bg-[#f6f3ed] p-4">
-                            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Dispatch &amp; Repair Timeline</p>
+                            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Assignment &amp; Repair Timeline</p>
                             <div class="mt-3 space-y-3">
                                 @foreach ([
                                     ['time' => '09:12', 'title' => 'Issue Flagged During Room Refresh', 'copy' => 'Housekeeping moved room into maintenance review.'],
-                                    ['time' => '09:24', 'title' => 'Engineering Dispatch Accepted', 'copy' => 'Facilities team assigned technician and opened work order.'],
+                                    ['time' => '09:24', 'title' => 'Engineering Assignment Accepted', 'copy' => 'Facilities team assigned technician and opened work order.'],
                                     ['time' => '10:18', 'title' => 'Housekeeping Verification Pending', 'copy' => 'Room remains out of order until final room inspection.'],
                                 ] as $event)
                                     <div class="flex gap-3">
@@ -2185,7 +2185,7 @@
                     </div>
 
                     <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">bolt</span>Engineering Response SLA</h3>
+                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">bolt</span>Engineering Response Response Time</h3>
                         <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
                             <div class="rounded-lg bg-white/10 p-3">
                                 <p class="text-[11px] uppercase tracking-wider text-slate-300">Open</p>
@@ -2198,7 +2198,7 @@
                         </div>
                         <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
                             <span class="material-symbols-outlined text-base">fact_check</span>
-                            Open HK Verification Queue
+                            Open HK Verification List
                         </a>
                     </div>
                 </aside>
@@ -2217,13 +2217,13 @@
                 ['name' => 'Grace Macapagal', 'zone' => 'Executive Villas', 'rooms' => max(1, $occupiedRooms), 'score' => 94, 'result' => 'Guest request support', 'callbacks' => $guestRequestRooms->count()],
             ];
             $reportCards = [
-                ['title' => 'Daily Housekeeper Performance & Pacing Ledger', 'badge' => 'Official Audit Ledger', 'body' => 'Full shift timestamp logs, individual room turnaround intervals, and discrepancy notes.', 'icon' => 'assignment', 'format' => 'PDF / XLSX', 'tone' => 'red'],
+                ['title' => 'Daily Housekeeper Performance & Pacing Records', 'badge' => 'Official Audit Records', 'body' => 'Full shift timestamp logs, individual room turnaround intervals, and discrepancy notes.', 'icon' => 'assignment', 'format' => 'PDF / XLSX', 'tone' => 'red'],
                 ['title' => 'White Glove Quality Audit Compliance Digest', 'badge' => 'Quality Compliance', 'body' => '5-star housekeeping standards checklist, linen freshness benchmarks, and VIP turn logs.', 'icon' => 'verified', 'format' => 'PDF', 'tone' => 'red'],
-                ['title' => 'Chemical Consumption & Par Stock Variance', 'badge' => 'Stock Analytics', 'body' => 'Cleaning chemical drawdowns, refill batches, and low-par consumable alerts.', 'icon' => 'science', 'format' => 'XLSX', 'tone' => 'amber'],
+                ['title' => 'Chemical Consumption & Par Stock Difference', 'badge' => 'Stock Analytics', 'body' => 'Cleaning chemical drawdowns, refill batches, and low-par consumable alerts.', 'icon' => 'science', 'format' => 'XLSX', 'tone' => 'amber'],
             ];
             $issueInsights = [
                 ['label' => 'Engineering defects', 'value' => $maintenanceQueue->count(), 'caption' => 'Housekeeping-flagged unit defects for Engineering.', 'tone' => $maintenanceQueue->count() > 0 ? 'text-red-700' : 'text-emerald-700', 'icon' => 'build'],
-                ['label' => 'Priority escalations', 'value' => $priorityRooms->count(), 'caption' => 'VIP, rush, or guest-impacting room readiness items.', 'tone' => 'text-secondary', 'icon' => 'priority_high'],
+                ['label' => 'Priority escalations', 'value' => $priorityRooms->count(), 'caption' => 'VIP, rush, or guest-impacting rooms ready for guests items.', 'tone' => 'text-secondary', 'icon' => 'priority_high'],
                 ['label' => 'Room status updates', 'value' => $recentRoomLogs->count(), 'caption' => 'Latest room state changes available for reporting.', 'tone' => 'text-primary', 'icon' => 'history'],
             ];
         @endphp
@@ -2236,7 +2236,7 @@
                             <span class="material-symbols-outlined text-sm">monitoring</span>
                             Quality Compliance
                         </div>
-                        <h3 class="font-serif text-3xl font-bold text-primary">Housekeeping Operational Reports &amp; SLA Analytics</h3>
+                        <h3 class="font-serif text-3xl font-bold text-primary">Housekeeping Operational Reports &amp; Response Time Analytics</h3>
                         <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Turnaround velocity analytics, attendant productivity metrics, quality audit compliance, and chemical consumption reports from live housekeeping activity.</p>
                     </div>
                     <div class="flex flex-wrap gap-3">
@@ -2262,7 +2262,7 @@
                     <div class="mt-4 h-1.5 rounded-full bg-[#f0eee8]"><div class="h-full rounded-full bg-secondary" style="width: {{ $qaYield }}%"></div></div>
                 </div>
                 <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                    <p class="text-sm text-slate-500">VIP Rush SLA Compliance</p>
+                    <p class="text-sm text-slate-500">VIP Rush Response Time Compliance</p>
                     <div class="mt-2 flex items-baseline gap-2">
                         <span class="font-serif text-3xl font-bold text-secondary">{{ $rushSla }}%</span>
                         <span class="text-xs font-bold text-primary">On-Time</span>
@@ -2275,7 +2275,7 @@
                         <span class="font-serif text-3xl font-bold text-primary">{{ $turnaroundMinutes }}</span>
                         <span class="text-xs font-bold text-slate-500">minutes</span>
                     </div>
-                    <p class="mt-4 text-sm text-slate-500">{{ $cleaningRooms->count() }} active turnovers in queue</p>
+                    <p class="mt-4 text-sm text-slate-500">{{ $cleaningRooms->count() }} rooms waiting or being cleaned</p>
                 </div>
                 <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
                     <p class="text-sm text-slate-500">Completed Shift Records</p>
@@ -2316,12 +2316,12 @@
                     <section class="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
                         <div class="flex flex-col justify-between gap-3 border-b border-line p-5 md:flex-row md:items-center">
                             <div>
-                                <h3 class="font-serif text-2xl font-bold text-primary">Attendant Productivity &amp; Quality Audit Ledger</h3>
+                                <h3 class="font-serif text-2xl font-bold text-primary">Attendant Productivity &amp; Quality Audit Records</h3>
                                 <p class="mt-1 text-sm text-slate-500">Real-time floor performance, QA scoring index, and callback logging.</p>
                             </div>
                             <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary hover:border-secondary">
                                 <span class="material-symbols-outlined text-base text-secondary">file_download</span>
-                                Export Ledger
+                                Export Records
                             </button>
                         </div>
                         <div class="overflow-x-auto">
@@ -2414,7 +2414,7 @@
                     <div class="rounded-lg border border-line bg-[#f6f3ed] p-5">
                         <h3 class="flex items-center gap-2 font-bold text-primary">
                             <span class="material-symbols-outlined text-secondary">shield</span>
-                            Compliance Snapshot
+                            Compliance Summary
                         </h3>
                         <div class="mt-4 space-y-3 text-sm">
                             <div class="flex justify-between border-b border-line pb-2"><span class="text-slate-600">Room audit records</span><strong>{{ $recentRoomLogs->count() }}</strong></div>
@@ -2448,11 +2448,11 @@
                     <div class="max-w-3xl">
                         <div class="inline-flex items-center gap-2 rounded-full border border-[#ffdeaa]/40 bg-[#ffdeaa]/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[#ffdeaa]">
                             <span class="material-symbols-outlined text-sm">done_all</span>
-                            Housekeeping Tasks &amp; Turnover Workspace
+                            Housekeeping Tasks &amp; Room Preparation Workspace
                         </div>
-                        <h3 class="mt-4 font-serif text-4xl font-bold leading-tight">Housekeeping Tasks &amp; Operational Dispatch</h3>
+                        <h3 class="mt-4 font-serif text-4xl font-bold leading-tight">Housekeeping Tasks &amp; Operational Assignment</h3>
                         <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-200">
-                            Daily cleaning roster, priority turnover acceleration, and verified inspection pipelines across {{ $totalRooms }} active hotel rooms.
+                            Daily cleaning assignments, priority room cleaning, and completed inspections across {{ $totalRooms }} active hotel rooms.
                         </p>
                     </div>
                     <div class="flex flex-wrap gap-3">
@@ -2468,7 +2468,7 @@
                         </a>
                         <a href="{{ route('housekeeping.page', 'priority-rooms') }}" class="inline-flex items-center gap-2 rounded-lg bg-[#ffdeaa] px-4 py-2.5 text-xs font-extrabold text-primary shadow-lg transition hover:bg-[#e6c185]">
                             <span class="material-symbols-outlined text-base">add_circle</span>
-                            Dispatch Urgent Turnover
+                            Assignment Urgent Room Preparation
                         </a>
                     </div>
                 </div>
@@ -2479,7 +2479,7 @@
                     ['label' => 'Total Rooms', 'value' => $totalRooms, 'caption' => 'Active inventory', 'icon' => 'apartment', 'tone' => 'text-primary', 'bar' => 'bg-primary', 'percent' => 100],
                     ['label' => 'Available & Ready', 'value' => $availableRooms, 'caption' => $readyPercent.'% of inventory', 'icon' => 'check_circle', 'tone' => 'text-emerald-700', 'bar' => 'bg-emerald-600', 'percent' => $readyPercent],
                     ['label' => 'Occupied', 'value' => $occupiedRooms, 'caption' => $occupiedPercent.'% in-house', 'icon' => 'bed', 'tone' => 'text-sky-700', 'bar' => 'bg-sky-600', 'percent' => $occupiedPercent],
-                    ['label' => 'In Turnover', 'value' => $cleaningRooms->count(), 'caption' => $vipRush.' VIP rush', 'icon' => 'mop', 'tone' => 'text-amber-700', 'bar' => 'bg-amber-500', 'percent' => max(5, $cleaningPercent)],
+                    ['label' => 'In Room Preparation', 'value' => $cleaningRooms->count(), 'caption' => $vipRush.' VIP rush', 'icon' => 'mop', 'tone' => 'text-amber-700', 'bar' => 'bg-amber-500', 'percent' => max(5, $cleaningPercent)],
                     ['label' => 'Maintenance Hold', 'value' => $maintenanceQueue->count(), 'caption' => $maintenanceQueue->count() ? 'Engineering queue' : 'No open holds', 'icon' => 'construction', 'tone' => 'text-red-700', 'bar' => 'bg-red-600', 'percent' => max(3, $maintenancePercent)],
                 ] as $metric)
                     <div class="rounded-xl border border-line bg-white p-5 shadow-sm transition hover:shadow-md">
@@ -2554,15 +2554,15 @@
                                             <div class="flex flex-wrap items-center gap-2">
                                                 <h3 class="font-serif text-lg font-bold text-primary">Room {{ $room->room_number }} - {{ $room->room_type }}</h3>
                                                 <span class="rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase {{ $toneClasses }}">
-                                                    {{ $room->status === 'maintenance' ? 'Engineering Hold' : 'Turnover Active' }}
+                                                    {{ $room->status === 'maintenance' ? 'Engineering Hold' : 'Room Preparation Active' }}
                                                 </span>
                                             </div>
                                             <p class="mt-0.5 text-xs text-slate-500">{{ $room->capacity }} guests capacity - PHP {{ number_format($room->rate, 2) }} room class</p>
                                         </div>
                                     </div>
                                     <div class="rounded-lg border border-line bg-[#f6f3ed] px-3 py-2">
-                                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">SLA Pacing</p>
-                                        <p class="font-mono text-xs font-bold text-primary">{{ $room->status === 'maintenance' ? 'Engineering response' : '32m target turnover' }}</p>
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Response Time Pacing</p>
+                                        <p class="font-mono text-xs font-bold text-primary">{{ $room->status === 'maintenance' ? 'Engineering response' : '32-minute cleaning target' }}</p>
                                     </div>
                                 </div>
                                 <div class="grid gap-4 pt-4 md:grid-cols-12 md:items-center">
@@ -2608,7 +2608,7 @@
                         <div class="mb-4 flex items-center justify-between">
                             <h4 class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
                                 <span class="material-symbols-outlined text-secondary">history</span>
-                                Today's Cleared Turnover Stream
+                                Today's Cleared Room Preparation Stream
                             </h4>
                             <a href="{{ route('housekeeping.page', 'completed-tasks') }}" class="text-xs font-bold text-secondary hover:underline">View Full Activity Log</a>
                         </div>
@@ -2627,14 +2627,14 @@
                                     @forelse ($completedTasks->take(3) as $log)
                                         <tr>
                                             <td class="px-3 py-3 font-serif font-bold text-primary">Room {{ $log->room?->room_number ?? 'N/A' }}</td>
-                                            <td class="px-3 py-3">{{ $log->notes ?: 'Checkout turnover' }}</td>
+                                            <td class="px-3 py-3">{{ $log->notes ?: 'Room cleaning after check-out' }}</td>
                                             <td class="px-3 py-3">{{ $attendants[$loop->index % count($attendants)]['name'] }}</td>
                                             <td class="px-3 py-3 font-mono text-slate-500">{{ 22 + ($loop->index * 4) }}m {{ 5 + $loop->index }}s</td>
                                             <td class="px-3 py-3 text-right"><span class="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">Ready for Front Desk</span></td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="px-3 py-8 text-center text-sm text-slate-500">No completed turnover logs yet today.</td>
+                                            <td colspan="5" class="px-3 py-8 text-center text-sm text-slate-500">No completed room cleaning records yet today.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -2674,7 +2674,7 @@
                     <div class="rounded-xl border border-line bg-primary p-5 text-white shadow-sm">
                         <h4 class="flex items-center gap-2 text-sm font-bold text-[#ffdeaa]">
                             <span class="material-symbols-outlined">sensors</span>
-                            Live Operations Telemetry
+                            Live Operations System Status
                         </h4>
                         <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
                             <div class="rounded-lg bg-white/10 p-3">
@@ -2682,7 +2682,7 @@
                                 <p class="font-serif text-2xl font-bold">{{ max(1, $totalRooms) }}</p>
                             </div>
                             <div class="rounded-lg bg-white/10 p-3">
-                                <p class="text-[10px] uppercase tracking-wider text-slate-300">RFID Latency</p>
+                                <p class="text-[10px] uppercase tracking-wider text-slate-300">Keycard Latency</p>
                                 <p class="font-serif text-2xl font-bold">14ms</p>
                             </div>
                             <div class="rounded-lg bg-white/10 p-3">
@@ -2726,12 +2726,12 @@
                             <span class="flex items-center gap-1 text-xs text-slate-500"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>Floor dispatch live</span>
                         </div>
                         <h3 class="font-serif text-4xl font-bold text-primary">Service Requests Hub &amp; Guest Amenities Delivery</h3>
-                        <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Guest service dispatches, amenity drop-offs, and specialized turn-down items handled by housekeeping.</p>
+                        <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Guest service assignments, amenity drop-offs, and specialized turn-down items handled by housekeeping.</p>
                     </div>
                     <div class="flex flex-wrap gap-3">
                         <a href="{{ route('rooms.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-line bg-[#f6f3ed] px-4 py-2.5 text-sm font-bold text-primary shadow-sm hover:bg-line">
                             <span class="material-symbols-outlined text-base text-secondary">grid_view</span>
-                            Open Room Status Matrix
+                            Open Room Status Table
                         </a>
                         <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-bold text-slate-600 shadow-sm hover:bg-[#f6f3ed]">
                             <span class="material-symbols-outlined text-base">file_download</span>
@@ -2752,7 +2752,7 @@
                     ['label' => 'Occupied', 'value' => $occupiedRooms, 'caption' => 'In-house guests', 'icon' => 'person', 'tone' => 'text-primary', 'border' => 'border-l-4 border-l-primary'],
                     ['label' => 'Active Requests', 'value' => $activeRequests, 'caption' => 'Guest amenity queue', 'icon' => 'notifications_active', 'tone' => 'text-amber-800', 'border' => 'border-l-4 border-l-amber-500'],
                     ['label' => 'Special Clean', 'value' => $specialCleanCount, 'caption' => 'Scheduled queue', 'icon' => 'sanitizer', 'tone' => 'text-slate-700', 'border' => 'border-line'],
-                    ['label' => 'Avg SLA Speed', 'value' => $avgSla, 'caption' => 'Under target', 'icon' => 'timer', 'tone' => 'text-secondary', 'border' => 'border-l-4 border-l-secondary'],
+                    ['label' => 'Avg Response Time Speed', 'value' => $avgSla, 'caption' => 'Under target', 'icon' => 'timer', 'tone' => 'text-secondary', 'border' => 'border-l-4 border-l-secondary'],
                 ] as $metric)
                     <div class="rounded-lg border bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md {{ $metric['border'] }}">
                         <div class="mb-2 flex items-center justify-between text-slate-500">
@@ -2773,8 +2773,8 @@
                                 <span class="material-symbols-outlined text-lg">room_service</span>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-primary">Guest Requests Active Queue</h3>
-                                <p class="text-xs text-slate-500">Real-time room-dispatch pipeline with attendant routing</p>
+                                <h3 class="text-lg font-bold text-primary">Guest Requests Active List</h3>
+                                <p class="text-xs text-slate-500">Live guest requests and assigned housekeeping staff</p>
                             </div>
                         </div>
                         <div class="flex gap-1 rounded-lg bg-line p-1 text-xs">
@@ -2808,7 +2808,7 @@
                                             <h4 class="text-base font-bold text-primary">{{ $isUrgent ? 'Extra Percale Duvet & Sateen Bathrobe Set' : 'Infant Crib Setup & Organic Baby Toiletry Basket' }}</h4>
                                             <p class="mt-1 text-xs leading-5 text-slate-600">{{ $isUrgent ? 'Guest requested hypoallergenic extra heavy duvet and two embroidered robes to the master bedroom.' : 'Place sanitized crib with organic cotton linens and baby toiletry basket before check-in.' }}</p>
                                             <div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-600">
-                                                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">timer</span>SLA: <strong class="text-primary">{{ $isUrgent ? '10m' : '45m window' }}</strong></span>
+                                                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">timer</span>Response Time: <strong class="text-primary">{{ $isUrgent ? '10m' : '45m window' }}</strong></span>
                                                 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">badge</span>Runner: <strong class="text-primary">{{ $attendant }}</strong></span>
                                                 <span class="rounded bg-emerald-100/70 px-2 py-0.5 text-[11px] font-bold text-emerald-800">{{ $isUrgent ? 'Dispatched & In-Transit' : 'Staged at Linen Closet' }}</span>
                                             </div>
@@ -2829,7 +2829,7 @@
                         @endforeach
                     </div>
                     <div class="flex items-center justify-between border-t border-line bg-[#f6f3ed] px-4 py-3 text-xs text-slate-500">
-                        <span>{{ max(2, $activeRequests) }} dispatches logged today - 100% on-time turnaround rate</span>
+                        <span>{{ max(2, $activeRequests) }} assignments logged today - 100% on-time turnaround rate</span>
                         <a href="{{ route('housekeeping.page', 'guest-requests') }}" class="font-bold text-secondary hover:underline">View Past 24h Delivered Guest Bill</a>
                     </div>
                 </section>
@@ -2856,7 +2856,7 @@
                                             <span class="h-2 w-2 rounded-full {{ $loop->first ? 'bg-blue-500' : 'bg-emerald-500' }}"></span>
                                             <span class="font-bold text-primary">Room {{ $room->room_number }} - {{ $room->room_type }}</span>
                                         </div>
-                                        <span class="rounded px-2 py-0.5 text-[10px] font-bold uppercase {{ $loop->first ? 'bg-blue-100 text-blue-900 ring-1 ring-blue-200' : 'bg-emerald-100 text-emerald-900 ring-1 ring-emerald-200' }}">{{ $loop->first ? 'Ozone Protocol' : 'Deep Clean' }}</span>
+                                        <span class="rounded px-2 py-0.5 text-[10px] font-bold uppercase {{ $loop->first ? 'bg-blue-100 text-blue-900 ring-1 ring-blue-200' : 'bg-emerald-100 text-emerald-900 ring-1 ring-emerald-200' }}">{{ $loop->first ? 'Ozone Cleaning' : 'Deep Clean' }}</span>
                                     </div>
                                     <p class="mt-2 text-xs leading-5 text-slate-600">{{ $loop->first ? 'Full atmospheric ozone degassing scheduled after guest departure.' : 'Thermo-steam carpet extraction and terrace sanitizing mist before release.' }}</p>
                                     <div class="mt-3 flex items-center justify-between border-t border-line pt-2 text-xs">
@@ -2929,7 +2929,7 @@
                                     <span class="{{ $isLiveRequest ? 'font-bold text-amber-800' : 'italic text-slate-400' }}">{{ $isLiveRequest ? 'Guest Amenities' : 'None' }}</span>
                                 </div>
                                 <div class="mt-1 flex items-center gap-1 text-[11px] font-semibold {{ $isLiveRequest ? 'text-blue-700' : 'text-emerald-700' }}">
-                                    <span class="material-symbols-outlined text-xs">{{ $isLiveRequest ? 'pending' : 'verified' }}</span>{{ $isLiveRequest ? 'Dispatch Active' : 'Front Desk Ready' }}
+                                    <span class="material-symbols-outlined text-xs">{{ $isLiveRequest ? 'pending' : 'verified' }}</span>{{ $isLiveRequest ? 'Assignment Active' : 'Front Desk Ready' }}
                                 </div>
                             </div>
                         </div>
@@ -2954,17 +2954,17 @@
                         <span class="material-symbols-outlined text-sm">verified</span>
                         Certified Shift Operations &amp; Quality Assurance
                     </div>
-                    <h3 class="font-serif text-3xl font-bold text-primary">Completed Tasks &amp; Shift Turnover History</h3>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Historical log of certified room sanitizations, completion timestamps, supervisor sign-offs, and PMS release records from real room status activity.</p>
+                    <h3 class="font-serif text-3xl font-bold text-primary">Completed Tasks &amp; Shift Cleaning History</h3>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Historical log of certified room sanitizations, completion timestamps, supervisor sign-offs, and IHMP release records from real room status activity.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-xs font-bold text-primary shadow-sm hover:bg-[#f6f3ed]">
                         <span class="material-symbols-outlined text-base text-secondary">print</span>
-                        Print Physical Ledger
+                        Print Physical Records
                     </button>
                     <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-primary/90">
                         <span class="material-symbols-outlined text-base text-[#ffdeaa]">file_download</span>
-                        Export Shift Turnover Ledger
+                        Export Shift Room Preparation Records
                     </button>
                 </div>
             </div>
@@ -3019,9 +3019,9 @@
             <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 @foreach ([
                     ['label' => 'Shift Output', 'value' => $completedCount, 'caption' => 'Certified room updates', 'icon' => 'check_circle', 'tone' => 'text-secondary', 'bar' => 'bg-secondary'],
-                    ['label' => 'Avg Turnover Duration', 'value' => $completedCount ? '24m' : '0m', 'caption' => 'Target: <= 30 mins', 'icon' => 'schedule', 'tone' => 'text-primary', 'bar' => 'bg-primary'],
+                    ['label' => 'Avg Room Preparation Duration', 'value' => $completedCount ? '24m' : '0m', 'caption' => 'Target: <= 30 mins', 'icon' => 'schedule', 'tone' => 'text-primary', 'bar' => 'bg-primary'],
                     ['label' => 'QA First-Pass Yield', 'value' => $qaYield.'%', 'caption' => $releasedCount.' released to available', 'icon' => 'verified_user', 'tone' => 'text-secondary', 'bar' => 'bg-secondary'],
-                    ['label' => 'PMS Sync Rate', 'value' => $completedCount ? '100%' : '0%', 'caption' => 'Room status ledger synced', 'icon' => 'sync', 'tone' => 'text-emerald-700', 'bar' => 'bg-emerald-700'],
+                    ['label' => 'IHMP Update Rate', 'value' => $completedCount ? '100%' : '0%', 'caption' => 'Room status records updated', 'icon' => 'sync', 'tone' => 'text-emerald-700', 'bar' => 'bg-emerald-700'],
                 ] as $metric)
                     <div class="relative overflow-hidden rounded-lg border border-line bg-white p-5 shadow-sm">
                         <div class="absolute left-0 right-0 top-0 h-1 {{ $metric['bar'] }}"></div>
@@ -3042,7 +3042,7 @@
                     <div class="flex flex-col gap-3 border-b border-line bg-[#f6f3ed] p-4 md:flex-row md:items-center md:justify-between">
                         <div class="flex flex-wrap items-center gap-2">
                             <span class="material-symbols-outlined text-primary">fact_check</span>
-                            <h3 class="font-bold text-primary">Shift 1 Completed Units Ledger</h3>
+                            <h3 class="font-bold text-primary">Shift 1 Completed Units Records</h3>
                             <span class="rounded-full bg-[#ffdeaa] px-2.5 py-0.5 text-xs font-bold text-secondary">Live Sync Active</span>
                         </div>
                         <span class="text-xs font-semibold text-slate-500">Showing {{ $completedLedger->take(8)->count() }} of {{ $completedCount }} units</span>
@@ -3059,7 +3059,7 @@
                                     <th class="px-3 py-3">Completed At</th>
                                     <th class="px-3 py-3 text-center">Score</th>
                                     <th class="px-3 py-3">Supervisor Signoff</th>
-                                    <th class="px-3 py-3">PMS Release</th>
+                                    <th class="px-3 py-3">IHMP Release</th>
                                     <th class="px-4 py-3 text-right">Actions</th>
                                 </tr>
                             </thead>
@@ -3069,7 +3069,7 @@
                                         $attendant = $attendants[($loop->iteration - 1) % count($attendants)];
                                         $score = max(92, 101 - $loop->iteration);
                                         $wing = ((int) ($log->room?->room_number ?? 0) >= 300) ? 'Ocean Wing' : 'Main Wing';
-                                        $cleaningType = $log->status === 'available' ? 'Turnover Certified' : 'Status Confirmation';
+                                        $cleaningType = $log->status === 'available' ? 'Room Preparation Certified' : 'Status Confirmation';
                                     @endphp
                                     <tr class="{{ $loop->first ? 'border-l-4 border-l-secondary bg-[#ffdeaa]/20' : 'hover:bg-[#f6f3ed]' }} transition">
                                         <td class="px-4 py-3">
@@ -3141,7 +3141,7 @@
                                 <p class="mt-1 font-serif text-2xl font-bold text-secondary">{{ $selectedLog ? '100' : '--' }}/100</p>
                             </div>
                             <div class="rounded-lg border border-line bg-[#f6f3ed] p-3">
-                                <p class="text-[11px] font-bold uppercase text-slate-500">PMS Release</p>
+                                <p class="text-[11px] font-bold uppercase text-slate-500">IHMP Release</p>
                                 <p class="mt-1 font-bold text-emerald-700">{{ $selectedLog ? ucfirst($selectedLog->status) : 'Pending' }}</p>
                             </div>
                         </div>
@@ -3156,7 +3156,7 @@
                     </div>
 
                     <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">analytics</span>Shift Turnover Summary</h3>
+                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">analytics</span>Shift Room Preparation Summary</h3>
                         <div class="mt-4 space-y-3 text-sm">
                             <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Certified rooms</span><strong>{{ $completedCount }}</strong></div>
                             <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Released rooms</span><strong>{{ $releasedCount }}</strong></div>
@@ -3164,7 +3164,7 @@
                         </div>
                         <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
                             <span class="material-symbols-outlined text-base">fact_check</span>
-                            Open Inspection Queue
+                            Open Inspection List
                         </a>
                     </div>
                 </aside>
@@ -3186,16 +3186,16 @@
                     'status' => 'Secured in Safe - Contacted Guest',
                     'statusClass' => 'border-emerald-200 bg-emerald-50 text-emerald-800',
                     'location' => 'Executive safe deposit box #04',
-                    'discoveredBy' => 'Turnover attendant',
+                    'discoveredBy' => 'Room Preparation attendant',
                     'barcode' => 'SEAL-VAULT-0410',
                     'icon' => 'watch',
                     'tone' => 'border-secondary/60 bg-[#fff8eb]',
-                    'actions' => ['Process Claim / Release', 'Print Tamper Label', 'View Full Chain of Custody'],
+                    'actions' => ['Process Claim / Release', 'Print Security Label', 'View Full Item History'],
                 ],
                 [
                     'reference' => 'LF-' . now()->format('Y') . '-090',
                     'category' => 'Consumer Electronics',
-                    'item' => 'Apple iPad Pro 11" with Leather Smart Folio',
+                    'item' => 'Apple iPad Pro 11" with Leather Smart Guest Bill',
                     'status' => 'Locker B-12 - Pending Courier',
                     'statusClass' => 'border-amber-200 bg-amber-50 text-amber-800',
                     'location' => 'Lost property locker B-12',
@@ -3216,7 +3216,7 @@
                     'foundLocation' => 'Room ' . $room->room_number . ' - ' . ($room->room_type ?? 'Guest Room'),
                     'discoveryTime' => optional($roomLog?->changed_at)->format('M d, Y h:i A') ?? now()->format('M d, Y h:i A'),
                     'guest' => $room->status === 'occupied' ? 'Current in-house guest' : 'Previous guest on room bill',
-                    'notes' => $roomLog?->notes ?: 'Recovered during housekeeping turnover and awaiting owner claim verification.',
+                    'notes' => $roomLog?->notes ?: 'Found during room cleaning and waiting for the owner to claim it.',
                 ]);
             });
 
@@ -3227,18 +3227,18 @@
             <div class="rounded-lg border border-line bg-white p-6 shadow-sm">
                 <div class="flex flex-col justify-between gap-5 xl:flex-row xl:items-start">
                     <div>
-                        <p class="text-xs font-bold uppercase tracking-[0.22em] text-secondary">Housekeeping Oversight &gt; Lost &amp; Found Chain of Custody</p>
-                        <h3 class="mt-2 font-serif text-3xl font-bold text-primary">Lost &amp; Found Vault &amp; Chain of Custody Registry</h3>
-                        <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Secure repository for belongings discovered during room turnovers, with locker allocation, claim status, release controls, and room-linked custody history.</p>
+                        <p class="text-xs font-bold uppercase tracking-[0.22em] text-secondary">Housekeeping &gt; Lost &amp; Found Item Records</p>
+                        <h3 class="mt-2 font-serif text-3xl font-bold text-primary">Lost &amp; Found Storage and Item History</h3>
+                        <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Secure records for belongings found during room cleaning, including storage location, claim status, release approval, and room history.</p>
                     </div>
                     <div class="flex flex-wrap gap-3">
                         <a href="{{ route('housekeeping.page', 'completed-tasks') }}" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-bold text-primary shadow-sm hover:bg-slate-50">
                             <span class="material-symbols-outlined text-base text-secondary">inventory</span>
-                            Audit Vault Inventory
+                            Check Stored Items
                         </a>
                         <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-secondary px-4 py-2.5 text-sm font-bold text-secondary shadow-sm hover:bg-secondary/10">
                             <span class="material-symbols-outlined text-base">qr_code_2</span>
-                            Print Custody Barcode Labels
+                            Print Item Barcode Labels
                         </button>
                         <a href="{{ route('rooms.index') }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90">
                             <span class="material-symbols-outlined text-base text-[#ffdeaa]">add</span>
@@ -3307,7 +3307,7 @@
                     <div class="flex flex-col justify-between gap-3 border-b border-line p-5 sm:flex-row sm:items-center">
                         <div>
                             <h3 class="font-serif text-2xl font-bold text-primary">Items Currently in Custody</h3>
-                            <p class="mt-1 text-sm text-slate-500">Recovered belongings tied to room turnover and inspection activity.</p>
+                            <p class="mt-1 text-sm text-slate-500">Recovered belongings tied to room cleaning and preparation and inspection activity.</p>
                         </div>
                         <span class="rounded-full bg-[#f6f3ed] px-3 py-1 text-xs font-bold text-secondary">{{ $lostFoundItems->count() }} open records</span>
                     </div>
@@ -3372,7 +3372,7 @@
                             <div class="rounded-lg border border-dashed border-line p-8 text-center">
                                 <span class="material-symbols-outlined text-4xl text-slate-300">inventory_2</span>
                                 <p class="mt-3 font-bold text-primary">No recovered items are in custody yet.</p>
-                                <p class="mt-1 text-sm text-slate-500">Use room notes or turnover logs when an item is found during cleaning.</p>
+                                <p class="mt-1 text-sm text-slate-500">Use room notes or cleaning records when an item is found.</p>
                             </div>
                         @endforelse
                     </div>
@@ -3384,7 +3384,7 @@
                             <div class="flex items-start justify-between gap-3">
                                 <div>
                                     <p class="text-xs font-bold uppercase tracking-[0.18em] text-secondary">Locked &amp; Verified</p>
-                                    <h3 class="mt-1 font-serif text-2xl font-bold text-primary">Chain of Custody Record</h3>
+                                    <h3 class="mt-1 font-serif text-2xl font-bold text-primary">Item Handling Record</h3>
                                 </div>
                                 <span class="material-symbols-outlined rounded-lg bg-[#f6f3ed] p-2 text-secondary">admin_panel_settings</span>
                             </div>
@@ -3402,7 +3402,7 @@
                                     <div class="flex items-center gap-3">
                                         <span class="material-symbols-outlined flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-[#ffdeaa]">lock</span>
                                         <div>
-                                            <p class="font-bold text-primary">Tamper-evident custody bag active</p>
+                                            <p class="font-bold text-primary">Sealed security bag in use</p>
                                             <p class="text-sm text-slate-500">{{ $selectedCustodyItem['barcode'] }}</p>
                                         </div>
                                     </div>
@@ -3410,10 +3410,10 @@
 
                                 <div class="mt-5 space-y-4">
                                     @foreach ([
-                                        ['label' => 'Discovered in turnover', 'detail' => $selectedCustodyItem['foundLocation'], 'icon' => 'cleaning_services'],
+                                        ['label' => 'Found during room cleaning', 'detail' => $selectedCustodyItem['foundLocation'], 'icon' => 'cleaning_services'],
                                         ['label' => 'Supervisor verification', 'detail' => 'Photo log and condition notes checked', 'icon' => 'verified_user'],
-                                        ['label' => 'Vault allocation', 'detail' => $selectedCustodyItem['location'], 'icon' => 'lock'],
-                                        ['label' => 'Guest notification dispatched', 'detail' => 'Claim instructions ready for front office handoff', 'icon' => 'forward_to_inbox'],
+                                        ['label' => 'Storage location', 'detail' => $selectedCustodyItem['location'], 'icon' => 'lock'],
+                                        ['label' => 'Guest notification sent', 'detail' => 'Claim instructions are ready for the Front Desk', 'icon' => 'forward_to_inbox'],
                                     ] as $step)
                                         <div class="flex gap-3">
                                             <span class="material-symbols-outlined mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-secondary/30 bg-white text-base text-secondary">{{ $step['icon'] }}</span>
@@ -3427,11 +3427,11 @@
 
                                 <a href="{{ route('housekeeping.page', 'notifications') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-primary/90">
                                     <span class="material-symbols-outlined text-base text-[#ffdeaa]">history</span>
-                                    Open Custody Activity Log
+                                    Open Item Activity History
                                 </a>
                             </div>
                         @else
-                            <div class="p-8 text-center text-sm text-slate-500">No chain of custody record is available yet.</div>
+                            <div class="p-8 text-center text-sm text-slate-500">No item handling record is available yet.</div>
                         @endif
                     </div>
                 </aside>
@@ -3452,7 +3452,7 @@
                 ['type' => 'VIP ARRIVAL ALERT - HIGH PRIORITY', 'source' => 'Front Desk', 'icon' => 'priority_high', 'tone' => 'red', 'meta' => 'Priority/Emergency', 'body' => 'Early arrival advisory received. Rush housekeeping turnaround is required before the next guest handoff window.'],
                 ['type' => 'MAINTENANCE RESOLUTION', 'source' => 'Engineering', 'icon' => 'build', 'tone' => 'sky', 'meta' => 'Maintenance Update', 'body' => 'Engineering has updated the work order. Housekeeping may prepare final inspection and release verification.'],
                 ['type' => 'GUEST SERVICE REQUEST', 'source' => 'Guest Services', 'icon' => 'room_service', 'tone' => 'amber', 'meta' => 'Guest Request', 'body' => 'Guest-facing amenity or linen request is ready for floor attendant dispatch.'],
-                ['type' => 'FRONT DESK CHECK-OUT EVENT', 'source' => 'Front Desk', 'icon' => 'logout', 'tone' => 'slate', 'meta' => 'Standard Turnover', 'body' => 'Room departure has been recorded. Prepare turnover queue, linen pull, and keycard recovery confirmation.'],
+                ['type' => 'FRONT DESK CHECK-OUT EVENT', 'source' => 'Front Desk', 'icon' => 'logout', 'tone' => 'slate', 'meta' => 'Standard Room Preparation', 'body' => 'Room departure has been recorded. Prepare room cleaning list, linen pull, and keycard recovery confirmation.'],
                 ['type' => 'IOT SENSOR WARNING', 'source' => 'Facilities IoT', 'icon' => 'sensors', 'tone' => 'red', 'meta' => 'Sensor Alert', 'body' => 'Room device or occupancy signal requires physical verification by housekeeping before room status release.'],
             ];
 
@@ -3485,9 +3485,9 @@
                 <div>
                     <div class="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-secondary">
                         <span class="material-symbols-outlined text-sm">notifications_active</span>
-                        Live Dispatch Center
+                        Live Assignment Center
                     </div>
-                    <h3 class="font-serif text-3xl font-bold text-primary">Housekeeping Dispatch Notifications &amp; Operational Alerts</h3>
+                    <h3 class="font-serif text-3xl font-bold text-primary">Housekeeping Assignment Notifications &amp; Operational Alerts</h3>
                     <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Real-time alert center for guest priority requests, Front Desk early check-ins, maintenance work order updates, and supervisor broadcasts.</p>
                 </div>
                 <div class="flex flex-wrap gap-3">
@@ -3568,15 +3568,15 @@
                                 <span class="material-symbols-outlined rounded-lg bg-white/10 p-2 text-[#ffdeaa]">podcasts</span>
                                 <div>
                                     <h4 class="font-bold">Radio Broadcast Log</h4>
-                                    <p class="text-xs text-[#ffdeaa]">Subic IHMP Channel 4 Dispatch</p>
+                                    <p class="text-xs text-[#ffdeaa]">Subic IHMP Channel 4 Assignment</p>
                                 </div>
                             </div>
                             <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
                         </div>
                         <div class="max-h-[380px] space-y-3 overflow-y-auto bg-[#fcf9f3] p-4">
                             @foreach ([
-                                ['from' => 'HK Lead', 'text' => 'Priority rooms acknowledged. Dispatch linen runner and supervisor inspection after final sweep.', 'time' => now()->subMinutes(4)->format('h:i A'), 'tone' => 'text-secondary'],
-                                ['from' => 'Engineering', 'text' => 'Maintenance queue update received. Housekeeping is cleared to enter resolved units for final inspection.', 'time' => now()->subMinutes(12)->format('h:i A'), 'tone' => 'text-sky-700'],
+                                ['from' => 'HK Lead', 'text' => 'Priority rooms acknowledged. Assignment linen runner and supervisor inspection after final sweep.', 'time' => now()->subMinutes(4)->format('h:i A'), 'tone' => 'text-secondary'],
+                                ['from' => 'Engineering', 'text' => 'Maintenance list update received. Housekeeping is cleared to enter resolved units for final inspection.', 'time' => now()->subMinutes(12)->format('h:i A'), 'tone' => 'text-sky-700'],
                                 ['from' => 'Front Desk', 'text' => 'Early arrival advisory sent. Please keep one clean unit ready for immediate guest handoff.', 'time' => now()->subMinutes(19)->format('h:i A'), 'tone' => 'text-red-700'],
                             ] as $broadcast)
                                 <div class="rounded-lg border border-line bg-white p-3 text-xs">
@@ -3599,7 +3599,7 @@
                     <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
                         <h3 class="flex items-center gap-2 font-bold text-primary">
                             <span class="material-symbols-outlined text-secondary">supervisor_account</span>
-                            Supervisor Dispatch Summary
+                            Supervisor Assignment Summary
                         </h3>
                         <div class="mt-4 space-y-3 text-sm">
                             <div class="flex justify-between border-b border-line pb-2"><span class="text-slate-600">Unread alerts</span><strong class="text-red-700">{{ $unreadAlerts }}</strong></div>
@@ -3609,7 +3609,7 @@
                         </div>
                         <a href="{{ route('housekeeping.page', 'priority-rooms') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-secondary px-4 py-2.5 text-sm font-bold text-secondary hover:bg-secondary/10">
                             <span class="material-symbols-outlined text-base">priority_high</span>
-                            Open Priority Queue
+                            Open Priority List
                         </a>
                     </div>
                 </aside>
@@ -3618,7 +3618,7 @@
     @else
         <section class="rounded-lg border border-line bg-white shadow-sm">
             <div class="border-b border-line p-5">
-                <h3 class="font-serif text-2xl font-bold">{{ $page['title'] }} Queue</h3>
+                <h3 class="font-serif text-2xl font-bold">{{ $page['title'] }} List</h3>
                 <p class="mt-1 text-sm text-slate-500">{{ $page['subtitle'] }}</p>
             </div>
             <div class="grid gap-4 p-5 md:grid-cols-2 xl:grid-cols-3">

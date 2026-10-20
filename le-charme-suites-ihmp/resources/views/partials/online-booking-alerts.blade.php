@@ -30,7 +30,7 @@
                         <p class="text-xs text-slate-300">${escapeText(booking.room_type)} · Arrives ${escapeText(booking.check_in_date)} · ${escapeText(booking.booking_reference)}</p>
                         <div class="mt-3 flex gap-2 text-xs font-bold">
                             <a class="rounded-lg bg-[#c5a36a] px-3 py-1.5 text-[#01162d]" href="${escapeText(booking.url)}">Review booking</a>
-                            <a class="rounded-lg border border-white/30 px-3 py-1.5" href="${escapeText(queueUrl)}">Pending queue (${pendingCount})</a>
+                            <a class="rounded-lg border border-white/30 px-3 py-1.5" href="${escapeText(queueUrl)}">Pending list (${pendingCount})</a>
                         </div>
                     </div>
                     <button type="button" class="text-slate-400 hover:text-white" aria-label="Dismiss alert">

@@ -111,9 +111,12 @@ cannot create Administrator accounts.
   available without internet after setup.
 - The system remains autonomous: hotel operations use the local shared database
   and do not depend on a third-party cloud service or API.
-- Optional read-only integration endpoints are under `/api/v1`. Set a private
+- Integration status and approved dataset endpoints under `/api/v1` are
+  read-only. The protected `/api/v1/bookings` endpoint accepts reservation
+  requests from an authorized website or booking provider. Set a private
   `IHMP_API_KEY` in `.env` to enable them. When the value is blank, external API
-  access is safely disabled.
+  access is safely disabled. See
+  `docs/OFFICIAL_WEBSITE_BOOKING_INTEGRATION.md` for production requirements.
 
 The implementation and presentation traceability report is in
 [`docs/DEVELOPMENT_PHASE_INTEGRATION_AND_RELIABILITY.md`](docs/DEVELOPMENT_PHASE_INTEGRATION_AND_RELIABILITY.md).

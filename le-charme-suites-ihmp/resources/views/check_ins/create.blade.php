@@ -227,7 +227,7 @@
                     <div class="mb-6 flex flex-col gap-4 border-b border-surface-variant pb-6 lg:flex-row lg:items-end lg:justify-between">
                         <div>
                             <div class="mb-2 flex items-center gap-2">
-                                <span class="text-xs font-bold uppercase tracking-[0.22em] text-secondary">Front Office Arrival Intake</span>
+                                <span class="text-xs font-bold uppercase tracking-[0.22em] text-secondary">Front Office Arrival Registration</span>
                                 <span class="h-1 w-1 rounded-full bg-secondary"></span>
                                 <span class="text-xs font-semibold text-slate-500">Live Room Allocation</span>
                             </div>
@@ -392,7 +392,7 @@
                                     </div>
 
                                     <div class="border-t border-surface-variant pt-4">
-                                        <p class="mb-3 text-xs font-bold uppercase tracking-wider text-primary">Pre-check-in operational protocol</p>
+                                        <p class="mb-3 text-xs font-bold uppercase tracking-wider text-primary">Pre-check-in checklist</p>
                                         <div class="space-y-3">
                                             <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-outline-variant/40 bg-surface-container p-3 text-sm transition hover:bg-surface-container-low">
                                                 <input id="identityVerified" type="checkbox" class="mt-0.5 rounded border-outline-variant text-secondary focus:ring-secondary">
@@ -520,7 +520,7 @@
                                             <span class="text-xs font-bold text-secondary">{{ $arrival->check_in_date?->format('M d') ?? 'Soon' }}</span>
                                         </div>
                                     @empty
-                                        <p class="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">No arrivals are queued yet.</p>
+                                        <p class="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">No guests are waiting for arrival yet.</p>
                                     @endforelse
                                 </div>
                             </section>
@@ -595,7 +595,7 @@
                         <span id="cardGuaranteeStatus" style="display: block; font-size: 8pt; margin-top: 1.5mm;">[ ] Deposit or guarantee confirmed</span>
                         <span id="cardRoomStatus" style="display: block; font-size: 8pt; margin-top: 1.5mm;">[ ] Room and keycards ready</span>
                     </div>
-                    <div class="receipt-field" style="grid-column: span 3;"><span class="receipt-label">RFID / keycard assignment</span><span id="cardKeycards" class="receipt-value">Not assigned</span></div>
+                    <div class="receipt-field" style="grid-column: span 3;"><span class="receipt-label">Keycard / keycard assignment</span><span id="cardKeycards" class="receipt-value">Not assigned</span></div>
                     <div class="receipt-field" style="grid-column: span 4;"><span class="receipt-label">Front Desk notes</span><span id="cardNotes" style="display: block; font-size: 8pt; margin-top: 1.5mm; min-height: 14mm; white-space: pre-wrap;">None recorded.</span></div>
                 </div>
             </section>

@@ -9,10 +9,10 @@
     $adr = $occupiedRooms > 0 ? round($todayRevenue / max($occupiedRooms, 1), 2) : 0;
     $revPar = $totalRooms > 0 ? round($todayRevenue / max($totalRooms, 1), 2) : 0;
     $reportRows = collect([
-        ['title' => 'Room Turnover & Hygiene Readiness Matrix', 'code' => 'REP-OPS-'.now('Asia/Manila')->format('Ymd').'-01', 'department' => 'Housekeeping', 'frequency' => 'Hourly Snapshot', 'status' => $turnoverCount ? 'Active Queue' : 'Ready', 'metric' => $readinessRate.'% ready', 'hash' => substr(strtoupper(hash('sha256', 'turnover-'.$readinessRate.'-'.$turnoverCount)), 0, 10)],
-        ['title' => 'Floor Attendant Performance & Velocity Matrix', 'code' => 'REP-OPS-'.now('Asia/Manila')->format('Ymd').'-02', 'department' => 'Housekeeping', 'frequency' => 'End of Shift', 'status' => 'Supervisor Review', 'metric' => $housekeepingLogs->count().' activity logs', 'hash' => substr(strtoupper(hash('sha256', 'attendant-'.$housekeepingLogs->count())), 0, 10)],
+        ['title' => 'Room Cleaning & Ready Status Report', 'code' => 'REP-OPS-'.now('Asia/Manila')->format('Ymd').'-01', 'department' => 'Housekeeping', 'frequency' => 'Hourly Summary', 'status' => $turnoverCount ? 'Active List' : 'Ready', 'metric' => $readinessRate.'% ready', 'hash' => substr(strtoupper(hash('sha256', 'turnover-'.$readinessRate.'-'.$turnoverCount)), 0, 10)],
+        ['title' => 'Floor Attendant Performance & Velocity Table', 'code' => 'REP-OPS-'.now('Asia/Manila')->format('Ymd').'-02', 'department' => 'Housekeeping', 'frequency' => 'End of Shift', 'status' => 'Supervisor Review', 'metric' => $housekeepingLogs->count().' activity logs', 'hash' => substr(strtoupper(hash('sha256', 'attendant-'.$housekeepingLogs->count())), 0, 10)],
         ['title' => 'Front Desk Arrival & Departure Flow', 'code' => 'REP-OPS-'.now('Asia/Manila')->format('Ymd').'-03', 'department' => 'Front Desk', 'frequency' => 'Daily Close', 'status' => 'Live Synced', 'metric' => $arrivalsToday.' arrivals / '.$departuresToday.' departures', 'hash' => substr(strtoupper(hash('sha256', 'frontdesk-'.$arrivalsToday.'-'.$departuresToday)), 0, 10)],
-        ['title' => 'Occupancy Yield & Room Revenue Snapshot', 'code' => 'REP-OPS-'.now('Asia/Manila')->format('Ymd').'-04', 'department' => 'Rooms Division', 'frequency' => 'Daily Audit', 'status' => 'Verified', 'metric' => $occupancyRate.'% occupancy / PHP '.number_format($revPar, 2).' RevPAR', 'hash' => substr(strtoupper(hash('sha256', 'yield-'.$occupancyRate.'-'.$revPar)), 0, 10)],
+        ['title' => 'Occupancy Yield & Room Revenue Summary', 'code' => 'REP-OPS-'.now('Asia/Manila')->format('Ymd').'-04', 'department' => 'Rooms Division', 'frequency' => 'Daily Audit', 'status' => 'Verified', 'metric' => $occupancyRate.'% occupancy / PHP '.number_format($revPar, 2).' RevPAR', 'hash' => substr(strtoupper(hash('sha256', 'yield-'.$occupancyRate.'-'.$revPar)), 0, 10)],
         ['title' => 'Maintenance Exception & Safety Compliance', 'code' => 'REP-OPS-'.now('Asia/Manila')->format('Ymd').'-05', 'department' => 'Facilities', 'frequency' => 'Exception Based', 'status' => $maintenanceCount ? 'Action Required' : 'Clear', 'metric' => $maintenanceCount.' maintenance holds', 'hash' => substr(strtoupper(hash('sha256', 'maintenance-'.$maintenanceCount)), 0, 10)],
     ]);
     $departmentTone = [
@@ -27,7 +27,7 @@
         'Verified' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
         'Live Synced' => 'border-blue-200 bg-blue-50 text-blue-700',
         'Supervisor Review' => 'border-secondary/30 bg-secondary/10 text-secondary',
-        'Active Queue' => 'border-sky-200 bg-sky-50 text-sky-700',
+        'Active List' => 'border-sky-200 bg-sky-50 text-sky-700',
         'Action Required' => 'border-error/20 bg-error-container text-error',
     ];
 @endphp
@@ -38,11 +38,11 @@
         <div class="max-w-4xl">
             <span class="inline-flex items-center gap-2 rounded border border-secondary-fixed/30 bg-secondary/25 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-secondary-fixed">
                 <span class="material-symbols-outlined text-sm">monitoring</span>
-                Owner Access / Operational Telemetry
+                Owner Access / Operational System Status
             </span>
-            <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Operational Reports & Departmental Telemetry</h2>
+            <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Operational Reports & Departmental System Status</h2>
             <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">
-                Real-time and scheduled operational reports across room turnover, housekeeping SLAs, occupancy yield, and front desk workflow pacing.
+                Real-time and scheduled operational reports across room cleaning and preparation, housekeeping SLAs, occupancy yield, and front desk work progress.
             </p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-3 rounded-xl border border-white/10 bg-white/10 p-4 sm:grid-cols-4 xl:min-w-[620px]">
@@ -56,7 +56,7 @@
 
 <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Room Availability</p><span class="material-symbols-outlined text-secondary">hotel</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $availableRooms }} Available</p><p class="mt-1 text-sm text-slate-500">of {{ $totalRooms }} rooms</p></div>
-    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Housekeeping Readiness</p><span class="material-symbols-outlined text-secondary">cleaning_services</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $readinessRate }}%</p><div class="mt-3 h-2 rounded-full bg-surface-mid"><div class="h-2 rounded-full bg-secondary" style="width: {{ min($readinessRate, 100) }}%"></div></div></div>
+    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Housekeeping Ready Status</p><span class="material-symbols-outlined text-secondary">cleaning_services</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $readinessRate }}%</p><div class="mt-3 h-2 rounded-full bg-surface-mid"><div class="h-2 rounded-full bg-secondary" style="width: {{ min($readinessRate, 100) }}%"></div></div></div>
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">ADR / RevPAR</p><span class="material-symbols-outlined text-secondary">payments</span></div><p class="mt-4 font-serif text-2xl font-bold">PHP {{ number_format($adr, 2) }}</p><p class="mt-1 text-sm text-slate-500">RevPAR PHP {{ number_format($revPar, 2) }}</p></div>
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Operational Velocity</p><span class="material-symbols-outlined text-secondary">timelapse</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $operationalVelocity }}</p><p class="mt-1 text-sm text-slate-500">Workflow events in owner feed</p></div>
 </section>
@@ -79,12 +79,12 @@
 
 <section class="owner-card overflow-hidden rounded-xl">
     <div class="flex items-center justify-between border-b border-line bg-white p-5">
-        <div><h3 class="font-serif text-2xl font-bold text-primary">Departmental Reports Ledger</h3><p class="text-sm text-slate-500">Validated live operational exports with audit timestamps and departmental supervisor sign-offs.</p></div>
+        <div><h3 class="font-serif text-2xl font-bold text-primary">Departmental Reports Records</h3><p class="text-sm text-slate-500">Validated live operational exports with audit timestamps and departmental supervisor sign-offs.</p></div>
         <span class="rounded-full bg-secondary-fixed/30 px-3 py-1 text-xs font-bold text-secondary">View-only audit mode</span>
     </div>
     <div class="owner-scroll overflow-x-auto">
         <table class="w-full min-w-[1120px] border-collapse text-left text-sm">
-            <thead><tr class="border-b border-line bg-surface-mid text-[11px] font-bold uppercase tracking-wider text-slate-600"><th class="px-5 py-3">Report Title & Code</th><th class="px-4 py-3">Department</th><th class="px-4 py-3">Frequency</th><th class="px-4 py-3">Telemetry / Status</th><th class="px-4 py-3">Audit Hash</th><th class="px-5 py-3 text-right">Executive Audit Actions</th></tr></thead>
+            <thead><tr class="border-b border-line bg-surface-mid text-[11px] font-bold uppercase tracking-wider text-slate-600"><th class="px-5 py-3">Report Title & Code</th><th class="px-4 py-3">Department</th><th class="px-4 py-3">Frequency</th><th class="px-4 py-3">System Status / Status</th><th class="px-4 py-3">Audit Hash</th><th class="px-5 py-3 text-right">Executive Audit Actions</th></tr></thead>
             <tbody class="divide-y divide-line">
                 @foreach ($reportRows as $report)
                     <tr class="transition hover:bg-surface-low" data-ops-report-row data-department="{{ $report['department'] }}" data-search="{{ strtolower($report['title'].' '.$report['code'].' '.$report['department'].' '.$report['frequency'].' '.$report['status'].' '.$report['metric']) }}">
@@ -108,7 +108,7 @@
 <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">
     <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Staffing Advisory</p><h3 class="mt-2 font-serif text-2xl font-bold">Coverage Stable</h3><p class="mt-3 text-sm text-slate-600">Zero unscheduled absences reported in the visible owner feed.</p></div>
     <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Safety Compliance</p><h3 class="mt-2 font-serif text-2xl font-bold">SBMA Standard Verified</h3><p class="mt-3 text-sm text-slate-600">Operational safety and hygiene monitoring remains compliant through current reporting period.</p></div>
-    <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Owner Governance</p><h3 class="mt-2 font-serif text-2xl font-bold">Executive View-Only</h3><p class="mt-3 text-sm leading-6 text-blue-100">Reports can be reviewed and exported. Operational edits remain restricted to authorized department users and administrators.</p></div>
+    <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Owner Management</p><h3 class="mt-2 font-serif text-2xl font-bold">Executive View-Only</h3><p class="mt-3 text-sm leading-6 text-blue-100">Reports can be reviewed and exported. Operational edits remain restricted to authorized department users and administrators.</p></div>
 </section>
 
 <script>
@@ -143,7 +143,7 @@
         const exportVisible = () => {
             const visibleRows = rows.filter((row) => !row.classList.contains('hidden'));
             const csv = [
-                ['Report Title & Code', 'Department', 'Frequency', 'Telemetry / Status', 'Audit Hash', 'Actions'],
+                ['Report Title & Code', 'Department', 'Frequency', 'System Status / Status', 'Audit Hash', 'Actions'],
                 ...visibleRows.map((row) => Array.from(row.children).map((cell) => cell.innerText.replace(/\s+/g, ' ').trim())),
             ].map((line) => line.map((value) => `"${value.replace(/"/g, '""')}"`).join(',')).join('\n');
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

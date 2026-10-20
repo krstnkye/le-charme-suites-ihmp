@@ -100,7 +100,7 @@
                         <span class="text-secondary">System Settings</span>
                     </div>
                     <h2 class="font-serif text-4xl font-semibold tracking-tight">Global System Settings & Operational Parameters</h2>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage property identity, front desk operating rules, billing policies, device integrations, room turnover logic, and backup schedules.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage hotel information, front desk operating rules, billing policies, device integrations, room cleaning and preparation logic, and backup schedules.</p>
                 </div>
                 <span class="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800">
                     <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
@@ -114,7 +114,7 @@
                     ['account_balance_wallet', 'Billing & Tax Policies'],
                     ['schedule', 'Check-in / Check-out Rules'],
                     ['hub', 'Hardware & Device Integrations'],
-                    ['nightlight', 'PMS Cron & Night Audit'],
+                    ['nightlight', 'IHMP Cron & Night Audit'],
                     ['mark_email_unread', 'Notifications'],
                 ] as $index => [$icon, $label])
                     <a href="#settings-form" @class([
@@ -276,9 +276,9 @@
                         </div>
                         <div class="space-y-3">
                             @foreach ([
-                                ['key', 'Saflok Quantum RFID Server', '192.168.10.45:8080 TCP Socket', 'Connected'],
+                                ['key', 'Saflok Quantum Keycard Server', '192.168.10.45:8080 TCP Socket', 'Connected'],
                                 ['point_of_sale', 'BDO Merchant POS Terminals', 'Ethernet direct hook / auto-settlement', 'Ethernet Synced'],
-                                ['print', 'Epson TM-T88VI Thermal Billing Printers', 'Front Desk Terminals 1, 2 and Concierge', 'Online & Ready'],
+                                ['print', 'Epson TM-T88VI Thermal Billing Printers', 'Front Desk Terminals 1, 2 and Guest Service', 'Online & Ready'],
                             ] as [$icon, $name, $description, $status])
                                 <div class="flex items-center justify-between gap-4 rounded-lg border border-surface-container-highest p-3 transition hover:border-secondary">
                                     <div class="flex items-center gap-3">
@@ -303,14 +303,14 @@
                         <div class="mb-5 flex items-center justify-between border-b border-surface-container-highest pb-3">
                             <div class="flex items-center gap-2.5">
                                 <span class="material-symbols-outlined text-secondary">cleaning_services</span>
-                                <h3 class="font-serif text-2xl font-semibold">Automated Room Turnover & Housekeeping Logic</h3>
+                                <h3 class="font-serif text-2xl font-semibold">Automatic Room Cleaning & Housekeeping Rules</h3>
                             </div>
                             <span class="rounded border border-primary/20 bg-primary/5 px-2 py-0.5 text-xs font-bold text-primary">Operational Trigger</span>
                         </div>
                         <div class="space-y-3">
                             @foreach ([
-                                ['Auto-mark room as Dirty upon checkout settlement', 'Broadcasts a room turnover task to housekeeping after the guest departure is recorded.'],
-                                ['Turnover SLA escalation alert', 'Notifies the housekeeping supervisor if a room turnaround exceeds 45 minutes.'],
+                                ['Auto-mark room as Dirty upon checkout settlement', 'Broadcasts a room cleaning and preparation task to housekeeping after the guest departure is recorded.'],
+                                ['Room Preparation Response Time escalation alert', 'Notifies the housekeeping supervisor if a room turnaround exceeds 45 minutes.'],
                             ] as [$title, $description])
                                 <div class="flex items-center justify-between gap-4 rounded-lg border border-surface-container-highest p-3">
                                     <div>
@@ -338,7 +338,7 @@
                             <div class="flex items-start gap-3">
                                 <span class="material-symbols-outlined text-secondary">schedule_send</span>
                                 <div>
-                                    <p class="font-bold">Daily Automated Cloud Snapshot</p>
+                                    <p class="font-bold">Daily Automated Cloud Summary</p>
                                     <p class="mt-1 text-sm leading-6 text-slate-600">Runs daily at <strong>03:00 Asia/Manila</strong> alongside the night audit, with a 7-year fiscal audit retention policy.</p>
                                 </div>
                             </div>

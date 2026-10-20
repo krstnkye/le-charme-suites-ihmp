@@ -18,19 +18,19 @@ class UiDesignPlacementTest extends TestCase
         $housekeeper = User::factory()->create(['role' => 'housekeeping']);
 
         $pages = [
-            'cleaning-tasks' => 'Unit Turnover & Cleaning Tasks Queue',
-            'priority-rooms' => 'Priority Rooms & Expedited Turnovers',
-            'guest-requests' => 'Live Request Dispatch Board',
+            'cleaning-tasks' => 'Unit Room Preparation & Cleaning Tasks List',
+            'priority-rooms' => 'Priority Rooms & Fast Cleaning',
+            'guest-requests' => 'Live Request Assignment Board',
             'special-cleaning' => 'Specialized Cleaning & Environmental Sanitization Protocol',
-            'completed-tasks' => 'Completed Tasks & Shift Turnover History',
+            'completed-tasks' => 'Completed Tasks & Shift Cleaning History',
             'report-issue' => 'Report Maintenance Defect or Room Discrepancy',
             'reported-issues' => 'Reported Issues & Facilities Work Orders Log',
             'lost-found' => 'Lost & Found Vault & Chain of Custody Registry',
-            'reports' => 'Housekeeping Operational Reports & SLA Analytics',
-            'notifications' => 'Housekeeping Dispatch Notifications & Operational Alerts',
-            'tasks' => 'Housekeeping Tasks & Operational Dispatch',
+            'reports' => 'Housekeeping Operational Reports & Response Time Analytics',
+            'notifications' => 'Housekeeping Assignment Notifications & Operational Alerts',
+            'tasks' => 'Housekeeping Tasks & Operational Assignment',
             'service-requests' => 'Service Requests Hub & Guest Amenities Delivery',
-            'maintenance-requests' => 'Maintenance Requests & Engineering Dispatch Queue',
+            'maintenance-requests' => 'Maintenance Requests & Engineering Assignment List',
         ];
 
         foreach ($pages as $page => $signature) {
@@ -44,7 +44,7 @@ class UiDesignPlacementTest extends TestCase
         $this->actingAs($housekeeper)
             ->get(route('profile.edit'))
             ->assertOk()
-            ->assertSeeText('Executive Housekeeper Profile & Digital Duty Credentials');
+            ->assertSeeText('Executive Housekeeper Profile & Digital Duty Login Details');
 
         foreach (['linen-supplies', 'linen-records', 'housekeeping-supplies'] as $removedPage) {
             $this->actingAs($housekeeper)

@@ -222,7 +222,7 @@ class WorkEmailAuthenticationTest extends TestCase
         $dashboards = [
             'receptionist' => 'Front Desk Dashboard',
             'cashier' => 'Cashier &amp; Billing Dashboard',
-            'housekeeping' => 'Daily Rooms Readiness & Turnover Control',
+            'housekeeping' => 'Daily Rooms Ready Status & Room Preparation Control',
         ];
 
         foreach ($dashboards as $role => $signature) {

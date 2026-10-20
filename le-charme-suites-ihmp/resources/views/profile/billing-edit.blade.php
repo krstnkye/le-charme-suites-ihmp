@@ -89,7 +89,7 @@
                         </div>
                         <dl class="mt-5 space-y-2 border-t border-white/10 pt-4 text-sm text-blue-100">
                             <div class="flex justify-between gap-4"><dt>Register</dt><dd class="font-bold text-white">Register 02</dd></div>
-                            <div class="flex justify-between gap-4"><dt>Authority</dt><dd class="font-bold text-white">Cashier & Billing</dd></div>
+                            <div class="flex justify-between gap-4"><dt>Access</dt><dd class="font-bold text-white">Cashier & Billing</dd></div>
                             <div class="flex justify-between gap-4"><dt>Member Since</dt><dd class="font-bold text-white">{{ $user->created_at?->timezone(config('app.timezone'))->format('M d, Y') }}</dd></div>
                         </dl>
                     </div>
@@ -139,7 +139,7 @@
                                 <span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-secondary">password</span>
                                 <div>
                                     <h3 class="font-serif text-2xl font-bold">Password &amp; Access Lifecycle</h3>
-                                    <p class="text-sm text-slate-500">Leave both password fields blank to keep the current credential.</p>
+                                    <p class="text-sm text-slate-500">Leave both password fields blank to keep the current password.</p>
                                 </div>
                             </div>
                             <span class="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white">Secure Rotation</span>

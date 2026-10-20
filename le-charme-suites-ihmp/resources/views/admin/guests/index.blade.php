@@ -97,7 +97,7 @@
                         <span class="text-secondary">Guest Management</span>
                     </div>
                     <h2 class="font-serif text-4xl font-semibold tracking-tight">Administrative Guest Registry & Oversight</h2>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Full-power guest governance for admin users: inspect profile quality, lifetime value, stay history, identification status, and sensitive record actions.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Full-power guest record management for admin users: inspect profile quality, lifetime value, stay history, identification status, and sensitive record actions.</p>
                 </div>
                 <div class="flex flex-wrap gap-3">
                     <a href="{{ route('guests.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-primary-container">

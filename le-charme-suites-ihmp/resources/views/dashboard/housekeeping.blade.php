@@ -74,9 +74,9 @@
             <section class="rounded-xl bg-primary p-7 text-white shadow-lg">
                 <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_480px] lg:items-center">
                     <div>
-                        <p class="text-xs font-bold uppercase tracking-[0.22em] text-[#ffdeaa]">Housekeeping Command Center</p>
-                        <h2 class="mt-3 font-serif text-4xl font-bold leading-tight">Daily Rooms Readiness & Turnover Control</h2>
-                        <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-200">Monitor cleaning queues, room inspection readiness, maintenance reports, and guest service requests from one role-specific workspace.</p>
+                        <p class="text-xs font-bold uppercase tracking-[0.22em] text-[#ffdeaa]">Housekeeping Dashboard</p>
+                        <h2 class="mt-3 font-serif text-4xl font-bold leading-tight">Daily Rooms Ready Status & Room Preparation Control</h2>
+                        <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-200">Monitor cleaning lists, room inspection readiness, maintenance reports, and guest service requests from one role-specific workspace.</p>
                     </div>
                     <div class="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-white/10 p-4">
                         <div>
@@ -85,7 +85,7 @@
                             <p class="mt-1 text-[11px] text-slate-300">Operational records · {{ $publishedRoomCount }} rooms in the property</p>
                         </div>
                         <div>
-                            <p class="text-xs font-bold uppercase text-slate-300">Readiness</p>
+                            <p class="text-xs font-bold uppercase text-slate-300">Ready Status</p>
                             <p class="mt-1 text-2xl font-bold">{{ $readyRate }}%</p>
                         </div>
                         <div>
@@ -105,7 +105,7 @@
                     ['label' => 'Property Rooms', 'value' => $publishedRoomCount, 'icon' => 'domain'],
                     ['label' => 'Ready / Available', 'value' => $availableRooms, 'icon' => 'check_circle'],
                     ['label' => 'Occupied Rooms', 'value' => $occupiedRooms, 'icon' => 'king_bed'],
-                    ['label' => 'Cleaning Queue', 'value' => $cleaningCount, 'icon' => 'mop'],
+                    ['label' => 'Cleaning List', 'value' => $cleaningCount, 'icon' => 'mop'],
                     ['label' => 'Maintenance Issues', 'value' => $maintenanceCount, 'icon' => 'construction'],
                 ] as $stat)
                     <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
@@ -314,8 +314,8 @@
                         <h3 class="font-serif text-2xl font-bold">Reports</h3>
                         <div class="mt-4 space-y-2 text-sm">
                             <div class="flex justify-between rounded-lg bg-slate-50 px-3 py-2"><span>Ready rooms</span><strong>{{ $availableRooms }}</strong></div>
-                            <div class="flex justify-between rounded-lg bg-slate-50 px-3 py-2"><span>Turnover queue</span><strong>{{ $cleaningCount }}</strong></div>
-                            <div class="flex justify-between rounded-lg bg-slate-50 px-3 py-2"><span>Maintenance queue</span><strong>{{ $maintenanceCount }}</strong></div>
+                            <div class="flex justify-between rounded-lg bg-slate-50 px-3 py-2"><span>Room cleaning list</span><strong>{{ $cleaningCount }}</strong></div>
+                            <div class="flex justify-between rounded-lg bg-slate-50 px-3 py-2"><span>Maintenance list</span><strong>{{ $maintenanceCount }}</strong></div>
                         </div>
                     </section>
 

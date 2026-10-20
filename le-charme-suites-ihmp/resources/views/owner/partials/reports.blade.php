@@ -9,7 +9,7 @@
     $reportRows = collect([
         [
             'title' => "Daily Manager's Flash Report",
-            'subtitle' => 'System compiled occupancy, room readiness, and revenue snapshot',
+            'subtitle' => 'System compiled occupancy, rooms ready for guests, and revenue snapshot',
             'classification' => 'Operational',
             'date' => now('Asia/Manila'),
             'status' => 'Verified',
@@ -17,7 +17,7 @@
             'amount' => $recordedRevenue,
         ],
         [
-            'title' => 'Revenue & Transaction Reconciliation',
+            'title' => 'Revenue & Transaction Payment Review',
             'subtitle' => 'Billing accounts, settled payments, and transaction activity',
             'classification' => 'Transaction',
             'date' => now('Asia/Manila')->subMinutes(18),
@@ -35,7 +35,7 @@
             'amount' => null,
         ],
         [
-            'title' => 'Housekeeping & Room Readiness Log',
+            'title' => 'Housekeeping & Room Ready Status Log',
             'subtitle' => 'Room status changes, cleaning signals, and maintenance visibility',
             'classification' => 'Operational',
             'date' => now('Asia/Manila')->subHours(2),
@@ -63,11 +63,11 @@
         <div class="max-w-4xl">
             <span class="inline-flex items-center gap-2 rounded border border-secondary-fixed/30 bg-secondary/25 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-secondary-fixed">
                 <span class="material-symbols-outlined text-sm">analytics</span>
-                Executive Reports / Immutable Records
+                Executive Reports / Protected Records
             </span>
             <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Reports & Records Overview</h2>
             <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">
-                Owner visibility into operational reports, transaction summaries, guest records, room readiness logs, and statutory audit archives.
+                View department reports, transaction summaries, guest records, room readiness history, and required audit records.
             </p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-3 rounded-xl border border-white/10 bg-white/10 p-4 sm:grid-cols-4 xl:min-w-[620px]">
@@ -81,7 +81,7 @@
 
 <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Generated Today</p><span class="material-symbols-outlined text-secondary">summarize</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $reportRows->count() }}</p><p class="mt-1 text-sm text-slate-500">Executive reports ready for viewing</p></div>
-    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Daily Audits</p><span class="material-symbols-outlined text-secondary">fact_check</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $operationalReportCount }}</p><p class="mt-1 text-sm text-slate-500">Operational ledgers ready</p></div>
+    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Daily Reviews</p><span class="material-symbols-outlined text-secondary">fact_check</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $operationalReportCount }}</p><p class="mt-1 text-sm text-slate-500">Operational reports ready</p></div>
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Transaction Reports</p><span class="material-symbols-outlined text-secondary">receipt_long</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $transactionReportCount }}</p><p class="mt-1 text-sm text-slate-500">Billing and transaction entries visible</p></div>
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Indexed Database</p><span class="material-symbols-outlined text-secondary">database</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $recordCount }}</p><p class="mt-1 text-sm text-slate-500">Total owner-visible records</p></div>
 </section>
@@ -90,14 +90,14 @@
     <div id="operational-reports" class="owner-card rounded-xl border-t-2 border-t-primary-container p-6">
         <div class="mb-4 flex items-start justify-between"><span class="material-symbols-outlined text-secondary">monitoring</span><span class="rounded bg-primary-container px-2 py-0.5 text-xs font-bold text-secondary-fixed">/owner/reports/operations</span></div>
         <h3 class="font-serif text-2xl font-bold text-primary">Operational Reports</h3>
-        <p class="mt-2 text-sm leading-6 text-slate-600">Occupancy, room readiness, housekeeping, arrivals, departures, and property performance reporting.</p>
-        <div class="mt-5 flex items-center justify-between border-t border-line pt-3 text-xs"><span class="text-slate-500">Daily audits:</span><strong>{{ $operationalReportCount }} ledgers ready</strong></div>
+        <p class="mt-2 text-sm leading-6 text-slate-600">Occupancy, rooms ready for guests, housekeeping, arrivals, departures, and property performance reporting.</p>
+        <div class="mt-5 flex items-center justify-between border-t border-line pt-3 text-xs"><span class="text-slate-500">Daily audits:</span><strong>{{ $operationalReportCount }} reports ready</strong></div>
         <button type="button" data-report-scroll="#reports-ledger" data-report-filter="Operational" class="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-line bg-surface-mid px-3 py-2.5 text-sm font-bold text-primary transition hover:bg-primary-container hover:text-secondary-fixed">Open Operational Reports <span class="material-symbols-outlined text-base">arrow_forward</span></button>
     </div>
     <div id="transaction-reports" class="owner-card rounded-xl border-t-2 border-t-secondary p-6">
         <div class="mb-4 flex items-start justify-between"><span class="material-symbols-outlined text-secondary">payments</span><span class="rounded bg-secondary/10 px-2 py-0.5 text-xs font-bold text-secondary">/owner/reports/transactions</span></div>
         <h3 class="font-serif text-2xl font-bold text-primary">Transaction Reports</h3>
-        <p class="mt-2 text-sm leading-6 text-slate-600">End-of-day payment reconciliations, transaction breakdowns, revenue velocity, and settlement monitoring.</p>
+        <p class="mt-2 text-sm leading-6 text-slate-600">End-of-day payment reviews, transaction breakdowns, revenue progress, and payment monitoring.</p>
         <div class="mt-5 flex items-center justify-between border-t border-line pt-3 text-xs"><span class="text-slate-500">Recorded today:</span><strong>PHP {{ number_format($todayTransactions->sum('amount'), 2) }}</strong></div>
         <button type="button" data-report-scroll="#reports-ledger" data-report-filter="Transaction" class="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-secondary bg-primary-container px-3 py-2.5 text-sm font-bold text-secondary-fixed transition hover:bg-primary">Open Transaction Reports <span class="material-symbols-outlined text-base">arrow_forward</span></button>
     </div>
@@ -114,16 +114,16 @@
     <div class="flex flex-col gap-4 border-b border-line bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
         <div class="flex items-center gap-3">
             <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary-container text-secondary-fixed"><span class="material-symbols-outlined">verified_user</span></span>
-            <div><h3 class="font-serif text-2xl font-bold text-primary">Live Audit Stream & Recent Reports</h3><p class="text-sm text-slate-500">Automated compilation schedule and immutable hash verification.</p></div>
+            <div><h3 class="font-serif text-2xl font-bold text-primary">Live Audit Stream & Recent Reports</h3><p class="text-sm text-slate-500">Automated compilation schedule and protected record verification.</p></div>
         </div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
             <label class="relative block sm:w-80"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400">search</span><input id="ownerReportSearch" class="w-full rounded-lg border border-line bg-surface-low py-2.5 pl-10 pr-4 text-sm text-primary placeholder:text-slate-400 focus:border-secondary focus:ring-secondary/20" placeholder="Filter report name or classification..." type="search"></label>
-            <button id="ownerReportExport" type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-white px-3.5 py-2.5 text-sm font-bold text-primary transition hover:border-secondary"><span class="material-symbols-outlined text-lg text-secondary">download</span>Export Ledger</button>
+            <button id="ownerReportExport" type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-white px-3.5 py-2.5 text-sm font-bold text-primary transition hover:border-secondary"><span class="material-symbols-outlined text-lg text-secondary">download</span>Export Records</button>
         </div>
     </div>
     <div class="owner-scroll overflow-x-auto">
         <table class="w-full min-w-[1120px] border-collapse text-left text-sm">
-            <thead><tr class="border-b border-line bg-surface-mid text-[11px] font-bold uppercase tracking-wider text-slate-600"><th class="px-5 py-3">Ledger / Report Title</th><th class="px-4 py-3">Classification</th><th class="px-4 py-3">Execution Date</th><th class="px-4 py-3">Audit Status</th><th class="px-4 py-3">Ledger Signature</th><th class="px-5 py-3 text-right">Statutory Action</th></tr></thead>
+            <thead><tr class="border-b border-line bg-surface-mid text-[11px] font-bold uppercase tracking-wider text-slate-600"><th class="px-5 py-3">Records / Report Title</th><th class="px-4 py-3">Classification</th><th class="px-4 py-3">Execution Date</th><th class="px-4 py-3">Audit Status</th><th class="px-4 py-3">Records Signature</th><th class="px-5 py-3 text-right">Required Tax Action</th></tr></thead>
             <tbody class="divide-y divide-line">
                 @foreach ($reportRows as $report)
                     <tr class="transition hover:bg-surface-low" data-report-row data-classification="{{ $report['classification'] }}" data-search="{{ strtolower($report['title'].' '.$report['subtitle'].' '.$report['classification'].' '.$report['status'].' '.$report['signature']) }}">
@@ -139,7 +139,7 @@
         </table>
     </div>
     <div class="flex flex-col items-center justify-between gap-2 border-t border-line bg-surface-low p-4 text-xs text-slate-500 sm:flex-row">
-        <span id="ownerReportCount">Displaying {{ $reportRows->count() }} recent immutable executive reports • hash {{ $auditHash }}</span>
+        <span id="ownerReportCount">Displaying {{ $reportRows->count() }} recent protected management reports • hash {{ $auditHash }}</span>
         <span>Owner access is view-only. Report exports are generated from current visible data.</span>
     </div>
 </section>
@@ -169,7 +169,7 @@
                 if (show) visible += 1;
             });
             if (count) {
-                count.textContent = `Displaying ${visible} of ${rows.length} recent immutable executive reports`;
+                count.textContent = `Displaying ${visible} of ${rows.length} recent protected management reports`;
             }
         };
 
@@ -188,7 +188,7 @@
         const exportVisibleReports = () => {
             const visibleRows = rows.filter((row) => !row.classList.contains('hidden'));
             const csv = [
-                ['Ledger / Report Title', 'Classification', 'Execution Date', 'Audit Status', 'Ledger Signature', 'Action'],
+                ['Records / Report Title', 'Classification', 'Execution Date', 'Audit Status', 'Records Signature', 'Action'],
                 ...visibleRows.map((row) => Array.from(row.children).map((cell) => cell.innerText.replace(/\s+/g, ' ').trim())),
             ].map((line) => line.map((value) => `"${value.replace(/"/g, '""')}"`).join(',')).join('\n');
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

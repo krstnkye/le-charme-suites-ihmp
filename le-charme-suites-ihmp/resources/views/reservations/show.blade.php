@@ -11,6 +11,7 @@
     $deposit = round($totalStay * 0.5, 2);
     $balance = max(0, $totalStay - $deposit);
     $statusLabels = [
+        'pending' => 'Pending Verification',
         'reserved' => 'Reserved',
         'checked_in' => 'Checked In',
         'completed' => 'Completed',
@@ -169,9 +170,26 @@
                                 <dt class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Booking Source</dt>
                                 <dd class="mt-0.5 flex items-center gap-1.5 text-sm font-semibold">
                                     <span class="material-symbols-outlined text-sm text-secondary">storefront</span>
-                                    Direct Front Desk Intake
+                                    {{ config('integrations.booking_sources.'.($reservation->source ?: 'front_desk'), 'Front Desk') }}
                                 </dd>
                             </div>
+                            @if ($reservation->external_reference)
+                                <div>
+                                    <dt class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Official Booking Number</dt>
+                                    <dd class="mt-0.5 text-sm font-bold text-primary">{{ $reservation->external_reference }}</dd>
+                                </div>
+                            @endif
+                            @if ($reservation->payment_status || $reservation->total_amount !== null)
+                                <div>
+                                    <dt class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Website Payment</dt>
+                                    <dd class="mt-0.5 text-sm font-semibold text-primary">
+                                        {{ ucfirst($reservation->payment_status ?: 'Not provided') }}
+                                        @if ($reservation->total_amount !== null)
+                                            · {{ $reservation->currency ?: 'PHP' }} {{ number_format((float) $reservation->total_amount, 2) }}
+                                        @endif
+                                    </dd>
+                                </div>
+                            @endif
                             <div>
                                 <dt class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Current Status</dt>
                                 <dd class="mt-1">
@@ -338,9 +356,9 @@
                         <div class="mb-4 flex items-center justify-between border-b border-surface-variant pb-3">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-primary">schema</span>
-                                <h3 class="text-lg font-bold text-primary">Lifecycle Records</h3>
+                                <h3 class="text-lg font-bold text-primary">Booking History</h3>
                             </div>
-                            <span class="rounded bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">Integration Pipeline</span>
+                            <span class="rounded bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">Booking Update</span>
                         </div>
                         <div class="space-y-4">
                             <div class="rounded-lg border border-secondary/30 bg-secondary-container/10 p-3.5">
@@ -406,7 +424,7 @@
                         </div>
                     </div>
                     <div class="mt-4 flex items-center justify-between border-t border-surface-variant pt-3 text-xs text-on-surface-variant">
-                        <span>IPT101 Lifecycle Protocol</span>
+                        <span>Reservation Process</span>
                         <span class="font-bold text-primary">{{ $reservation->status === 'reserved' ? 'Phase 2: Active Pre-Arrival' : 'Active Record' }}</span>
                     </div>
                 </section>
@@ -418,14 +436,14 @@
                         <span class="material-symbols-outlined text-base">room_service</span>
                     </div>
                     <div>
-                        <h4 class="font-bold text-primary">Concierge & Front Desk Amenities Note</h4>
+                        <h4 class="font-bold text-primary">Guest Service & Front Desk Amenities Note</h4>
                         <p class="text-sm text-on-surface-variant">{{ $reservation->notes ?: 'No amenities or service notes have been added for this reservation.' }}</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
                     <a href="{{ route('reservations.edit', $reservation) }}" class="rounded-lg border border-surface-variant bg-white px-3 py-1.5 text-sm font-bold text-primary transition hover:bg-surface-container">Add Service Request</a>
                     @if ($canCheckIn)
-                        <a href="{{ route('check-ins.create', ['reservation_id' => $reservation->id]) }}" class="rounded-lg bg-secondary px-3 py-1.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110">Assign RFID Key Card</a>
+                        <a href="{{ route('check-ins.create', ['reservation_id' => $reservation->id]) }}" class="rounded-lg bg-secondary px-3 py-1.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110">Assign Room Keycard</a>
                     @endif
                 </div>
             </section>

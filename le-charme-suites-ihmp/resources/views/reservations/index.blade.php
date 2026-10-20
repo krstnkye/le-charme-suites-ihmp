@@ -171,9 +171,9 @@
                         <div class="mb-4 flex items-center justify-between border-b border-surface-variant pb-3">
                             <div class="flex items-center gap-2">
                                 <span class="h-2.5 w-2.5 rounded-full bg-secondary"></span>
-                                <h3 class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Sequential Reservation Pipeline</h3>
+                                <h3 class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Sequential Reservation Upcoming Bookings</h3>
                             </div>
-                            <span class="rounded-full bg-secondary-fixed/60 px-3 py-1 text-[10px] font-bold uppercase text-on-secondary-fixed-variant">Ready for front desk handoff</span>
+                            <span class="rounded-full bg-secondary-fixed/60 px-3 py-1 text-[10px] font-bold uppercase text-on-secondary-fixed-variant">Ready for Front Desk</span>
                         </div>
                         <div class="grid grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-8">
                             @foreach ([
@@ -363,7 +363,7 @@
                                     </div>
 
                                     <div>
-                                        <span class="mb-2 block text-[11px] font-bold uppercase tracking-wider text-outline">Billing Snapshot</span>
+                                        <span class="mb-2 block text-[11px] font-bold uppercase tracking-wider text-outline">Billing Summary</span>
                                         <div class="space-y-2 rounded-lg border border-secondary/30 bg-surface-container-low p-3 text-xs">
                                             <div class="flex justify-between">
                                                 <span class="text-on-surface-variant">Nightly room charge</span>

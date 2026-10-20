@@ -11,15 +11,15 @@
     $statusCopy = [
         'available' => ['label' => 'Ready / Clean', 'tone' => 'border-emerald-200 bg-emerald-50 text-emerald-700', 'dot' => 'bg-emerald-600', 'score' => 100, 'inspection' => 'Executive housekeeping verified'],
         'occupied' => ['label' => 'Occupied / Clean', 'tone' => 'border-primary-container/20 bg-primary-container/10 text-primary-container', 'dot' => 'bg-primary-container', 'score' => 92, 'inspection' => 'In-stay service monitored'],
-        'reserved' => ['label' => 'Reserved / Ready', 'tone' => 'border-blue-200 bg-blue-50 text-blue-700', 'dot' => 'bg-blue-500', 'score' => 96, 'inspection' => 'Pre-arrival inspection queued'],
-        'cleaning' => ['label' => 'Turnover Active', 'tone' => 'border-sky-200 bg-sky-50 text-sky-700', 'dot' => 'bg-sky-500', 'score' => 72, 'inspection' => 'Cleaning cycle in progress'],
+        'reserved' => ['label' => 'Reserved / Ready', 'tone' => 'border-blue-200 bg-blue-50 text-blue-700', 'dot' => 'bg-blue-500', 'score' => 96, 'inspection' => 'Pre-arrival inspection waiting'],
+        'cleaning' => ['label' => 'Room Preparation Active', 'tone' => 'border-sky-200 bg-sky-50 text-sky-700', 'dot' => 'bg-sky-500', 'score' => 72, 'inspection' => 'Cleaning cycle in progress'],
         'maintenance' => ['label' => 'Maintenance Hold', 'tone' => 'border-amber-300 bg-amber-50 text-amber-800', 'dot' => 'bg-amber-600', 'score' => 38, 'inspection' => 'Engineering clearance required'],
     ];
     $roomStatusGroups = [
         ['key' => 'all', 'label' => 'All Rooms', 'count' => $totalRooms],
         ['key' => 'available', 'label' => 'Clean & Ready', 'count' => $vacantCleanRooms],
         ['key' => 'occupied', 'label' => 'Occupied', 'count' => $occupiedRooms],
-        ['key' => 'cleaning', 'label' => 'Turnover', 'count' => $turnoverRooms],
+        ['key' => 'cleaning', 'label' => 'Room Preparation', 'count' => $turnoverRooms],
         ['key' => 'maintenance', 'label' => 'Maintenance', 'count' => $outOfOrderRooms],
     ];
     $floorSummary = $rooms->groupBy(fn ($room) => substr((string) $room->room_number, 0, 1) ?: '1')->map(fn ($floorRooms, $floor) => [
@@ -39,16 +39,16 @@
                 <span class="material-symbols-outlined text-sm">hotel_class</span>
                 Owner Access / Room Hygiene Command View
             </span>
-            <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Housekeeping Room Status Matrix</h2>
+            <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Housekeeping Room Status Table</h2>
             <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">
-                Real-time room turnover, cleanliness inspection readiness, and attendant assignment oversight across all property wings.
+                Real-time room cleaning and preparation, cleanliness inspection readiness, and attendant assignment oversight across all property wings.
             </p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-0 overflow-hidden rounded-xl border border-white/10 bg-white/10 sm:grid-cols-4 xl:min-w-[600px]">
-            <div class="border-b border-r border-white/10 p-4 sm:border-b-0"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Property Rooms</p><p class="mt-1 font-serif text-2xl font-bold">{{ $publishedRoomCount }}</p><p class="text-[10px] text-blue-100/70">{{ $totalRooms }} encoded</p></div>
+            <div class="border-b border-r border-white/10 p-4 sm:border-b-0"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Property Rooms</p><p class="mt-1 font-serif text-2xl font-bold">{{ $publishedRoomCount }}</p><p class="text-[10px] text-blue-100/70">{{ $totalRooms }} rooms recorded</p></div>
             <div class="border-b border-white/10 p-4 sm:border-b-0 sm:border-r"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Clean & Ready</p><p class="mt-1 font-serif text-2xl font-bold text-secondary-fixed">{{ $vacantCleanRooms }}</p></div>
             <div class="border-r border-white/10 p-4"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Occupied</p><p class="mt-1 font-serif text-2xl font-bold">{{ $occupiedRooms }}</p></div>
-            <div class="p-4"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Readiness</p><p class="mt-1 font-serif text-2xl font-bold text-secondary-fixed">{{ $readinessRate }}%</p></div>
+            <div class="p-4"><p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Ready Status</p><p class="mt-1 font-serif text-2xl font-bold text-secondary-fixed">{{ $readinessRate }}%</p></div>
         </div>
     </div>
 </section>
@@ -60,11 +60,11 @@
             <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-low text-secondary"><span class="material-symbols-outlined">bed</span></span>
         </div>
         <p class="mt-4 font-serif text-3xl font-bold">{{ $availableRooms }}</p>
-        <p class="mt-1 text-sm text-slate-500">{{ $availableRooms }} available of {{ $totalRooms }} encoded rooms ({{ $publishedRoomCount }} property total)</p>
+        <p class="mt-1 text-sm text-slate-500">{{ $availableRooms }} available of {{ $totalRooms }} added rooms ({{ $publishedRoomCount }} property total)</p>
     </div>
     <div class="owner-card rounded-xl p-5">
         <div class="flex items-center justify-between">
-            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Cleanliness Readiness</p>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Cleanliness Ready Status</p>
             <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700"><span class="material-symbols-outlined">task_alt</span></span>
         </div>
         <p class="mt-4 font-serif text-3xl font-bold">{{ $readinessRate }}%</p>
@@ -72,11 +72,11 @@
     </div>
     <div class="owner-card rounded-xl p-5">
         <div class="flex items-center justify-between">
-            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Turnover Workload</p>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Room Preparation Workload</p>
             <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-50 text-sky-700"><span class="material-symbols-outlined">cleaning_services</span></span>
         </div>
         <p class="mt-4 font-serif text-3xl font-bold">{{ $turnoverRooms }}</p>
-        <p class="mt-1 text-sm text-slate-500">{{ $turnoverRooms ? 'Rooms currently in turnover' : 'No active turnover queue' }}</p>
+        <p class="mt-1 text-sm text-slate-500">{{ $turnoverRooms ? 'Rooms currently being cleaned' : 'No active room cleaning list' }}</p>
     </div>
     <div class="owner-card rounded-xl p-5">
         <div class="flex items-center justify-between">
@@ -92,13 +92,13 @@
     <div class="flex flex-col gap-4 border-b border-line bg-white p-5 xl:flex-row xl:items-center xl:justify-between">
         <div>
             <div class="flex flex-wrap items-center gap-2">
-                <h3 class="font-serif text-2xl font-bold text-primary">Room Turnover & Hygiene Readiness Stream</h3>
+                <h3 class="font-serif text-2xl font-bold text-primary">Room Cleaning & Ready Status Updates</h3>
                 <span class="inline-flex items-center gap-1 rounded-full bg-secondary-fixed/30 px-2 py-0.5 text-xs font-bold text-secondary">
                     <span class="material-symbols-outlined text-sm">verified</span>
                     View Only
                 </span>
             </div>
-            <p class="mt-1 text-sm text-slate-500">Room readiness and maintenance events from housekeeping activity logs.</p>
+            <p class="mt-1 text-sm text-slate-500">Rooms Ready for Guests and maintenance events from housekeeping activity logs.</p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
             @foreach ($roomStatusGroups as $group)
@@ -116,7 +116,7 @@
         <div class="flex flex-wrap items-center gap-2">
             <button id="ownerRoomStatusExport" type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3.5 py-2 text-sm font-bold text-primary transition hover:border-secondary">
                 <span class="material-symbols-outlined text-lg text-secondary">download</span>
-                Export Matrix
+                Export Table
             </button>
             <button id="ownerRoomStatusReset" type="button" class="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-bold text-white transition hover:bg-primary-container">
                 <span class="material-symbols-outlined text-lg text-secondary-fixed">refresh</span>
@@ -182,7 +182,7 @@
                         </td>
                         <td class="px-4 py-3.5">
                             <p class="max-w-sm text-sm text-slate-700">{{ $inspection }}</p>
-                            <p class="mt-1 text-[11px] font-semibold text-secondary">{{ $latestLog ? 'Digital log verified' : 'Current PMS baseline' }}</p>
+                            <p class="mt-1 text-[11px] font-semibold text-secondary">{{ $latestLog ? 'Digital log verified' : 'Current IHMP baseline' }}</p>
                         </td>
                         <td class="px-5 py-3.5 text-right">
                             <p class="font-mono text-xs font-bold text-primary">{{ $changedAt ? $changedAt->format('M d, Y h:i A') : now('Asia/Manila')->format('M d, Y h:i A') }}</p>
@@ -205,7 +205,7 @@
 
 <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">
     <div class="owner-card rounded-xl p-5">
-        <p class="text-xs font-bold uppercase tracking-wider text-secondary">Floor Readiness</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-secondary">Floor Ready Status</p>
         <h3 class="mt-2 font-serif text-2xl font-bold text-primary">Wing Distribution</h3>
         <div class="mt-5 space-y-4">
             @forelse ($floorSummary as $floor)
@@ -220,7 +220,7 @@
         </div>
     </div>
     <div class="owner-card rounded-xl p-5">
-        <p class="text-xs font-bold uppercase tracking-wider text-secondary">Inspection Ledger</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-secondary">Inspection Records</p>
         <h3 class="mt-2 font-serif text-2xl font-bold text-primary">{{ $inspectionCount }} Logs Synced</h3>
         <p class="mt-3 text-sm leading-6 text-slate-600">Room hygiene inspections are verified digitally by housekeeping before front-desk clearance. Owner access is read-only.</p>
         <div class="mt-4 rounded-lg bg-surface-low p-3 text-xs font-semibold text-slate-600">Current discrepancy rate: <span class="font-bold text-emerald-700">0.00%</span></div>
@@ -228,7 +228,7 @@
     <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md">
         <p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Executive Advisory</p>
         <h3 class="mt-2 font-serif text-2xl font-bold">Operational Record Guardrail</h3>
-        <p class="mt-3 text-sm leading-6 text-blue-100">Owner / Management can monitor status, cleanliness, and turnover conditions. Room updates remain controlled by housekeeping, front desk, and administrators.</p>
+        <p class="mt-3 text-sm leading-6 text-blue-100">Owner / Management can monitor status, cleanliness, and room cleaning conditions. Room updates remain controlled by housekeeping, front desk, and administrators.</p>
         <div class="mt-4 rounded-lg border border-white/10 bg-white/10 p-3 text-xs font-bold text-secondary-fixed">No record editing privileges</div>
     </div>
 </section>

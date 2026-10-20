@@ -155,7 +155,7 @@ class AuthController extends Controller
 
         $message = $account && $account->role !== $credentials['role']
             ? 'The selected department does not match this account. Choose '.config("hotel.staff_roles.{$account->role}.label", ucfirst($account->role)).' and try again.'
-            : 'The provided credentials do not match our records.';
+            : 'The email or password does not match our records.';
 
         return back()
             ->withErrors(['email' => $message])

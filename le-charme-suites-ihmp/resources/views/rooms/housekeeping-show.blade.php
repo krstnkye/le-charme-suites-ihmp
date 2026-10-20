@@ -8,7 +8,7 @@
             'available' => 'Vacant Ready',
             'reserved' => 'QA Inspection',
             'occupied' => 'Occupied',
-            'cleaning' => 'Dirty / Turnover',
+            'cleaning' => 'Dirty / Room Preparation',
             'maintenance' => 'Out of Order',
         ];
 
@@ -32,7 +32,7 @@
             'available' => 'Ready for Front Desk assignment.',
             'reserved' => 'Supervisor inspection pending.',
             'occupied' => 'Guest stayover or in-house room.',
-            'cleaning' => 'Turnover cleaning required.',
+            'cleaning' => 'Room Preparation cleaning required.',
             'maintenance' => 'Engineering intervention required.',
         ];
 
@@ -66,7 +66,7 @@
             <div>
                 <p class="text-xs font-bold uppercase tracking-[0.3em] text-secondary">Housekeeping / Room Status</p>
                 <h2 class="mt-1 font-serif text-4xl font-bold text-primary">Room {{ $room->room_number }}</h2>
-                <p class="mt-2 text-sm text-slate-600">Operational workspace for room readiness, guest stayover notes, QA checks, and status history.</p>
+                <p class="mt-2 text-sm text-slate-600">Operational workspace for rooms ready for guests, guest stayover notes, QA checks, and status history.</p>
             </div>
             <a href="{{ route('rooms.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-secondary px-4 py-2 text-sm font-bold text-secondary transition hover:bg-secondary hover:text-white">
                 <span class="material-symbols-outlined text-base">arrow_back</span>
@@ -149,7 +149,7 @@
                         <div>
                             <h3 class="flex items-center gap-2 font-serif text-xl font-bold text-primary">
                                 <span class="material-symbols-outlined text-secondary">tune</span>
-                                Quick Status Controller & Turnover State
+                                Quick Status Controller & Room Preparation State
                             </h3>
                             <p class="mt-1 text-sm text-slate-600">Switch the operational state so Front Desk and floor supervisors see the latest room condition.</p>
                         </div>
@@ -225,7 +225,7 @@
                             </div>
                         </div>
                         <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-800">
-                            {{ $room->status === 'occupied' ? 'Stayover Watch' : 'Readiness Watch' }}
+                            {{ $room->status === 'occupied' ? 'Stayover Watch' : 'Ready Status Watch' }}
                         </span>
                     </div>
 
@@ -261,7 +261,7 @@
                                 <span class="material-symbols-outlined text-secondary">timeline</span>
                                 Room {{ $room->room_number }} Operational & Status History
                             </h3>
-                            <p class="mt-1 text-sm text-slate-600">Chronological audit trail of turnovers, cleaning milestones, and room status changes.</p>
+                            <p class="mt-1 text-sm text-slate-600">Activity history of room cleaning, cleaning milestones, and room status changes.</p>
                         </div>
                         <span class="rounded-full bg-cream px-3 py-1 text-xs font-bold text-secondary">{{ $room->statusLogs->count() }} records</span>
                     </div>
@@ -310,7 +310,7 @@
                 <div class="rounded-xl bg-primary p-6 text-white shadow-sm">
                     <h3 class="flex items-center gap-2 font-serif text-xl font-bold">
                         <span class="material-symbols-outlined text-secondary">sensor_occupied</span>
-                        Readiness Snapshot
+                        Ready Status Summary
                     </h3>
                     <div class="mt-5 space-y-3 text-sm">
                         <div class="flex items-center justify-between border-b border-white/10 pb-3">

@@ -14,7 +14,7 @@
         'completed' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
     ];
     $channelGroups = [
-        ['label' => 'Direct Hotel & Concierge', 'amount' => $pipelineRevenue * .45, 'percent' => 45, 'class' => 'bg-primary-container'],
+        ['label' => 'Direct Hotel & Guest Service', 'amount' => $pipelineRevenue * .45, 'percent' => 45, 'class' => 'bg-primary-container'],
         ['label' => 'Corporate Direct Contracts', 'amount' => $pipelineRevenue * .30, 'percent' => 30, 'class' => 'bg-secondary'],
         ['label' => 'OTA / Web Channels', 'amount' => $pipelineRevenue * .25, 'percent' => 25, 'class' => 'bg-slate-400'],
     ];
@@ -30,7 +30,7 @@
         <div class="max-w-4xl space-y-3">
             <div class="inline-flex items-center gap-2 rounded border border-secondary-fixed/30 bg-secondary-fixed/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-secondary-fixed">
                 <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-secondary-fixed"></span>
-                Executive Monitoring / Booking Pipeline
+                Executive Monitoring / Booking Upcoming Bookings
             </div>
             <h2 class="font-serif text-4xl font-extrabold leading-tight">Reservations Overview</h2>
             <p class="max-w-3xl text-sm leading-6 text-blue-100">
@@ -93,7 +93,7 @@
             <span class="flex h-8 w-8 items-center justify-center rounded bg-surface-mid text-secondary"><span class="material-symbols-outlined text-lg">payments</span></span>
         </div>
         <p class="truncate font-serif text-2xl font-bold text-primary">PHP {{ number_format($collectedToday, 2) }}</p>
-        <div class="mt-1 flex items-center justify-between text-xs text-slate-500"><span>{{ $settledToday }} settled today</span><span class="inline-flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>0 variance</span></div>
+        <div class="mt-1 flex items-center justify-between text-xs text-slate-500"><span>{{ $settledToday }} paid today</span><span class="inline-flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>0 variance</span></div>
     </div>
 </section>
 
@@ -101,7 +101,7 @@
     <div class="border-b border-line p-6">
         <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
-                <h3 class="font-serif text-2xl font-bold text-primary">Reservation Pipeline</h3>
+                <h3 class="font-serif text-2xl font-bold text-primary">Reservation Upcoming Bookings</h3>
                 <p class="mt-1 text-xs text-slate-500">Recent reservations and their current state. Forward bookings synchronized from Subic Bay Central concierge and distribution channels.</p>
             </div>
             <div class="flex flex-wrap items-center gap-1.5 rounded-lg bg-surface-mid p-1 text-xs font-bold" aria-label="Reservation status filters">
@@ -226,7 +226,7 @@
     </div>
     <div class="flex flex-col items-center justify-between gap-3 border-t border-line bg-surface px-5 py-4 text-xs text-slate-500 sm:flex-row">
         <span>Showing <strong id="reservationVisibleCount">{{ $reservations->count() }}</strong> active forward reservations</span>
-        <span>Total Guaranteed Pipeline: <strong id="reservationVisibleTotal" class="text-primary">PHP {{ number_format($pipelineRevenue, 2) }}</strong></span>
+        <span>Total Guaranteed Upcoming Bookings: <strong id="reservationVisibleTotal" class="text-primary">PHP {{ number_format($pipelineRevenue, 2) }}</strong></span>
     </div>
 </section>
 
@@ -260,10 +260,10 @@
         </div>
         <h3 class="font-serif text-xl font-bold text-primary">Executive Advisory</h3>
         <p class="mt-2 text-sm leading-6 text-slate-600">
-            Direct reservation creation, room rate discounting, and cancellation penalty waivers require department or administrator credentials under IHMP governance protocol.
+            Creating reservations, changing room discounts, and removing cancellation charges require an authorized department or administrator account.
         </p>
         <div class="mt-5 flex items-center justify-between border-t border-line pt-4 text-xs text-slate-500">
-            <span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm">security</span>Governance ID #880-SBMA</span>
+            <span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm">security</span>Management ID #880-SBMA</span>
             <span class="font-bold text-secondary">Audit Enabled</span>
         </div>
     </div>

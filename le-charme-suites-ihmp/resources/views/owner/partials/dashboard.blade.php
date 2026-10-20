@@ -25,7 +25,7 @@
             <h2 class="max-w-4xl font-serif text-4xl font-semibold leading-tight">Hotel Ownership & Executive Performance Portal</h2>
             <p class="max-w-4xl text-sm leading-6 text-blue-100">
                 Executive read-only command view with <strong class="text-white">{{ number_format($operationalHealth, 1) }}% Operational Health Index</strong>,
-                a <strong class="text-secondary-fixed">{{ $publishedRoomCount }}-room property</strong> with {{ $totalRooms }} rooms currently encoded for live occupancy, readiness, and revenue visibility.
+                a <strong class="text-secondary-fixed">{{ $publishedRoomCount }}-room property</strong> with {{ $totalRooms }} rooms currently added for live occupancy, readiness, and revenue visibility.
             </p>
         </div>
         <div class="flex flex-wrap items-center gap-3">
@@ -56,13 +56,13 @@
         <div class="absolute left-0 top-0 h-1 w-full bg-primary"></div>
         <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Property Occupancy</span><span class="rounded-lg bg-surface-mid p-2 text-primary"><span class="material-symbols-outlined">meeting_room</span></span></div>
         <p class="mt-3 font-serif text-2xl font-bold">{{ $occupiedPercent }}%</p>
-        <p class="mt-2 text-xs text-slate-500">Occupied: <strong>{{ $occupiedRooms }} / {{ $totalRooms }}</strong> encoded rooms · {{ $publishedRoomCount }} property total</p>
+        <p class="mt-2 text-xs text-slate-500">Occupied: <strong>{{ $occupiedRooms }} / {{ $totalRooms }}</strong> added rooms · {{ $publishedRoomCount }} property total</p>
     </div>
     <div class="owner-card relative overflow-hidden rounded-xl p-5">
         <div class="absolute left-0 top-0 h-1 w-full bg-secondary"></div>
         <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Average Room Rate</span><span class="rounded-lg bg-surface-mid p-2 text-secondary"><span class="material-symbols-outlined">query_stats</span></span></div>
         <p class="mt-3 font-serif text-2xl font-bold">PHP {{ number_format($averageRoomRate, 2) }}</p>
-        <p class="mt-2 text-xs text-slate-500">Calculated from encoded room inventory</p>
+        <p class="mt-2 text-xs text-slate-500">Calculated from added room inventory</p>
     </div>
     <div class="owner-card relative overflow-hidden rounded-xl p-5">
         <div class="absolute left-0 top-0 h-1 w-full bg-primary"></div>
@@ -105,11 +105,11 @@
                 </dl>
             </div>
             <div class="rounded-lg border border-line bg-surface-low p-4">
-                <div class="flex items-center justify-between"><span class="font-bold">Housekeeping</span><span class="rounded bg-amber-100 px-2 py-0.5 text-[11px] font-bold text-amber-800">{{ $maintenanceRooms }} Queue</span></div>
+                <div class="flex items-center justify-between"><span class="font-bold">Housekeeping</span><span class="rounded bg-amber-100 px-2 py-0.5 text-[11px] font-bold text-amber-800">{{ $maintenanceRooms }} List</span></div>
                 <dl class="mt-3 space-y-2 text-xs text-slate-600">
                     <div class="flex justify-between"><dt>Available Rooms</dt><dd class="font-bold text-primary">{{ $availableRooms }}</dd></div>
                     <div class="flex justify-between"><dt>Cleaning / Maintenance</dt><dd class="font-bold text-primary">{{ $maintenanceRooms }}</dd></div>
-                    <div class="flex justify-between"><dt>Readiness</dt><dd class="font-bold text-emerald-700">{{ $availablePercent }}%</dd></div>
+                    <div class="flex justify-between"><dt>Ready Status</dt><dd class="font-bold text-emerald-700">{{ $availablePercent }}%</dd></div>
                 </dl>
             </div>
             <div class="rounded-lg border border-line bg-surface-low p-4">
@@ -118,7 +118,7 @@
             </div>
         </div>
         <div class="mt-5 rounded-lg border border-line bg-surface-mid p-3 text-xs font-semibold text-slate-700">
-            Overall enterprise SLA compliance estimate: <strong class="text-primary">{{ number_format($operationalHealth, 1) }}%</strong>
+            Overall enterprise Response Time compliance estimate: <strong class="text-primary">{{ number_format($operationalHealth, 1) }}%</strong>
         </div>
     </section>
 
@@ -126,7 +126,7 @@
         <div class="flex items-start justify-between gap-4 border-b border-line pb-4">
             <div>
                 <h3 class="font-serif text-2xl font-bold">Room Inventory & Cohort Distribution</h3>
-                <p class="text-sm text-slate-500">Live room breakdown based on encoded inventory.</p>
+                <p class="text-sm text-slate-500">Live room breakdown based on added rooms.</p>
             </div>
             <span class="rounded bg-primary px-2 py-1 font-mono text-xs font-bold text-secondary-fixed">{{ $occupiedRooms }} / {{ $totalRooms }} Active</span>
         </div>
@@ -180,7 +180,7 @@
             @foreach ([
                 ['label' => 'Room & Stay Charges', 'value' => $roomRevenue, 'percent' => 68, 'color' => 'bg-primary'],
                 ['label' => 'Billing Collections', 'value' => $collectedToday, 'percent' => 22, 'color' => 'bg-secondary'],
-                ['label' => 'Reservations Pipeline', 'value' => $activeReservations * max($averageRoomRate, 0), 'percent' => 10, 'color' => 'bg-slate-500'],
+                ['label' => 'Reservations Upcoming Bookings', 'value' => $activeReservations * max($averageRoomRate, 0), 'percent' => 10, 'color' => 'bg-slate-500'],
             ] as $stream)
                 <div>
                     <div class="mb-1 flex justify-between text-xs">

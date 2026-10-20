@@ -29,7 +29,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Permissions Matrix & Capability Grants - Le Charme Suites IHMP</title>
+    <title>Permissions Table & Capability Grants - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -127,7 +127,7 @@
                         <span class="material-symbols-outlined text-xs">chevron_right</span>
                         <span class="font-bold text-secondary">Permissions</span>
                     </nav>
-                    <h1 class="font-serif text-4xl font-semibold tracking-tight">Granular Permissions Matrix &amp; Capability Grants</h1>
+                    <h1 class="font-serif text-4xl font-semibold tracking-tight">Granular Permissions Table &amp; Capability Grants</h1>
                     <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage read, write, execute, override, and export access for each hotel role across core IHMP modules with administrator-level audit tracking.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
@@ -145,7 +145,7 @@
                     </form>
                     <button form="permissionMatrixForm" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white shadow-md transition hover:bg-primary-container active:scale-95" type="submit">
                         <span class="material-symbols-outlined text-base text-secondary-fixed">save</span>
-                        Save Matrix Grants
+                        Save Permission Changes
                     </button>
                 </div>
             </section>
@@ -183,7 +183,7 @@
                     <div class="gold-glow overflow-hidden rounded-xl border border-surface-container-highest bg-white">
                         <div class="flex items-center justify-between border-b border-surface-container-highest bg-surface-container-low/60 p-5">
                             <div>
-                                <h2 class="font-serif text-2xl font-semibold">Capability Matrix</h2>
+                                <h2 class="font-serif text-2xl font-semibold">Access Table</h2>
                                 <p class="mt-1 text-sm text-slate-500">{{ $roleLabels[$selectedRole] }} access across core IHMP modules.</p>
                             </div>
                             <span class="rounded-full bg-surface-container-highest/80 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">{{ count($capabilities) }} Active Modules</span>
@@ -308,7 +308,7 @@
                                 <span class="material-symbols-outlined text-base">verified</span>
                                 Admin Controlled
                             </span>
-                            <a class="underline transition hover:text-primary" href="{{ route('admin.audit-logs.index') }}">View Audit Log</a>
+                            <a class="underline transition hover:text-primary" href="{{ route('admin.audit-logs.index') }}">View Activity Log</a>
                         </div>
                     </section>
 

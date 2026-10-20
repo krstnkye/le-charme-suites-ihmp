@@ -29,14 +29,14 @@ class HousekeepingController extends Controller
         'tasks' => [
             'active' => 'tasks',
             'title' => 'Housekeeping Tasks',
-            'subtitle' => 'Daily cleaning, priority, and completed turnover work.',
+            'subtitle' => 'Daily cleaning, priority rooms, and completed cleaning work.',
             'icon' => 'task_alt',
             'group' => 'Housekeeping Tasks',
         ],
         'cleaning-tasks' => [
             'active' => 'cleaning-tasks',
             'title' => 'Cleaning Tasks',
-            'subtitle' => 'Rooms currently marked for cleaning and turnover.',
+            'subtitle' => 'Rooms currently marked for cleaning and preparation.',
             'icon' => 'mop',
             'group' => 'Housekeeping Tasks',
         ],
@@ -106,7 +106,7 @@ class HousekeepingController extends Controller
         'reports' => [
             'active' => 'reports',
             'title' => 'Housekeeping Reports',
-            'subtitle' => 'Readiness, turnover, and maintenance summaries for housekeeping.',
+            'subtitle' => 'Clean room, room preparation, and maintenance summaries for housekeeping.',
             'icon' => 'monitoring',
             'group' => 'Reports',
         ],

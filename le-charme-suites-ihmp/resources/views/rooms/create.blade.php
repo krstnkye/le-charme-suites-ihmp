@@ -122,7 +122,7 @@
                                 <span class="material-symbols-outlined text-secondary">meeting_room</span>
                                 <h3 class="text-xl font-bold">Room Details</h3>
                             </div>
-                            <p class="mt-1 text-sm text-slate-600">Use a unique room number and keep rates aligned with the current tariff table.</p>
+                            <p class="mt-1 text-sm text-slate-600">Use a unique room number and follow the hotel's current room rate list.</p>
                         </div>
                         <span class="rounded bg-surface-container px-3 py-1 text-xs font-bold text-slate-600">IPT-MOD-RI</span>
                     </div>
@@ -186,7 +186,7 @@
                             <span class="material-symbols-outlined text-secondary">verified</span>
                             <h3 class="text-lg font-bold">Official Room Catalog</h3>
                         </div>
-                        <p class="mb-4 text-xs leading-5 text-slate-500">Select a published Le Charmé room category to load its current base tariff and capacity.</p>
+                        <p class="mb-4 text-xs leading-5 text-slate-500">Select a Le Charmé room type to load its current starting rate and guest capacity.</p>
                         <div class="space-y-2">
                             @foreach ($officialRoomTypes as $name => $specification)
                                 <button

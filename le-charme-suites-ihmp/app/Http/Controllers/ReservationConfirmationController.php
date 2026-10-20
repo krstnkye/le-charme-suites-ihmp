@@ -43,6 +43,6 @@ class ReservationConfirmationController extends Controller
             ]);
         });
 
-        return back()->with('status', 'Online booking confirmed and added to the arrival queue.');
+        return back()->with('status', 'Online booking confirmed and added to the arrival list.');
     }
 }

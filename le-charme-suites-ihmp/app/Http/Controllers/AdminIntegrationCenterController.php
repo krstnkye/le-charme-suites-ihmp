@@ -38,7 +38,7 @@ class AdminIntegrationCenterController extends Controller
             'recordCounts' => [
                 'Guests' => Guest::count(),
                 'Property Rooms' => (int) config('hotel.published_room_count', Room::count()),
-                'Rooms Encoded' => Room::count(),
+                'Rooms Added' => Room::count(),
                 'Reservations' => Reservation::count(),
                 'Transactions' => HotelTransaction::count(),
                 'Messages' => DepartmentMessage::count(),

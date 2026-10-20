@@ -79,7 +79,7 @@
             <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-mid text-secondary"><span class="material-symbols-outlined text-lg">account_balance_wallet</span></span>
         </div>
         <p class="mt-3 font-serif text-2xl font-bold text-primary">PHP {{ number_format($collectedToday, 2) }}</p>
-        <p class="mt-1 text-xs text-slate-500">{{ $settledToday }} pending settlement · Audited 0 variance</p>
+        <p class="mt-1 text-xs text-slate-500">{{ $settledToday }} pending payment · Audited 0 variance</p>
     </div>
 </section>
 
@@ -155,7 +155,7 @@
                             <div class="flex flex-col items-center justify-center text-slate-500">
                                 <span class="material-symbols-outlined mb-1 text-2xl text-slate-400">domain_disabled</span>
                                 <p class="font-semibold text-primary">Remaining {{ $availableRooms }} Rooms Available & Vacant</p>
-                                <p class="mt-0.5 text-xs">{{ $availableRoomNames ?: 'No available room list has been encoded yet.' }}</p>
+                                <p class="mt-0.5 text-xs">{{ $availableRoomNames ?: 'No available rooms have been added yet.' }}</p>
                             </div>
                         </td>
                     </tr>
@@ -163,7 +163,7 @@
             </table>
         </div>
         <div class="flex flex-col justify-between gap-2 border-t border-line bg-surface-low px-4 py-3 text-xs font-semibold text-slate-500 sm:flex-row">
-            <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-secondary">verified_user</span>Keycard RFID status view-only</span>
+            <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-secondary">verified_user</span>Keycard Keycard status view-only</span>
             <span>{{ $guaranteedCheckout ? 'Guaranteed Checkout: '.$guaranteedCheckout : 'Guaranteed checkout dates follow reservation records' }}</span>
         </div>
     </div>
@@ -173,7 +173,7 @@
             <div>
                 <div class="flex flex-wrap items-center gap-2">
                     <h3 class="font-serif text-2xl font-bold text-primary">Recent Check-outs</h3>
-                    <span class="inline-flex items-center gap-1 rounded-full bg-surface-mid px-2.5 py-0.5 text-xs font-bold text-slate-600"><span class="material-symbols-outlined text-xs text-secondary">sync</span>Turnover Synced</span>
+                    <span class="inline-flex items-center gap-1 rounded-full bg-surface-mid px-2.5 py-0.5 text-xs font-bold text-slate-600"><span class="material-symbols-outlined text-xs text-secondary">sync</span>Room Preparation Synced</span>
                 </div>
                 <p class="mt-1 text-xs text-slate-500">Recently completed departures with finalized billing records and key turn-ins.</p>
             </div>
@@ -218,7 +218,7 @@
                                 <span class="inline-flex items-center gap-1.5 rounded-full bg-surface-mid px-2.5 py-1 text-xs font-semibold text-slate-600"><span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>{{ str_replace('_', ' ', ucfirst($checkOut->payment_status ?? 'checked out')) }}</span>
                             </td>
                             <td class="whitespace-nowrap px-4 py-4 text-right">
-                                <span class="inline-flex items-center gap-1 rounded bg-secondary-fixed/30 px-2.5 py-1 text-xs font-bold text-secondary"><span class="material-symbols-outlined text-xs">done_all</span>Turnover Ready</span>
+                                <span class="inline-flex items-center gap-1 rounded bg-secondary-fixed/30 px-2.5 py-1 text-xs font-bold text-secondary"><span class="material-symbols-outlined text-xs">done_all</span>Room Preparation Ready</span>
                             </td>
                         </tr>
                     @empty
@@ -239,11 +239,11 @@
 <section class="grid grid-cols-1 gap-6 lg:grid-cols-3">
     <div class="owner-card rounded-xl p-5">
         <div class="mb-2 flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-secondary">Turnover Velocity</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-secondary">Room Preparation Velocity</span>
             <span class="material-symbols-outlined text-secondary">speed</span>
         </div>
         <h4 class="font-semibold text-primary">Front Desk Processing Pacing</h4>
-        <p class="mt-1 text-sm text-slate-500">Time elapsed from guest arrival to electronic keycard dispatch and room account lock.</p>
+        <p class="mt-1 text-sm text-slate-500">Time elapsed from guest arrival to room keycard release and room account lock.</p>
         <div class="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-3">
             <div><span class="block text-[11px] text-slate-500">Avg. Check-in</span><span class="font-bold text-primary">2m 45s</span></div>
             <div><span class="block text-[11px] text-slate-500">Key Drop</span><span class="font-bold text-primary">1m 20s</span></div>
@@ -255,19 +255,19 @@
             <span class="text-xs font-bold uppercase tracking-wider text-secondary">Housekeeping Integration</span>
             <span class="material-symbols-outlined text-secondary">sanitizer</span>
         </div>
-        <h4 class="font-semibold text-primary">Turnover Inspection Sync</h4>
-        <p class="mt-1 text-sm text-slate-500">Automated handoff between departures and housekeeping release for resale.</p>
+        <h4 class="font-semibold text-primary">Room Preparation Inspection Sync</h4>
+        <p class="mt-1 text-sm text-slate-500">Automatic update from check-out to housekeeping cleaning.</p>
         <div class="mt-4 flex items-center gap-3 border-t border-line pt-3">
             <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-mid font-bold text-primary">100%</span>
-            <div><p class="font-semibold text-primary">Departed keys released</p><p class="text-xs text-slate-500">Zero delayed dirty turnover state</p></div>
+            <div><p class="font-semibold text-primary">Departed keys released</p><p class="text-xs text-slate-500">Zero delayed dirty cleaning status</p></div>
         </div>
     </div>
     <div class="rounded-xl border border-secondary/30 bg-surface-mid p-5 shadow-sm">
         <div class="mb-2 flex items-center gap-2 text-secondary">
             <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1;">policy</span>
-            <span class="text-xs font-bold uppercase tracking-wider">Executive Governance Protocol</span>
+            <span class="text-xs font-bold uppercase tracking-wider">Owner Access Rules</span>
         </div>
-        <h4 class="font-semibold text-primary">Immutable SBMA Audit Chain</h4>
+        <h4 class="font-semibold text-primary">Protected SBMA Audit Chain</h4>
         <p class="mt-1 text-sm leading-6 text-slate-600">Express checkouts, keycard re-encodings, deposit release authorizations, and manual room status overrides are reserved for operational departments.</p>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3">
             <span class="font-mono text-xs text-slate-500">SYS-REV-2026.10-PROD</span>

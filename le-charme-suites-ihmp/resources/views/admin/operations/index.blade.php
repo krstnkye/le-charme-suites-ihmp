@@ -7,7 +7,7 @@
     $roomCount = $statMap['Rooms tracked'] ?? 0;
     $reservationCount = $statMap['Reservations tracked'] ?? 0;
     $transactionCount = $statMap['Transaction records'] ?? 0;
-    $ledgerTotal = $statMap['Ledger total'] ?? 'PHP 0.00';
+    $ledgerTotal = $statMap['Transaction total'] ?? 'PHP 0.00';
     $roomTypeRows = collect($records)->values();
     $selectedRoomType = $roomTypeRows->first();
     $officialRoomCatalog = config('hotel.room_types', []);
@@ -31,20 +31,20 @@
     $roomRateRows = collect($records)->values();
     $selectedRoomRate = $roomRateRows->get(1) ?? $roomRateRows->first();
     $reportRows = [
-        ['group' => 'financial', 'icon' => 'summarize', 'title' => "Daily Manager's Flash Report", 'code' => 'LCS-FIN-FLSH-01', 'description' => 'Comprehensive daily yield and occupancy ledger', 'category' => 'Financial', 'formats' => ['PDF', 'XLSX'], 'cadence' => 'Daily at 03:00 PHT', 'status' => 'SBMA Certified', 'last' => now(config('app.timezone'))->format('M d, Y h:i A')],
-        ['group' => 'statutory', 'icon' => 'account_balance', 'title' => 'SBMA Freeport Tourism Eco-Levy & Tax Ledger', 'code' => 'LCS-TAX-SBMA-09', 'description' => 'Statutory exemption and municipal surcharge registry', 'category' => 'Statutory', 'formats' => ['PDF', 'CSV'], 'cadence' => 'Monthly close', 'status' => 'Ready', 'last' => 'Pending run'],
+        ['group' => 'financial', 'icon' => 'summarize', 'title' => "Daily Manager's Flash Report", 'code' => 'LCS-FIN-FLSH-01', 'description' => 'Comprehensive daily yield and room and revenue report', 'category' => 'Financial', 'formats' => ['PDF', 'XLSX'], 'cadence' => 'Daily at 03:00 PHT', 'status' => 'SBMA Certified', 'last' => now(config('app.timezone'))->format('M d, Y h:i A')],
+        ['group' => 'statutory', 'icon' => 'account_balance', 'title' => 'SBMA Freeport Tourism Eco-Levy & Tax Records', 'code' => 'LCS-TAX-SBMA-09', 'description' => 'Required Tax exemption and municipal surcharge registry', 'category' => 'Required Tax', 'formats' => ['PDF', 'CSV'], 'cadence' => 'Monthly close', 'status' => 'Ready', 'last' => 'Pending run'],
         ['group' => 'front-desk', 'icon' => 'hotel', 'title' => 'Room Occupancy & Availability Summary', 'code' => 'LCS-RMS-OCC-04', 'description' => 'Room status, occupancy, reserved inventory, and maintenance view', 'category' => 'Rooms', 'formats' => ['PDF', 'XLSX'], 'cadence' => 'Hourly snapshot', 'status' => 'Live Synced', 'last' => now(config('app.timezone'))->format('h:i A')],
-        ['group' => 'financial', 'icon' => 'receipt_long', 'title' => 'Transactions & Billing Reconciliation', 'code' => 'LCS-FOL-REC-07', 'description' => 'Payment collection, guest bill activity, and settlement audit trail', 'category' => 'Finance', 'formats' => ['PDF', 'XLSX'], 'cadence' => 'End of shift', 'status' => 'Balanced', 'last' => $transactionCount ? now(config('app.timezone'))->format('M d, Y') : 'No entries'],
-        ['group' => 'housekeeping', 'icon' => 'cleaning_services', 'title' => 'Housekeeping & Maintenance SLA Report', 'code' => 'LCS-HSK-SLA-06', 'description' => 'Room turnover, cleaning queue, and facilities readiness report', 'category' => 'Housekeeping', 'formats' => ['PDF', 'XLSX'], 'cadence' => 'Shift close', 'status' => 'Ready', 'last' => now(config('app.timezone'))->format('M d, Y')],
+        ['group' => 'financial', 'icon' => 'receipt_long', 'title' => 'Transactions & Billing Payment Review', 'code' => 'LCS-FOL-REC-07', 'description' => 'Payment collection, guest bill activity, and settlement audit trail', 'category' => 'Finance', 'formats' => ['PDF', 'XLSX'], 'cadence' => 'End of shift', 'status' => 'Balanced', 'last' => $transactionCount ? now(config('app.timezone'))->format('M d, Y') : 'No entries'],
+        ['group' => 'housekeeping', 'icon' => 'cleaning_services', 'title' => 'Housekeeping & Maintenance Response Time Report', 'code' => 'LCS-HSK-Response Time-06', 'description' => 'Room cleaning and preparation, cleaning list, and facilities readiness report', 'category' => 'Housekeeping', 'formats' => ['PDF', 'XLSX'], 'cadence' => 'Shift close', 'status' => 'Ready', 'last' => now(config('app.timezone'))->format('M d, Y')],
         ['group' => 'audit', 'icon' => 'shield', 'title' => 'Security & Audit Activity Export', 'code' => 'LCS-AUD-LOG-02', 'description' => 'Administrative access, role changes, and protected event stream', 'category' => 'Audit', 'formats' => ['PDF'], 'cadence' => 'On demand', 'status' => 'Admin Only', 'last' => now(config('app.timezone'))->format('M d, Y')],
     ];
     $reportFilters = [
         'All Reports' => ['key' => 'all', 'count' => count($reportRows)],
         'Financial & Revenue' => ['key' => 'financial', 'count' => collect($reportRows)->where('group', 'financial')->count()],
-        'Statutory & SBMA Tax' => ['key' => 'statutory', 'count' => collect($reportRows)->where('group', 'statutory')->count()],
+        'Required Tax & SBMA Tax' => ['key' => 'statutory', 'count' => collect($reportRows)->where('group', 'statutory')->count()],
         'Front Desk & Rooms' => ['key' => 'front-desk', 'count' => collect($reportRows)->where('group', 'front-desk')->count()],
-        'Housekeeping & Maintenance SLA' => ['key' => 'housekeeping', 'count' => collect($reportRows)->where('group', 'housekeeping')->count()],
-        'Audit & Cryptographic Logs' => ['key' => 'audit', 'count' => collect($reportRows)->where('group', 'audit')->count()],
+        'Housekeeping & Maintenance Response Time' => ['key' => 'housekeeping', 'count' => collect($reportRows)->where('group', 'housekeeping')->count()],
+        'Activity & Security Logs' => ['key' => 'audit', 'count' => collect($reportRows)->where('group', 'audit')->count()],
     ];
 @endphp
 
@@ -113,7 +113,7 @@
         <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-container-highest bg-surface px-8 shadow-sm">
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-secondary">{{ $isReports ? 'monitoring' : ($isRoomTypes ? 'bed' : ($isRoomRates ? 'price_change' : 'security')) }}</span>
-                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - {{ $isReports ? 'Executive Reports & Auditing Center' : ($isRoomTypes ? 'Room Types & Suite Specifications' : ($isRoomRates ? 'Room Rates & Tariffs Management' : 'Administrator Operations')) }}</h1>
+                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - {{ $isReports ? 'Management Reports' : ($isRoomTypes ? 'Room Types & Suite Details' : ($isRoomRates ? 'Room Rate Management' : 'Administrator Operations')) }}</h1>
             </div>
             <div class="flex items-center gap-4">
                 @if ($isReports || $isRoomTypes || $isRoomRates)
@@ -136,14 +136,14 @@
                     <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
                         <span>Administration</span>
                         <span class="material-symbols-outlined text-sm">chevron_right</span>
-                        <span>Control & Governance</span>
+                        <span>Control & Management</span>
                         <span class="material-symbols-outlined text-sm">chevron_right</span>
                         <span class="font-bold text-primary">Operational & Financial Reports Center</span>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
                         <span class="inline-flex items-center gap-1.5 rounded-full border border-secondary/30 bg-secondary/15 px-2.5 py-1 text-xs font-bold text-secondary">
                             <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
-                            Freeport Statutory & Audit Suite
+                            Freeport Required Tax & Audit Suite
                         </span>
                         <span class="rounded-full bg-surface-container-high px-2.5 py-1 text-xs font-bold text-slate-600">SBMA Act 7227 Compliant</span>
                     </div>
@@ -152,7 +152,7 @@
                 <section class="flex flex-col justify-between gap-6 xl:flex-row xl:items-end">
                     <div>
                         <h2 class="font-serif text-4xl font-semibold tracking-tight">Executive & Departmental Reports Center</h2>
-                        <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Generate, schedule, parameterize, and export institutional hotel reports, tax reconciliation ledgers, and operational telemetry for Le Charme Suites operations.</p>
+                        <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Generate, schedule, set up, and export hotel reports, tax payment records, and operational information for Le Charme Suites operations.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <div class="flex items-center gap-2 rounded-lg border border-outline-variant bg-white px-3 py-2 text-sm font-semibold text-primary shadow-sm">
@@ -192,7 +192,7 @@
                                 </span>
                                 <div>
                                     <span class="text-xs font-bold uppercase tracking-wider text-secondary">Active Parameter Console</span>
-                                    <h3 class="font-serif text-2xl font-semibold">Daily Manager's Operational Flash & Revenue Ledger</h3>
+                                    <h3 class="font-serif text-2xl font-semibold">Daily Manager's Operational Flash & Revenue Records</h3>
                                 </div>
                             </div>
                             <span class="rounded border border-outline-variant/30 bg-surface-container px-2.5 py-1 text-xs font-semibold text-slate-600">Doc ID: LCS-REP-{{ now(config('app.timezone'))->format('Ymd') }}</span>
@@ -217,7 +217,7 @@
                                 <select class="w-full rounded-lg border border-outline-variant bg-white px-3 py-2 text-sm text-primary focus:border-secondary focus:ring-1 focus:ring-secondary/20">
                                     <option>Philippine Peso (PHP) - Local</option>
                                     <option>US Dollar (USD) - Reference</option>
-                                    <option>Dual Ledger (PHP / USD)</option>
+                                    <option>Dual Records (PHP / USD)</option>
                                 </select>
                             </label>
                         </div>
@@ -234,7 +234,7 @@
                         <div class="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-surface-container-highest pt-4">
                             <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
                                 <span class="material-symbols-outlined text-base text-emerald-700">check_circle</span>
-                                {{ $transactionCount }} ledger records available for compilation
+                                {{ $transactionCount }} billing records available for compilation
                             </div>
                             <div class="flex flex-wrap items-center gap-3">
                                 <button data-report-action="preview" class="inline-flex items-center gap-2 rounded-lg border border-outline-variant bg-surface-container px-4 py-2 text-sm font-bold text-primary transition hover:bg-surface-container-high" type="button"><span class="material-symbols-outlined text-lg">visibility</span>Preview</button>
@@ -247,7 +247,7 @@
                     <div class="parchment-card flex flex-col justify-between rounded-xl p-6 xl:col-span-4">
                         <div>
                             <div class="flex items-center justify-between border-b border-surface-container-highest pb-3">
-                                <span class="text-xs font-bold uppercase tracking-wider text-secondary">Live Audit Telemetry</span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-secondary">Live Audit System Status</span>
                                 <span class="font-mono text-[11px] text-outline">MTD Summary</span>
                             </div>
                             <div class="mt-4 space-y-4">
@@ -285,7 +285,7 @@
                     <div class="flex flex-col justify-between gap-4 border-b border-surface-container-highest bg-surface-container-low p-5 md:flex-row md:items-center">
                         <div>
                             <h3 class="font-serif text-2xl font-semibold">Standard Institutional Report Directory</h3>
-                            <p class="text-sm text-slate-500">Mandatory operational, statutory, and audit reports scheduled for hospitality and Freeport compliance.</p>
+                            <p class="text-sm text-slate-500">Required hotel, tax, and activity reports scheduled for hospitality and Freeport compliance.</p>
                         </div>
                         <div class="flex items-center gap-3">
                             <div class="relative">
@@ -356,15 +356,15 @@
                             <span class="material-symbols-outlined text-sm">chevron_right</span>
                             <span>Room Management</span>
                             <span class="material-symbols-outlined text-sm">chevron_right</span>
-                            <span class="font-bold text-secondary">Room Rates &amp; Tariff Schedules</span>
+                            <span class="font-bold text-secondary">Room Rates &amp; Schedules</span>
                         </nav>
-                        <h2 class="font-serif text-4xl font-semibold tracking-tight text-primary">Room Rates &amp; Dynamic Tariffs</h2>
-                        <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Configure tier base tariffs, seasonal yield modifiers, weekend surge rules, SBMA Freeport tax policies, and corporate negotiated rates.</p>
+                        <h2 class="font-serif text-4xl font-semibold tracking-tight text-primary">Room Rate Management</h2>
+                        <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Configure standard room rates, seasonal rate changes, weekend rate rules, SBMA Freeport tax policies, and agreed company rates.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <button class="inline-flex items-center gap-2 rounded-lg border border-outline-variant/50 bg-white px-3.5 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-container" type="button">
                             <span class="material-symbols-outlined text-base">download</span>
-                            Export Tariff Schedule
+                            Export Room Rate Schedule
                         </button>
                         <button class="inline-flex items-center gap-2 rounded-lg border border-secondary/40 bg-secondary-fixed/30 px-3.5 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-fixed/50" type="button">
                             <span class="material-symbols-outlined text-base">trending_up</span>
@@ -383,7 +383,7 @@
                             <div class="absolute inset-x-0 top-0 h-0.5 {{ $loop->index === 0 ? 'bg-secondary' : ($loop->index === 1 ? 'bg-secondary-fixed' : ($loop->index === 2 ? 'bg-primary' : 'bg-secondary')) }}"></div>
                             <div class="flex items-start justify-between">
                                 <div>
-                                    <span class="text-xs font-bold uppercase tracking-wider text-outline">{{ ['Active Base Rate Index', 'Lowest Published Tariff', 'Highest Published Tariff', 'Average Base Tariff'][$loop->index] ?? $stat['label'] }}</span>
+                                    <span class="text-xs font-bold uppercase tracking-wider text-outline">{{ ['Active Base Rate Index', 'Lowest Published Room Rate', 'Highest Published Room Rate', 'Average Base Room Rate'][$loop->index] ?? $stat['label'] }}</span>
                                     <p class="mt-1 font-serif text-2xl font-bold text-primary">{{ $stat['value'] }}</p>
                                 </div>
                                 <span class="flex h-10 w-10 items-center justify-center rounded-lg border border-outline-variant/30 bg-surface-container-low text-primary">
@@ -400,7 +400,7 @@
 
                 <section class="flex flex-col items-center justify-between gap-4 rounded-xl border border-surface-container-highest bg-white p-4 shadow-sm lg:flex-row">
                     <div class="flex w-full items-center gap-1 overflow-x-auto pb-1 lg:w-auto lg:pb-0">
-                        @foreach (['All Active Plans', 'Standard Base Tariffs', 'Dynamic / Seasonal Yields', 'Corporate & Diplomatic OTA', 'Promotional Packages'] as $tab)
+                        @foreach (['All Active Plans', 'Standard Base Room Rates', 'Dynamic / Seasonal Yields', 'Corporate & Diplomatic OTA', 'Promotional Packages'] as $tab)
                             <button class="whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-bold transition {{ $loop->first ? 'bg-primary text-white shadow-sm' : 'text-slate-600 hover:bg-surface-container hover:text-primary' }}" type="button">{{ $tab }}</button>
                         @endforeach
                     </div>
@@ -428,7 +428,7 @@
                         <div class="flex items-center justify-between border-b border-surface-container-highest bg-surface-container-low/60 px-6 py-4">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-secondary">view_list</span>
-                                <h3 class="font-serif text-2xl font-semibold text-primary">Master Room Tariffs Matrix</h3>
+                                <h3 class="font-serif text-2xl font-semibold text-primary">Room Rates Table</h3>
                                 <span class="ml-2 rounded border border-secondary/30 bg-secondary-fixed/30 px-2 py-0.5 text-xs font-bold text-secondary">Live Yield Applied</span>
                             </div>
                             <span class="text-xs font-semibold text-outline">Viewing {{ $roomRateRows->count() }} configured tiers</span>
@@ -481,7 +481,7 @@
                                                 <div class="flex items-center justify-end gap-1">
                                                     <button class="rounded {{ $selected ? 'bg-secondary text-white' : 'bg-surface-container text-primary hover:bg-secondary-fixed/40' }} px-2 py-1 text-[11px] font-bold transition" type="button">{{ $selected ? 'Inspect' : 'Edit' }}</button>
                                                     <button class="rounded p-1 text-outline transition hover:text-primary" title="Audit History" type="button"><span class="material-symbols-outlined text-base">history</span></button>
-                                                    <button class="rounded p-1 text-outline transition hover:text-primary" title="Tariff Restrictions" type="button"><span class="material-symbols-outlined text-base">rule</span></button>
+                                                    <button class="rounded p-1 text-outline transition hover:text-primary" title="Room Rate Restrictions" type="button"><span class="material-symbols-outlined text-base">rule</span></button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -524,12 +524,12 @@
                         <section class="rounded-xl border border-surface-container-highest bg-white p-5 shadow-sm">
                             <div class="mb-3 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-secondary">shield</span>
-                                <h3 class="font-bold text-primary">Tariff Governance</h3>
+                                <h3 class="font-bold text-primary">Room Rate Management</h3>
                             </div>
                             <ul class="space-y-3 text-xs leading-5 text-slate-600">
-                                <li class="flex gap-2"><span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>Base tariffs come from encoded room inventory.</li>
+                                <li class="flex gap-2"><span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>Base room rates come from rooms added to the system.</li>
                                 <li class="flex gap-2"><span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>Seasonal multipliers require admin approval before publishing.</li>
-                                <li class="flex gap-2"><span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>SBMA tax estimates are shown for review and reconciliation.</li>
+                                <li class="flex gap-2"><span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>SBMA tax estimates are shown for review and payment checking.</li>
                             </ul>
                         </section>
                     </aside>
@@ -548,7 +548,7 @@
                             <span class="font-bold text-secondary">Room Types &amp; Suite Classifications</span>
                         </nav>
                         <h2 class="font-serif text-4xl font-bold tracking-tight text-primary">Room Types &amp; Suite Specifications</h2>
-                        <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage hotel room tiers, bed configurations, standard tariffs, capacity limits, and inventory allocations across Subic Bay property wings.</p>
+                        <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage hotel room tiers, bed configurations, standard room rates, capacity limits, and room counts across Subic Bay property wings.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <button id="exportRoomTypesCatalog" class="inline-flex items-center gap-2 rounded-lg border border-surface-container-highest bg-white px-3.5 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-container-low" type="button">
@@ -653,7 +653,7 @@
                                             </div>
                                         </div>
                                         <div class="shrink-0 text-left sm:text-right">
-                                            <span class="block text-[11px] font-bold uppercase tracking-wider text-outline">Base Nightly Tariff</span>
+                                            <span class="block text-[11px] font-bold uppercase tracking-wider text-outline">Base Nightly Room Rate</span>
                                             <span class="font-mono text-lg font-bold text-primary">{{ $averageRate }}</span>
                                             <span class="mt-0.5 block rounded border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 font-mono text-[10px] text-emerald-700">{{ $availability }}</span>
                                         </div>
@@ -676,7 +676,7 @@
                                         </div>
                                         <div class="flex flex-wrap items-center gap-2">
                                             <button data-room-type-action="edit" data-type="{{ Str::headline($typeName) }}" class="rounded px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-surface-container-low" type="button">Edit Type</button>
-                                            <a class="rounded border border-secondary/40 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary-fixed/20" href="{{ route('admin.operations.index', ['module' => 'room-rates']) }}">Manage Tariffs</a>
+                                            <a class="rounded border border-secondary/40 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary-fixed/20" href="{{ route('admin.operations.index', ['module' => 'room-rates']) }}">Manage Room Rates</a>
                                             <a class="rounded bg-primary px-3 py-1.5 text-xs font-bold text-white transition hover:bg-primary-container" href="{{ route('admin.operations.index', ['module' => 'room-inventory']) }}">View Units</a>
                                         </div>
                                     </div>
@@ -702,8 +702,8 @@
                                 <dl class="grid grid-cols-2 gap-3">
                                     <div class="rounded-lg bg-surface-container-low p-3"><dt class="text-xs font-bold uppercase text-outline">Inventory</dt><dd class="mt-1 font-bold text-primary">{{ $selectedRoomType[1] ?? '0 rooms' }}</dd></div>
                                     <div class="rounded-lg bg-surface-container-low p-3"><dt class="text-xs font-bold uppercase text-outline">Capacity</dt><dd class="mt-1 font-bold text-primary">{{ $selectedRoomType[2] ?? '0 guests' }}</dd></div>
-                                    <div class="rounded-lg bg-surface-container-low p-3"><dt class="text-xs font-bold uppercase text-outline">Avg. Tariff</dt><dd class="mt-1 font-bold text-primary">{{ $selectedRoomType[3] ?? 'PHP 0.00' }}</dd></div>
-                                    <div class="rounded-lg bg-surface-container-low p-3"><dt class="text-xs font-bold uppercase text-outline">Readiness</dt><dd class="mt-1 font-bold text-emerald-700">{{ $selectedRoomType[4] ?? '0 available' }}</dd></div>
+                                    <div class="rounded-lg bg-surface-container-low p-3"><dt class="text-xs font-bold uppercase text-outline">Avg. Room Rate</dt><dd class="mt-1 font-bold text-primary">{{ $selectedRoomType[3] ?? 'PHP 0.00' }}</dd></div>
+                                    <div class="rounded-lg bg-surface-container-low p-3"><dt class="text-xs font-bold uppercase text-outline">Ready Status</dt><dd class="mt-1 font-bold text-emerald-700">{{ $selectedRoomType[4] ?? '0 available' }}</dd></div>
                                 </dl>
                                 <div class="rounded-lg border border-surface-container-highest p-4">
                                     <p class="text-xs font-bold uppercase tracking-wider text-outline">Specification Completeness</p>
@@ -720,10 +720,10 @@
                         <section class="rounded-xl border border-surface-container-highest bg-white p-5 shadow-sm">
                             <div class="mb-3 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-secondary">rule</span>
-                                <h3 class="font-bold text-primary">Governance Checklist</h3>
+                                <h3 class="font-bold text-primary">Management Checklist</h3>
                             </div>
                             <ul class="space-y-3 text-xs leading-5 text-slate-600">
-                                <li class="flex gap-2"><span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>Every type must map to at least one encoded room.</li>
+                                <li class="flex gap-2"><span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>Every type must map to at least one added room.</li>
                                 <li class="flex gap-2"><span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>Rate changes should be reviewed through Room Rates.</li>
                                 <li class="flex gap-2"><span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>Capacity limits control reservation guest counts.</li>
                             </ul>
@@ -793,7 +793,7 @@
                             </div>
                             <div class="flex flex-wrap items-center justify-end gap-3 border-t border-surface-container-highest pt-4">
                                 <button id="cancelRoomTypeModal" class="rounded-lg border border-outline-variant px-4 py-2 text-sm font-bold text-primary transition hover:bg-surface-container" type="button">Cancel</button>
-                                <a href="{{ route('admin.operations.index', ['module' => 'room-rates']) }}" class="rounded-lg border border-secondary px-4 py-2 text-sm font-bold text-secondary transition hover:bg-secondary/10">Open Tariffs</a>
+                                <a href="{{ route('admin.operations.index', ['module' => 'room-rates']) }}" class="rounded-lg border border-secondary px-4 py-2 text-sm font-bold text-secondary transition hover:bg-secondary/10">Open Room Rates</a>
                                 <button class="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white transition hover:bg-primary-container" type="submit">Save Room Type</button>
                             </div>
                         </form>
@@ -825,7 +825,7 @@
                             <h3 class="font-serif text-2xl font-semibold">Administrative Records</h3>
                             <p class="mt-1 text-sm text-slate-500">These records are displayed from the shared hotel database with administrator-level oversight.</p>
                         </div>
-                        <a href="{{ route('admin.audit-logs.index') }}" class="rounded-lg border border-secondary px-4 py-2 text-sm font-bold text-secondary hover:bg-secondary/10">Open Audit Logs</a>
+                        <a href="{{ route('admin.audit-logs.index') }}" class="rounded-lg border border-secondary px-4 py-2 text-sm font-bold text-secondary hover:bg-secondary/10">Open Activity Logs</a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full min-w-[760px] text-left">
@@ -939,7 +939,7 @@
                 document.querySelectorAll('[data-report-action], [data-report-row-action]').forEach((button) => {
                     button.addEventListener('click', () => {
                         const action = button.dataset.reportAction || button.dataset.reportRowAction;
-                        const reportTitle = button.dataset.reportTitle || "Daily Manager's Operational Flash & Revenue Ledger";
+                        const reportTitle = button.dataset.reportTitle || "Daily Manager's Operational Flash & Revenue Records";
 
                         if (action === 'download') {
                             window.print();
@@ -952,7 +952,7 @@
                         }
 
                         if (action === 'email') {
-                            alert('Report email queued for Board and General Manager review.');
+                            alert('Report email is ready to be sent to the Board and General Manager for review.');
                             return;
                         }
 

@@ -41,7 +41,7 @@
                 <p class="text-[10px] text-blue-100/70">Live guest count</p>
             </div>
             <div class="rounded-lg border border-white/10 bg-primary-container/80 px-3.5 py-2.5">
-                <p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Settled Intake</p>
+                <p class="text-[10px] font-bold uppercase tracking-wider text-blue-100/70">Settled Registration</p>
                 <p class="mt-1 font-serif text-2xl font-bold text-secondary-fixed">PHP {{ number_format($estimatedIntake, 0) }}</p>
                 <p class="text-[10px] text-blue-100/70">+ PHP {{ number_format($securityBond, 0) }} Deposit</p>
             </div>
@@ -116,7 +116,7 @@
                     <th class="px-4 py-3">Room & Wing</th>
                     <th class="px-4 py-3">Check-in Timestamp</th>
                     <th class="px-4 py-3">Scheduled Checkout</th>
-                    <th class="px-4 py-3">Room Key / Telemetry</th>
+                    <th class="px-4 py-3">Room Key / System Status</th>
                     <th class="px-4 py-3 text-right">Booking & Security Bond</th>
                     <th class="px-4 py-3">KYC / Compliance</th>
                     <th class="px-4 py-3 text-center">Status</th>
@@ -163,12 +163,12 @@
                         <td class="px-4 py-3.5 align-top">
                             <div class="font-bold text-primary">Room {{ $checkIn->room?->room_number ?? 'TBD' }}</div>
                             <div class="text-xs font-medium text-slate-500">{{ $checkIn->room?->room_type ?? 'Pending room type' }}</div>
-                            <span class="mt-1 inline-flex items-center gap-1 text-[11px] font-bold text-secondary"><span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>Le Charmé Rooms Cluster</span>
+                            <span class="mt-1 inline-flex items-center gap-1 text-[11px] font-bold text-secondary"><span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>Le Charmé Room System</span>
                         </td>
                         <td class="px-4 py-3.5 align-top">
                             <div class="text-xs font-bold text-primary">{{ $checkIn->checked_in_at?->timezone('Asia/Manila')->format('M d, Y · h:i A') ?? 'Pending timestamp' }} PHT</div>
                             <div class="mt-0.5 text-[11px] text-slate-500">Front Desk validated</div>
-                            <div class="mt-0.5 text-[10px] text-slate-400">{{ $checkIn->notes ?: 'Arrival desk dispatch' }}</div>
+                            <div class="mt-0.5 text-[10px] text-slate-400">{{ $checkIn->notes ?: 'Front Desk arrival note' }}</div>
                         </td>
                         <td class="px-4 py-3.5 align-top">
                             <div class="text-xs font-bold text-primary">{{ $checkIn->reservation?->check_out_date?->format('M d, Y') ?? 'TBD' }} · 12:00 PHT</div>
@@ -180,7 +180,7 @@
                                 <span class="material-symbols-outlined text-xs text-emerald-700">nfc</span>
                                 <span class="font-mono text-xs font-bold text-primary">KC-{{ str_pad((string) $checkIn->id, 4, '0', STR_PAD_LEFT) }}-B</span>
                             </div>
-                            <div class="mt-0.5 flex items-center gap-1 text-[11px] font-semibold text-emerald-800"><span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>Door telemetry synced</div>
+                            <div class="mt-0.5 flex items-center gap-1 text-[11px] font-semibold text-emerald-800"><span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>Door keycard status updated</div>
                             <div class="mt-0.5 font-mono text-[10px] text-slate-400">Hash: {{ substr(md5('checkin-'.$checkIn->id), 0, 4) }}..{{ substr(md5((string) $checkIn->room_id), 0, 4) }}</div>
                         </td>
                         <td class="px-4 py-3.5 text-right align-top">
@@ -234,9 +234,9 @@
 
 <div class="grid grid-cols-1 gap-4 pb-2 md:grid-cols-3">
     <div class="owner-card rounded-xl p-5">
-        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-secondary">Turnover Velocity</span><span class="material-symbols-outlined text-slate-400">speed</span></div>
+        <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-secondary">Room Preparation Velocity</span><span class="material-symbols-outlined text-slate-400">speed</span></div>
         <h3 class="mt-1 font-semibold text-primary">Front Desk Processing Pacing</h3>
-        <p class="mt-1 text-sm text-slate-500">Time elapsed from guest arrival to electronic keycard dispatch and room account lock.</p>
+        <p class="mt-1 text-sm text-slate-500">Time elapsed from guest arrival to room keycard release and room account lock.</p>
         <div class="mt-4 grid grid-cols-3 border-t border-line pt-3 text-center">
             <div><div class="font-bold text-primary">2m 45s</div><div class="text-[10px] uppercase text-slate-500">Avg.</div></div>
             <div><div class="font-bold text-primary">1m 20s</div><div class="text-[10px] uppercase text-slate-500">Key Drop</div></div>
@@ -245,16 +245,16 @@
     </div>
     <div class="owner-card rounded-xl p-5">
         <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-secondary">Housekeeping Integration</span><span class="material-symbols-outlined text-slate-400">sanitizer</span></div>
-        <h3 class="mt-1 font-semibold text-primary">Turnover Inspection Sync</h3>
-        <p class="mt-1 text-sm text-slate-500">Automated handoff between departures and housekeeping release for resale.</p>
+        <h3 class="mt-1 font-semibold text-primary">Room Preparation Inspection Sync</h3>
+        <p class="mt-1 text-sm text-slate-500">Automatic update from check-out to housekeeping cleaning.</p>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3">
-            <div class="flex items-center gap-3"><span class="font-serif text-2xl font-bold text-primary">100%</span><div><div class="text-xs font-bold text-primary">Departed keys released</div><div class="text-[10px] text-slate-500">Zero delayed dirty turnover state</div></div></div>
+            <div class="flex items-center gap-3"><span class="font-serif text-2xl font-bold text-primary">100%</span><div><div class="text-xs font-bold text-primary">Departed keys released</div><div class="text-[10px] text-slate-500">Zero delayed dirty cleaning status</div></div></div>
             <span class="material-symbols-outlined text-emerald-600">task_alt</span>
         </div>
     </div>
     <div class="rounded-xl border border-primary-container bg-primary-container p-5 text-white shadow-sm">
-        <div class="flex items-center justify-between"><span class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed"><span class="material-symbols-outlined text-xs">policy</span>Executive Governance Protocol</span></div>
-        <h3 class="mt-1 font-serif text-xl font-bold">Immutable SBMA Audit Chain</h3>
+        <div class="flex items-center justify-between"><span class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed"><span class="material-symbols-outlined text-xs">policy</span>Owner Access Rules</span></div>
+        <h3 class="mt-1 font-serif text-xl font-bold">Protected SBMA Audit Chain</h3>
         <p class="mt-1 text-sm leading-6 text-blue-100">Express checkouts, keycard re-encodings, deposit release authorizations, and manual room status overrides are reserved for operational departments.</p>
         <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[11px] text-secondary-fixed"><span class="font-mono">SYS-REV-2026.10-PROD</span><span class="inline-flex items-center gap-1 font-bold"><span class="material-symbols-outlined text-xs">verified_user</span>Read-Only Validated</span></div>
     </div>

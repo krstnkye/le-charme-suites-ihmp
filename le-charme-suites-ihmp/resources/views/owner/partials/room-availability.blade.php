@@ -22,7 +22,7 @@
         'available' => ['label' => 'Available', 'box' => 'border-emerald-200 bg-emerald-50 text-emerald-800', 'note' => 'Ready Clean'],
         'occupied' => ['label' => 'Occupied', 'box' => 'border-rose-200 bg-rose-50 text-rose-700', 'note' => 'In-house'],
         'reserved' => ['label' => 'Reserved', 'box' => 'border-blue-200 bg-blue-50 text-blue-800', 'note' => 'Confirmed'],
-        'cleaning' => ['label' => 'Cleaning', 'box' => 'border-sky-200 bg-sky-50 text-sky-800', 'note' => 'Turnover'],
+        'cleaning' => ['label' => 'Cleaning', 'box' => 'border-sky-200 bg-sky-50 text-sky-800', 'note' => 'Room Preparation'],
         'maintenance' => ['label' => 'Hold', 'box' => 'border-amber-300 bg-amber-50 text-amber-800', 'note' => 'Maintenance'],
     ];
 @endphp
@@ -35,7 +35,7 @@
                 <span class="material-symbols-outlined text-sm">monitoring</span>
                 Room Availability Overview
             </div>
-            <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Room Availability & Booking Pace Matrix</h2>
+            <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Room Availability & Booking Pace Table</h2>
             <p class="mt-3 max-w-3xl text-sm leading-6 text-blue-100">
                 Real-time room availability, forecast occupancy, and forward calendar pipeline across all room categories and wings. This owner view is read-only.
             </p>
@@ -68,10 +68,10 @@
             <span class="material-symbols-outlined text-secondary">domain</span>
         </div>
         <p class="mt-3 font-serif text-3xl font-extrabold">{{ $publishedRoomCount }} Rooms</p>
-        <p class="mt-1 text-xs text-slate-500">{{ $totalRooms }} rooms currently encoded in IHMP</p>
-        <p class="mt-1 text-xs text-slate-500">{{ $roomTypes->count() }} room categories encoded</p>
+        <p class="mt-1 text-xs text-slate-500">{{ $totalRooms }} rooms currently added in IHMP</p>
+        <p class="mt-1 text-xs text-slate-500">{{ $roomTypes->count() }} room types added</p>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-[11px]">
-            <span class="text-slate-400">Active portfolios</span>
+            <span class="text-slate-400">Active bookings</span>
             <span class="font-bold text-primary">100% Operational</span>
         </div>
     </div>
@@ -105,7 +105,7 @@
             <span class="material-symbols-outlined text-secondary">payments</span>
         </div>
         <p class="mt-3 font-serif text-3xl font-extrabold">PHP {{ number_format($averageRate, 2) }}</p>
-        <p class="mt-1 text-xs text-slate-500">Average encoded nightly rate</p>
+        <p class="mt-1 text-xs text-slate-500">Average nightly room rate</p>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-[11px]">
             <span class="text-slate-400">RevPAR indicator</span>
             <span class="font-bold text-primary">PHP {{ number_format(($averageRate * $occupancyRate) / 100, 2) }}</span>
@@ -116,7 +116,7 @@
 <section class="owner-card overflow-hidden rounded-2xl">
     <div class="flex flex-col justify-between gap-4 border-b border-line bg-surface-low px-6 py-5 xl:flex-row xl:items-center">
         <div>
-            <h3 class="font-serif text-2xl font-bold text-primary">7-Day Forward Room Availability Matrix</h3>
+            <h3 class="font-serif text-2xl font-bold text-primary">7-Day Forward Room Availability Table</h3>
             <p class="mt-1 text-xs text-slate-500">Live view across rooms, categories, base rates, and availability signals.</p>
         </div>
         <div class="flex flex-wrap items-center gap-3 text-xs font-semibold text-slate-600">
@@ -153,7 +153,7 @@
                                 <span class="font-bold text-primary">Room {{ $room->room_number }}</span>
                                 <span class="rounded border border-line bg-surface-low px-2 py-0.5 text-[10px] font-bold uppercase text-slate-500">{{ $room->room_type }}</span>
                             </div>
-                            <span class="mt-1 block text-[11px] text-slate-500">Le Charmé Rooms Cluster · {{ $room->capacity }} guests</span>
+                            <span class="mt-1 block text-[11px] text-slate-500">Le Charmé Room System · {{ $room->capacity }} guests</span>
                         </td>
                         <td class="px-4 py-4">
                             <span class="block font-mono font-bold text-primary">PHP {{ number_format($room->rate, 2) }}</span>
@@ -173,7 +173,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="px-6 py-10 text-center text-sm text-slate-500">No room availability records have been encoded yet.</td>
+                        <td colspan="9" class="px-6 py-10 text-center text-sm text-slate-500">No room availability records have been added yet.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -186,7 +186,7 @@
         <div class="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-center">
             <div>
                 <h3 class="font-serif text-2xl font-bold text-primary">Room Type Availability & Booking Pace</h3>
-                <p class="mt-1 text-xs text-slate-500">Distribution by encoded category, availability, and operational holds.</p>
+                <p class="mt-1 text-xs text-slate-500">Distribution by added room type, availability, and operational holds.</p>
             </div>
             <span class="rounded-full border border-line bg-surface-low px-3 py-1 text-xs font-bold text-slate-600">Owner view only</span>
         </div>
@@ -231,7 +231,7 @@
 
     <section class="space-y-5">
         <div class="owner-card rounded-2xl p-6">
-            <h3 class="font-serif text-2xl font-bold text-primary">Yield Snapshot</h3>
+            <h3 class="font-serif text-2xl font-bold text-primary">Yield Summary</h3>
             <div class="mt-5 space-y-4">
                 <div class="rounded-xl bg-surface-low p-4">
                     <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Available room revenue</p>
@@ -248,11 +248,11 @@
         <div class="rounded-2xl border border-primary-container bg-gradient-to-br from-primary to-[#07111f] p-6 text-white shadow-md">
             <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-secondary-fixed">
                 <span class="material-symbols-outlined text-base">verified_user</span>
-                Forward Calendar Governance
+                Forward Calendar Management
             </div>
             <h3 class="mt-3 font-serif text-2xl font-bold">Executive Monitoring Only</h3>
             <p class="mt-2 text-sm leading-6 text-blue-100">
-                Owners can review availability, booking pace, and yield indicators. Room blocking, tariff changes, and operational edits stay with department users and administrators.
+                Owners can review room availability, booking activity, and room income. Room blocking, rate changes, and daily updates stay with department users and administrators.
             </p>
             <div class="mt-5 grid grid-cols-2 gap-3 text-sm">
                 <div class="rounded-lg border border-white/10 bg-white/10 p-3">

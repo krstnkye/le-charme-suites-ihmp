@@ -41,13 +41,13 @@ class AdminAuditLogController extends Controller
             ->get()
             ->map(fn (HotelTransaction $transaction): array => [
                 'timestamp' => $transaction->transaction_date ?? $transaction->created_at,
-                'actor' => 'Front Office Ledger',
+                'actor' => 'Front Office Records',
                 'role' => 'System Recorded',
                 'event' => strtoupper((string) str_replace(' ', '_', $transaction->transaction_type)),
                 'icon' => 'receipt_long',
                 'target' => 'Guest Bill #'.str_pad((string) $transaction->id, 5, '0', STR_PAD_LEFT),
                 'context' => 'Room '.($transaction->room?->room_number ?? 'N/A'),
-                'terminal' => 'IHMP Ledger',
+                'terminal' => 'IHMP Records',
                 'ip' => '127.0.0.1',
                 'details' => $transaction->description ?: 'Hotel transaction recorded.',
                 'severity' => $transaction->status === 'paid' ? 'Verified' : 'Review',

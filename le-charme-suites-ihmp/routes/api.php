@@ -28,4 +28,10 @@ Route::prefix('v1')->middleware('integration.key')->group(function () {
     Route::post('/bookings', [OnlineBookingApiController::class, 'store'])
         ->middleware('throttle:30,1')
         ->name('api.v1.bookings.store');
+    Route::put('/bookings/{externalReference}', [OnlineBookingApiController::class, 'update'])
+        ->middleware('throttle:30,1')
+        ->name('api.v1.bookings.update');
+    Route::post('/bookings/{externalReference}/cancel', [OnlineBookingApiController::class, 'cancel'])
+        ->middleware('throttle:30,1')
+        ->name('api.v1.bookings.cancel');
 });

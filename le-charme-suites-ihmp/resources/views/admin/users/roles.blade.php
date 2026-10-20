@@ -5,11 +5,11 @@
             'label' => 'System Admin',
             'tier' => 'Tier 1',
             'department' => 'IT Infrastructure',
-            'scope' => 'Full system administration, access governance, audit oversight, and global settings.',
+            'scope' => 'Full system administration, user access control, activity review, and system settings.',
             'icon' => 'admin_panel_settings',
             'accent' => 'border-primary bg-primary/5',
             'badge' => 'bg-primary text-white',
-            'modules' => ['All modules', 'User governance', 'System settings', 'Audit logs'],
+            'modules' => ['All modules', 'User access', 'System settings', 'Activity logs'],
         ],
         'receptionist' => [
             'label' => 'Front Desk',
@@ -35,11 +35,11 @@
             'label' => 'Housekeeping',
             'tier' => 'Tier 4',
             'department' => 'Rooms & Facilities',
-            'scope' => 'Room readiness, cleaning queues, maintenance notes, and room status updates.',
+            'scope' => 'Rooms Ready for Guests, cleaning lists, maintenance notes, and room status updates.',
             'icon' => 'cleaning_services',
             'accent' => 'border-surface-container-highest bg-white',
             'badge' => 'bg-surface-container text-primary',
-            'modules' => ['Room status', 'Housekeeping', 'Maintenance notes', 'Turnover queue'],
+            'modules' => ['Room status', 'Housekeeping', 'Maintenance notes', 'Room cleaning list'],
         ],
     ];
     $roleOrder = ['admin', 'receptionist', 'cashier', 'housekeeping'];
@@ -141,12 +141,12 @@
                         <h1 class="font-serif text-4xl font-semibold tracking-tight">Role Directory & Access Tiers</h1>
                         <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#5b4313]">{{ count($roleOrder) }} Role Tiers</span>
                     </div>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Review each system role, department assignment, authority tier, and operational scope before tuning detailed permissions.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Review each system role, department assignment, access level, and allowed tasks before tuning detailed permissions.</p>
                 </div>
                 <div class="flex flex-wrap gap-3">
                     <a href="{{ route('admin.permissions.index') }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-primary-container">
                         <span class="material-symbols-outlined text-[18px]">lock</span>
-                        Open Permissions Matrix
+                        Open Permissions Table
                     </a>
                 </div>
             </section>
@@ -204,7 +204,7 @@
                         </div>
 
                         <div class="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-surface-container-highest pt-4">
-                            <span class="text-xs text-slate-500">Detailed capabilities are controlled in the permissions matrix.</span>
+                            <span class="text-xs text-slate-500">Detailed capabilities are controlled in the permissions table.</span>
                             <a href="{{ route('admin.permissions.index', ['role' => $role]) }}" class="inline-flex items-center gap-1 rounded-lg border border-secondary px-3 py-2 text-xs font-bold text-secondary hover:bg-secondary/10">
                                 Configure Role
                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>

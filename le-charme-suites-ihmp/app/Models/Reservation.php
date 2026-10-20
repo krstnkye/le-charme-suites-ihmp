@@ -21,8 +21,17 @@ class Reservation extends Model
         'check_in_date',
         'check_out_date',
         'number_of_guests',
+        'adult_guests',
+        'child_guests',
         'status',
         'source',
+        'official_booking_status',
+        'payment_status',
+        'currency',
+        'gross_amount',
+        'discount_amount',
+        'total_amount',
+        'rate_plan',
         'created_by',
         'confirmed_by',
         'confirmed_at',
@@ -35,6 +44,9 @@ class Reservation extends Model
             'check_in_date' => 'date',
             'check_out_date' => 'date',
             'confirmed_at' => 'datetime',
+            'gross_amount' => 'decimal:2',
+            'discount_amount' => 'decimal:2',
+            'total_amount' => 'decimal:2',
         ];
     }
 

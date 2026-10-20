@@ -113,7 +113,7 @@
                 <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">{{ session('status') }}</div>
             @endif
             <div class="flex flex-col justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950 sm:flex-row sm:items-center">
-                <span><strong>{{ $totalRooms }} of {{ $publishedRoomCount }}</strong> published hotel rooms are encoded in this shared inventory.</span>
+                <span><strong>{{ $totalRooms }} of {{ $publishedRoomCount }}</strong> hotel rooms are added to the system.</span>
                 <span class="text-xs font-bold uppercase tracking-wider">{{ $officialRoomTypeCount }} official room types</span>
             </div>
 
@@ -125,7 +125,7 @@
                         <span>Room Records Updated</span>
                     </div>
                     <h2 class="font-headline text-3xl font-semibold tracking-tight text-primary">Room Management & Availability Grid</h2>
-                    <p class="text-sm text-on-surface-variant">Real-time room occupancy states, quick room assignments, and inventory booking matrix.</p>
+                    <p class="text-sm text-on-surface-variant">Real-time room occupancy states, quick room assignments, and room booking table.</p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2 rounded-xl border border-surface-variant bg-white p-2.5 shadow-sm">
@@ -196,10 +196,10 @@
             <section class="grid grid-cols-2 gap-3 md:grid-cols-5">
                 @foreach ([
                     ['Property Rooms', $publishedRoomCount, 'apartment', 'text-primary', 'Hotel total'],
-                    ['Available', $availableRooms, 'check_circle', 'text-emerald-800', 'Encoded inventory'],
-                    ['Reserved', $reservedRooms, 'event_available', 'text-secondary', 'Encoded inventory'],
-                    ['Occupied', $occupiedRooms, 'king_bed', 'text-primary', 'Encoded inventory'],
-                    ['Maintenance', $maintenanceRooms, 'build', 'text-error', 'Encoded inventory'],
+                    ['Available', $availableRooms, 'check_circle', 'text-emerald-800', 'Rooms added'],
+                    ['Reserved', $reservedRooms, 'event_available', 'text-secondary', 'Rooms added'],
+                    ['Occupied', $occupiedRooms, 'king_bed', 'text-primary', 'Rooms added'],
+                    ['Maintenance', $maintenanceRooms, 'build', 'text-error', 'Rooms added'],
                 ] as [$label, $value, $icon, $color, $caption])
                     <article class="rounded-xl border border-surface-variant bg-white p-4 shadow-sm">
                         <div class="flex items-center justify-between">
@@ -217,7 +217,7 @@
                     <div>
                         <h3 class="flex items-center gap-2 text-lg font-bold text-primary">
                             <span class="material-symbols-outlined text-secondary">grid_view</span>
-                            Live Availability Selection Matrix
+                            Live Availability Selection Table
                         </h3>
                         <p class="text-xs text-on-surface-variant">Recommended available rooms for {{ now(config('app.timezone'))->format('M d') }} to {{ now(config('app.timezone'))->addDays(3)->format('M d, Y') }}</p>
                     </div>
@@ -276,7 +276,7 @@
                             <span class="material-symbols-outlined text-secondary">table_chart</span>
                             Master Room Inventory & Status Roster
                         </h3>
-                        <p class="text-sm text-on-surface-variant">Complete inventory breakdown across all encoded rooms.</p>
+                        <p class="text-sm text-on-surface-variant">Complete inventory breakdown across all added rooms.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
                         @if ($canManageRooms)
@@ -343,7 +343,7 @@
 
                 <div class="flex flex-col gap-3 border-t border-surface-variant bg-surface-container p-4 text-sm text-outline sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span>Live Inventory: <strong class="text-on-surface">{{ $totalRooms }} of {{ $publishedRoomCount }} Property Rooms Encoded</strong></span>
+                        <span>Live Inventory: <strong class="text-on-surface">{{ $totalRooms }} of {{ $publishedRoomCount }} Property Rooms Added</strong></span>
                         <span>Available Rate: <strong class="text-emerald-700">{{ $availableRate }}%</strong></span>
                         <span>Occupancy Rate: <strong class="text-primary">{{ $occupancyRate }}%</strong></span>
                     </div>
@@ -352,7 +352,7 @@
             </section>
 
             <section class="rounded-xl border border-surface-variant bg-white p-5 shadow-sm">
-                <h3 class="mb-4 font-headline text-xl font-medium text-primary">Floor Room Matrix</h3>
+                <h3 class="mb-4 font-headline text-xl font-medium text-primary">Floor Room Table</h3>
                 <div class="grid gap-3 md:grid-cols-3">
                     @forelse ($roomMatrix as $floor => $floorRooms)
                         <div class="rounded-lg border border-surface-variant bg-surface-container-low p-3">
@@ -369,7 +369,7 @@
                             </div>
                         </div>
                     @empty
-                        <p class="text-sm text-on-surface-variant">No room matrix available.</p>
+                        <p class="text-sm text-on-surface-variant">No room list available.</p>
                     @endforelse
                 </div>
             </section>

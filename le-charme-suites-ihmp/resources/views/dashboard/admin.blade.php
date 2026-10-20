@@ -14,7 +14,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Le Charme Suites - Admin Command Center</title>
+    <title>Le Charme Suites - Admin Dashboard</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -73,7 +73,7 @@
         <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-container-highest bg-surface px-8 shadow-sm">
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">security</span>
-                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - System Administration Command Center</h1>
+                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - System Administration Dashboard</h1>
                 <span class="hidden rounded-full border border-secondary/20 bg-surface-container px-3 py-1 text-xs font-bold text-secondary lg:inline-flex">
                     Subic Bay Freeport Zone
                 </span>
@@ -104,7 +104,7 @@
                     <div>
                         <div class="flex items-center gap-2 text-secondary-fixed">
                             <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
-                            <span class="text-xs font-bold uppercase tracking-wider">Subic Bay IHMP Master Telemetry - Live Operations</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">Subic Bay IHMP Master System Status - Live Operations</span>
                         </div>
                         <h2 class="mt-2 font-serif text-4xl font-bold">Property Systems Integrity & Control</h2>
                         <p class="mt-2 text-sm leading-6 text-[#b4c8e5]">Primary hotel operations, guest bills, room inventory, and role access are monitored from this administrator workspace.</p>
@@ -157,7 +157,7 @@
                     <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Active Exceptions</span><span class="material-symbols-outlined text-error">priority_high</span></div>
                     <p class="mt-3 font-serif text-4xl font-bold text-error">{{ $maintenanceRooms }}</p>
                     <div class="mt-3 space-y-1.5 text-xs">
-                        <div class="flex items-center justify-between"><span class="font-semibold text-error">Maintenance / cleaning queue</span><a href="{{ route('admin.operations.index', ['module' => 'housekeeping']) }}" class="font-bold text-secondary hover:underline">Review</a></div>
+                        <div class="flex items-center justify-between"><span class="font-semibold text-error">Maintenance / cleaning list</span><a href="{{ route('admin.operations.index', ['module' => 'housekeeping']) }}" class="font-bold text-secondary hover:underline">Review</a></div>
                         <div class="flex items-center justify-between"><span class="text-slate-600">{{ $pendingCheckIns }} pending arrivals</span><a href="{{ route('admin.operations.index', ['module' => 'check-ins']) }}" class="font-bold text-secondary hover:underline">Open</a></div>
                     </div>
                 </div>
@@ -166,7 +166,7 @@
             <section class="space-y-4">
                 <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
                     <div>
-                        <h2 class="font-serif text-2xl font-bold">Operational Governance & Subsystems</h2>
+                        <h2 class="font-serif text-2xl font-bold">Operational Management & Subsystems</h2>
                         <p class="mt-1 text-sm text-slate-500">Direct administrative access and real-time record checking.</p>
                     </div>
                     <span class="rounded-full bg-surface-container-highest px-3 py-1 text-xs font-bold text-slate-600">Synchronized with local Laravel IHMP database</span>
@@ -174,7 +174,7 @@
                 <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
                     <div class="command-card rounded-xl p-6">
                         <div class="flex items-start justify-between gap-4">
-                            <div class="flex items-center gap-3"><span class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary-container text-secondary"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">admin_panel_settings</span></span><div><h3 class="text-lg font-bold">User & Role Governance</h3><p class="text-sm text-slate-500">Active access control matrix</p></div></div>
+                            <div class="flex items-center gap-3"><span class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary-container text-secondary"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">admin_panel_settings</span></span><div><h3 class="text-lg font-bold">User & Role Management</h3><p class="text-sm text-slate-500">Current role access settings</p></div></div>
                             <span class="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold">{{ $totalUsers }} Accounts</span>
                         </div>
                         <div class="my-5 grid grid-cols-3 gap-3 border-y border-surface-container py-3">
@@ -182,7 +182,7 @@
                             <div><span class="text-[11px] font-bold text-slate-500">ADMINS</span><p class="font-bold text-emerald-700">{{ $adminCount }}</p></div>
                             <div><span class="text-[11px] font-bold text-slate-500">BILLING</span><p class="font-bold text-secondary">{{ $cashierCount }}</p></div>
                         </div>
-                        <a href="{{ route('admin.users.index') }}" class="inline-flex items-center gap-1 text-sm font-bold text-secondary hover:text-primary">Manage Matrix <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                        <a href="{{ route('admin.users.index') }}" class="inline-flex items-center gap-1 text-sm font-bold text-secondary hover:text-primary">Manage Table <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
                     </div>
 
                     <div class="command-card rounded-xl p-6">
@@ -221,7 +221,7 @@
                             <div class="flex justify-between"><span>Current Guests</span><strong>{{ $currentGuests }}</strong></div>
                             <div class="flex justify-between"><span>Open Reservations</span><strong>{{ $activeReservations }}</strong></div>
                         </div>
-                        <a href="{{ route('admin.operations.index', ['module' => 'transactions']) }}" class="inline-flex items-center gap-1 text-sm font-bold text-secondary hover:text-primary">Open Ledgers <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+                        <a href="{{ route('admin.operations.index', ['module' => 'transactions']) }}" class="inline-flex items-center gap-1 text-sm font-bold text-secondary hover:text-primary">Open Billing Records <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
                     </div>
                 </div>
             </section>
@@ -231,7 +231,7 @@
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">history</span>
                         <div>
-                            <h3 class="text-lg font-bold">Privileged System Audit & Telemetry Log</h3>
+                            <h3 class="text-lg font-bold">Privileged System Audit & System Status Log</h3>
                             <p class="text-sm text-slate-500">Recent operational transactions recorded by the system.</p>
                         </div>
                     </div>
@@ -271,7 +271,7 @@
             </section>
 
             <footer class="pb-8 pt-4 text-center text-xs text-slate-500">
-                <p>Le Charme Suites Integrated Hotel Management Portal (IHMP) - Subic Bay Central Server Cluster</p>
+                <p>Le Charme Suites Integrated Hotel Management Portal (IHMP) - Subic Bay Central Server System</p>
                 <p class="mt-1">Authorized Administration Station - Laravel local development environment</p>
             </footer>
         </main>

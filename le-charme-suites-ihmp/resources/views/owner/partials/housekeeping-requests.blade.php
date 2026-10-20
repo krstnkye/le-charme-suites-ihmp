@@ -34,8 +34,8 @@
             'room' => $roomNumber,
             'guest' => match ($status) {
                 'occupied' => 'In-house Guest',
-                'reserved' => 'Front Desk Dispatch',
-                'cleaning' => 'Turnover Coordinator',
+                'reserved' => 'Front Desk Assignment',
+                'cleaning' => 'Room Preparation Coordinator',
                 'maintenance' => 'Engineering Desk',
                 default => 'Housekeeping Desk',
             },
@@ -47,8 +47,8 @@
             'category' => $category,
             'details' => $item->notes ?? match ($status) {
                 'occupied' => 'Guest room monitoring and amenity readiness check.',
-                'reserved' => 'Pre-arrival room readiness and welcome setup.',
-                'cleaning' => 'Room turnover cleaning is currently in progress.',
+                'reserved' => 'Pre-arrival rooms ready for guests and welcome setup.',
+                'cleaning' => 'Room cleaning and preparation cleaning is currently in progress.',
                 'maintenance' => 'Maintenance hold requires engineering clearance.',
                 default => 'Housekeeping service request pending operational review.',
             },
@@ -81,9 +81,9 @@
                 <span class="material-symbols-outlined text-sm">room_service</span>
                 Executive Monitoring / Service Request Control
             </span>
-            <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Housekeeping Requests Ledger</h2>
+            <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Housekeeping Requests Records</h2>
             <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">
-                Real-time telemetry of front desk dispatches, amenity delivery, special cleaning, maintenance coordination, and room service requests.
+                Current information of front desk assignments, amenity delivery, special cleaning, maintenance coordination, and room service requests.
             </p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-3 rounded-xl border border-white/10 bg-white/10 p-4 sm:grid-cols-4 xl:min-w-[620px]">
@@ -96,8 +96,8 @@
 </section>
 
 <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">All Requests</p><span class="material-symbols-outlined text-secondary">list_alt</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $requestRows->count() }}</p><p class="mt-1 text-sm text-slate-500">Housekeeping service ledger entries</p></div>
-    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Active Queue</p><span class="material-symbols-outlined text-secondary">pending_actions</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $openRequests }}</p><p class="mt-1 text-sm text-slate-500">Pending or in-progress service signals</p></div>
+    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">All Requests</p><span class="material-symbols-outlined text-secondary">list_alt</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $requestRows->count() }}</p><p class="mt-1 text-sm text-slate-500">Housekeeping service billing entries</p></div>
+    <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Active List</p><span class="material-symbols-outlined text-secondary">pending_actions</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $openRequests }}</p><p class="mt-1 text-sm text-slate-500">Pending or in-progress service signals</p></div>
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Urgent Flags</p><span class="material-symbols-outlined text-error">priority_high</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $urgentRequests }}</p><p class="mt-1 text-sm text-slate-500">Maintenance or escalated requests</p></div>
     <div class="owner-card rounded-xl p-5"><div class="flex items-center justify-between"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Completed</p><span class="material-symbols-outlined text-emerald-700">task_alt</span></div><p class="mt-4 font-serif text-3xl font-bold">{{ $completedRequests }}</p><p class="mt-1 text-sm text-slate-500">Resolved within visible owner log</p></div>
 </section>
@@ -105,8 +105,8 @@
 <section class="owner-card overflow-hidden rounded-xl">
     <div class="flex flex-col gap-4 border-b border-line bg-white p-6 xl:flex-row xl:items-center xl:justify-between">
         <div>
-            <h3 class="font-serif text-2xl font-bold text-primary">Guest & Operational Service Requests Ledger</h3>
-            <p class="mt-1 text-sm text-slate-500">Real-time telemetry of dispatches, amenity delivery, and cleaning requests.</p>
+            <h3 class="font-serif text-2xl font-bold text-primary">Guest & Operational Service Requests Records</h3>
+            <p class="mt-1 text-sm text-slate-500">Current information of assignments, amenity delivery, and cleaning requests.</p>
         </div>
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
             <label class="relative block sm:w-80">
@@ -123,7 +123,7 @@
         <button type="button" class="border-b-2 border-secondary py-3 text-secondary" data-hk-request-filter="all">All Requests <span class="ml-1 rounded-full bg-secondary/15 px-1.5 text-[10px]">{{ $requestRows->count() }}</span></button>
         <button type="button" class="border-b-2 border-transparent py-3 text-slate-500" data-hk-request-filter="urgent">Urgent <span class="ml-1 rounded-full bg-surface-mid px-1.5 text-[10px]">{{ $urgentRequests }}</span></button>
         <button type="button" class="border-b-2 border-transparent py-3 text-slate-500" data-hk-request-filter="active">Active <span class="ml-1 rounded-full bg-surface-mid px-1.5 text-[10px]">{{ $requestRows->where('status', 'active')->count() }}</span></button>
-        <button type="button" class="border-b-2 border-transparent py-3 text-slate-500" data-hk-request-filter="queued">Queued <span class="ml-1 rounded-full bg-surface-mid px-1.5 text-[10px]">{{ $requestRows->where('status', 'queued')->count() }}</span></button>
+        <button type="button" class="border-b-2 border-transparent py-3 text-slate-500" data-hk-request-filter="queued">Waiting <span class="ml-1 rounded-full bg-surface-mid px-1.5 text-[10px]">{{ $requestRows->where('status', 'queued')->count() }}</span></button>
     </div>
     <div class="owner-scroll overflow-x-auto">
         <table class="w-full min-w-[1220px] border-collapse text-left text-sm">
@@ -137,7 +137,7 @@
                     <th class="px-4 py-3">Assigned Attendant</th>
                     <th class="px-4 py-3">Status</th>
                     <th class="px-4 py-3">Requested At</th>
-                    <th class="px-5 py-3 text-right">SLA Timer</th>
+                    <th class="px-5 py-3 text-right">Response Time Timer</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-line">
@@ -149,9 +149,9 @@
                         <td class="px-5 py-3.5 font-semibold text-primary">{{ $request['category'] }}</td>
                         <td class="px-6 py-3.5"><p class="max-w-sm text-slate-700">{{ $request['details'] }}</p></td>
                         <td class="px-4 py-3.5"><p class="font-semibold text-primary">{{ $request['attendant'] }}</p><p class="text-[11px] text-slate-500">Floor response team</p></td>
-                        <td class="px-4 py-3.5"><span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-bold {{ $statusTone[$request['status']] ?? $statusTone['queued'] }}"><span class="h-1.5 w-1.5 rounded-full bg-current"></span>{{ str_replace('_', ' ', ucfirst($request['status'])) }}</span></td>
+                        <td class="px-4 py-3.5"><span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-bold {{ $statusTone[$request['status']] ?? $statusTone['queued'] }}"><span class="h-1.5 w-1.5 rounded-full bg-current"></span>{{ $request['status'] === 'queued' ? 'Waiting' : str_replace('_', ' ', ucfirst($request['status'])) }}</span></td>
                         <td class="px-4 py-3.5 font-mono text-xs text-primary">{{ $request['requested_at']->format('M d, Y h:i A') }}</td>
-                        <td class="px-5 py-3.5 text-right"><p class="text-xs font-bold text-primary">{{ $request['remaining'] }}m Remaining</p><p class="text-[10px] text-slate-500">SLA: {{ $request['sla_minutes'] }}m</p></td>
+                        <td class="px-5 py-3.5 text-right"><p class="text-xs font-bold text-primary">{{ $request['remaining'] }}m Remaining</p><p class="text-[10px] text-slate-500">Response Time: {{ $request['sla_minutes'] }}m</p></td>
                     </tr>
                 @empty
                     <tr><td colspan="9" class="px-6 py-12 text-center text-sm text-slate-500">No housekeeping request records are visible yet.</td></tr>
@@ -166,9 +166,9 @@
 </section>
 
 <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">
-    <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">SLA Compliance</p><h3 class="mt-2 font-serif text-2xl font-bold">100% On-Time Rate</h3><p class="mt-3 text-sm text-slate-600">Visible requests are tracked against housekeeping service windows and escalated when maintenance is involved.</p><div class="mt-4 rounded-lg bg-emerald-50 p-3 text-xs font-bold text-emerald-700">0 confirmed breaches in owner view</div></div>
+    <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Response Time Compliance</p><h3 class="mt-2 font-serif text-2xl font-bold">100% On-Time Rate</h3><p class="mt-3 text-sm text-slate-600">Visible requests are tracked against housekeeping service windows and escalated when maintenance is involved.</p><div class="mt-4 rounded-lg bg-emerald-50 p-3 text-xs font-bold text-emerald-700">0 confirmed breaches in owner view</div></div>
     <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Category Mix</p><div class="mt-4 space-y-3">@forelse ($serviceCategories as $category => $count)<div class="flex items-center justify-between text-sm"><span>{{ $category }}</span><strong>{{ $count }}</strong></div>@empty<p class="text-sm text-slate-500">No request categories yet.</p>@endforelse</div></div>
-    <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Executive Advisory</p><h3 class="mt-2 font-serif text-2xl font-bold">Read-Only Service Governance</h3><p class="mt-3 text-sm leading-6 text-blue-100">Owner access can inspect request movement, SLA posture, and service origins without changing operational records.</p></div>
+    <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Executive Advisory</p><h3 class="mt-2 font-serif text-2xl font-bold">Read-Only Service Management</h3><p class="mt-3 text-sm leading-6 text-blue-100">Owner access can inspect request movement, Response Time posture, and service origins without changing operational records.</p></div>
 </section>
 
 <script>
@@ -210,7 +210,7 @@
         exportButton?.addEventListener('click', () => {
             const visibleRows = rows.filter((row) => !row.classList.contains('hidden'));
             const csv = [
-                ['Ticket ID', 'Room', 'Guest / Origin', 'Category', 'Details', 'Attendant', 'Status', 'Requested At', 'SLA Timer'],
+                ['Ticket ID', 'Room', 'Guest / Origin', 'Category', 'Details', 'Attendant', 'Status', 'Requested At', 'Response Time Timer'],
                 ...visibleRows.map((row) => Array.from(row.children).map((cell) => cell.innerText.replace(/\s+/g, ' ').trim())),
             ].map((line) => line.map((value) => `"${value.replace(/"/g, '""')}"`).join(',')).join('\n');
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

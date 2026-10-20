@@ -27,7 +27,7 @@ from Le Charme Suites, SBMA, or a payment provider.
 | Messaging | Staff can send normal, important, or urgent messages to one department or all departments. | Open **Department Messages** in a department sidebar. |
 | Shared departmental data | Reservations affect Front Desk and room availability; room status affects Housekeeping and Owner monitoring; transactions affect Billing and reports. | Create a record in the authorized department, then inspect it from another authorized dashboard. |
 | History saved | Login/logout, failed access, room status, transactions, message reads, API calls, and file exports have persistent database history. | **Audit Logs**, **Message History**, and **Integration Center**. |
-| API | A read-only versioned API provides status and approved datasets. It is disabled until an API key is configured. | `/api/v1/status` and `/api/v1/datasets/{dataset}` with a Bearer key. |
+| API | A versioned API provides read-only status and approved datasets plus a protected official-website booking intake route. It is disabled until an API key is configured. | `/api/v1/status`, `/api/v1/datasets/{dataset}`, and `POST /api/v1/bookings` with a Bearer key. |
 | Development phase | The project is an academic development-phase prototype. Hotel validation, penetration testing, production infrastructure, privacy approval, and payment-provider certification remain future work. | State this limitation during the defense and in the final manuscript. |
 | Bookbind / hardbind | Hardbinding is a submission procedure, not a software feature. Freeze the approved manuscript, export to PDF, verify pagination, print the required copies, and hardbind only after adviser approval. | Final documentation checklist. |
 
@@ -53,12 +53,15 @@ users to connect to the same running host.
 4. Send `Authorization: Bearer YOUR_KEY` or `X-IHMP-Key: YOUR_KEY`.
 5. Read status from `/api/v1/status`.
 6. Read an approved dataset from `/api/v1/datasets/rooms`, `guests`, `reservations`, or `transactions`.
-7. Verify the transfer in **Admin > Integration Center**.
-8. Rotate the key if it is exposed or if the receiving platform changes.
+7. An authorized booking provider may send a new reservation to `POST /api/v1/bookings`.
+8. Verify the transfer in **Admin > Integration Center**.
+9. Rotate the key if it is exposed or if the receiving platform changes.
 
-The API is read-only in this phase. That restriction prevents an external
-platform from modifying hotel records without a future validation and approval
-process.
+Status and dataset routes are read-only. The booking route is the only approved
+write operation and applies validation, duplicate prevention, availability
+checks, and integration history. Live use requires hotel approval and a
+server-side webhook from the official booking website. See
+`OFFICIAL_WEBSITE_BOOKING_INTEGRATION.md`.
 
 ## Reliability and Honest Limitations
 

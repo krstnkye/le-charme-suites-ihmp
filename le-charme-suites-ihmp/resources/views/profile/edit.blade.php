@@ -16,7 +16,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $isAdmin ? 'My Profile & Security Credentials' : 'Front Desk Agent Profile & Shift Credentials' }} - Le Charmé Suites IHMP</title>
+    <title>{{ $isAdmin ? 'My Profile & Security Login Details' : 'Front Desk Agent Profile & Shift Login Details' }} - Le Charmé Suites IHMP</title>
     @include('partials.offline-assets')
     <script>
         tailwind.config = {
@@ -78,7 +78,7 @@
             <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-container-highest bg-surface px-8 shadow-sm">
                 <div class="flex w-full max-w-md items-center gap-3">
                     <span class="material-symbols-outlined text-outline">search</span>
-                    <input class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm outline-none transition focus:border-secondary focus:ring-1 focus:ring-secondary/20" placeholder="Search audit logs, terminal sessions, IP records..." type="search">
+                    <input class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm outline-none transition focus:border-secondary focus:ring-1 focus:ring-secondary/20" placeholder="Search activity logs, signed-in devices, or IP records..." type="search">
                 </div>
                 <div class="flex items-center gap-3">
                     <span class="hidden items-center gap-2 rounded-full border border-outline-variant/40 bg-surface-container-high px-3 py-1 text-xs font-semibold text-slate-600 xl:inline-flex">
@@ -107,15 +107,15 @@
                     <div class="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500">
                         <span>Administration</span>
                         <span class="material-symbols-outlined text-sm">chevron_right</span>
-                        <span>System Governance</span>
+                        <span>System Management</span>
                         <span class="material-symbols-outlined text-sm">chevron_right</span>
-                        <span class="font-bold text-secondary">My Profile &amp; Security Credentials</span>
+                        <span class="font-bold text-secondary">My Profile &amp; Security Login Details</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="font-mono text-xs text-outline">Session Hash: {{ substr(sha1((string) $user->id), 0, 4) }}...{{ substr(sha1($user->email), -3) }}</span>
                         <button class="inline-flex items-center gap-1.5 rounded-lg border border-outline-variant/50 bg-surface-container-high px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-surface-container-highest" type="button">
                             <span class="material-symbols-outlined text-base">cached</span>
-                            Refresh Enclave
+                            Refresh Security Key
                         </button>
                     </div>
                 </section>
@@ -136,7 +136,7 @@
                                 <p class="mt-2 text-sm font-medium text-slate-600">Administrator account for Le Charme Suites IHMP command operations.</p>
                                 <div class="mt-3 flex flex-wrap items-center gap-2">
                                     <span class="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-1 text-xs font-bold text-primary"><span class="material-symbols-outlined text-sm">fingerprint</span>Admin Identity Verified</span>
-                                    <span class="inline-flex items-center gap-1 rounded border border-secondary-container bg-secondary-container/40 px-2 py-1 text-xs font-bold text-secondary"><span class="material-symbols-outlined text-sm">verified_user</span>SBMA Enclave Clearance</span>
+                                    <span class="inline-flex items-center gap-1 rounded border border-secondary-container bg-secondary-container/40 px-2 py-1 text-xs font-bold text-secondary"><span class="material-symbols-outlined text-sm">verified_user</span>SBMA Access</span>
                                     <span class="inline-flex items-center gap-1 rounded bg-surface-container-high px-2 py-1 text-xs font-bold text-slate-600"><span class="material-symbols-outlined text-sm">key</span>Security Token Bound</span>
                                 </div>
                             </div>
@@ -151,12 +151,12 @@
                             </div>
                             <dl class="mt-3 space-y-2 text-xs text-slate-600">
                                 <div class="flex justify-between gap-3"><dt>Hardware Level</dt><dd class="font-bold text-primary">FIPS 140-2 Level 4</dd></div>
-                                <div class="flex justify-between gap-3"><dt>Authority</dt><dd class="font-bold text-primary">Subic Bay Freeport Root CA</dd></div>
-                                <div class="flex justify-between gap-3"><dt>Enclave Workstation</dt><dd class="font-bold text-primary">Master Station #01</dd></div>
+                                <div class="flex justify-between gap-3"><dt>Access</dt><dd class="font-bold text-primary">Subic Bay Freeport Root CA</dd></div>
+                                <div class="flex justify-between gap-3"><dt>Assigned Computer</dt><dd class="font-bold text-primary">Master Station #01</dd></div>
                             </dl>
                             <div class="mt-3">
                                 <div class="h-1.5 rounded-full bg-surface-container-highest"><div class="h-1.5 rounded-full bg-secondary" style="width: 100%"></div></div>
-                                <p class="mt-1 text-right text-[10px] text-outline">Cryptographic handshake 100% solid</p>
+                                <p class="mt-1 text-right text-[10px] text-outline">Secure connection active</p>
                             </div>
                         </div>
                     </div>
@@ -199,12 +199,12 @@
                                     <div class="rounded-lg border border-surface-container-highest bg-surface-container-low px-3 py-2.5 text-sm font-bold text-secondary">{{ $roleLabel }} - Tier 1</div>
                                 </label>
                                 <label class="space-y-1 sm:col-span-2">
-                                    <span class="block text-xs font-bold uppercase tracking-wider text-slate-500">Primary Enclave Work Email</span>
+                                    <span class="block text-xs font-bold uppercase tracking-wider text-slate-500">Primary Work Email</span>
                                     <input type="email" name="email" value="{{ old('email', $user->email) }}" required class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm text-primary outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20">
                                 </label>
                                 <div class="space-y-1 sm:col-span-2">
                                     <span class="block text-xs font-bold uppercase tracking-wider text-slate-500">Department &amp; Operational Unit</span>
-                                    <div class="rounded-lg border border-surface-container-highest bg-surface-container-low px-3 py-2.5 text-sm text-primary">Information Technology &amp; Administrative Governance Division - Subic Bay Command Enclave</div>
+                                    <div class="rounded-lg border border-surface-container-highest bg-surface-container-low px-3 py-2.5 text-sm text-primary">Information Technology &amp; Administrative Management Division - Subic Bay Office</div>
                                 </div>
                             </div>
                         </section>
@@ -215,7 +215,7 @@
                                     <span class="material-symbols-outlined text-secondary">password</span>
                                     <div>
                                         <h2 class="font-serif text-2xl font-semibold">Master Secret &amp; Password Lifecycle</h2>
-                                        <p class="text-xs text-slate-500">Leave password fields blank to keep the current credential.</p>
+                                        <p class="text-xs text-slate-500">Leave the password fields blank to keep your current password.</p>
                                     </div>
                                 </div>
                                 <span class="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white">90-Day Rotation Policy</span>
@@ -241,8 +241,8 @@
                                 <div class="flex items-center gap-2.5">
                                     <span class="material-symbols-outlined text-secondary">key_vertical</span>
                                     <div>
-                                        <h2 class="font-serif text-2xl font-semibold">Hardware MFA &amp; Cryptographic Key Vault</h2>
-                                        <p class="text-xs text-slate-500">Security credentials bound to the administrator enclave.</p>
+                                        <h2 class="font-serif text-2xl font-semibold">Two-Step Verification &amp; Security Keys</h2>
+                                        <p class="text-xs text-slate-500">Login details protected for the administrator account.</p>
                                     </div>
                                 </div>
                                 <button class="inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-1.5 text-xs font-bold text-white" type="button"><span class="material-symbols-outlined text-base">add</span>Register Key</button>
@@ -250,8 +250,8 @@
                             <div class="mt-4 space-y-3">
                                 @foreach ([
                                     ['icon' => 'usb', 'name' => 'YubiKey 5C NFC (Primary)', 'meta' => 'Serial #YK-' . str_pad((string) $user->id, 8, '0', STR_PAD_LEFT) . ' - Physical presence verification active', 'status' => 'Active Primary', 'active' => true],
-                                    ['icon' => 'pin', 'name' => 'RSA SecurID Token', 'meta' => '60s time-based sync - Stored in station vault', 'status' => 'Standby Key', 'active' => false],
-                                    ['icon' => 'fingerprint', 'name' => 'Platform Biometric Enclave', 'meta' => 'Bound to workstation master profile - Local hardware attestation', 'status' => 'Enrolled', 'active' => false],
+                                    ['icon' => 'pin', 'name' => 'Security Code Device', 'meta' => '60s time-based sync - Stored on the assigned computer', 'status' => 'Standby Key', 'active' => false],
+                                    ['icon' => 'fingerprint', 'name' => 'Device Fingerprint Login', 'meta' => 'Bound to workstation master profile - Local device check', 'status' => 'Enrolled', 'active' => false],
                                 ] as $token)
                                     <div class="flex flex-col justify-between gap-3 rounded-xl border {{ $token['active'] ? 'border-secondary/40 bg-surface-container-low/60' : 'border-surface-container-highest bg-white' }} p-3.5 sm:flex-row sm:items-center">
                                         <div class="flex items-center gap-3.5">
@@ -273,15 +273,15 @@
                             <div class="flex items-center justify-between border-b border-surface-container-highest pb-3">
                                 <div class="flex items-center gap-2">
                                     <span class="material-symbols-outlined text-secondary">devices</span>
-                                    <h2 class="text-lg font-bold">Active Authorized Terminals</h2>
+                                    <h2 class="text-lg font-bold">Approved Signed-in Devices</h2>
                                 </div>
-                                <span class="rounded-full bg-secondary-fixed px-2 py-0.5 text-[11px] font-bold text-primary">3 Terminals</span>
+                                <span class="rounded-full bg-secondary-fixed px-2 py-0.5 text-[11px] font-bold text-primary">3 Devices</span>
                             </div>
                             <div class="mt-4 space-y-3">
                                 @foreach ([
                                     ['icon' => 'computer', 'title' => 'Master Station #01', 'meta' => 'Chrome - Windows workstation', 'foot' => 'Current browser session', 'state' => 'Active Now', 'current' => true],
                                     ['icon' => 'tablet_mac', 'title' => 'Backup Inspection Tablet', 'meta' => 'Admin-Air - Secure Wi-Fi', 'foot' => 'Subic Bay staff network', 'state' => 'Active 45m ago', 'current' => false],
-                                    ['icon' => 'point_of_sale', 'title' => 'Front Desk Emergency Station', 'meta' => 'Terminal #02 - Main Wing Lobby', 'foot' => 'Restricted override terminal', 'state' => 'Idle 4 hrs ago', 'current' => false],
+                                    ['icon' => 'point_of_sale', 'title' => 'Front Desk Emergency Station', 'meta' => 'Station #02 - Main Wing Lobby', 'foot' => 'Restricted staff computer', 'state' => 'Idle 4 hrs ago', 'current' => false],
                                 ] as $terminal)
                                     <div class="rounded-xl border {{ $terminal['current'] ? 'border-2 border-secondary-fixed bg-surface-container-low/40' : 'border-surface-container-highest bg-white' }} p-3.5">
                                         <div class="flex items-start justify-between gap-3">
@@ -292,7 +292,7 @@
                                                     <p class="text-xs text-outline">{{ $terminal['meta'] }}</p>
                                                 </div>
                                             </div>
-                                            <span class="text-xs font-bold {{ $terminal['current'] ? 'rounded bg-secondary-fixed px-2 py-0.5 text-primary' : 'text-error' }}">{{ $terminal['current'] ? 'This Terminal' : 'Revoke' }}</span>
+                                            <span class="text-xs font-bold {{ $terminal['current'] ? 'rounded bg-secondary-fixed px-2 py-0.5 text-primary' : 'text-error' }}">{{ $terminal['current'] ? 'This Station' : 'Revoke' }}</span>
                                         </div>
                                         <div class="mt-2 flex items-center justify-between border-t border-surface-container-highest pt-2 font-mono text-[11px] text-slate-500">
                                             <span>{{ $terminal['foot'] }}</span>
@@ -313,7 +313,7 @@
                             </div>
                             <p class="mt-4 text-sm leading-6 text-slate-600">The following operational modules are available under administrator access.</p>
                             <div class="mt-4 flex flex-wrap gap-2">
-                                @foreach (['All Module Governance', 'Audit Logs', 'Database Reports', 'Room Management', 'Guest Bill Oversight', 'System Settings'] as $grant)
+                                @foreach (['All Module Management', 'Activity Logs', 'Database Reports', 'Room Management', 'Guest Bill Oversight', 'System Settings'] as $grant)
                                     <span class="inline-flex items-center gap-1.5 rounded-lg border border-outline-variant/30 bg-surface-container-high px-2.5 py-1 text-xs font-bold text-primary"><span class="material-symbols-outlined text-sm text-secondary">check_circle</span>{{ $grant }}</span>
                                 @endforeach
                             </div>
@@ -329,10 +329,10 @@
                             </div>
                             <div class="mt-4 space-y-3">
                                 @foreach ([
-                                    ['title' => 'Terminal Lockouts & Intrusion', 'meta' => '3 failed root challenges anywhere in cluster', 'checked' => true],
-                                    ['title' => 'Manager Override Variances Above PHP 10,000', 'meta' => 'Immediate front-desk dispatch ping', 'checked' => true],
-                                    ['title' => 'Night Audit Imbalances', 'meta' => 'Daily reconciliation anomaly flags', 'checked' => true],
-                                    ['title' => 'Daily Cluster Health Summary', 'meta' => 'Digest email delivered at 06:00', 'checked' => false],
+                                    ['title' => 'Station Lockouts & Intrusion', 'meta' => '3 failed root challenges anywhere in cluster', 'checked' => true],
+                                    ['title' => 'Manager Approval for Differences Above PHP 10,000', 'meta' => 'Immediate Front Desk notification', 'checked' => true],
+                                    ['title' => 'End-of-Day Payment Differences', 'meta' => 'Daily payment difference alerts', 'checked' => true],
+                                    ['title' => 'Daily System Health Summary', 'meta' => 'Digest email delivered at 06:00', 'checked' => false],
                                 ] as $trigger)
                                     <div class="flex items-center justify-between gap-4 border-t border-surface-container-highest/60 pt-3 first:border-t-0 first:pt-0">
                                         <div>
@@ -353,7 +353,7 @@
                         <div class="flex items-center gap-3">
                             <span class="flex h-10 w-10 items-center justify-center rounded-full bg-secondary-fixed/50 text-secondary"><span class="material-symbols-outlined">enhanced_encryption</span></span>
                             <div>
-                                <p class="text-sm font-bold text-primary">Current Session Cryptographically Bound</p>
+                                <p class="text-sm font-bold text-primary">Current Sign-in Is Secure</p>
                                 <p class="font-mono text-xs text-outline">Hardware Key Hash: {{ substr(sha1($user->email), 0, 8) }}-{{ substr(sha1((string) $user->id), 0, 4) }}-{{ substr(sha1($user->name), -12) }}</p>
                             </div>
                         </div>
@@ -365,7 +365,7 @@
                     </footer>
                 </form>
 
-                <p class="pb-6 text-center text-xs text-outline">Le Charmé Suites Subic Integrated Hotel Management Portal (IHMP) - SEC Registered - SBMA Freeport Zone - Cryptographic Level 4 Active</p>
+                <p class="pb-6 text-center text-xs text-outline">Le Charmé Suites Subic Integrated Hotel Management Portal (IHMP) - SEC Registered - SBMA Freeport Zone - Secure Account Protection Active</p>
             </main>
         </div>
     @else
@@ -377,7 +377,7 @@
                     <span class="material-symbols-outlined text-xl text-[#755a28]">desk</span>
                     <div class="min-w-0">
                         <p class="truncate text-xs font-semibold text-slate-500">Front Desk Console / Agent Profile</p>
-                        <p class="truncate font-serif text-lg font-semibold text-[#01162d]">Shift Profile &amp; Authority</p>
+                        <p class="truncate font-serif text-lg font-semibold text-[#01162d]">Shift Profile &amp; Access</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -412,9 +412,9 @@
                     <span class="material-symbols-outlined pointer-events-none absolute -bottom-12 right-4 text-[220px] text-white opacity-[0.04]">shield</span>
                     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
                         <div>
-                            <span class="inline-flex items-center gap-2 rounded-full border border-[#ffdeaa]/30 bg-[#ffdeaa]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#ffdeaa]"><span class="material-symbols-outlined text-sm">verified</span>Front Office Operations · Shift Credentials</span>
-                            <h1 class="mt-3 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">Front Desk Agent Profile &amp; Station Authority</h1>
-                            <p class="mt-2 max-w-3xl text-sm leading-6 text-[#b4c8e5]">Manage your verified employee identity, work-email credentials, and frontline access for Le Charmé Suites hotel operations.</p>
+                            <span class="inline-flex items-center gap-2 rounded-full border border-[#ffdeaa]/30 bg-[#ffdeaa]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#ffdeaa]"><span class="material-symbols-outlined text-sm">verified</span>Front Office Operations · Shift Login Details</span>
+                            <h1 class="mt-3 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">Front Desk Agent Profile &amp; Station Access</h1>
+                            <p class="mt-2 max-w-3xl text-sm leading-6 text-[#b4c8e5]">Manage your verified employee identity, work email and password, and frontline access for Le Charmé Suites hotel operations.</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <a href="{{ route('reservations.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-[#ffdeaa] px-4 py-2.5 text-xs font-bold text-[#271900] shadow-sm transition hover:bg-[#e6c185]"><span class="material-symbols-outlined text-base">add</span>New Reservation</a>
@@ -425,7 +425,7 @@
                     <div class="relative z-10 mt-6 grid grid-cols-2 gap-3 border-t border-white/10 pt-6 sm:grid-cols-3 xl:grid-cols-5">
                         <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Active Agent</p><p class="mt-1 truncate text-sm font-bold">{{ $user->name }}</p><span class="text-[11px] text-[#b4c8e5]">Front Office</span></div>
                         <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Agent Badge ID</p><p class="mt-1 font-mono text-sm font-bold">LCS-FDA-{{ str_pad((string) $user->id, 4, '0', STR_PAD_LEFT) }}</p><span class="text-[11px] text-[#b4c8e5]">{{ $employeeId }}</span></div>
-                        <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Authority</p><p class="mt-1 text-sm font-bold">Front Desk</p><span class="text-[11px] text-[#b4c8e5]">Role key: {{ $role }}</span></div>
+                        <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Access</p><p class="mt-1 text-sm font-bold">Front Desk</p><span class="text-[11px] text-[#b4c8e5]">Role key: {{ $role }}</span></div>
                         <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Account Status</p><p class="mt-1 flex items-center gap-1.5 text-sm font-bold text-emerald-300"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Active</p><span class="text-[11px] text-[#b4c8e5]">Local access enabled</span></div>
                         <div class="col-span-2 rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5 sm:col-span-1"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Member Since</p><p class="mt-1 text-sm font-bold">{{ $user->created_at?->timezone(config('app.timezone'))->format('M d, Y') }}</p><span class="text-[11px] text-[#b4c8e5]">IHMP personnel record</span></div>
                     </div>
@@ -463,7 +463,7 @@
                                 @csrf
                                 @method('PUT')
                                 @include('profile.partials.photo-field')
-                                <div class="mb-5 flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f0eee8] text-[#755a28]"><span class="material-symbols-outlined">manage_accounts</span></span><div><h3 class="font-bold text-[#01162d]">Official Personnel Details</h3><p class="text-xs text-slate-500">Update your own account record and sign-in credentials.</p></div></div>
+                                <div class="mb-5 flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f0eee8] text-[#755a28]"><span class="material-symbols-outlined">manage_accounts</span></span><div><h3 class="font-bold text-[#01162d]">Official Personnel Details</h3><p class="text-xs text-slate-500">Update your own account record and sign-in details.</p></div></div>
                                 <div class="grid gap-5 sm:grid-cols-2">
                                     <label class="sm:col-span-2"><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Full name</span><input name="name" value="{{ old('name', $user->name) }}" required autocomplete="name" class="w-full rounded-lg border border-[#c4c6cd] bg-white px-3 py-2.5 text-sm text-[#01162d] outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20"></label>
                                     <label class="sm:col-span-2"><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Official work email</span><input type="email" name="email" value="{{ old('email', $user->email) }}" required autocomplete="email" class="w-full rounded-lg border border-[#c4c6cd] bg-white px-3 py-2.5 text-sm text-[#01162d] outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20"><span class="mt-1 block text-[11px] text-slate-500">Use your approved @lecharmehotel.com address.</span></label>
@@ -481,7 +481,7 @@
 
                     <aside class="space-y-6 xl:col-span-5">
                         <section class="hotel-card rounded-xl p-6">
-                            <div class="flex items-center justify-between border-b border-[#e5e2dc] pb-4"><div class="flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#fdd79a]/35 text-[#755a28]"><span class="material-symbols-outlined">admin_panel_settings</span></span><div><h2 class="font-bold text-[#01162d]">Station Authority</h2><p class="text-xs text-slate-500">Frontline access assigned to this role</p></div></div><span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700">Authorized</span></div>
+                            <div class="flex items-center justify-between border-b border-[#e5e2dc] pb-4"><div class="flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#fdd79a]/35 text-[#755a28]"><span class="material-symbols-outlined">admin_panel_settings</span></span><div><h2 class="font-bold text-[#01162d]">Station Access</h2><p class="text-xs text-slate-500">Frontline access assigned to this role</p></div></div><span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700">Authorized</span></div>
                             <div class="mt-4 grid gap-3 sm:grid-cols-2">
                                 @foreach ([
                                     ['icon' => 'calendar_month', 'title' => 'Reservations', 'detail' => 'Create and manage stays'],
@@ -495,7 +495,7 @@
                         </section>
 
                         <section class="hotel-card rounded-xl p-6">
-                            <div class="flex items-center gap-3 border-b border-[#e5e2dc] pb-4"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f0eee8] text-[#755a28]"><span class="material-symbols-outlined">security</span></span><div><h2 class="font-bold text-[#01162d]">Security &amp; Account Status</h2><p class="text-xs text-slate-500">Current credential protection</p></div></div>
+                            <div class="flex items-center gap-3 border-b border-[#e5e2dc] pb-4"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f0eee8] text-[#755a28]"><span class="material-symbols-outlined">security</span></span><div><h2 class="font-bold text-[#01162d]">Security &amp; Account Status</h2><p class="text-xs text-slate-500">Current account protection</p></div></div>
                             <dl class="mt-4 space-y-3 text-sm">
                                 <div class="flex items-center justify-between gap-4 rounded-lg bg-[#f6f3ed] px-4 py-3"><dt class="flex items-center gap-2 text-slate-600"><span class="material-symbols-outlined text-lg text-[#755a28]">alternate_email</span>Work email</dt><dd class="font-bold text-emerald-700">Approved domain</dd></div>
                                 <div class="flex items-center justify-between gap-4 rounded-lg bg-[#f6f3ed] px-4 py-3"><dt class="flex items-center gap-2 text-slate-600"><span class="material-symbols-outlined text-lg text-[#755a28]">password</span>Password</dt><dd class="font-bold text-[#01162d]">Protected</dd></div>
@@ -504,7 +504,7 @@
                         </section>
 
                         <section class="rounded-xl border border-[#e5e2dc] bg-[#f0eee8] p-5">
-                            <div class="flex items-start gap-3"><span class="material-symbols-outlined mt-0.5 text-[#755a28]">info</span><div><h2 class="font-bold text-[#01162d]">Credential Support</h2><p class="mt-1 text-sm leading-6 text-slate-600">Contact an administrator to change your department, role authority, or employee badge assignment.</p><a href="{{ route('messages.index') }}" class="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#755a28] hover:underline">Open Department Messages<span class="material-symbols-outlined text-sm">arrow_forward</span></a></div></div>
+                            <div class="flex items-start gap-3"><span class="material-symbols-outlined mt-0.5 text-[#755a28]">info</span><div><h2 class="font-bold text-[#01162d]">Login Detail Support</h2><p class="mt-1 text-sm leading-6 text-slate-600">Contact an administrator to change your department, role authority, or employee badge assignment.</p><a href="{{ route('messages.index') }}" class="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#755a28] hover:underline">Open Department Messages<span class="material-symbols-outlined text-sm">arrow_forward</span></a></div></div>
                         </section>
                     </aside>
                 </div>

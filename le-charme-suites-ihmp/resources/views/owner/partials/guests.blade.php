@@ -57,7 +57,7 @@
             <span class="font-serif text-3xl font-bold text-primary">{{ $totalGuests }}</span>
             <span class="text-xs font-semibold text-emerald-700">Live roster</span>
         </div>
-        <p class="mt-2 text-xs text-slate-500">All guest profiles encoded in the central database.</p>
+        <p class="mt-2 text-xs text-slate-500">All guest profiles saved in the central database.</p>
     </div>
     <div class="owner-card rounded-xl border-t-2 border-t-emerald-600 p-5 transition hover:border-secondary/40">
         <div class="flex items-center justify-between">
@@ -122,7 +122,7 @@
     <div class="owner-card overflow-hidden rounded-xl xl:col-span-8">
         <div class="flex items-center justify-between border-b border-line bg-surface-low px-5 py-4">
             <div>
-                <h3 class="font-serif text-xl font-bold text-primary">Master Guest Ledger & Roster</h3>
+                <h3 class="font-serif text-xl font-bold text-primary">Master Guest Records & Roster</h3>
                 <p class="mt-0.5 text-xs text-slate-500">Showing latest executive-visible profiles with verified stay histories.</p>
             </div>
             <span class="rounded bg-primary/10 px-2 py-1 text-[10px] font-bold text-primary">Live Data Synchronized</span>
@@ -179,7 +179,7 @@
                             </td>
                             <td class="px-3 py-3 text-right">
                                 <span class="block font-bold text-primary">PHP {{ number_format($spend, 2) }}</span>
-                                <span class="text-[10px] text-secondary">System ledger</span>
+                                <span class="text-[10px] text-secondary">System records</span>
                             </td>
                             <td class="px-3 py-3">
                                 <span class="inline-flex items-center gap-1 rounded-full bg-surface-mid px-2 py-1 text-[10px] font-bold text-primary">
@@ -189,7 +189,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-4 py-10 text-center text-sm text-slate-500">No guest profiles have been encoded yet.</td>
+                            <td colspan="6" class="px-4 py-10 text-center text-sm text-slate-500">No guest profiles have been added yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

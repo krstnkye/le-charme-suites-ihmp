@@ -250,7 +250,7 @@ class CheckOutController extends Controller
                 'room_id' => $checkIn->room_id,
                 'created_by' => auth()->id(),
                 'task_type' => 'turnover',
-                'title' => 'Departure turnover - Room '.$checkIn->room->room_number,
+                'title' => 'Room cleaning after check-out - Room '.$checkIn->room->room_number,
                 'instructions' => 'Prepare the room for the next guest and submit completion notes for inspection.',
                 'priority' => 'high',
                 'status' => 'queued',

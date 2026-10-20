@@ -288,7 +288,7 @@
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-secondary">tune</span>
                                 <div>
-                                    <h3 class="font-bold">Permissions Matrix Inspector</h3>
+                                    <h3 class="font-bold">Permissions Table Inspector</h3>
                                     <p class="text-xs font-bold text-secondary">Front Desk Tier - Configured</p>
                                 </div>
                             </div>
@@ -301,10 +301,10 @@
                             @foreach ([
                                 ['edit_calendar', 'Reservation Creation & Modification', 'Permits room blocking, VIP tags, and guest bill initiation.', true, false],
                                 ['percent', 'Room Rate Discount Override', 'Maximum authority cap: 15% without manager signoff.', true, false],
-                                ['nfc', 'RFID Encoder Interface', 'Permits writing guest keys and front entrance passes.', true, false],
+                                ['nfc', 'Keycard Encoder Interface', 'Permits writing guest keys and front entrance passes.', true, false],
                                 ['price_change', 'Guest Bill Zero-Balance / Refund', 'Restricted to cashier or executive approval.', false, true],
-                                ['fact_check', 'Housekeeping Turnover Sign-off', 'Authority to transition room status to inspected ready.', true, false],
-                                ['download_for_offline', 'Audit Log Export', 'Exports raw transaction and staff session trails.', false, false],
+                                ['fact_check', 'Housekeeping Room Preparation Sign-off', 'Access to transition room status to inspected ready.', true, false],
+                                ['download_for_offline', 'Activity Log Export', 'Exports raw transaction and staff session trails.', false, false],
                             ] as [$icon, $label, $description, $enabled, $restricted])
                                 <div @class(['flex items-start justify-between gap-3 rounded-lg border p-3', 'border-error/20 bg-red-50' => $restricted, 'border-surface-container-highest bg-surface-container-low/40' => ! $restricted])>
                                     <div>

@@ -9,7 +9,7 @@
     $roomTypes = $rooms->groupBy('room_type');
     $roomPageCopy = [
         'rooms' => ['Room Management Overview', 'Room inventory, occupancy, availability, and maintenance readiness visibility across all Le Charmé Suites rooms.'],
-        'room-inventory' => ['Room Inventory Overview', 'Detailed read-only room asset registry with nightly rates, capacity, and operational owner ledger status.'],
+        'room-inventory' => ['Room Inventory Overview', 'Detailed read-only room records with nightly rates, capacity, and operational owner record status.'],
         'room-availability' => ['Room Availability Overview', 'Executive availability monitoring across room types, capacity, and booking readiness segments.'],
         'room-status' => ['Room Status Overview', 'Read-only occupancy, reserved, cleaning, and maintenance status monitoring for owner review.'],
     ];
@@ -53,7 +53,7 @@
             <div class="border-l border-white/10 pl-5">
                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Rooms</p>
                 <p class="mt-1 text-2xl font-extrabold">{{ $publishedRoomCount }} <span class="text-xs font-normal text-slate-400">Property Total</span></p>
-                <p class="mt-1 text-[11px] text-slate-400">{{ $totalRooms }} operational records encoded</p>
+                <p class="mt-1 text-[11px] text-slate-400">{{ $totalRooms }} operational records added</p>
             </div>
             <div class="border-l border-white/10 pl-5">
                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Guests</p>
@@ -115,12 +115,12 @@
             <div>
                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Billing & Transactions</p>
                 <h3 class="mt-2.5 font-serif text-2xl font-extrabold text-primary">PHP {{ number_format($collectedToday, 2) }}</h3>
-                <p class="mt-1 text-xs text-slate-500">{{ $settledToday }} settled today</p>
+                <p class="mt-1 text-xs text-slate-500">{{ $settledToday }} paid today</p>
             </div>
             <span class="flex h-10 w-10 items-center justify-center rounded-lg border border-secondary/20 bg-secondary-fixed/20 text-secondary"><span class="material-symbols-outlined">payments</span></span>
         </div>
         <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-[11px]">
-            <span class="text-slate-400">Treasury settlement</span>
+            <span class="text-slate-400">Payment summary</span>
             <span class="font-semibold text-emerald-700">Balanced & cleared</span>
         </div>
     </div>
@@ -158,7 +158,7 @@
                     <th class="px-6 py-3.5">Capacity</th>
                     <th class="px-6 py-3.5">Rate</th>
                     <th class="px-6 py-3.5 text-center">Status</th>
-                    <th class="px-6 py-3.5 text-right">Owner Ledger</th>
+                    <th class="px-6 py-3.5 text-right">Owner Records</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-line">
@@ -174,7 +174,7 @@
                         </td>
                         <td class="px-6 py-3.5 text-slate-600">
                             <span class="block font-semibold text-primary">{{ $room->room_type }}</span>
-                            <span class="block text-xs text-slate-400">Le Charmé Rooms Cluster</span>
+                            <span class="block text-xs text-slate-400">Le Charmé Room System</span>
                         </td>
                         <td class="px-6 py-3.5 text-slate-600">
                             <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-slate-400">person</span>{{ $room->capacity }} guests</span>
@@ -192,14 +192,14 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">No room assets have been encoded yet.</td>
+                        <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">No rooms have been added yet.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
     <div class="flex flex-col items-center justify-between gap-3 border-t border-line bg-surface-low px-6 py-4 text-xs text-slate-500 sm:flex-row">
-        <span>Showing <strong class="text-primary">{{ $rooms->count() }}</strong> of <strong class="text-primary">{{ $totalRooms }}</strong> verified room assets</span>
+        <span>Showing <strong class="text-primary">{{ $rooms->count() }}</strong> of <strong class="text-primary">{{ $totalRooms }}</strong> verified rooms</span>
         <span class="rounded border border-secondary bg-secondary-fixed/30 px-3 py-1.5 font-bold text-secondary">Page 1</span>
     </div>
 </section>
@@ -209,9 +209,9 @@
         <div class="mb-4 flex items-center justify-between gap-4">
             <div>
                 <h4 class="font-serif text-xl font-bold text-primary">Wing Distribution & Architectural Breakdown</h4>
-                <p class="text-xs text-slate-500">Inventory allocation by room type using live encoded room categories.</p>
+                <p class="text-xs text-slate-500">Inventory allocation by room type using live added room types.</p>
             </div>
-            <span class="rounded border border-secondary/20 bg-secondary-fixed/30 px-2 py-1 text-xs font-semibold text-secondary">Property Total: {{ $publishedRoomCount }} Rooms · {{ $totalRooms }} Encoded</span>
+            <span class="rounded border border-secondary/20 bg-secondary-fixed/30 px-2 py-1 text-xs font-semibold text-secondary">Property Total: {{ $publishedRoomCount }} Rooms · {{ $totalRooms }} Added</span>
         </div>
         <div class="space-y-4 text-xs">
             @forelse ($roomTypes as $type => $typeRooms)
@@ -248,14 +248,14 @@
         <div>
             <div class="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-secondary-fixed">
                 <span class="material-symbols-outlined text-base">verified_user</span>
-                Governance Protocol
+                Owner Access Rules
             </div>
             <h4 class="mb-2 font-serif text-xl font-bold">Executive Sandboxing Notice</h4>
             <p class="text-xs leading-6 text-slate-300">
-                As an Executive Owner, room status alterations, housekeeping assignments, and tariff adjustments are restricted from this terminal.
+                Owners can view this page, but room status changes, housekeeping assignments, and room rate changes must be handled by authorized staff.
             </p>
             <div class="mt-4 rounded-lg border border-secondary/20 bg-primary-container/80 p-3 text-[11px] text-secondary-fixed/90">
-                Front desk and housekeeping terminal sync remains operational through the Subic Central PMS cluster.
+                Front desk and housekeeping system update remains operational through the Subic Central IHMP cluster.
             </div>
         </div>
         <div class="mt-6 flex items-center justify-between border-t border-white/10 pt-4 text-[11px] text-slate-400">

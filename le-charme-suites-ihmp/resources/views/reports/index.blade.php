@@ -13,7 +13,7 @@
         ['title' => 'Shift Cashier Balance Report', 'code' => 'LCS-BIL-SHFT-01', 'category' => 'Financial', 'cadence' => 'End of shift', 'status' => 'Ready', 'formats' => ['PDF', 'XLSX']],
         ['title' => 'Daily Revenue Z-Reading', 'code' => 'LCS-BIL-ZREAD-02', 'category' => 'Revenue', 'cadence' => 'Daily close', 'status' => 'Scheduled', 'formats' => ['PDF']],
         ['title' => 'Guest Bill Payment Issues', 'code' => 'LCS-BIL-EXC-03', 'category' => 'Review', 'cadence' => 'Current', 'status' => $balancedCount === $postedCount ? 'Balanced' : 'Review', 'formats' => ['PDF', 'CSV']],
-        ['title' => 'Room & Reservation Revenue Snapshot', 'code' => 'LCS-BIL-RMS-04', 'category' => 'Rooms', 'cadence' => 'Hourly', 'status' => 'Synced', 'formats' => ['PDF', 'XLSX']],
+        ['title' => 'Room & Reservation Revenue Summary', 'code' => 'LCS-BIL-RMS-04', 'category' => 'Rooms', 'cadence' => 'Hourly', 'status' => 'Synced', 'formats' => ['PDF', 'XLSX']],
     ];
 @endphp
 
@@ -138,7 +138,7 @@
 
                 <aside class="rounded-xl border border-line bg-white p-5 shadow-sm xl:col-span-4">
                     <div class="mb-4 flex items-center justify-between border-b border-line pb-4">
-                        <h3 class="text-sm font-bold uppercase tracking-wider text-secondary">Live Audit Telemetry</h3>
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-secondary">Live Audit System Status</h3>
                         <span class="text-[11px] font-semibold text-slate-500">MTD Summary</span>
                     </div>
                     <div class="space-y-4">

@@ -27,7 +27,7 @@
         'subject' => $checkOut->guest?->full_name ?? 'Departed guest',
         'entity' => $checkOut->room?->room_number ? 'Room '.$checkOut->room->room_number : 'No room assigned',
         'classification' => 'Check-Out Record',
-        'details' => 'Settlement PHP '.number_format((float) $checkOut->amount_paid, 2),
+        'details' => 'Payment PHP '.number_format((float) $checkOut->amount_paid, 2),
         'timestamp' => $checkOut->checked_out_at ?? $recordDate,
         'status' => 'Departure Archived',
         'amount' => (float) $checkOut->amount_paid,
@@ -36,9 +36,9 @@
     $billingArchive = $transactions->map(fn ($transaction) => [
         'id' => 'BIL-'.str_pad((string) $transaction->id, 5, '0', STR_PAD_LEFT),
         'subject' => $transaction->guest?->full_name ?? 'Billing entry',
-        'entity' => $transaction->room?->room_number ? 'Room '.$transaction->room->room_number : ($transaction->transaction_type ?: 'Ledger account'),
+        'entity' => $transaction->room?->room_number ? 'Room '.$transaction->room->room_number : ($transaction->transaction_type ?: 'Records account'),
         'classification' => 'Billing Record',
-        'details' => str($transaction->transaction_type ?: 'Manual ledger')->replace('_', ' ')->title().' / PHP '.number_format((float) $transaction->amount, 2),
+        'details' => str($transaction->transaction_type ?: 'Manual record')->replace('_', ' ')->title().' / PHP '.number_format((float) $transaction->amount, 2),
         'timestamp' => $transaction->transaction_date ?? $transaction->created_at ?? $recordDate,
         'status' => in_array(strtolower((string) $transaction->status), ['paid', 'settled', 'completed', 'recorded', 'cleared'], true) ? 'Closed & Audited' : 'Financial Review',
         'amount' => (float) $transaction->amount,
@@ -112,7 +112,7 @@
             </span>
             <h2 class="mt-4 font-serif text-4xl font-extrabold leading-tight">Master Operational & Historical Records Archive</h2>
             <p class="mt-2 max-w-3xl text-sm leading-6 text-blue-100">
-                Central owner-view registry of guest profiles, stays, billing records, room assets, housekeeping logs, and immutable system archives.
+                Central owner view of guest profiles, stays, billing records, rooms, housekeeping history, and protected system records.
             </p>
         </div>
         <div class="grid shrink-0 grid-cols-2 gap-3 rounded-xl border border-white/10 bg-white/10 p-4 sm:grid-cols-4 xl:min-w-[650px]">
@@ -154,8 +154,8 @@
 <section class="owner-card overflow-hidden rounded-xl">
     <div class="flex flex-col gap-3 border-b border-line bg-surface-low p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <h3 class="font-serif text-2xl font-bold text-primary">Institutional Ledger & Document Register</h3>
-            <p class="mt-1 text-sm text-slate-500">Archived records signed by the IHMP owner-view audit ledger.</p>
+            <h3 class="font-serif text-2xl font-bold text-primary">Institutional Records & Document Register</h3>
+            <p class="mt-1 text-sm text-slate-500">Archived records signed by the IHMP owner-view protected activity record.</p>
         </div>
         <div class="flex items-center gap-2 text-xs text-slate-500"><span id="ownerRecordsPageLabel">Showing {{ $visibleRows->count() }} of {{ $totalArchived }}</span><span class="rounded border border-line bg-white px-2 py-1 font-mono">Node PH-SBFZ-01</span></div>
     </div>
@@ -207,7 +207,7 @@
         </table>
     </div>
     <div class="flex flex-col items-center justify-between gap-2 border-t border-line bg-surface-low p-4 text-xs text-slate-500 sm:flex-row">
-        <span><span class="inline-block h-2 w-2 rounded-full bg-emerald-500"></span> Ledger block synchronized with owner archive • <strong class="text-primary">{{ $archiveHash }}</strong></span>
+        <span><span class="inline-block h-2 w-2 rounded-full bg-emerald-500"></span> Records block synchronized with owner archive • <strong class="text-primary">{{ $archiveHash }}</strong></span>
         <span>Owner access is view-only. Direct archival edits remain restricted.</span>
     </div>
 </section>
@@ -218,11 +218,11 @@
             <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-surface-mid text-secondary"><span class="material-symbols-outlined">gavel</span></span>
             <div>
                 <h4 class="font-serif text-xl font-bold text-primary">Subic Bay Freeport Legal Retention Compliance</h4>
-                <p class="mt-1 max-w-4xl text-sm leading-6 text-slate-600">Guest identity records, billing accounts, stay logs, room status records, and tax-related documents are retained for executive review and statutory audit support.</p>
+                <p class="mt-1 max-w-4xl text-sm leading-6 text-slate-600">Guest identity records, billing accounts, stay logs, room status records, and tax-related documents are retained for executive review and required tax review.</p>
             </div>
         </div>
         <div class="rounded-lg border border-line bg-white px-3 py-2 text-right">
-            <p class="text-[10px] font-bold uppercase tracking-wider text-secondary">Cryptographic Archive Seal</p>
+            <p class="text-[10px] font-bold uppercase tracking-wider text-secondary">Protected Record</p>
             <p class="mt-1 font-mono text-xs text-primary">SHA256: {{ $archiveHash }}</p>
         </div>
     </div>
