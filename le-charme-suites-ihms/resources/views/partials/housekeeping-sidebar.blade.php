@@ -64,9 +64,6 @@
 
         <div class="space-y-1">
             <a href="{{ route('housekeeping.page', 'lost-found') }}" class="{{ $navBase }} {{ $active === 'lost-found' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">travel_explore</span>Lost &amp; Found</a>
-            <a href="{{ route('housekeeping.page', 'linen-supplies') }}" class="{{ $navBase }} {{ $active === 'linen-supplies' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">inventory_2</span>Linen &amp; Supplies</a>
-            <a href="{{ route('housekeeping.page', 'linen-records') }}" class="{{ $subBase }} {{ $active === 'linen-records' ? $subActive : $subIdle }}">Linen Records</a>
-            <a href="{{ route('housekeeping.page', 'housekeeping-supplies') }}" class="{{ $subBase }} {{ $active === 'housekeeping-supplies' ? $subActive : $subIdle }}">Housekeeping Supplies</a>
             <a href="{{ route('housekeeping.page', 'reports') }}" class="{{ $navBase }} {{ $active === 'reports' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">monitoring</span>Reports</a>
             <a href="{{ route('housekeeping.page', 'notifications') }}" class="{{ $navBase }} {{ $active === 'notifications' ? $navActive : $navIdle }}"><span class="material-symbols-outlined">notifications</span>Notifications</a>
             <a href="{{ route('messages.index') }}" class="{{ $navBase }} {{ request()->routeIs('messages.*') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">forum</span>Department Messages</a>

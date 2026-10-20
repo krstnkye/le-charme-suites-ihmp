@@ -377,7 +377,6 @@
                         <div class="mt-3 grid gap-2">
                             <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="rounded-lg border border-line px-3 py-2 text-sm font-bold hover:bg-[#f6f3ed]">Open Inspection Queue</a>
                             <a href="{{ route('housekeeping.page', 'maintenance-requests') }}" class="rounded-lg border border-line px-3 py-2 text-sm font-bold hover:bg-[#f6f3ed]">Review Maintenance</a>
-                            <a href="{{ route('housekeeping.page', 'linen-supplies') }}" class="rounded-lg border border-line px-3 py-2 text-sm font-bold hover:bg-[#f6f3ed]">Linen & Supplies</a>
                         </div>
                     </section>
                 </div>

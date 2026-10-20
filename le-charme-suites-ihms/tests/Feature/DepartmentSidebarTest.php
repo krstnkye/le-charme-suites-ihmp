@@ -56,7 +56,6 @@ class DepartmentSidebarTest extends TestCase
             route('housekeeping.page', ['page' => 'cleaning-tasks']),
             route('housekeeping.page', ['page' => 'guest-requests']),
             route('housekeeping.page', ['page' => 'report-issue']),
-            route('housekeeping.page', ['page' => 'linen-records']),
             route('housekeeping.page', ['page' => 'notifications']),
             route('profile.edit'),
         ] as $url) {

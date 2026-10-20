@@ -130,11 +130,7 @@
                             <span class="material-symbols-outlined text-base text-secondary">warning</span>
                             Log Maintenance Defect
                         </a>
-                        <div class="grid grid-cols-2 gap-2">
-                            <a href="{{ route('housekeeping.page', 'linen-supplies') }}" class="inline-flex items-center justify-center gap-1 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-cream">
-                                <span class="material-symbols-outlined text-base text-secondary">inventory_2</span>
-                                Restock
-                            </a>
+                        <div>
                             <button type="button" class="inline-flex items-center justify-center gap-1 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-cream" onclick="window.print()">
                                 <span class="material-symbols-outlined text-base text-secondary">key</span>
                                 Key Audit
@@ -320,7 +316,6 @@
                     <div class="mt-4 grid gap-2">
                         <a href="{{ route('housekeeping.page', 'guest-requests') }}" class="rounded-lg border border-line px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-secondary hover:bg-cream">Guest Requests</a>
                         <a href="{{ route('housekeeping.page', 'special-cleaning') }}" class="rounded-lg border border-line px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-secondary hover:bg-cream">Special Cleaning</a>
-                        <a href="{{ route('housekeeping.page', 'linen-records') }}" class="rounded-lg border border-line px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-secondary hover:bg-cream">Linen Records</a>
                     </div>
                 </div>
             </aside>

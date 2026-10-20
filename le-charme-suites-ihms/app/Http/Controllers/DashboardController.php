@@ -30,7 +30,11 @@ class DashboardController extends Controller
             'departuresToday' => Reservation::where('status', 'checked_in')->whereDate('check_out_date', now(config('app.timezone'))->toDateString())->count(),
             'pendingCheckIns' => Reservation::whereIn('status', ['pending', 'reserved'])->count(),
             'recentTransactions' => HotelTransaction::with(['guest', 'room'])->latest('transaction_date')->take(5)->get(),
-            'activeReservationsList' => Reservation::with(['guest', 'room'])->latest()->take(8)->get(),
+            'activeReservationsList' => Reservation::with(['guest', 'room'])
+                ->whereIn('status', ['pending', 'reserved', 'checked_in'])
+                ->latest()
+                ->take(8)
+                ->get(),
             'roomMatrix' => Room::orderBy('room_number')->get()->groupBy(fn (Room $room) => substr($room->room_number, 0, 1)),
             'totalUsers' => User::count(),
             'roleCounts' => User::selectRaw('role, count(*) as total')->groupBy('role')->pluck('total', 'role'),
@@ -64,6 +68,7 @@ class DashboardController extends Controller
                     ->take(8)
                     ->get(),
                 'completedTasks' => RoomStatusLog::with('room')
+                    ->where('status', 'available')
                     ->whereDate('changed_at', now(config('app.timezone'))->toDateString())
                     ->latest('changed_at')
                     ->take(8)
@@ -93,12 +98,36 @@ class DashboardController extends Controller
                 ->latest('transaction_date')
                 ->take(8)
                 ->get();
+            $additionalCharges = HotelTransaction::query()
+                ->whereIn('reservation_id', $activeCheckIns->pluck('reservation_id'))
+                ->whereNotIn('transaction_type', ['reservation', 'booking_confirmation', 'check_in', 'check_out'])
+                ->where('status', '!=', 'void')
+                ->where('amount', '>', 0)
+                ->selectRaw('reservation_id, SUM(amount) as total')
+                ->groupBy('reservation_id')
+                ->pluck('total', 'reservation_id');
+            $activeBillAmounts = $activeCheckIns->mapWithKeys(function (CheckIn $checkIn) use ($additionalCharges) {
+                $reservation = $checkIn->reservation;
+                $nights = $reservation?->check_in_date && $reservation?->check_out_date
+                    ? max(1, (int) $reservation->check_in_date->diffInDays($reservation->check_out_date))
+                    : 1;
+                $roomCharges = round((float) ($checkIn->room?->rate ?? 0) * $nights, 2);
+                $additional = round((float) ($additionalCharges[$checkIn->reservation_id] ?? 0), 2);
+
+                return [$checkIn->id => [
+                    'nights' => $nights,
+                    'room_charges' => $roomCharges,
+                    'additional_charges' => $additional,
+                    'total' => round($roomCharges + $additional, 2),
+                ]];
+            });
 
             return view('dashboard.billing', [
                 ...$data,
                 'activeCheckIns' => $activeCheckIns,
                 'completedToday' => $completedToday,
                 'folioActivity' => $folioActivity,
+                'activeBillAmounts' => $activeBillAmounts,
                 'settlementQueue' => $activeCheckIns->take(6),
                 'pendingDepartures' => $activeCheckIns->count(),
                 'departuresToday' => $activeCheckIns
@@ -109,6 +138,9 @@ class DashboardController extends Controller
                 'recordedRevenue' => HotelTransaction::whereDate('transaction_date', $today)->sum('amount'),
                 'unpaidFolios' => CheckOut::where('payment_status', 'unpaid')->count(),
                 'partialFolios' => CheckOut::where('payment_status', 'partial')->count(),
+                'paidToday' => $completedToday->where('payment_status', 'paid')->count(),
+                'partialToday' => $completedToday->where('payment_status', 'partial')->count(),
+                'unpaidToday' => $completedToday->where('payment_status', 'unpaid')->count(),
             ]);
         }
 

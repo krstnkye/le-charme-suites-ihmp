@@ -6,7 +6,6 @@
     $receptionistCount = (int) ($roleCounts['receptionist'] ?? 0);
     $cashierCount = (int) ($roleCounts['cashier'] ?? 0);
     $housekeepingCount = (int) ($roleCounts['housekeeping'] ?? 0);
-    $ownerCount = (int) ($roleCounts['owner'] ?? 0);
     $todayMovement = $arrivalsToday + $departuresToday;
 @endphp
 
@@ -81,8 +80,8 @@
             </div>
             <div class="flex items-center gap-4">
                 <div class="hidden items-center gap-1.5 rounded border border-outline-variant/30 bg-surface-container px-3 py-1 text-xs font-semibold text-slate-600 sm:flex">
-                    <span class="material-symbols-outlined text-sm text-secondary">wifi_tethering</span>
-                    TLS 1.3 Active
+                    <span class="material-symbols-outlined text-sm text-secondary">database</span>
+                    Shared database connected
                 </div>
                 <div class="text-right">
                     <p class="text-xs font-bold text-primary">{{ $user?->name }}</p>
@@ -117,7 +116,8 @@
                         </div>
                         <div class="px-3 py-1.5">
                             <p class="text-[11px] font-bold uppercase text-[#b4c8e5]">Rooms Managed</p>
-                            <p class="mt-1 text-lg font-bold">{{ $totalRooms }} / {{ $publishedRoomCount }}</p>
+                            <p class="mt-1 text-lg font-bold">{{ $publishedRoomCount }}</p>
+                            <p class="text-[10px] text-[#b4c8e5]">{{ $totalRooms }} operational records</p>
                         </div>
                         <div class="px-3 py-1.5">
                             <p class="text-[11px] font-bold uppercase text-[#b4c8e5]">Staff Accounts</p>
@@ -133,10 +133,10 @@
 
             <section class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
                 <div class="command-card rounded-xl p-5">
-                    <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Property Occupancy</span><span class="material-symbols-outlined text-secondary">hotel</span></div>
+                    <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Operational Occupancy</span><span class="material-symbols-outlined text-secondary">hotel</span></div>
                     <div class="mt-3 flex items-baseline gap-2"><span class="font-serif text-4xl font-bold">{{ $occupancyRate }}%</span><span class="text-sm text-slate-500">{{ $occupiedRooms }} / {{ $totalRooms }} rooms</span></div>
                     <div class="mt-3 h-2 overflow-hidden rounded-full bg-surface-container"><div class="h-full rounded-full bg-secondary" style="width: {{ min(100, $occupancyRate) }}%"></div></div>
-                    <p class="mt-2 text-xs font-semibold text-secondary">{{ $availableRooms }} ready · {{ $totalRooms }} of {{ $publishedRoomCount }} rooms encoded</p>
+                    <p class="mt-2 text-xs font-semibold text-secondary">{{ $availableRooms }} ready · {{ $totalRooms }} operational records · {{ $publishedRoomCount }} property rooms</p>
                 </div>
                 <div class="command-card rounded-xl p-5">
                     <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Reservation Flow</span><span class="material-symbols-outlined text-secondary">calendar_month</span></div>
@@ -144,7 +144,7 @@
                     <div class="mt-3 flex justify-between border-t border-surface-container pt-3 text-xs text-slate-500"><span>Arrivals <strong class="text-primary">{{ $arrivalsToday }}</strong></span><span>Departures <strong class="text-primary">{{ $departuresToday }}</strong></span></div>
                 </div>
                 <div class="command-card rounded-xl p-5">
-                    <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Staff On Duty</span><span class="material-symbols-outlined text-primary">badge</span></div>
+                    <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Staff Accounts</span><span class="material-symbols-outlined text-primary">badge</span></div>
                     <p class="mt-3 font-serif text-4xl font-bold">{{ $totalUsers }}</p>
                     <div class="mt-3 grid grid-cols-2 gap-1.5 text-xs text-slate-600">
                         <span class="rounded bg-surface-container-low px-2 py-1">Front Desk: <strong>{{ $receptionistCount }}</strong></span>
@@ -178,9 +178,9 @@
                             <span class="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold">{{ $totalUsers }} Accounts</span>
                         </div>
                         <div class="my-5 grid grid-cols-3 gap-3 border-y border-surface-container py-3">
-                            <div><span class="text-[11px] font-bold text-slate-500">DEPARTMENTS</span><p class="font-bold">4 Workspaces</p></div>
+                            <div><span class="text-[11px] font-bold text-slate-500">DEPARTMENTS</span><p class="font-bold">{{ count(config('hotel.staff_roles', [])) }} Workspaces</p></div>
                             <div><span class="text-[11px] font-bold text-slate-500">ADMINS</span><p class="font-bold text-emerald-700">{{ $adminCount }}</p></div>
-                            <div><span class="text-[11px] font-bold text-slate-500">OWNERS</span><p class="font-bold text-secondary">{{ $ownerCount }}</p></div>
+                            <div><span class="text-[11px] font-bold text-slate-500">BILLING</span><p class="font-bold text-secondary">{{ $cashierCount }}</p></div>
                         </div>
                         <a href="{{ route('admin.users.index') }}" class="inline-flex items-center gap-1 text-sm font-bold text-secondary hover:text-primary">Manage Matrix <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
                     </div>
@@ -253,7 +253,7 @@
                             </div>
                         </div>
                     @empty
-                        <div class="py-10 text-center text-sm font-semibold text-slate-500">No telemetry records yet.</div>
+                        <div class="py-10 text-center text-sm font-semibold text-slate-500">No transaction records yet.</div>
                     @endforelse
                 </div>
             </section>

@@ -504,7 +504,7 @@ class RoleAccessTest extends TestCase
             ->assertSee('Service Requests')
             ->assertSee('Maintenance Requests')
             ->assertSee('Lost &amp; Found', false)
-            ->assertSee('Linen &amp; Supplies', false)
+            ->assertDontSee('Linen &amp; Supplies', false)
             ->assertSee('Notifications')
             ->assertSee('Room 501');
     }
@@ -601,9 +601,6 @@ class RoleAccessTest extends TestCase
             'report-issue' => 'Report Issue',
             'reported-issues' => 'Reported Issues',
             'lost-found' => 'Lost &amp; Found',
-            'linen-supplies' => 'Linen &amp; Supplies',
-            'linen-records' => 'Linen Records',
-            'housekeeping-supplies' => 'Housekeeping Supplies',
             'reports' => 'Housekeeping Reports',
             'notifications' => 'Notifications',
         ] as $page => $heading) {
@@ -622,7 +619,6 @@ class RoleAccessTest extends TestCase
             ->assertSee('Unit Turnover &amp; Cleaning Tasks Queue', false)
             ->assertSee('Live Cleaning Task Board')
             ->assertSee('Attendant Workload')
-            ->assertSee('Linen &amp; Stock Alert', false)
             ->assertSee('Room 701');
 
         $this->actingAs($user)
@@ -687,15 +683,6 @@ class RoleAccessTest extends TestCase
             ->assertSee('Room 701');
 
         $this->actingAs($user)
-            ->get(route('housekeeping.page', 'housekeeping-supplies'))
-            ->assertOk()
-            ->assertSee('Housekeeping Supplies &amp; Chemical Par Stock Hub', false)
-            ->assertSee('Supply Par Health')
-            ->assertSee('Cleaning Chemicals &amp; Sanitizing Agents', false)
-            ->assertSee('Cart Stocking Quick Form')
-            ->assertSee('Quat Sanitizer 5L refill');
-
-        $this->actingAs($user)
             ->get(route('housekeeping.page', 'reports'))
             ->assertOk()
             ->assertSee('Housekeeping Operational Reports &amp; SLA Analytics', false)
@@ -704,21 +691,18 @@ class RoleAccessTest extends TestCase
             ->assertSee('Custom Report Builder');
 
         $this->actingAs($user)
-            ->get(route('housekeeping.page', 'linen-records'))
-            ->assertOk()
-            ->assertSee('Linen Inventory, Par Levels &amp; Laundry Cycles', false)
-            ->assertSee('Master Linen Stock Ledger')
-            ->assertSee('Commercial Laundry Inbound')
-            ->assertSee('Linen Life Cycle &amp; Thread Degradation Log', false)
-            ->assertSee('Premium King Sheet Set');
-
-        $this->actingAs($user)
             ->get(route('housekeeping.page', 'notifications'))
             ->assertOk()
             ->assertSee('Housekeeping Dispatch Notifications &amp; Operational Alerts', false)
             ->assertSee('Live Dispatch Center')
             ->assertSee('Radio Broadcast Log')
             ->assertSee('Supervisor Dispatch Summary');
+
+        foreach (['linen-supplies', 'linen-records', 'housekeeping-supplies'] as $removedPage) {
+            $this->actingAs($user)
+                ->get(route('housekeeping.page', $removedPage))
+                ->assertNotFound();
+        }
     }
 
     public function test_other_departments_cannot_open_housekeeping_pages(): void

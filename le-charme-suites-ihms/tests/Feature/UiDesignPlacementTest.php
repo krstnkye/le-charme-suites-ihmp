@@ -26,14 +26,11 @@ class UiDesignPlacementTest extends TestCase
             'report-issue' => 'Report Maintenance Defect or Room Discrepancy',
             'reported-issues' => 'Reported Issues & Facilities Work Orders Log',
             'lost-found' => 'Lost & Found Vault & Chain of Custody Registry',
-            'housekeeping-supplies' => 'Housekeeping Supplies & Chemical Par Stock Hub',
             'reports' => 'Housekeeping Operational Reports & SLA Analytics',
-            'linen-records' => 'Linen Inventory, Par Levels & Laundry Cycles',
             'notifications' => 'Housekeeping Dispatch Notifications & Operational Alerts',
             'tasks' => 'Housekeeping Tasks & Operational Dispatch',
             'service-requests' => 'Service Requests Hub & Guest Amenities Delivery',
             'maintenance-requests' => 'Maintenance Requests & Engineering Dispatch Queue',
-            'linen-supplies' => 'Linen & Supplies Operational Command',
         ];
 
         foreach ($pages as $page => $signature) {
@@ -48,6 +45,12 @@ class UiDesignPlacementTest extends TestCase
             ->get(route('profile.edit'))
             ->assertOk()
             ->assertSeeText('Executive Housekeeper Profile & Digital Duty Credentials');
+
+        foreach (['linen-supplies', 'linen-records', 'housekeeping-supplies'] as $removedPage) {
+            $this->actingAs($housekeeper)
+                ->get(route('housekeeping.page', ['page' => $removedPage]))
+                ->assertNotFound();
+        }
     }
 
     public function test_billing_reference_designs_are_rendered_on_their_intended_pages(): void

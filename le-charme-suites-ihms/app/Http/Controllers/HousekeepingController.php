@@ -103,27 +103,6 @@ class HousekeepingController extends Controller
             'icon' => 'travel_explore',
             'group' => 'Records',
         ],
-        'linen-supplies' => [
-            'active' => 'linen-supplies',
-            'title' => 'Linen & Supplies',
-            'subtitle' => 'Linen readiness and housekeeping supply monitoring.',
-            'icon' => 'inventory_2',
-            'group' => 'Records',
-        ],
-        'linen-records' => [
-            'active' => 'linen-records',
-            'title' => 'Linen Records',
-            'subtitle' => 'Room turnover activity used for linen planning.',
-            'icon' => 'receipt_long',
-            'group' => 'Records',
-        ],
-        'housekeeping-supplies' => [
-            'active' => 'housekeeping-supplies',
-            'title' => 'Housekeeping Supplies',
-            'subtitle' => 'Supply attention points based on active room operations.',
-            'icon' => 'category',
-            'group' => 'Records',
-        ],
         'reports' => [
             'active' => 'reports',
             'title' => 'Housekeeping Reports',
@@ -182,6 +161,7 @@ class HousekeepingController extends Controller
             'priorityRooms' => $priorityRooms,
             'guestRequestRooms' => $allRooms->where('status', 'occupied')->values(),
             'completedTasks' => RoomStatusLog::with('room')
+                ->where('status', 'available')
                 ->whereDate('changed_at', now(config('app.timezone'))->toDateString())
                 ->latest('changed_at')
                 ->get(),

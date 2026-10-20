@@ -76,13 +76,13 @@
                     <div>
                         <p class="text-xs font-bold uppercase tracking-[0.22em] text-[#ffdeaa]">Housekeeping Command Center</p>
                         <h2 class="mt-3 font-serif text-4xl font-bold leading-tight">Daily Rooms Readiness & Turnover Control</h2>
-                        <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-200">Monitor cleaning queues, room inspection readiness, maintenance reports, guest service requests, and supply records from one role-specific workspace.</p>
+                        <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-200">Monitor cleaning queues, room inspection readiness, maintenance reports, and guest service requests from one role-specific workspace.</p>
                     </div>
                     <div class="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-white/10 p-4">
                         <div>
                             <p class="text-xs font-bold uppercase text-slate-300">Ready Rooms</p>
                             <p class="mt-1 text-2xl font-bold">{{ $availableRooms }} / {{ $totalRooms }}</p>
-                            <p class="mt-1 text-[11px] text-slate-300">Encoded inventory · {{ $publishedRoomCount }}-room property</p>
+                            <p class="mt-1 text-[11px] text-slate-300">Operational records · {{ $publishedRoomCount }} rooms in the property</p>
                         </div>
                         <div>
                             <p class="text-xs font-bold uppercase text-slate-300">Readiness</p>
@@ -102,7 +102,7 @@
 
             <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
                 @foreach ([
-                    ['label' => 'Rooms Encoded', 'value' => $totalRooms.' / '.$publishedRoomCount, 'icon' => 'domain'],
+                    ['label' => 'Property Rooms', 'value' => $publishedRoomCount, 'icon' => 'domain'],
                     ['label' => 'Ready / Available', 'value' => $availableRooms, 'icon' => 'check_circle'],
                     ['label' => 'Occupied Rooms', 'value' => $occupiedRooms, 'icon' => 'king_bed'],
                     ['label' => 'Cleaning Queue', 'value' => $cleaningCount, 'icon' => 'mop'],
@@ -242,14 +242,6 @@
                     <section id="lost-found" class="rounded-xl border border-line bg-white p-5 shadow-sm">
                         <h3 class="font-serif text-2xl font-bold">Lost &amp; Found</h3>
                         <p class="mt-3 text-sm text-slate-600">No lost-and-found entries are stored yet. Use room status notes to record recovered items until a separate lost-and-found record page is added.</p>
-                    </section>
-
-                    <section id="linen-supplies" class="rounded-xl border border-line bg-white p-5 shadow-sm">
-                        <h3 class="font-serif text-2xl font-bold">Linen &amp; Supplies</h3>
-                        <div id="linen-records" class="mt-4 grid grid-cols-2 gap-3 text-sm">
-                            <div class="rounded-lg bg-slate-50 p-3"><p class="text-xs font-bold uppercase text-slate-500">Linen Records</p><p class="mt-1 text-2xl font-bold">{{ $cleaningCount }}</p></div>
-                            <div id="housekeeping-supplies" class="rounded-lg bg-slate-50 p-3"><p class="text-xs font-bold uppercase text-slate-500">Supplies Queue</p><p class="mt-1 text-2xl font-bold">{{ $occupiedRooms }}</p></div>
-                        </div>
                     </section>
 
                     <section id="reports" class="rounded-xl border border-line bg-white p-5 shadow-sm">

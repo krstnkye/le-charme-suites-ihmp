@@ -6,11 +6,7 @@
         'unpaid' => 'border-rose-200 bg-rose-50 text-rose-800',
         'recorded' => 'border-slate-200 bg-slate-50 text-slate-700',
     ];
-    $totalOpenExposure = $activeCheckIns->sum(fn ($checkIn) => (float) ($checkIn->room?->rate ?? 0));
-    $cashOnHand = round((float) $collectedToday * 0.35, 2);
-    $cardTender = round((float) $collectedToday * 0.5, 2);
-    $digitalTender = max(0, (float) $collectedToday - $cashOnHand - $cardTender);
-    $depositPool = round($totalOpenExposure * 0.35, 2);
+    $totalOpenExposure = $activeBillAmounts->sum('total');
 @endphp
 
 <!DOCTYPE html>
@@ -67,9 +63,9 @@
             <div class="flex flex-wrap items-center justify-end gap-3">
                 <div class="hidden items-center gap-2 rounded-full border border-line bg-surface-low px-3 py-1.5 text-xs font-semibold text-primary xl:flex">
                     <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                    <span>Shift A: 06:00 - 14:30 PHT</span>
+                    <span>{{ auth()->user()->name }}</span>
                     <span class="text-slate-300">|</span>
-                    <span class="text-slate-600">Register #02 Online</span>
+                    <span class="text-slate-600">{{ $pendingDepartures }} active guest bills</span>
                 </div>
                 <div class="rounded-lg border border-line bg-white px-4 py-2 text-right shadow-sm">
                     <p id="billing-date" class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Loading date</p>
@@ -95,7 +91,7 @@
                     <div class="max-w-3xl">
                         <div class="mb-2 flex flex-wrap items-center gap-2">
                             <span class="rounded border border-secondary-fixed/30 bg-secondary-container/20 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Authorized Billing Dashboard</span>
-                            <span class="text-xs font-semibold text-blue-100/70">SBMA Act 7227 Compliant</span>
+                            <span class="text-xs font-semibold text-blue-100/70">Shared database records</span>
                         </div>
                         <h2 class="font-serif text-4xl font-bold leading-tight">Cashier &amp; Billing Dashboard</h2>
                         <p class="mt-2 text-sm leading-6 text-blue-100">Review guest bills, verify payments, add charges, and monitor hotel income for the Billing department.</p>
@@ -124,16 +120,16 @@
                             <span class="rounded-lg bg-secondary-container/40 p-2 text-secondary"><span class="material-symbols-outlined">monetization_on</span></span>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Daily Collections</p>
-                            <p class="text-xs font-semibold text-secondary">Shift A + previous night report</p>
+                            <p class="text-xs font-semibold text-secondary">Payments saved today</p>
                             </div>
                         </div>
                         <span class="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700">Live</span>
                     </div>
                     <p class="font-serif text-3xl font-bold text-primary">PHP {{ number_format($collectedToday, 2) }}</p>
                     <div class="mt-4 grid gap-2 border-t border-line pt-3 text-xs sm:grid-cols-3">
-                        <div class="rounded border border-line bg-surface-low p-2"><span class="block text-slate-500">Cash on hand</span><strong>PHP {{ number_format($cashOnHand, 2) }}</strong></div>
-                        <div class="rounded border border-line bg-surface-low p-2"><span class="block text-slate-500">Credit card</span><strong>PHP {{ number_format($cardTender, 2) }}</strong></div>
-                        <div class="rounded border border-line bg-surface-low p-2"><span class="block text-slate-500">Digital / bank</span><strong>PHP {{ number_format($digitalTender, 2) }}</strong></div>
+                        <div class="rounded border border-line bg-surface-low p-2"><span class="block text-slate-500">Paid receipts</span><strong>{{ $paidToday }}</strong></div>
+                        <div class="rounded border border-line bg-surface-low p-2"><span class="block text-slate-500">Partial payments</span><strong>{{ $partialToday }}</strong></div>
+                        <div class="rounded border border-line bg-surface-low p-2"><span class="block text-slate-500">Unpaid records</span><strong>{{ $unpaidToday }}</strong></div>
                     </div>
                 </div>
 
@@ -152,10 +148,10 @@
                 </div>
 
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
-                    <div class="mb-2 flex items-center justify-between"><span class="rounded-lg bg-emerald-50 p-2 text-emerald-700"><span class="material-symbols-outlined">check_circle</span></span><span class="rounded bg-emerald-100 px-2 py-1 text-xs font-bold text-emerald-800">Balanced</span></div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Cash Differences / Cancelled</p>
-                    <p class="mt-2 font-serif text-2xl font-bold text-emerald-700">0 Not Balanced</p>
-                    <p class="mt-3 border-t border-line pt-3 text-xs text-slate-500">Deposit pool: <strong class="text-primary">PHP {{ number_format($depositPool, 2) }}</strong></p>
+                    <div class="mb-2 flex items-center justify-between"><span class="rounded-lg bg-emerald-50 p-2 text-emerald-700"><span class="material-symbols-outlined">receipt_long</span></span><span class="rounded bg-emerald-100 px-2 py-1 text-xs font-bold text-emerald-800">Database</span></div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Recorded Charges Today</p>
+                    <p class="mt-2 font-serif text-2xl font-bold text-emerald-700">PHP {{ number_format($recordedRevenue, 2) }}</p>
+                    <p class="mt-3 border-t border-line pt-3 text-xs text-slate-500">Saved hotel transaction records</p>
                 </div>
             </section>
 
@@ -168,7 +164,7 @@
                                     <h3 class="font-serif text-2xl font-bold text-primary">Departures &amp; Guest Bills for Payment</h3>
                                     <span class="rounded-full bg-secondary-fixed px-2 py-1 text-xs font-bold text-primary">{{ $settlementQueue->count() }} Today</span>
                                 </div>
-                                <p class="mt-1 text-sm text-slate-600">Guest bills waiting for payment, receipt printing, or tax review.</p>
+                                <p class="mt-1 text-sm text-slate-600">Guest bills waiting for payment or receipt printing.</p>
                             </div>
                             <a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-sm font-bold text-primary transition hover:border-secondary">
                                     <span class="material-symbols-outlined text-base text-secondary">filter_list</span>
@@ -179,10 +175,8 @@
                         <div class="divide-y divide-line">
                             @forelse ($settlementQueue as $checkIn)
                                 @php
-                                    $roomRate = (float) ($checkIn->room?->rate ?? 0);
-                                    $tax = round($roomRate * 0.05, 2);
-                                    $deposit = round($roomRate * 0.35, 2);
-                                    $balance = max(0, $roomRate + $tax - $deposit);
+                                    $bill = $activeBillAmounts->get($checkIn->id, ['nights' => 1, 'room_charges' => 0, 'additional_charges' => 0, 'total' => 0]);
+                                    $balance = (float) $bill['total'];
                                 @endphp
                                 <div class="p-5 transition hover:bg-surface-low/40">
                                     <div class="flex flex-col justify-between gap-4 border-b border-line/70 pb-3 md:flex-row md:items-center">
@@ -195,7 +189,7 @@
                                                 <div class="flex flex-wrap items-center gap-2">
                                                     <span class="font-bold text-primary">{{ $checkIn->guest?->full_name ?? 'Guest record unavailable' }}</span>
                                                     <span class="rounded border border-secondary-fixed/50 bg-secondary-container/40 px-2 py-0.5 text-xs font-semibold text-secondary">{{ $checkIn->room?->room_type ?? 'Room' }}</span>
-                                                    <span class="font-mono text-xs text-slate-500">#FOL-{{ str_pad((string) $checkIn->id, 5, '0', STR_PAD_LEFT) }}</span>
+                                                    <span class="font-mono text-xs text-slate-500">#STAY-{{ str_pad((string) $checkIn->id, 5, '0', STR_PAD_LEFT) }}</span>
                                                 </div>
                                                 <div class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
                                                     <span>Check-in: <strong class="text-primary">{{ $checkIn->checked_in_at?->format('M d, Y') ?? 'N/A' }}</strong></span>
@@ -210,10 +204,10 @@
                                         </div>
                                     </div>
                                     <div class="grid gap-3 py-3 text-sm sm:grid-cols-4">
-                                        <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Room charges</span><strong>PHP {{ number_format($roomRate, 2) }}</strong></div>
-                                        <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Extra Charges</span><strong>PHP 0.00</strong></div>
-                                        <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Tax</span><strong>PHP {{ number_format($tax, 2) }}</strong></div>
-                                        <div class="rounded border border-emerald-200 bg-emerald-50 p-2"><span class="block text-xs text-emerald-800">Deposit paid</span><strong class="text-emerald-700">- PHP {{ number_format($deposit, 2) }}</strong></div>
+                                        <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Room charges</span><strong>PHP {{ number_format($bill['room_charges'], 2) }}</strong></div>
+                                        <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Additional charges</span><strong>PHP {{ number_format($bill['additional_charges'], 2) }}</strong></div>
+                                        <div class="rounded border border-line bg-surface p-2"><span class="block text-xs text-slate-500">Number of nights</span><strong>{{ $bill['nights'] }}</strong></div>
+                                        <div class="rounded border border-emerald-200 bg-emerald-50 p-2"><span class="block text-xs text-emerald-800">Current total</span><strong class="text-emerald-700">PHP {{ number_format($bill['total'], 2) }}</strong></div>
                                     </div>
                                     <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
                                         <div class="flex items-center gap-2 text-xs font-semibold text-secondary"><span class="h-2 w-2 rounded-full bg-amber-500"></span>Guest Bill pending Billing review</div>
@@ -232,29 +226,15 @@
                     <div class="rounded-xl border border-line bg-white p-6 shadow-sm">
                         <div class="mb-4 flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-secondary">add_shopping_cart</span>
-                                <h3 class="text-base font-bold text-primary">Add Guest Bill Charge</h3>
+                                <span class="material-symbols-outlined text-secondary">person_search</span>
+                                <h3 class="text-base font-bold text-primary">Find a Guest Bill</h3>
                             </div>
                             <span class="text-xs font-semibold text-slate-500">Quick entry</span>
                         </div>
-                        <form class="grid gap-3 sm:grid-cols-4" action="{{ route('check-outs.index') }}" method="GET">
+                        <form class="grid gap-3 sm:grid-cols-[1fr_auto]" action="{{ route('check-outs.index') }}" method="GET">
                             <div>
-                                <label class="mb-1 block text-xs font-bold text-slate-500">Target Room #</label>
-                                <input name="search" class="w-full rounded border border-line bg-surface-low p-2 text-sm focus:border-secondary focus:ring-secondary" placeholder="e.g. 308" type="text">
-                            </div>
-                            <div>
-                                <label class="mb-1 block text-xs font-bold text-slate-500">Charge Department</label>
-                                <select class="w-full rounded border border-line bg-surface-low p-2 text-sm focus:border-secondary focus:ring-secondary">
-                                    <option>F&B / Poolside Bistro</option>
-                                    <option>Spa & Wellness</option>
-                                    <option>Laundry Service</option>
-                                    <option>Minibar Replenishment</option>
-                                    <option>Damage / Lost Keycard</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="mb-1 block text-xs font-bold text-slate-500">Amount (PHP)</label>
-                                <input class="w-full rounded border border-line bg-surface-low p-2 text-sm font-semibold focus:border-secondary focus:ring-secondary" placeholder="0.00" type="number" min="0" step="0.01">
+                                <label class="mb-1 block text-xs font-bold text-slate-500">Guest name, room number, or email</label>
+                                <input name="search" class="w-full rounded border border-line bg-surface-low p-2 text-sm focus:border-secondary focus:ring-secondary" placeholder="Enter a guest name, room, or email" type="search">
                             </div>
                             <div class="flex items-end">
                                 <button class="flex w-full items-center justify-center gap-1 rounded bg-primary-container px-3 py-2.5 text-sm font-bold text-white transition hover:bg-primary" type="submit">
@@ -302,13 +282,14 @@
 
                     <div class="space-y-4 rounded-xl border border-line bg-white p-5 shadow-sm">
                         <div class="flex items-center justify-between border-b border-line pb-3">
-                        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary">inventory_2</span><h3 class="font-serif text-lg font-bold text-primary">Cash Register Summary</h3></div>
-                            <span class="rounded border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700">100% In Balance</span>
+                        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary">payments</span><h3 class="font-serif text-lg font-bold text-primary">Payment Record Summary</h3></div>
+                            <span class="rounded border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700">Saved Records</span>
                         </div>
                         <div class="space-y-2 text-sm">
-                            <div class="flex items-center justify-between rounded bg-surface-low p-2"><span class="text-slate-600">Starting cash</span><strong>PHP 15,000.00</strong></div>
-                            <div class="flex items-center justify-between rounded bg-surface-low p-2"><span class="text-slate-600">Cash collected this shift</span><strong class="text-emerald-700">PHP {{ number_format($cashOnHand, 2) }}</strong></div>
-                            <div class="flex items-center justify-between rounded border-l-2 border-secondary bg-surface-low p-2"><span class="font-semibold">Expected cash in register</span><strong class="text-secondary">PHP {{ number_format(15000 + $cashOnHand, 2) }}</strong></div>
+                            <div class="flex items-center justify-between rounded bg-surface-low p-2"><span class="text-slate-600">Paid check-outs today</span><strong class="text-emerald-700">{{ $paidToday }}</strong></div>
+                            <div class="flex items-center justify-between rounded bg-surface-low p-2"><span class="text-slate-600">Partially paid check-outs</span><strong class="text-amber-700">{{ $partialToday }}</strong></div>
+                            <div class="flex items-center justify-between rounded bg-surface-low p-2"><span class="text-slate-600">Unpaid check-outs</span><strong class="text-red-700">{{ $unpaidToday }}</strong></div>
+                            <div class="flex items-center justify-between rounded border-l-2 border-secondary bg-surface-low p-2"><span class="font-semibold">Payments recorded today</span><strong class="text-secondary">PHP {{ number_format($collectedToday, 2) }}</strong></div>
                         </div>
                         <div class="grid grid-cols-2 gap-2 pt-2">
                             <a href="{{ route('reports.index') }}" class="flex items-center justify-center gap-1 rounded border border-line bg-surface-low px-3 py-2 text-sm font-bold text-primary transition hover:bg-line"><span class="material-symbols-outlined text-sm">receipt</span>Current Cash Report</a>
@@ -319,8 +300,8 @@
                     <div class="flex items-start gap-3 rounded-xl border border-line bg-surface-mid p-4">
                         <span class="material-symbols-outlined text-2xl text-secondary">verified_user</span>
                         <div>
-                            <p class="font-bold text-primary">Subic Bay Tax Records</p>
-                            <p class="mt-1 text-sm text-slate-600">Guest payments are saved for manager review in the Le Charmé Suites billing dashboard.</p>
+                            <p class="font-bold text-primary">Saved Payment Records</p>
+                            <p class="mt-1 text-sm text-slate-600">Guest payments and check-out records are saved in the shared IHMP database for authorized review.</p>
                         </div>
                     </div>
                 </aside>
