@@ -7,6 +7,7 @@ use App\Models\CheckOut;
 use App\Models\HotelTransaction;
 use App\Models\Reservation;
 use App\Models\Room;
+use App\Services\RoomAvailabilityService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -112,8 +113,9 @@ class AdminOperationsController extends Controller
 
     private function roomTypes(): array
     {
+        $availability = app(RoomAvailabilityService::class)->summary();
         $rooms = Room::query()
-            ->selectRaw('room_type, COUNT(*) as room_count, MIN(capacity) as min_capacity, MAX(capacity) as max_capacity, AVG(rate) as average_rate, SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as available_count', ['available'])
+            ->selectRaw('room_type, COUNT(*) as room_count, MIN(capacity) as min_capacity, MAX(capacity) as max_capacity, AVG(rate) as average_rate')
             ->groupBy('room_type')
             ->orderBy('room_type')
             ->get();
@@ -122,10 +124,11 @@ class AdminOperationsController extends Controller
             'title' => 'Room Types Administration',
             'subtitle' => 'Review each room category, capacity profile, assigned inventory, and readiness for booking configuration.',
             'icon' => 'hotel',
+            'roomAvailability' => $availability,
             'stats' => [
                 ['label' => 'Room type groups', 'value' => $rooms->count()],
-                ['label' => 'Total encoded rooms', 'value' => Room::count()],
-                ['label' => 'Available inventory', 'value' => Room::where('status', 'available')->count()],
+                ['label' => 'Total hotel rooms', 'value' => $availability['property_total']],
+                ['label' => 'Available now', 'value' => $availability['available']],
                 ['label' => 'Highest capacity', 'value' => (Room::max('capacity') ?? 0).' guests'],
             ],
             'records' => $rooms->map(fn ($record) => [
@@ -133,7 +136,7 @@ class AdminOperationsController extends Controller
                 $record->room_count.' rooms',
                 ((int) $record->min_capacity === (int) $record->max_capacity ? $record->max_capacity : $record->min_capacity.'-'.$record->max_capacity).' guests',
                 'PHP '.number_format((float) $record->average_rate, 2),
-                $record->available_count.' available',
+                ($availability['by_type'][$record->room_type]['available'] ?? 0).' available',
             ]),
             'headers' => ['Room Type', 'Inventory', 'Capacity Range', 'Average Rate', 'Availability'],
         ];
@@ -170,11 +173,13 @@ class AdminOperationsController extends Controller
 
     private function roomStatus(): array
     {
-        $records = Room::orderBy('status')->orderBy('room_number')->limit(50)->get();
+        $records = Room::orderBy('status')->orderBy('room_number')->get();
+        $availability = app(RoomAvailabilityService::class)->summary();
 
         return [
             'title' => 'Room Status Administration', 'subtitle' => 'Monitor availability, occupancy, reserved rooms, maintenance, and housekeeping readiness without leaving the admin portal.', 'icon' => 'bed',
-            'stats' => [['label' => 'Available', 'value' => Room::where('status', 'available')->count()], ['label' => 'Reserved', 'value' => Room::where('status', 'reserved')->count()], ['label' => 'Occupied', 'value' => Room::where('status', 'occupied')->count()], ['label' => 'Maintenance', 'value' => Room::whereIn('status', ['maintenance', 'cleaning'])->count()]],
+            'roomAvailability' => $availability,
+            'stats' => [['label' => 'Available', 'value' => $availability['available']], ['label' => 'Reserved', 'value' => $availability['reserved']], ['label' => 'Occupied', 'value' => $availability['occupied']], ['label' => 'Cleaning / Maintenance', 'value' => $availability['out_of_service']]],
             'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, ucfirst($record->status), $record->capacity.' guests', 'PHP '.number_format((float) $record->rate, 2)]),
             'headers' => ['Room', 'Type', 'Status', 'Capacity', 'Rate'],
         ];

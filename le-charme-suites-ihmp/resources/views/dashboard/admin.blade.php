@@ -131,6 +131,8 @@
                 </div>
             </section>
 
+            @include('partials.room-availability-summary')
+
             <section class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
                 <div class="command-card rounded-xl p-5">
                     <div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Operational Occupancy</span><span class="material-symbols-outlined text-secondary">hotel</span></div>

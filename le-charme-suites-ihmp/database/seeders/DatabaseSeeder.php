@@ -33,13 +33,8 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        foreach ([
-            ['101', 'Standard Room'],
-            ['102', 'Deluxe King'],
-            ['201', 'Deluxe Twin'],
-            ['202', 'Charmé Suite'],
-            ['301', 'Family Room'],
-        ] as [$number, $type]) {
+        foreach (config('hotel.sample_room_layout') as $number => $type) {
+            $number = (string) $number;
             $specification = config("hotel.room_types.{$type}");
             $room = Room::firstOrNew(['room_number' => $number]);
 

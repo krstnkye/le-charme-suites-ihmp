@@ -568,6 +568,8 @@
                     </div>
                 @endif
 
+                @include('partials.room-availability-summary')
+
                 <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     @foreach ($stats as $stat)
                         <div class="relative overflow-hidden rounded-xl border border-surface-container-highest bg-white p-4 shadow-sm">
@@ -810,6 +812,9 @@
                     </div>
                     <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#5b4313]">Administrator-only workspace</span>
                 </section>
+                @isset($roomAvailability)
+                    @include('partials.room-availability-summary')
+                @endisset
                 <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     @foreach ($stats as $stat)
                         <div class="rounded-xl border border-surface-container-highest bg-white p-5 shadow-sm">
