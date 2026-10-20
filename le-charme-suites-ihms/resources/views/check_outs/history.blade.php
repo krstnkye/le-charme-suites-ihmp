@@ -119,7 +119,7 @@
                                         <td class="px-4 py-3.5"><span class="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase {{ $paymentClasses[$checkOut->payment_status] ?? 'border-line bg-surface-low text-primary' }}"><span class="h-1.5 w-1.5 rounded-full bg-current"></span>{{ $paymentLabels[$checkOut->payment_status] ?? $checkOut->payment_status }}</span></td>
                                         <td class="px-4 py-3.5"><span class="font-mono text-xs font-bold text-secondary">{{ $rowHash }}</span><p class="text-xs text-slate-500">Security code</p></td>
                                         <td class="px-4 py-3.5 text-right font-mono font-bold">PHP {{ number_format($checkOut->amount_paid, 2) }}</td>
-                                        <td class="px-4 py-3.5 text-right"><button type="button" onclick="window.print()" class="rounded p-1 text-primary hover:bg-surface-mid" title="Print audit copy"><span class="material-symbols-outlined text-base">print</span></button></td>
+                                        <td class="px-4 py-3.5 text-right"><a href="{{ route('check-outs.receipt', ['checkOut' => $checkOut, 'print' => 1]) }}" target="_blank" rel="noopener" class="inline-flex rounded p-1 text-primary hover:bg-surface-mid" title="Print guest receipt"><span class="material-symbols-outlined text-base">print</span></a></td>
                                     </tr>
                                 @empty
                                     <tr><td colspan="7" class="px-4 py-12 text-center font-semibold text-slate-500">No transaction history records match the current filter.</td></tr>

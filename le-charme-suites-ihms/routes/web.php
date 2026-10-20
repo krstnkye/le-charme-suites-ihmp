@@ -112,6 +112,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/check-outs', [CheckOutController::class, 'index'])->name('check-outs.index');
         Route::get('/check-outs/history', [CheckOutController::class, 'history'])->name('check-outs.history');
         Route::get('/check-outs/create', [CheckOutController::class, 'create'])->name('check-outs.create');
+        Route::get('/check-outs/{checkOut}/receipt', [CheckOutController::class, 'receipt'])->name('check-outs.receipt');
         Route::post('/check-outs', [CheckOutController::class, 'store'])->name('check-outs.store');
     });
 

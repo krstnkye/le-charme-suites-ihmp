@@ -39,4 +39,9 @@ class CheckOut extends Model
     {
         return $this->belongsTo(Room::class);
     }
+
+    public function reservation(): BelongsTo
+    {
+        return $this->belongsTo(Reservation::class);
+    }
 }

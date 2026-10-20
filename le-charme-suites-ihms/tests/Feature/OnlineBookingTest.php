@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\CheckIn;
+use App\Models\CheckOut;
 use App\Models\HousekeepingTask;
 use App\Models\Reservation;
 use App\Models\Room;
@@ -138,13 +139,26 @@ class OnlineBookingTest extends TestCase
         $this->assertSame('occupied', $room->fresh()->status);
 
         $checkIn = CheckIn::firstOrFail();
-        $this->actingAs($receptionist)
+        $response = $this->actingAs($receptionist)
             ->post(route('check-outs.store'), [
                 'check_in_id' => $checkIn->id,
                 'amount_paid' => 27500,
                 'payment_status' => 'paid',
-            ])
-            ->assertRedirect(route('check-outs.index'));
+            ]);
+
+        $checkOut = CheckOut::firstOrFail();
+        $response->assertRedirect(route('check-outs.receipt', ['checkOut' => $checkOut, 'print' => 1]));
+
+        $this->actingAs($receptionist)
+            ->get(route('check-outs.receipt', $checkOut))
+            ->assertOk()
+            ->assertSeeText('GUEST CHECKOUT RECEIPT')
+            ->assertSeeText('Online Guest')
+            ->assertSeeText('Room 105')
+            ->assertSeeText('PHP 27,500.00')
+            ->assertSee('@page { size: A4 portrait;', false)
+            ->assertDontSeeText('Folio')
+            ->assertDontSeeText('POS');
 
         $this->assertSame('cleaning', $room->fresh()->status);
         $this->assertDatabaseHas('housekeeping_tasks', [

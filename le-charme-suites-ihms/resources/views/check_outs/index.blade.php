@@ -410,9 +410,9 @@
                                     </td>
                                     <td class="px-4 py-3.5 text-right font-mono font-bold">PHP {{ number_format($checkOut->amount_paid, 2) }}</td>
                                     <td class="px-4 py-3.5 text-right">
-                                        <button type="button" onclick="window.print()" class="rounded p-1 text-primary hover:bg-surface-mid" title="Print receipt">
+                                        <a href="{{ route('check-outs.receipt', ['checkOut' => $checkOut, 'print' => 1]) }}" target="_blank" rel="noopener" class="inline-flex rounded p-1 text-primary hover:bg-surface-mid" title="Print guest receipt">
                                             <span class="material-symbols-outlined text-base">receipt</span>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

@@ -116,6 +116,36 @@ class CheckOutController extends Controller
         ]);
     }
 
+    public function receipt(CheckOut $checkOut): View
+    {
+        $checkOut->load(['guest', 'room', 'checkIn', 'reservation']);
+
+        $reservation = $checkOut->reservation;
+        $nights = max(1, (int) ($reservation?->check_in_date?->diffInDays($reservation?->check_out_date) ?? 1));
+        $roomCharges = round((float) ($checkOut->room?->rate ?? 0) * $nights, 2);
+        $additionalCharges = HotelTransaction::query()
+            ->where('reservation_id', $checkOut->reservation_id)
+            ->whereNotIn('transaction_type', ['reservation', 'check_in', 'check_out'])
+            ->where('status', '!=', 'void')
+            ->orderBy('transaction_date')
+            ->get();
+        $additionalTotal = round((float) $additionalCharges->sum('amount'), 2);
+        $totalCharges = round($roomCharges + $additionalTotal, 2);
+        $amountPaid = round((float) $checkOut->amount_paid, 2);
+
+        return view('check_outs.receipt', [
+            'checkOut' => $checkOut,
+            'reservation' => $reservation,
+            'nights' => $nights,
+            'roomCharges' => $roomCharges,
+            'additionalCharges' => $additionalCharges,
+            'additionalTotal' => $additionalTotal,
+            'totalCharges' => $totalCharges,
+            'amountPaid' => $amountPaid,
+            'balance' => max(0, round($totalCharges - $amountPaid, 2)),
+        ]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
@@ -125,12 +155,12 @@ class CheckOutController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
-        DB::transaction(function () use ($data) {
+        $checkOut = DB::transaction(function () use ($data) {
             $checkIn = CheckIn::with(['reservation', 'room'])->lockForUpdate()->findOrFail($data['check_in_id']);
 
             abort_if($checkIn->status !== 'active', 422, 'Only active check-ins can be checked out.');
 
-            CheckOut::create([
+            $checkOut = CheckOut::create([
                 'check_in_id' => $checkIn->id,
                 'reservation_id' => $checkIn->reservation_id,
                 'guest_id' => $checkIn->guest_id,
@@ -170,8 +200,12 @@ class CheckOutController extends Controller
                 'transaction_date' => now(),
                 'description' => 'Guest checked out.',
             ]);
+
+            return $checkOut;
         });
 
-        return redirect()->route('check-outs.index')->with('status', 'Guest checked out.');
+        return redirect()
+            ->route('check-outs.receipt', ['checkOut' => $checkOut, 'print' => 1])
+            ->with('status', 'Guest checked out. The receipt is ready to print.');
     }
 }
