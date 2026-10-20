@@ -10,7 +10,7 @@ class WorkEmailAuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_login_and_registration_show_roles_in_the_same_order(): void
+    public function test_login_shows_all_roles_and_registration_excludes_admin(): void
     {
         $expectedOrder = ['Admin', 'Receptionist', 'Billing', 'Housekeeping'];
 
@@ -22,10 +22,24 @@ class WorkEmailAuthenticationTest extends TestCase
 
         $this->get(route('register'))
             ->assertOk()
-            ->assertSeeInOrder($expectedOrder)
+            ->assertDontSee('value="admin"', false)
+            ->assertSeeInOrder(['Receptionist', 'Billing', 'Housekeeping'])
             ->assertSee('id="password-match-status"', false)
             ->assertSeeText('Passwords match.')
             ->assertSeeText('Passwords do not match.');
+    }
+
+    public function test_public_registration_cannot_create_an_administrator(): void
+    {
+        $this->from(route('register'))->post(route('register.store'), [
+            'name' => 'Unapproved Administrator',
+            'email' => 'newadmin@lecharmehotel.com',
+            'role' => 'admin',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ])->assertRedirect(route('register'))->assertSessionHasErrors('role');
+
+        $this->assertDatabaseMissing('users', ['email' => 'newadmin@lecharmehotel.com']);
     }
 
     public function test_registration_accepts_a_work_email(): void
@@ -206,7 +220,6 @@ class WorkEmailAuthenticationTest extends TestCase
     public function test_every_registered_department_opens_its_own_dashboard(): void
     {
         $dashboards = [
-            'admin' => 'Property Systems Integrity & Control',
             'receptionist' => 'Front Desk Dashboard',
             'cashier' => 'Cashier &amp; Billing Dashboard',
             'housekeeping' => 'Daily Rooms Readiness & Turnover Control',

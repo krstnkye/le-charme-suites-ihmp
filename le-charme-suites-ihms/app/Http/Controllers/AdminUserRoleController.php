@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RolePermission;
 use App\Models\User;
 use App\Rules\WorkEmail;
+use App\Services\PermissionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -77,9 +80,9 @@ class AdminUserRoleController extends Controller
         return to_route('admin.users.index')->with('status', 'User account deleted.');
     }
 
-    public function permissions(Request $request): View
+    public function permissions(Request $request, PermissionService $permissions): View
     {
-        $roles = ['admin', 'receptionist', 'cashier', 'housekeeping'];
+        $roles = config('rbac.roles');
         $selectedRole = $request->string('role')->toString();
         $selectedRole = in_array($selectedRole, $roles, true) ? $selectedRole : 'admin';
 
@@ -87,22 +90,40 @@ class AdminUserRoleController extends Controller
             ...$this->viewData(),
             'roles' => $roles,
             'selectedRole' => $selectedRole,
-            'permissionState' => session('permission_matrix', []),
+            'permissionState' => $permissions->matrix(),
+            'capabilities' => config('rbac.capabilities'),
+            'actions' => array_combine(
+                config('rbac.actions'),
+                array_map(fn (string $action) => ucfirst($action), config('rbac.actions')),
+            ),
         ]);
     }
 
     public function savePermissions(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'role' => ['required', 'in:admin,receptionist,cashier,housekeeping'],
+            'role' => ['required', Rule::in(config('rbac.roles'))],
             'permissions' => ['nullable', 'array'],
-            'permissions.*' => ['array'],
+            'permissions.*' => ['array:'.implode(',', config('rbac.actions'))],
             'permissions.*.*' => ['boolean'],
         ]);
 
-        $matrix = session('permission_matrix', []);
-        $matrix[$validated['role']] = $validated['permissions'] ?? [];
-        session(['permission_matrix' => $matrix]);
+        $capabilities = array_keys(config('rbac.capabilities'));
+        $actions = config('rbac.actions');
+
+        DB::transaction(function () use ($request, $validated, $capabilities, $actions): void {
+            foreach ($capabilities as $capability) {
+                foreach ($actions as $action) {
+                    RolePermission::updateOrCreate(
+                        ['role' => $validated['role'], 'permission' => "{$capability}.{$action}"],
+                        [
+                            'granted' => (bool) data_get($validated, "permissions.{$capability}.{$action}", false),
+                            'updated_by' => $request->user()->id,
+                        ],
+                    );
+                }
+            }
+        });
 
         return to_route('admin.permissions.index', ['role' => $validated['role']])
             ->with('status', 'Permission changes saved for this role.');
@@ -111,12 +132,10 @@ class AdminUserRoleController extends Controller
     public function resetPermissions(Request $request): RedirectResponse
     {
         $role = $request->validate([
-            'role' => ['required', 'in:admin,receptionist,cashier,housekeeping'],
+            'role' => ['required', Rule::in(config('rbac.roles'))],
         ])['role'];
 
-        $matrix = session('permission_matrix', []);
-        unset($matrix[$role]);
-        session(['permission_matrix' => $matrix]);
+        RolePermission::where('role', $role)->delete();
 
         return to_route('admin.permissions.index', ['role' => $role])
             ->with('status', 'Permission changes reset to the standard defaults.');

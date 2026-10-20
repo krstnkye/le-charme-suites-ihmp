@@ -61,14 +61,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/system-manual', SystemManualController::class)->name('system-manual');
 
     Route::middleware('role:receptionist')->group(function () {
-        Route::resource('guests', GuestController::class);
+        Route::resource('guests', GuestController::class)
+            ->middlewareFor(['index', 'show'], 'permission:guests.read')
+            ->middlewareFor(['create', 'store', 'edit', 'update'], 'permission:guests.write')
+            ->middlewareFor('destroy', 'permission:guests.override');
         Route::get('/reservations/{reservation}/registration-card', [ReservationController::class, 'registrationCard'])
+            ->middleware('permission:reservations.export')
             ->name('reservations.registration-card');
-        Route::resource('reservations', ReservationController::class);
-        Route::get('/check-ins', [CheckInController::class, 'index'])->name('check-ins.index');
-        Route::get('/check-ins/create', [CheckInController::class, 'create'])->name('check-ins.create');
-        Route::post('/check-ins', [CheckInController::class, 'store'])->name('check-ins.store');
+        Route::resource('reservations', ReservationController::class)
+            ->middlewareFor(['index', 'show'], 'permission:reservations.read')
+            ->middlewareFor(['create', 'store', 'edit', 'update'], 'permission:reservations.write')
+            ->middlewareFor('destroy', 'permission:reservations.override');
+        Route::get('/check-ins', [CheckInController::class, 'index'])->middleware('permission:reservations.read')->name('check-ins.index');
+        Route::get('/check-ins/create', [CheckInController::class, 'create'])->middleware('permission:reservations.execute')->name('check-ins.create');
+        Route::post('/check-ins', [CheckInController::class, 'store'])->middleware('permission:reservations.execute')->name('check-ins.store');
         Route::post('/reservations/{reservation}/confirmation', ReservationConfirmationController::class)
+            ->middleware('permission:reservations.execute')
             ->name('reservations.confirmation.store');
     });
 
@@ -92,10 +100,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:receptionist,housekeeping')->group(function () {
-        Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
-        Route::get('/rooms/{room}', [RoomController::class, 'show'])->whereNumber('room')->name('rooms.show');
-        Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->whereNumber('room')->name('rooms.edit');
-        Route::match(['put', 'patch'], '/rooms/{room}', [RoomController::class, 'update'])->whereNumber('room')->name('rooms.update');
+        Route::get('/rooms', [RoomController::class, 'index'])->middleware('permission:rooms.read')->name('rooms.index');
+        Route::get('/rooms/{room}', [RoomController::class, 'show'])->middleware('permission:rooms.read')->whereNumber('room')->name('rooms.show');
+        Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->middleware('permission:rooms.write')->whereNumber('room')->name('rooms.edit');
+        Route::match(['put', 'patch'], '/rooms/{room}', [RoomController::class, 'update'])->middleware('permission:rooms.write')->whereNumber('room')->name('rooms.update');
     });
 
     Route::middleware('role:housekeeping')->group(function () {
@@ -103,21 +111,22 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:receptionist,housekeeping')->group(function () {
-        Route::post('/housekeeping-tasks', [HousekeepingTaskController::class, 'store'])->name('housekeeping-tasks.store');
+        Route::post('/housekeeping-tasks', [HousekeepingTaskController::class, 'store'])->middleware('permission:rooms.write')->name('housekeeping-tasks.store');
         Route::patch('/housekeeping-tasks/{housekeepingTask}', [HousekeepingTaskController::class, 'update'])
+            ->middleware('permission:rooms.write')
             ->name('housekeeping-tasks.update');
     });
 
     Route::middleware('role:receptionist,cashier')->group(function () {
-        Route::get('/check-outs', [CheckOutController::class, 'index'])->name('check-outs.index');
-        Route::get('/check-outs/history', [CheckOutController::class, 'history'])->name('check-outs.history');
-        Route::get('/check-outs/create', [CheckOutController::class, 'create'])->name('check-outs.create');
-        Route::get('/check-outs/check-ins/{checkIn}/bill-preview', [CheckOutController::class, 'billPreview'])->name('check-outs.bill-preview');
-        Route::get('/check-outs/{checkOut}/receipt', [CheckOutController::class, 'receipt'])->name('check-outs.receipt');
-        Route::post('/check-outs', [CheckOutController::class, 'store'])->name('check-outs.store');
+        Route::get('/check-outs', [CheckOutController::class, 'index'])->middleware('permission:guest_bills.read')->name('check-outs.index');
+        Route::get('/check-outs/history', [CheckOutController::class, 'history'])->middleware('permission:guest_bills.read')->name('check-outs.history');
+        Route::get('/check-outs/create', [CheckOutController::class, 'create'])->middleware('permission:guest_bills.write')->name('check-outs.create');
+        Route::get('/check-outs/check-ins/{checkIn}/bill-preview', [CheckOutController::class, 'billPreview'])->middleware('permission:guest_bills.read')->name('check-outs.bill-preview');
+        Route::get('/check-outs/{checkOut}/receipt', [CheckOutController::class, 'receipt'])->middleware('permission:guest_bills.export')->name('check-outs.receipt');
+        Route::post('/check-outs', [CheckOutController::class, 'store'])->middleware('permission:guest_bills.execute')->name('check-outs.store');
     });
 
     Route::middleware('role:cashier')->group(function () {
-        Route::get('/reports', ReportController::class)->name('reports.index');
+        Route::get('/reports', ReportController::class)->middleware('permission:audit.read')->name('reports.index');
     });
 });

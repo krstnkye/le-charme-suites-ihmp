@@ -18,16 +18,9 @@
         'cashier' => 'Finance & Billing',
         'housekeeping' => 'Rooms & Facilities',
     ];
-    $capabilities = [
-        ['key' => 'reservations', 'module' => 'Reservations', 'icon' => 'calendar_month', 'token' => 'reservations.manage', 'description' => 'Create and modify room bookings, arrival dates, and guest assignments.', 'risk' => 'High', 'defaults' => ['admin' => ['read' => true, 'write' => true, 'execute' => true, 'override' => true, 'export' => true], 'owner' => ['read' => true, 'write' => true, 'execute' => true, 'override' => true, 'export' => true], 'receptionist' => ['read' => true, 'write' => true, 'execute' => true, 'override' => false, 'export' => false], 'cashier' => ['read' => true, 'write' => false, 'execute' => false, 'override' => false, 'export' => false], 'housekeeping' => ['read' => true, 'write' => false, 'execute' => false, 'override' => false, 'export' => false]]],
-        ['key' => 'guests', 'module' => 'Guest Management', 'icon' => 'badge', 'token' => 'guests.directory', 'description' => 'View and maintain guest profiles, contacts, and identification records.', 'risk' => 'Medium', 'defaults' => ['admin' => ['read' => true, 'write' => true, 'execute' => true, 'override' => true, 'export' => true], 'owner' => ['read' => true, 'write' => true, 'execute' => false, 'override' => false, 'export' => true], 'receptionist' => ['read' => true, 'write' => true, 'execute' => true, 'override' => false, 'export' => false], 'cashier' => ['read' => true, 'write' => false, 'execute' => false, 'override' => false, 'export' => false], 'housekeeping' => ['read' => false, 'write' => false, 'execute' => false, 'override' => false, 'export' => false]]],
-        ['key' => 'rooms', 'module' => 'Room Status & Inventory', 'icon' => 'meeting_room', 'token' => 'rooms.status_update', 'description' => 'Update room availability, maintenance state, and housekeeping readiness.', 'risk' => 'High', 'defaults' => ['admin' => ['read' => true, 'write' => true, 'execute' => true, 'override' => true, 'export' => true], 'owner' => ['read' => true, 'write' => false, 'execute' => false, 'override' => false, 'export' => true], 'receptionist' => ['read' => true, 'write' => false, 'execute' => false, 'override' => false, 'export' => false], 'cashier' => ['read' => false, 'write' => false, 'execute' => false, 'override' => false, 'export' => false], 'housekeeping' => ['read' => true, 'write' => true, 'execute' => true, 'override' => false, 'export' => false]]],
-        ['key' => 'guest bills', 'module' => 'Transactions & Billing', 'icon' => 'receipt_long', 'token' => 'guest bills.adjust', 'description' => 'Post charges, settle balances, and perform approved guest bill adjustments.', 'risk' => 'Critical', 'defaults' => ['admin' => ['read' => true, 'write' => true, 'execute' => true, 'override' => true, 'export' => true], 'owner' => ['read' => true, 'write' => false, 'execute' => true, 'override' => true, 'export' => true], 'receptionist' => ['read' => true, 'write' => false, 'execute' => false, 'override' => false, 'export' => false], 'cashier' => ['read' => true, 'write' => true, 'execute' => true, 'override' => true, 'export' => true], 'housekeeping' => ['read' => false, 'write' => false, 'execute' => false, 'override' => false, 'export' => false]]],
-        ['key' => 'audit', 'module' => 'Audit Logs & Reports', 'icon' => 'shield', 'token' => 'audit.export', 'description' => 'Review operational history and export protected audit records.', 'risk' => 'Critical', 'defaults' => ['admin' => ['read' => true, 'write' => false, 'execute' => true, 'override' => true, 'export' => true], 'owner' => ['read' => true, 'write' => false, 'execute' => false, 'override' => false, 'export' => true], 'receptionist' => ['read' => false, 'write' => false, 'execute' => false, 'override' => false, 'export' => false], 'cashier' => ['read' => true, 'write' => false, 'execute' => false, 'override' => false, 'export' => false], 'housekeeping' => ['read' => false, 'write' => false, 'execute' => false, 'override' => false, 'export' => false]]],
-    ];
-    $actions = ['read' => 'Read', 'write' => 'Write', 'execute' => 'Execute', 'override' => 'Override', 'export' => 'Export'];
     $saved = $permissionState[$selectedRole] ?? [];
-    $focusCapability = $capabilities[3];
+    $capabilities = collect($capabilities)->map(fn ($capability, $key) => [...$capability, 'key' => $key])->values()->all();
+    $focusCapability = collect($capabilities)->firstWhere('key', 'guest_bills') ?? $capabilities[0];
     $selectedRoleCount = (int) ($roleCounts[$selectedRole] ?? 0);
 @endphp
 
@@ -240,7 +233,7 @@
                         <div class="flex flex-col justify-between gap-2 border-t border-surface-container-highest bg-surface-container-low/30 p-4 text-xs text-slate-500 sm:flex-row sm:items-center">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm text-secondary">info</span>
-                                <span>Changes apply to new sessions after saving this matrix.</span>
+                                <span>Saved changes are enforced immediately on protected pages.</span>
                             </div>
                             <span class="font-mono font-semibold text-outline">Role token: {{ $selectedRole }}.{{ Str::slug($roleTiers[$selectedRole]) }}</span>
                         </div>

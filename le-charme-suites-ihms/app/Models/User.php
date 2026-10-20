@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Services\PermissionService;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -50,5 +51,15 @@ class User extends Authenticatable
     public function assignedHousekeepingTasks(): HasMany
     {
         return $this->hasMany(HousekeepingTask::class, 'assigned_to');
+    }
+
+    public function jwtTokens(): HasMany
+    {
+        return $this->hasMany(JwtToken::class);
+    }
+
+    public function hasPermissionTo(string $permission): bool
+    {
+        return app(PermissionService::class)->allows($this, $permission);
     }
 }

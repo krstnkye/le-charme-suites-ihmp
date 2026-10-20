@@ -162,7 +162,7 @@ class AuthController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', new WorkEmail, 'unique:users,email'],
-            'role' => ['required', 'in:admin,receptionist,cashier,housekeeping'],
+            'role' => ['required', 'in:receptionist,cashier,housekeeping'],
             'password' => ['required', 'confirmed', Password::min(8)],
         ], [
             'password.confirmed' => 'Passwords do not match.',

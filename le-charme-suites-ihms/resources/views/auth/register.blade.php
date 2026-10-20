@@ -83,7 +83,7 @@
             @endif
 
             @php
-                $roleOptions = config('hotel.staff_roles');
+                $roleOptions = collect(config('hotel.staff_roles'))->except('admin')->all();
                 $roleLabels = collect($roleOptions)
                     ->mapWithKeys(fn ($role, $value) => [$value => $role['label']])
                     ->all();
