@@ -85,6 +85,9 @@ class FrontDeskSidebarTest extends TestCase
             ->assertSee('data-search="res-00001', false)
             ->assertSee('value="'.$reservation->id.'"', false)
             ->assertSee('selected', false)
-            ->assertSee('function filterReservations()', false);
+            ->assertSee('function filterReservations()', false)
+            ->assertSee('id="registrationCard"', false)
+            ->assertSee('Guest Registration Card')
+            ->assertSee('function printRegistrationCard()', false);
     }
 }

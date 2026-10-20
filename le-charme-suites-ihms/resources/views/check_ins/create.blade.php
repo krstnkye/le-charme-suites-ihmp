@@ -16,10 +16,16 @@
             'guest' => $guest?->full_name ?: 'Guest profile unavailable',
             'email' => $guest?->email ?: 'No email on file',
             'phone' => $guest?->phone ?: 'No phone on file',
+            'address' => $guest?->address ?: 'Not provided',
+            'identification' => trim(implode(' ', array_filter([
+                $guest?->identification_type,
+                $guest?->identification_number,
+            ]))) ?: 'Not recorded',
             'room' => $room?->room_number ?: 'Unassigned',
             'room_type' => $room?->room_type ?: 'Room',
             'room_status' => ucfirst($room?->status ?: 'unknown'),
             'capacity' => $room?->capacity ?: 1,
+            'guests' => $reservation->number_of_guests,
             'check_in' => $checkInDate?->format('M d, Y') ?: 'Not recorded',
             'check_out' => $checkOutDate?->format('M d, Y') ?: 'Pending',
             'nights' => $nights,
@@ -82,11 +88,37 @@
         .lux-card {
             box-shadow: 0 18px 45px -24px rgba(1, 22, 45, 0.35), 0 2px 8px rgba(117, 90, 40, 0.08);
         }
+
+        .registration-card {
+            display: none;
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+
+            .screen-shell {
+                display: none !important;
+            }
+
+            .registration-card {
+                display: block !important;
+                color: #01162d;
+                font-family: Arial, sans-serif;
+            }
+
+            .registration-card * {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
     </style>
     @include('partials.favicon')
 </head>
 <body class="min-h-screen bg-background font-sans text-primary antialiased">
-    <div class="flex min-h-screen">
+    <div class="screen-shell flex min-h-screen">
         @include('partials.front-desk-sidebar', ['active' => 'check-ins'])
 
         <main class="min-h-screen flex-1 lg:ml-64">
@@ -262,8 +294,8 @@
                                                 <span class="text-xs font-bold text-secondary">Optional demo fields</span>
                                             </div>
                                             <div class="grid gap-3 md:grid-cols-2">
-                                                <input type="text" class="rounded-lg border border-outline-variant bg-white px-3 py-2 text-xs font-mono focus:border-secondary focus:ring-secondary" placeholder="Keycard UID #01">
-                                                <input type="text" class="rounded-lg border border-outline-variant bg-white px-3 py-2 text-xs font-mono focus:border-secondary focus:ring-secondary" placeholder="Keycard UID #02">
+                                                <input id="keycardOne" type="text" class="rounded-lg border border-outline-variant bg-white px-3 py-2 text-xs font-mono focus:border-secondary focus:ring-secondary" placeholder="Keycard UID #01">
+                                                <input id="keycardTwo" type="text" class="rounded-lg border border-outline-variant bg-white px-3 py-2 text-xs font-mono focus:border-secondary focus:ring-secondary" placeholder="Keycard UID #02">
                                             </div>
                                         </div>
                                     </div>
@@ -280,21 +312,21 @@
                                         <p class="mb-3 text-xs font-bold uppercase tracking-wider text-primary">Pre-check-in operational protocol</p>
                                         <div class="space-y-3">
                                             <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-outline-variant/40 bg-surface-container p-3 text-sm transition hover:bg-surface-container-low">
-                                                <input type="checkbox" class="mt-0.5 rounded border-outline-variant text-secondary focus:ring-secondary">
+                                                <input id="identityVerified" type="checkbox" class="mt-0.5 rounded border-outline-variant text-secondary focus:ring-secondary">
                                                 <span>
                                                     <strong class="block">Identity verified</strong>
                                                     <span class="text-xs text-slate-500">Valid ID or guest profile checked before issuing access.</span>
                                                 </span>
                                             </label>
                                             <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-outline-variant/40 bg-surface-container p-3 text-sm transition hover:bg-surface-container-low">
-                                                <input type="checkbox" class="mt-0.5 rounded border-outline-variant text-secondary focus:ring-secondary">
+                                                <input id="guaranteeConfirmed" type="checkbox" class="mt-0.5 rounded border-outline-variant text-secondary focus:ring-secondary">
                                                 <span>
                                                     <strong class="block">Deposit or guarantee confirmed</strong>
                                                     <span class="text-xs text-slate-500">Front desk confirms payment guarantee or hotel policy requirement.</span>
                                                 </span>
                                             </label>
                                             <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-outline-variant/40 bg-surface-container p-3 text-sm transition hover:bg-surface-container-low">
-                                                <input type="checkbox" class="mt-0.5 rounded border-outline-variant text-secondary focus:ring-secondary">
+                                                <input id="roomReady" type="checkbox" class="mt-0.5 rounded border-outline-variant text-secondary focus:ring-secondary">
                                                 <span>
                                                     <strong class="block">Room and keycards ready</strong>
                                                     <span class="text-xs text-slate-500">Room assignment is ready before completing check-in.</span>
@@ -309,7 +341,7 @@
                                                 <span class="material-symbols-outlined text-[19px]">check</span>
                                                 Check In
                                             </button>
-                                            <button id="printArrivalButton" type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-outline-variant bg-white px-4 py-3 text-sm font-bold text-primary shadow-sm transition hover:border-secondary">
+                                            <button id="printArrivalButton" type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-outline-variant bg-white px-4 py-3 text-sm font-bold text-primary shadow-sm transition hover:border-secondary disabled:cursor-not-allowed disabled:opacity-50" disabled>
                                                 <span class="material-symbols-outlined text-[18px]">print</span>
                                                 Print Registration Card
                                             </button>
@@ -416,6 +448,68 @@
         </main>
     </div>
 
+    <section id="registrationCard" class="registration-card" aria-hidden="true">
+        <div style="border: 2px solid #01162d; min-height: 265mm; padding: 12mm; position: relative;">
+            <header style="display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #755a28; padding-bottom: 7mm;">
+                <div style="display: flex; align-items: center; gap: 7mm;">
+                    <img src="{{ asset('images/le-charme-logo-white.png') }}" alt="Le Charme Suites" style="width: 42mm; height: 18mm; object-fit: contain;">
+                    <div>
+                        <p style="margin: 0; color: #755a28; font-size: 9pt; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;">Le Charme Suites Subic</p>
+                        <h1 style="margin: 1mm 0 0; font-family: Georgia, serif; font-size: 22pt;">Guest Registration Card</h1>
+                        <p style="margin: 1mm 0 0; color: #475569; font-size: 8.5pt;">Integrated Hotel Management Portal (IHMP)</p>
+                    </div>
+                </div>
+                <div style="text-align: right; font-size: 8.5pt;">
+                    <p style="margin: 0; color: #64748b;">Registration reference</p>
+                    <strong id="cardReference" style="display: block; margin-top: 1mm; font-family: monospace; font-size: 12pt;">--</strong>
+                    <span id="cardPreparedAt" style="display: block; margin-top: 2mm; color: #64748b;"></span>
+                </div>
+            </header>
+
+            <div style="margin-top: 7mm; background: #01162d; color: white; padding: 3mm 4mm; font-size: 9pt; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Guest Information</div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 9.5pt;">
+                <tr><td style="width: 22%; border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Guest name</td><td id="cardGuest" colspan="3" style="border: 1px solid #cbd5e1; padding: 3mm; font-weight: 700;">--</td></tr>
+                <tr><td style="border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Email</td><td id="cardEmail" style="width: 28%; border: 1px solid #cbd5e1; padding: 3mm;">--</td><td style="width: 18%; border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Phone</td><td id="cardPhone" style="width: 32%; border: 1px solid #cbd5e1; padding: 3mm;">--</td></tr>
+                <tr><td style="border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Address</td><td id="cardAddress" colspan="3" style="border: 1px solid #cbd5e1; padding: 3mm;">--</td></tr>
+                <tr><td style="border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Identification</td><td id="cardIdentification" colspan="3" style="border: 1px solid #cbd5e1; padding: 3mm;">--</td></tr>
+            </table>
+
+            <div style="margin-top: 6mm; background: #01162d; color: white; padding: 3mm 4mm; font-size: 9pt; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Stay and Room Details</div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 9.5pt;">
+                <tr><td style="width: 18%; border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Arrival</td><td id="cardArrival" style="width: 32%; border: 1px solid #cbd5e1; padding: 3mm; font-weight: 700;">--</td><td style="width: 18%; border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Departure</td><td id="cardDeparture" style="width: 32%; border: 1px solid #cbd5e1; padding: 3mm; font-weight: 700;">--</td></tr>
+                <tr><td style="border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Room</td><td id="cardRoom" style="border: 1px solid #cbd5e1; padding: 3mm;">--</td><td style="border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Guests / nights</td><td id="cardStay" style="border: 1px solid #cbd5e1; padding: 3mm;">--</td></tr>
+                <tr><td style="border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Room rate</td><td id="cardRate" style="border: 1px solid #cbd5e1; padding: 3mm;">--</td><td style="border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Suggested deposit</td><td id="cardDeposit" style="border: 1px solid #cbd5e1; padding: 3mm;">--</td></tr>
+                <tr><td style="border: 1px solid #cbd5e1; padding: 3mm; color: #64748b;">Keycards</td><td id="cardKeycards" colspan="3" style="border: 1px solid #cbd5e1; padding: 3mm;">Not assigned</td></tr>
+            </table>
+
+            <div style="margin-top: 6mm; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm;">
+                <div style="border: 1px solid #cbd5e1; padding: 4mm;">
+                    <p style="margin: 0 0 3mm; color: #755a28; font-size: 9pt; font-weight: 700; text-transform: uppercase;">Arrival verification</p>
+                    <p id="cardIdentityStatus" style="margin: 2mm 0;">[ ] Identity verified</p>
+                    <p id="cardGuaranteeStatus" style="margin: 2mm 0;">[ ] Deposit or guarantee confirmed</p>
+                    <p id="cardRoomStatus" style="margin: 2mm 0;">[ ] Room and keycards ready</p>
+                </div>
+                <div style="border: 1px solid #cbd5e1; padding: 4mm;">
+                    <p style="margin: 0 0 3mm; color: #755a28; font-size: 9pt; font-weight: 700; text-transform: uppercase;">Front desk notes</p>
+                    <p id="cardNotes" style="margin: 0; min-height: 18mm; white-space: pre-wrap;">None recorded.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 7mm; border: 1px solid #cbd5e1; background: #f8fafc; padding: 4mm; font-size: 8.5pt; line-height: 1.5;">
+                I confirm that the information written on this registration card is accurate. I acknowledge the assigned room and the hotel's applicable policies, charges, and check-out requirements.
+            </div>
+
+            <div style="margin-top: 16mm; display: grid; grid-template-columns: 1fr 1fr; gap: 16mm; font-size: 9pt;">
+                <div style="border-top: 1px solid #01162d; padding-top: 2mm; text-align: center;">Guest signature over printed name</div>
+                <div style="border-top: 1px solid #01162d; padding-top: 2mm; text-align: center;">Front Desk representative: <span id="cardPreparedBy">--</span></div>
+            </div>
+
+            <footer style="position: absolute; bottom: 8mm; left: 12mm; right: 12mm; border-top: 1px solid #cbd5e1; padding-top: 3mm; text-align: center; color: #64748b; font-size: 7.5pt;">
+                {{ config('hotel.address') }} &middot; {{ config('hotel.phone') }} &middot; {{ config('hotel.email') }}
+            </footer>
+        </div>
+    </section>
+
     <script>
         const reservations = @json($reservationPreview);
         const reservationSelect = document.getElementById('reservation_id');
@@ -423,6 +517,7 @@
         const reservationSearchButton = document.getElementById('reservationSearchButton');
         const reservationSearchClear = document.getElementById('reservationSearchClear');
         const reservationSearchStatus = document.getElementById('reservationSearchStatus');
+        const printArrivalButton = document.getElementById('printArrivalButton');
 
         const currency = (value) => new Intl.NumberFormat('en-PH', {
             style: 'currency',
@@ -454,6 +549,7 @@
                 deposit: 0,
                 folio: '--',
                 capacity: 0,
+                guests: 0,
             };
 
             document.getElementById('roomAssignmentPreview').textContent = selected ? `Room ${data.room} - ${data.room_type}` : 'No room selected';
@@ -472,6 +568,56 @@
             document.getElementById('roomRatePreview').textContent = currency(data.room_rate);
             document.getElementById('roomTotalPreview').textContent = currency(data.room_total);
             document.getElementById('depositPreview').textContent = currency(data.deposit);
+            printArrivalButton.disabled = !selected;
+        }
+
+        function setCardText(id, value) {
+            document.getElementById(id).textContent = value || '--';
+        }
+
+        function verificationMark(checked, label) {
+            return `${checked ? '[X]' : '[ ]'} ${label}`;
+        }
+
+        function printRegistrationCard() {
+            const selected = selectedReservation();
+
+            if (!selected) {
+                reservationSelect.focus();
+                return;
+            }
+
+            const keycards = [
+                document.getElementById('keycardOne').value.trim(),
+                document.getElementById('keycardTwo').value.trim(),
+            ].filter(Boolean);
+            const notes = document.getElementById('notes').value.trim();
+
+            setCardText('cardReference', selected.folio);
+            setCardText('cardPreparedAt', new Intl.DateTimeFormat('en-PH', {
+                timeZone: @json(config('app.timezone')),
+                dateStyle: 'medium',
+                timeStyle: 'short',
+            }).format(new Date()));
+            setCardText('cardGuest', selected.guest);
+            setCardText('cardEmail', selected.email);
+            setCardText('cardPhone', selected.phone);
+            setCardText('cardAddress', selected.address);
+            setCardText('cardIdentification', selected.identification);
+            setCardText('cardArrival', selected.check_in);
+            setCardText('cardDeparture', selected.check_out);
+            setCardText('cardRoom', `Room ${selected.room} - ${selected.room_type}`);
+            setCardText('cardStay', `${selected.guests} ${Number(selected.guests) === 1 ? 'guest' : 'guests'} / ${selected.nights} ${Number(selected.nights) === 1 ? 'night' : 'nights'}`);
+            setCardText('cardRate', currency(selected.room_rate));
+            setCardText('cardDeposit', currency(selected.deposit));
+            setCardText('cardKeycards', keycards.length ? keycards.join(' / ') : 'Not assigned');
+            setCardText('cardNotes', notes || 'None recorded.');
+            setCardText('cardPreparedBy', @json($currentUser?->name ?? 'Front Desk Staff'));
+            setCardText('cardIdentityStatus', verificationMark(document.getElementById('identityVerified').checked, 'Identity verified'));
+            setCardText('cardGuaranteeStatus', verificationMark(document.getElementById('guaranteeConfirmed').checked, 'Deposit or guarantee confirmed'));
+            setCardText('cardRoomStatus', verificationMark(document.getElementById('roomReady').checked, 'Room and keycards ready'));
+
+            window.print();
         }
 
         function normalizeSearch(value) {
@@ -542,7 +688,7 @@
                 filterReservations();
             }
         });
-        document.getElementById('printArrivalButton').addEventListener('click', () => window.print());
+        printArrivalButton.addEventListener('click', printRegistrationCard);
 
         updatePreview();
     </script>
