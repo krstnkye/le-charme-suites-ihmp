@@ -1691,14 +1691,14 @@
                 <div>
                     <div class="mb-2 inline-flex items-center gap-2 rounded bg-secondary/15 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary">
                         <span class="material-symbols-outlined text-sm">build</span>
-                        Engineering Dispatch Terminal
+                        Maintenance Issue Report
                     </div>
                     <h3 class="font-serif text-3xl font-bold text-primary">Report Maintenance Defect or Room Discrepancy</h3>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Direct incident logging and dispatch terminal to Engineering &amp; Facilities for room hardware, plumbing, HVAC, or smart-lock failures.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Record a room problem and place the room in the maintenance queue shared with Front Desk and Housekeeping.</p>
                 </div>
                 <span class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-slate-600">
-                    <span class="material-symbols-outlined text-base text-secondary">schedule</span>
-                    Avg. Dispatch Response: 14 Mins
+                    <span class="material-symbols-outlined text-base text-secondary">database</span>
+                    Saved in shared room records
                 </span>
             </div>
 
@@ -1851,7 +1851,7 @@
                                     </button>
                                     <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-primary/90" {{ $selectedReportRoom ? '' : 'disabled' }}>
                                         <span class="material-symbols-outlined text-base text-[#ffdeaa]">send</span>
-                                        Submit Work Order to Engineering
+                                        Save Maintenance Report
                                     </button>
                                 </div>
                             </div>

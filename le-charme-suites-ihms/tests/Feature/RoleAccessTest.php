@@ -661,7 +661,7 @@ class RoleAccessTest extends TestCase
             ->assertOk()
             ->assertSee('Report Maintenance Defect or Room Discrepancy')
             ->assertSee('Room Location &amp; Defect Classification', false)
-            ->assertSee('Submit Work Order to Engineering')
+            ->assertSee('Save Maintenance Report')
             ->assertSee('Maintenance Coordination')
             ->assertSee('Open Department Messages')
             ->assertSee('Room 701');
