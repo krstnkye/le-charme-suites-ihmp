@@ -133,6 +133,7 @@ class OnlineBookingTest extends TestCase
             ->assertSessionHas('status');
         $this->assertSame('reserved', $reservation->fresh()->status);
 
+        $this->travelTo($reservation->check_in_date->setTime(14, 0));
         $this->actingAs($receptionist)
             ->post(route('check-ins.store'), ['reservation_id' => $reservation->id])
             ->assertRedirect(route('check-ins.index'));

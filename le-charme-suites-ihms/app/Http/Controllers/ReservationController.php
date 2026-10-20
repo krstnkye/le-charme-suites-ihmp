@@ -11,11 +11,25 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ReservationController extends Controller
 {
+    /**
+     * Statuses the edit form may move a reservation to. Check-in and check-out have
+     * their own workflows (room assignment, folio, receipt), so they are not offered here.
+     *
+     * @var array<string, list<string>>
+     */
+    private const EDITABLE_STATUS_TRANSITIONS = [
+        'pending' => ['pending', 'reserved', 'cancelled'],
+        'reserved' => ['reserved', 'cancelled'],
+        'cancelled' => ['cancelled', 'reserved'],
+        'checked_in' => ['checked_in'],
+    ];
+
     public function index(Request $request): View
     {
         $status = (string) $request->string('status');
@@ -63,13 +77,18 @@ class ReservationController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $data = $this->validatedData($request);
+        $data = $this->validatedData($request, isNewReservation: true);
 
         DB::transaction(function () use ($data) {
             $room = Room::whereKey($data['room_id'])->lockForUpdate()->firstOrFail();
 
-            abort_if(in_array($room->status, ['maintenance'], true), 422, 'The selected room is not available.');
+            if ($room->status === 'maintenance') {
+                throw ValidationException::withMessages([
+                    'room_id' => 'The selected room is under maintenance and cannot be booked.',
+                ]);
+            }
 
+            $this->ensureRoomFitsParty($room, (int) $data['number_of_guests']);
             $this->ensureRoomIsAvailable($room, $data['check_in_date'], $data['check_out_date']);
 
             if (empty($data['guest_id'])) {
@@ -141,10 +160,15 @@ class ReservationController extends Controller
         return view('reservations.registration-card', compact('reservation'));
     }
 
-    public function edit(Reservation $reservation): View
+    public function edit(Reservation $reservation): View|RedirectResponse
     {
+        if ($reservation->status === 'completed') {
+            return $this->completedStayIsLocked($reservation);
+        }
+
         return view('reservations.edit', [
             'reservation' => $reservation,
+            'statusOptions' => self::EDITABLE_STATUS_TRANSITIONS[$reservation->status] ?? [$reservation->status],
             'guests' => Guest::orderBy('last_name')->get(),
             'rooms' => Room::where(fn ($query) => $query
                 ->where('status', 'available')
@@ -156,9 +180,15 @@ class ReservationController extends Controller
 
     public function update(Request $request, Reservation $reservation): RedirectResponse
     {
+        if ($reservation->status === 'completed') {
+            return $this->completedStayIsLocked($reservation);
+        }
+
         $data = $this->validatedData($request);
         $data['status'] = $request->validate([
-            'status' => ['required', 'in:pending,reserved,checked_in,completed,cancelled'],
+            'status' => ['required', Rule::in(self::EDITABLE_STATUS_TRANSITIONS[$reservation->status] ?? [$reservation->status])],
+        ], [
+            'status.in' => 'Use the check-in and check-out screens to move a stay into or out of the hotel.',
         ])['status'];
 
         DB::transaction(function () use ($reservation, $data) {
@@ -191,15 +221,38 @@ class ReservationController extends Controller
             }
 
             $targetRoom = Room::whereKey($data['room_id'])->lockForUpdate()->firstOrFail();
-            $this->ensureRoomIsAvailable($targetRoom, $data['check_in_date'], $data['check_out_date'], $reservation->id);
+
+            if ($data['status'] !== 'cancelled') {
+                $this->ensureRoomFitsParty($targetRoom, (int) $data['number_of_guests']);
+                $this->ensureRoomIsAvailable($targetRoom, $data['check_in_date'], $data['check_out_date'], $reservation->id);
+            }
+
+            $roomChanged = $oldRoomId !== (int) $data['room_id'];
+
+            if ($roomChanged && $data['status'] === 'checked_in' && in_array($targetRoom->status, ['occupied', 'maintenance'], true)) {
+                throw ValidationException::withMessages([
+                    'room_id' => 'An in-house guest can only be moved to a room that is not occupied or under maintenance.',
+                ]);
+            }
 
             $reservation->update($data);
 
-            if ($oldRoomId !== (int) $data['room_id']) {
-                if ($data['status'] === 'checked_in') {
-                    Room::whereKey($oldRoomId)->update(['status' => 'available']);
-                    $targetRoom->update(['status' => 'occupied']);
-                }
+            if ($roomChanged && $data['status'] === 'checked_in') {
+                Room::whereKey($oldRoomId)->update(['status' => 'cleaning']);
+                $targetRoom->update(['status' => 'occupied']);
+                $reservation->checkIn()->where('status', 'active')->update(['room_id' => $targetRoom->id]);
+                RoomStatusLog::create([
+                    'room_id' => $oldRoomId,
+                    'status' => 'cleaning',
+                    'notes' => 'In-house guest moved to room '.$targetRoom->room_number.'.',
+                    'changed_at' => now(),
+                ]);
+                RoomStatusLog::create([
+                    'room_id' => $targetRoom->id,
+                    'status' => 'occupied',
+                    'notes' => 'In-house guest moved in from another room.',
+                    'changed_at' => now(),
+                ]);
             }
 
             if ($data['status'] === 'cancelled' && $reservation->room?->status === 'reserved') {
@@ -212,8 +265,14 @@ class ReservationController extends Controller
 
     public function destroy(Reservation $reservation): RedirectResponse
     {
+        if (in_array($reservation->status, ['checked_in', 'completed'], true)) {
+            return back()->withErrors([
+                'reservation' => 'Reservations with a check-in or receipt cannot be deleted. Cancel upcoming bookings instead.',
+            ]);
+        }
+
         DB::transaction(function () use ($reservation) {
-            if (in_array($reservation->status, ['reserved', 'cancelled'], true)) {
+            if ($reservation->room?->status === 'reserved') {
                 $reservation->room()->update(['status' => 'available']);
             }
 
@@ -223,7 +282,14 @@ class ReservationController extends Controller
         return redirect()->route('reservations.index')->with('status', 'Reservation deleted.');
     }
 
-    private function validatedData(Request $request): array
+    private function completedStayIsLocked(Reservation $reservation): RedirectResponse
+    {
+        return redirect()
+            ->route('reservations.show', $reservation)
+            ->withErrors(['status' => 'Completed stays are locked because their receipt has already been issued.']);
+    }
+
+    private function validatedData(Request $request, bool $isNewReservation = false): array
     {
         return $request->validate([
             'guest_id' => ['nullable', 'exists:guests,id'],
@@ -235,11 +301,20 @@ class ReservationController extends Controller
             'manual_guest_identification_type' => ['nullable', 'string', 'max:100'],
             'manual_guest_identification_number' => ['nullable', 'string', 'max:100'],
             'room_id' => ['required', 'exists:rooms,id'],
-            'check_in_date' => ['required', 'date'],
+            'check_in_date' => ['required', 'date', ...($isNewReservation ? ['after_or_equal:today'] : [])],
             'check_out_date' => ['required', 'date', 'after:check_in_date'],
             'number_of_guests' => ['required', 'integer', 'min:1'],
             'notes' => ['nullable', 'string'],
         ]);
+    }
+
+    private function ensureRoomFitsParty(Room $room, int $numberOfGuests): void
+    {
+        if ($numberOfGuests > $room->capacity) {
+            throw ValidationException::withMessages([
+                'number_of_guests' => "Room {$room->room_number} sleeps at most {$room->capacity} guests.",
+            ]);
+        }
     }
 
     private function ensureRoomIsAvailable(Room $room, string $checkInDate, string $checkOutDate, ?int $exceptReservationId = null): void

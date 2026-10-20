@@ -153,6 +153,39 @@
                 @endforeach
             </section>
 
+            @if ($pendingUsers->isNotEmpty())
+                <section id="pending-approvals" class="folio-shadow overflow-hidden rounded-xl border border-secondary/40 bg-white">
+                    <div class="flex flex-col justify-between gap-2 border-b border-surface-container-highest p-5 sm:flex-row sm:items-center">
+                        <div>
+                            <h2 class="font-serif text-2xl font-semibold">Pending Account Approvals</h2>
+                            <p class="mt-1 text-sm text-slate-500">Self-registered staff accounts cannot sign in until an administrator approves them.</p>
+                        </div>
+                        <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-secondary">{{ $pendingUsers->count() }} waiting</span>
+                    </div>
+                    <ul class="divide-y divide-surface-container-highest/60 text-sm">
+                        @foreach ($pendingUsers as $pendingUser)
+                            <li class="flex flex-col gap-3 px-5 py-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                    <p class="font-bold text-primary">{{ $pendingUser->name }}</p>
+                                    <p class="text-xs text-slate-500">{{ $pendingUser->email }} - requested {{ $roleMeta[$pendingUser->role]['label'] ?? ucfirst($pendingUser->role) }} access {{ $pendingUser->created_at?->diffForHumans() }}</p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <form method="POST" action="{{ route('admin.users.approve', $pendingUser) }}">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white hover:opacity-90"><span class="material-symbols-outlined text-sm">how_to_reg</span>Approve</button>
+                                    </form>
+                                    <form method="POST" action="{{ route('admin.users.destroy', $pendingUser) }}" onsubmit="return confirm('Reject and delete this account request?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="inline-flex items-center gap-1 rounded-lg border border-outline-variant px-3 py-2 text-xs font-semibold text-error hover:bg-red-50"><span class="material-symbols-outlined text-sm">person_remove</span>Reject</button>
+                                    </form>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </section>
+            @endif
+
             <div class="grid grid-cols-1 gap-6 xl:grid-cols-12">
                 <section id="users" class="folio-shadow overflow-hidden rounded-xl border border-surface-container-highest bg-white xl:col-span-8">
                     <div class="flex flex-col justify-between gap-3 border-b border-surface-container-highest p-5 sm:flex-row sm:items-center">

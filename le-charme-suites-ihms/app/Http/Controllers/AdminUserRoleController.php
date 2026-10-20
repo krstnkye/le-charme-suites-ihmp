@@ -36,7 +36,7 @@ class AdminUserRoleController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        User::create($validated);
+        User::create($validated + ['approved_at' => now()]);
 
         return to_route('admin.users.index')->with('status', 'User account provisioned.');
     }
@@ -63,6 +63,15 @@ class AdminUserRoleController extends Controller
         $user->update($validated);
 
         return to_route('admin.users.index')->with('status', 'User account updated.');
+    }
+
+    public function approve(User $user): RedirectResponse
+    {
+        if (! $user->isApproved()) {
+            $user->update(['approved_at' => now()]);
+        }
+
+        return to_route('admin.users.index')->with('status', "{$user->name} can now sign in.");
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
@@ -146,6 +155,7 @@ class AdminUserRoleController extends Controller
         return [
             'users' => User::latest()->paginate(10),
             'totalUsers' => User::count(),
+            'pendingUsers' => User::whereNull('approved_at')->oldest()->get(),
             'roleCounts' => User::selectRaw('role, count(*) as total')->groupBy('role')->pluck('total', 'role'),
         ];
     }

@@ -171,6 +171,8 @@
                     </div>
                 </div>
 
+                <p class="rounded-lg border border-secondary/20 bg-secondary-container/20 px-3 py-2 text-xs text-on-surface-variant">A system administrator must approve new accounts before they can sign in.</p>
+
                 <button class="flex w-full items-center justify-center gap-2 rounded-lg border border-secondary/20 bg-primary px-5 py-3 text-base font-bold text-surface shadow-md transition hover:bg-[#172b42]" type="submit">
                     <span>Create IHMP Account</span>
                     <span class="material-symbols-outlined text-secondary-fixed">arrow_forward</span>

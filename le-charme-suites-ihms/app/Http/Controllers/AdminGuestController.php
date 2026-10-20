@@ -16,7 +16,7 @@ class AdminGuestController extends Controller
             ->withCount('reservations')
             ->withSum('transactions as lifetime_value', 'amount')
             ->when($search !== '', function ($query) use ($search) {
-                $term = '%' . $search . '%';
+                $term = '%'.$search.'%';
 
                 $query->where(function ($query) use ($term) {
                     $query->where('first_name', 'like', $term)

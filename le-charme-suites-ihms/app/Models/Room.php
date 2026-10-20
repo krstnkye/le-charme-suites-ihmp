@@ -42,6 +42,11 @@ class Room extends Model
         return $this->hasMany(Reservation::class);
     }
 
+    public function checkIns(): HasMany
+    {
+        return $this->hasMany(CheckIn::class);
+    }
+
     public function statusLogs(): HasMany
     {
         return $this->hasMany(RoomStatusLog::class);

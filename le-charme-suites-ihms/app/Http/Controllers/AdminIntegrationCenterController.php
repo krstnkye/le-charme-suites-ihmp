@@ -142,6 +142,6 @@ class AdminIntegrationCenterController extends Controller
     {
         $text = is_array($value) ? json_encode($value) : (string) ($value ?? '');
 
-        return preg_match('/^[=+\-@]/', $text) ? "'{$text}" : $text;
+        return preg_match('/^[=+\-@\t\r]/', $text) ? "'{$text}" : $text;
     }
 }

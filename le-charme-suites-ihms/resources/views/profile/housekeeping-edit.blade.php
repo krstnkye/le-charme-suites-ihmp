@@ -126,6 +126,10 @@
                     <p class="mt-2 text-sm text-slate-600">Leave the password fields blank when you only want to update your name or email.</p>
                 </div>
                 <div class="grid gap-5 p-6 md:grid-cols-2">
+                    <label class="text-sm font-bold text-primary md:col-span-2">
+                        Current Password
+                        <input type="password" name="current_password" class="mt-2 w-full rounded-lg border-line text-sm shadow-sm focus:border-secondary focus:ring-secondary" autocomplete="current-password" placeholder="Required to change your email or password">
+                    </label>
                     <label class="text-sm font-bold text-primary">
                         New Password
                         <input type="password" name="password" class="mt-2 w-full rounded-lg border-line text-sm shadow-sm focus:border-secondary focus:ring-secondary" autocomplete="new-password">

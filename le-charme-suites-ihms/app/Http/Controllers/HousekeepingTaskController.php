@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CheckIn;
 use App\Models\HousekeepingTask;
 use App\Models\RoomStatusLog;
 use Illuminate\Http\RedirectResponse;
@@ -58,7 +59,12 @@ class HousekeepingTaskController extends Controller
                 $data['started_at'] = now();
             }
 
-            if ($data['status'] === 'completed') {
+            $roomHasGuest = CheckIn::query()
+                ->where('room_id', $housekeepingTask->room_id)
+                ->where('status', 'active')
+                ->exists();
+
+            if ($data['status'] === 'completed' && $housekeepingTask->status !== 'completed' && ! $roomHasGuest) {
                 $data['completed_at'] = now();
                 $housekeepingTask->room()->update(['status' => 'available']);
                 RoomStatusLog::create([
@@ -67,6 +73,8 @@ class HousekeepingTaskController extends Controller
                     'notes' => 'Housekeeping task #'.$housekeepingTask->id.' completed: '.($data['completion_notes'] ?? $housekeepingTask->title),
                     'changed_at' => now(),
                 ]);
+            } elseif ($data['status'] === 'completed' && $housekeepingTask->completed_at === null) {
+                $data['completed_at'] = now();
             }
 
             $housekeepingTask->update($data);

@@ -10,6 +10,7 @@ use App\Models\RoomStatusLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class CheckInController extends Controller
@@ -55,6 +56,23 @@ class CheckInController extends Controller
 
             abort_if($reservation->status !== 'reserved', 422, 'Only reserved reservations can be checked in.');
 
+            if ($reservation->check_in_date->isAfter(today())) {
+                throw ValidationException::withMessages([
+                    'reservation_id' => 'This guest is scheduled to arrive on '.$reservation->check_in_date->format('M j, Y').' and cannot be checked in early.',
+                ]);
+            }
+
+            $roomIsTaken = CheckIn::query()
+                ->where('room_id', $reservation->room_id)
+                ->where('status', 'active')
+                ->exists();
+
+            if ($roomIsTaken || in_array($reservation->room->status, ['occupied', 'maintenance'], true)) {
+                throw ValidationException::withMessages([
+                    'reservation_id' => 'Room '.$reservation->room->room_number.' is still occupied or under maintenance. Move the reservation to another room first.',
+                ]);
+            }
+
             $checkIn = CheckIn::create([
                 'reservation_id' => $reservation->id,
                 'guest_id' => $reservation->guest_id,
@@ -69,7 +87,7 @@ class CheckInController extends Controller
             RoomStatusLog::create([
                 'room_id' => $reservation->room_id,
                 'status' => 'occupied',
-                'notes' => 'Guest checked in through check-in #' . $checkIn->id,
+                'notes' => 'Guest checked in through check-in #'.$checkIn->id,
                 'changed_at' => now(),
             ]);
             HotelTransaction::create([

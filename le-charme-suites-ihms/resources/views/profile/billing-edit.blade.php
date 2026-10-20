@@ -145,6 +145,10 @@
                             <span class="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white">Secure Rotation</span>
                         </div>
                         <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                            <label class="space-y-1 sm:col-span-2">
+                                <span class="block text-xs font-bold uppercase tracking-wider text-slate-500">Current Password</span>
+                                <input type="password" name="current_password" autocomplete="current-password" class="w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20" placeholder="Required to change your email or password">
+                            </label>
                             <label class="space-y-1">
                                 <span class="block text-xs font-bold uppercase tracking-wider text-slate-500">New Password</span>
                                 <input type="password" name="password" autocomplete="new-password" class="w-full rounded-lg border-line bg-white px-3 py-2.5 text-sm outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20" placeholder="Leave blank to keep current">

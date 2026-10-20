@@ -53,11 +53,11 @@ class WorkEmailAuthenticationTest extends TestCase
         ]);
 
         $response->assertRedirect(route('login'));
-        $response->assertSessionHas('status', 'Account created successfully. Please sign in with your new work account to continue.');
+        $response->assertSessionHas('status', 'Account request submitted. A system administrator must approve it before you can sign in.');
         $response->assertSessionHasInput('email', 'sample@lecharmehotel.com');
         $response->assertSessionHasInput('role', 'receptionist');
         $this->assertGuest();
-        $this->assertDatabaseHas('users', ['email' => 'sample@lecharmehotel.com']);
+        $this->assertDatabaseHas('users', ['email' => 'sample@lecharmehotel.com', 'approved_at' => null]);
         $this->assertDatabaseHas('auth_activity_logs', [
             'email' => 'sample@lecharmehotel.com',
             'event_type' => 'ACCOUNT_REGISTERED',
@@ -238,6 +238,7 @@ class WorkEmailAuthenticationTest extends TestCase
 
             $this->assertDatabaseHas('users', ['email' => $email, 'role' => $role]);
             $this->assertGuest();
+            User::where('email', $email)->update(['approved_at' => now()]);
 
             $this->post(route('login.store'), [
                 'email' => $email,

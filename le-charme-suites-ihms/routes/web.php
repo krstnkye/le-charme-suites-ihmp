@@ -12,7 +12,6 @@ use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentMessageController;
 use App\Http\Controllers\GuestController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HousekeepingController;
 use App\Http\Controllers\HousekeepingTaskController;
 use App\Http\Controllers\ProfileController;
@@ -26,7 +25,6 @@ use App\Http\Controllers\UiPreferenceController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login')->name('home');
-Route::post('/generate', [HomeController::class, 'generate'])->name('generate');
 Route::get('/book', [PublicBookingController::class, 'create'])->name('booking.create');
 Route::post('/book', [PublicBookingController::class, 'store'])->middleware('throttle:10,1')->name('booking.store');
 Route::get('/book/confirmation/{reference}', [PublicBookingController::class, 'confirmation'])
@@ -37,7 +35,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1')->name('register.store');
     Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendPasswordResetLink'])
         ->middleware('throttle:5,1')
@@ -86,6 +84,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/users', [AdminUserRoleController::class, 'index'])->name('admin.users.index');
         Route::post('/admin/users', [AdminUserRoleController::class, 'store'])->name('admin.users.store');
         Route::put('/admin/users/{user}', [AdminUserRoleController::class, 'update'])->name('admin.users.update');
+        Route::post('/admin/users/{user}/approve', [AdminUserRoleController::class, 'approve'])->name('admin.users.approve');
         Route::delete('/admin/users/{user}', [AdminUserRoleController::class, 'destroy'])->name('admin.users.destroy');
         Route::get('/admin/roles', [AdminUserRoleController::class, 'roles'])->name('admin.roles.index');
         Route::get('/admin/permissions', [AdminUserRoleController::class, 'permissions'])->name('admin.permissions.index');

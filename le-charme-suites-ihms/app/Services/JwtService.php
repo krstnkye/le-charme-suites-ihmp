@@ -88,6 +88,17 @@ class JwtService
         $token->update(['revoked_at' => now()]);
     }
 
+    /**
+     * Revoke the token only if no other request revoked it first, so a refresh token is single-use.
+     */
+    public function revokeIfActive(JwtToken $token): bool
+    {
+        return JwtToken::query()
+            ->whereKey($token->getKey())
+            ->whereNull('revoked_at')
+            ->update(['revoked_at' => now()]) === 1;
+    }
+
     public function revokeEncoded(string $token, string $expectedType): void
     {
         $this->revoke($this->authenticate($token, $expectedType));

@@ -45,7 +45,7 @@ class AdminOperationsController extends Controller
         return [
             'title' => 'Reservation Administration', 'subtitle' => 'Review, modify, cancel, and audit all property reservations.', 'icon' => 'calendar_month',
             'stats' => [['label' => 'Total reservations', 'value' => Reservation::count()], ['label' => 'Reserved', 'value' => Reservation::where('status', 'reserved')->count()], ['label' => 'Checked in', 'value' => Reservation::where('status', 'checked_in')->count()], ['label' => 'Cancelled', 'value' => Reservation::where('status', 'cancelled')->count()]],
-            'records' => $records->map(fn ($record) => [$record->id, $record->guest?->full_name ?? 'Guest record unavailable', $record->room?->room_number ?? 'Unassigned', $record->check_in_date?->format('M d, Y') . ' - ' . $record->check_out_date?->format('M d, Y'), ucfirst(str_replace('_', ' ', $record->status))]),
+            'records' => $records->map(fn ($record) => [$record->id, $record->guest?->full_name ?? 'Guest record unavailable', $record->room?->room_number ?? 'Unassigned', $record->check_in_date?->format('M d, Y').' - '.$record->check_out_date?->format('M d, Y'), ucfirst(str_replace('_', ' ', $record->status))]),
             'headers' => ['Reservation', 'Guest', 'Room', 'Dates', 'Status'],
         ];
     }
@@ -81,7 +81,7 @@ class AdminOperationsController extends Controller
         return [
             'title' => 'Housekeeping & Room Status Administration', 'subtitle' => 'Monitor room readiness, cleaning queues, and inventory status across the property.', 'icon' => 'cleaning_services',
             'stats' => [['label' => 'Total rooms', 'value' => Room::count()], ['label' => 'Available', 'value' => Room::where('status', 'available')->count()], ['label' => 'Cleaning', 'value' => Room::where('status', 'cleaning')->count()], ['label' => 'Maintenance', 'value' => Room::where('status', 'maintenance')->count()]],
-            'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, $record->capacity . ' guests', 'PHP ' . number_format((float) $record->rate, 2), ucfirst($record->status)]),
+            'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, $record->capacity.' guests', 'PHP '.number_format((float) $record->rate, 2), ucfirst($record->status)]),
             'headers' => ['Room', 'Type', 'Capacity', 'Rate', 'Status'],
         ];
     }
@@ -92,8 +92,8 @@ class AdminOperationsController extends Controller
 
         return [
             'title' => 'Transactions & Billing Administration', 'subtitle' => 'Inspect hotel charges, settlements, guest bills, and financial activity across all departments.', 'icon' => 'receipt_long',
-            'stats' => [['label' => 'Recorded transactions', 'value' => HotelTransaction::count()], ['label' => 'Collected amount', 'value' => 'PHP ' . number_format((float) HotelTransaction::sum('amount'), 2)], ['label' => 'Reservation entries', 'value' => HotelTransaction::where('transaction_type', 'reservation')->count()], ['label' => 'Check-out entries', 'value' => HotelTransaction::where('transaction_type', 'check_out')->count()]],
-            'records' => $records->map(fn ($record) => [$record->id, $record->guest?->full_name ?? 'Unknown guest', ucfirst(str_replace('_', ' ', $record->transaction_type)), 'PHP ' . number_format((float) $record->amount, 2), optional($record->transaction_date)->format('M d, Y h:i A')]),
+            'stats' => [['label' => 'Recorded transactions', 'value' => HotelTransaction::count()], ['label' => 'Collected amount', 'value' => 'PHP '.number_format((float) HotelTransaction::sum('amount'), 2)], ['label' => 'Reservation entries', 'value' => HotelTransaction::where('transaction_type', 'reservation')->count()], ['label' => 'Check-out entries', 'value' => HotelTransaction::where('transaction_type', 'check_out')->count()]],
+            'records' => $records->map(fn ($record) => [$record->id, $record->guest?->full_name ?? 'Unknown guest', ucfirst(str_replace('_', ' ', $record->transaction_type)), 'PHP '.number_format((float) $record->amount, 2), optional($record->transaction_date)->format('M d, Y h:i A')]),
             'headers' => ['Transaction', 'Guest', 'Type', 'Amount', 'Date'],
         ];
     }
@@ -104,8 +104,8 @@ class AdminOperationsController extends Controller
 
         return [
             'title' => 'Room Inventory Administration', 'subtitle' => 'Inspect encoded rooms, categories, capacity, rates, and inventory readiness from the administrator workspace.', 'icon' => 'inventory_2',
-            'stats' => [['label' => 'Total rooms', 'value' => Room::count()], ['label' => 'Standard rooms', 'value' => Room::where('room_type', 'like', 'Standard%')->count()], ['label' => 'Available rooms', 'value' => Room::where('status', 'available')->count()], ['label' => 'Average rate', 'value' => 'PHP ' . number_format((float) Room::avg('rate'), 2)]],
-            'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, $record->capacity . ' guests', 'PHP ' . number_format((float) $record->rate, 2), ucfirst($record->status)]),
+            'stats' => [['label' => 'Total rooms', 'value' => Room::count()], ['label' => 'Standard rooms', 'value' => Room::where('room_type', 'like', 'Standard%')->count()], ['label' => 'Available rooms', 'value' => Room::where('status', 'available')->count()], ['label' => 'Average rate', 'value' => 'PHP '.number_format((float) Room::avg('rate'), 2)]],
+            'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, $record->capacity.' guests', 'PHP '.number_format((float) $record->rate, 2), ucfirst($record->status)]),
             'headers' => ['Room', 'Type', 'Capacity', 'Rate', 'Status'],
         ];
     }
@@ -126,14 +126,14 @@ class AdminOperationsController extends Controller
                 ['label' => 'Room type groups', 'value' => $rooms->count()],
                 ['label' => 'Total encoded rooms', 'value' => Room::count()],
                 ['label' => 'Available inventory', 'value' => Room::where('status', 'available')->count()],
-                ['label' => 'Highest capacity', 'value' => (Room::max('capacity') ?? 0) . ' guests'],
+                ['label' => 'Highest capacity', 'value' => (Room::max('capacity') ?? 0).' guests'],
             ],
             'records' => $rooms->map(fn ($record) => [
                 $record->room_type,
-                $record->room_count . ' rooms',
-                ((int) $record->min_capacity === (int) $record->max_capacity ? $record->max_capacity : $record->min_capacity . '-' . $record->max_capacity) . ' guests',
-                'PHP ' . number_format((float) $record->average_rate, 2),
-                $record->available_count . ' available',
+                $record->room_count.' rooms',
+                ((int) $record->min_capacity === (int) $record->max_capacity ? $record->max_capacity : $record->min_capacity.'-'.$record->max_capacity).' guests',
+                'PHP '.number_format((float) $record->average_rate, 2),
+                $record->available_count.' available',
             ]),
             'headers' => ['Room Type', 'Inventory', 'Capacity Range', 'Average Rate', 'Availability'],
         ];
@@ -153,16 +153,16 @@ class AdminOperationsController extends Controller
             'icon' => 'sell',
             'stats' => [
                 ['label' => 'Rate categories', 'value' => $rooms->count()],
-                ['label' => 'Lowest rate', 'value' => 'PHP ' . number_format((float) (Room::min('rate') ?? 0), 2)],
-                ['label' => 'Highest rate', 'value' => 'PHP ' . number_format((float) (Room::max('rate') ?? 0), 2)],
-                ['label' => 'Average rate', 'value' => 'PHP ' . number_format((float) Room::avg('rate'), 2)],
+                ['label' => 'Lowest rate', 'value' => 'PHP '.number_format((float) (Room::min('rate') ?? 0), 2)],
+                ['label' => 'Highest rate', 'value' => 'PHP '.number_format((float) (Room::max('rate') ?? 0), 2)],
+                ['label' => 'Average rate', 'value' => 'PHP '.number_format((float) Room::avg('rate'), 2)],
             ],
             'records' => $rooms->map(fn ($record) => [
                 $record->room_type,
-                $record->room_count . ' rooms',
-                'PHP ' . number_format((float) $record->minimum_rate, 2),
-                'PHP ' . number_format((float) $record->maximum_rate, 2),
-                'PHP ' . number_format((float) $record->average_rate, 2),
+                $record->room_count.' rooms',
+                'PHP '.number_format((float) $record->minimum_rate, 2),
+                'PHP '.number_format((float) $record->maximum_rate, 2),
+                'PHP '.number_format((float) $record->average_rate, 2),
             ]),
             'headers' => ['Room Type', 'Inventory', 'Minimum Rate', 'Maximum Rate', 'Average Rate'],
         ];
@@ -175,7 +175,7 @@ class AdminOperationsController extends Controller
         return [
             'title' => 'Room Status Administration', 'subtitle' => 'Monitor availability, occupancy, reserved rooms, maintenance, and housekeeping readiness without leaving the admin portal.', 'icon' => 'bed',
             'stats' => [['label' => 'Available', 'value' => Room::where('status', 'available')->count()], ['label' => 'Reserved', 'value' => Room::where('status', 'reserved')->count()], ['label' => 'Occupied', 'value' => Room::where('status', 'occupied')->count()], ['label' => 'Maintenance', 'value' => Room::whereIn('status', ['maintenance', 'cleaning'])->count()]],
-            'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, ucfirst($record->status), $record->capacity . ' guests', 'PHP ' . number_format((float) $record->rate, 2)]),
+            'records' => $records->map(fn ($record) => [$record->room_number, $record->room_type, ucfirst($record->status), $record->capacity.' guests', 'PHP '.number_format((float) $record->rate, 2)]),
             'headers' => ['Room', 'Type', 'Status', 'Capacity', 'Rate'],
         ];
     }
@@ -186,8 +186,8 @@ class AdminOperationsController extends Controller
 
         return [
             'title' => 'Reports Administration', 'subtitle' => 'Review room, reservation, and financial summaries from the administrator command sidebar.', 'icon' => 'monitoring',
-            'stats' => [['label' => 'Rooms tracked', 'value' => Room::count()], ['label' => 'Reservations tracked', 'value' => Reservation::count()], ['label' => 'Transaction records', 'value' => HotelTransaction::count()], ['label' => 'Ledger total', 'value' => 'PHP ' . number_format((float) HotelTransaction::sum('amount'), 2)]],
-            'records' => $records->map(fn ($record) => [optional($record->transaction_date)->format('M d, Y h:i A'), ucfirst(str_replace('_', ' ', $record->transaction_type)), $record->guest?->full_name ?? 'N/A', $record->room?->room_number ?? 'N/A', 'PHP ' . number_format((float) $record->amount, 2)]),
+            'stats' => [['label' => 'Rooms tracked', 'value' => Room::count()], ['label' => 'Reservations tracked', 'value' => Reservation::count()], ['label' => 'Transaction records', 'value' => HotelTransaction::count()], ['label' => 'Ledger total', 'value' => 'PHP '.number_format((float) HotelTransaction::sum('amount'), 2)]],
+            'records' => $records->map(fn ($record) => [optional($record->transaction_date)->format('M d, Y h:i A'), ucfirst(str_replace('_', ' ', $record->transaction_type)), $record->guest?->full_name ?? 'N/A', $record->room?->room_number ?? 'N/A', 'PHP '.number_format((float) $record->amount, 2)]),
             'headers' => ['Date', 'Type', 'Guest', 'Room', 'Amount'],
         ];
     }

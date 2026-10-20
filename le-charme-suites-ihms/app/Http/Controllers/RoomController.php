@@ -131,6 +131,20 @@ class RoomController extends Controller
         $data = $this->validatedData($request, $room);
         $oldStatus = $room->status;
 
+        $hasActiveStay = $room->checkIns()->where('status', 'active')->exists();
+
+        if ($hasActiveStay && $data['status'] !== 'occupied') {
+            return back()->withInput()->withErrors([
+                'status' => 'This room has an in-house guest. Check the guest out before changing the room status.',
+            ]);
+        }
+
+        if (! $hasActiveStay && $data['status'] === 'occupied') {
+            return back()->withInput()->withErrors([
+                'status' => 'A room becomes occupied only through guest check-in.',
+            ]);
+        }
+
         $room->update($data);
 
         if ($oldStatus !== $room->status) {
@@ -142,6 +156,12 @@ class RoomController extends Controller
 
     public function destroy(Room $room): RedirectResponse
     {
+        if ($room->reservations()->exists() || $room->checkIns()->exists()) {
+            return back()->withErrors([
+                'room' => "Room {$room->room_number} has booking history and cannot be deleted. Set it to maintenance instead.",
+            ]);
+        }
+
         $room->delete();
 
         return redirect()->route('rooms.index')->with('status', 'Room deleted.');

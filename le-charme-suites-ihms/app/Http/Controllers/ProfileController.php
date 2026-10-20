@@ -35,11 +35,21 @@ class ProfileController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', new WorkEmail, Rule::unique('users', 'email')->ignore($user->id)],
+            'current_password' => [
+                Rule::requiredIf(fn (): bool => filled($request->input('password')) || $request->input('email') !== $user->email),
+                'nullable',
+                'current_password',
+            ],
             'password' => ['nullable', 'confirmed', Password::min(8)],
             'profile_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', 'dimensions:min_width=128,min_height=128,max_width=6000,max_height=6000'],
             'camera_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', 'dimensions:min_width=128,min_height=128,max_width=6000,max_height=6000'],
             'remove_profile_photo' => ['nullable', 'boolean'],
+        ], [
+            'current_password.required' => 'Enter your current password to change your email or password.',
+            'current_password.current_password' => 'Your current password is incorrect.',
         ]);
+
+        unset($data['current_password']);
 
         if (blank($data['password'] ?? null)) {
             unset($data['password']);

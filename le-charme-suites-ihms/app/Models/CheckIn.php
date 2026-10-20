@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use Database\Factories\CheckInFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class CheckIn extends Model
 {
+    /** @use HasFactory<CheckInFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'reservation_id',
         'guest_id',

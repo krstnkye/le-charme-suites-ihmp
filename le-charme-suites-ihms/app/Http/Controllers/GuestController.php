@@ -15,7 +15,7 @@ class GuestController extends Controller
         $guests = Guest::query()
             ->withCount('reservations')
             ->when($search !== '', function ($query) use ($search) {
-                $term = '%' . $search . '%';
+                $term = '%'.$search.'%';
                 $query->where(function ($query) use ($term) {
                     $query->where('first_name', 'like', $term)
                         ->orWhere('last_name', 'like', $term)
@@ -77,6 +77,12 @@ class GuestController extends Controller
 
     public function destroy(Guest $guest): RedirectResponse
     {
+        if ($guest->reservations()->where('status', '!=', 'cancelled')->exists()) {
+            return back()->withErrors([
+                'guest' => "{$guest->full_name} has bookings or stay history and cannot be deleted.",
+            ]);
+        }
+
         $guest->delete();
 
         return redirect()->route('guests.index')->with('status', 'Guest record deleted.');

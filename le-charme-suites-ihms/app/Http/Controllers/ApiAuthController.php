@@ -31,6 +31,12 @@ class ApiAuthController extends Controller
             return response()->json(['message' => 'The email or password is incorrect.'], 401);
         }
 
+        if (! $user->isApproved()) {
+            $this->record($request, $user, 'JWT_LOGIN_FAILED', false);
+
+            return response()->json(['message' => 'This account is still awaiting administrator approval.'], 403);
+        }
+
         $this->record($request, $user, 'JWT_LOGIN_SUCCESS', true);
 
         return response()->json([
@@ -49,7 +55,9 @@ class ApiAuthController extends Controller
             return response()->json(['message' => 'The refresh token is invalid, expired, or revoked.'], 401);
         }
 
-        $jwt->revoke($refreshToken);
+        if (! $jwt->revokeIfActive($refreshToken)) {
+            return response()->json(['message' => 'The refresh token is invalid, expired, or revoked.'], 401);
+        }
 
         return response()->json([
             ...$jwt->issuePair($refreshToken->user),

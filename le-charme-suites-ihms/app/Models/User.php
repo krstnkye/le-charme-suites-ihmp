@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'role', 'password', 'ui_preferences', 'profile_photo_path'])]
+#[Fillable(['name', 'email', 'role', 'approved_at', 'password', 'ui_preferences', 'profile_photo_path'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -28,6 +28,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'approved_at' => 'datetime',
             'password' => 'hashed',
             'ui_preferences' => 'array',
         ];
@@ -56,6 +57,11 @@ class User extends Authenticatable
     public function jwtTokens(): HasMany
     {
         return $this->hasMany(JwtToken::class);
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->approved_at !== null;
     }
 
     public function hasPermissionTo(string $permission): bool

@@ -131,19 +131,28 @@ class AuthController extends Controller
             throw $exception;
         }
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::attemptWhen($credentials, fn (User $user): bool => $user->isApproved(), $request->boolean('remember'))) {
             $request->session()->regenerate();
             $this->recordActivity($request, 'LOGIN_SUCCESS', true, Auth::user(), 'Staff member signed in.');
 
             return redirect()->intended(route('dashboard'));
         }
 
-        $this->recordActivity($request, 'LOGIN_FAILED', false, null, 'Email and password did not match an account.');
-
         $account = Auth::validate([
             'email' => $credentials['email'],
             'password' => $credentials['password'],
         ]) ? User::where('email', $credentials['email'])->first() : null;
+
+        if ($account && ! $account->isApproved()) {
+            $this->recordActivity($request, 'LOGIN_FAILED', false, $account, 'Account is still awaiting administrator approval.');
+
+            return back()
+                ->withErrors(['email' => 'Your account is still awaiting approval from a system administrator.'])
+                ->onlyInput('email', 'role');
+        }
+
+        $this->recordActivity($request, 'LOGIN_FAILED', false, null, 'Email and password did not match an account.');
+
         $message = $account && $account->role !== $credentials['role']
             ? 'The selected department does not match this account. Choose '.config("hotel.staff_roles.{$account->role}.label", ucfirst($account->role)).' and try again.'
             : 'The provided credentials do not match our records.';
@@ -170,11 +179,11 @@ class AuthController extends Controller
 
         $user = User::create($data);
 
-        $this->recordActivity($request, 'ACCOUNT_REGISTERED', true, $user, 'New staff account registered.');
+        $this->recordActivity($request, 'ACCOUNT_REGISTERED', true, $user, 'New staff account registered and awaiting administrator approval.');
 
         return redirect()
             ->route('login')
-            ->with('status', 'Account created successfully. Please sign in with your new work account to continue.')
+            ->with('status', 'Account request submitted. A system administrator must approve it before you can sign in.')
             ->withInput([
                 'email' => $user->email,
                 'role' => $user->role,

@@ -6,10 +6,14 @@ use App\Models\CheckIn;
 use App\Models\CheckOut;
 use App\Models\HotelTransaction;
 use App\Models\HousekeepingTask;
+use App\Models\Reservation;
+use App\Models\Room;
 use App\Models\RoomStatusLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class CheckOutController extends Controller
@@ -129,27 +133,14 @@ class CheckOutController extends Controller
         $checkOut->load(['guest', 'room', 'checkIn', 'reservation']);
 
         $reservation = $checkOut->reservation;
-        $nights = max(1, (int) ($reservation?->check_in_date?->diffInDays($reservation?->check_out_date) ?? 1));
-        $roomCharges = round((float) ($checkOut->room?->rate ?? 0) * $nights, 2);
-        $additionalCharges = HotelTransaction::query()
-            ->where('reservation_id', $checkOut->reservation_id)
-            ->whereNotIn('transaction_type', ['reservation', 'check_in', 'check_out'])
-            ->where('status', '!=', 'void')
-            ->where('amount', '>', 0)
-            ->orderBy('transaction_date')
-            ->get();
-        $additionalTotal = round((float) $additionalCharges->sum('amount'), 2);
-        $totalCharges = round($roomCharges + $additionalTotal, 2);
+        $folio = $this->folio($reservation, $checkOut->room);
+        $totalCharges = $folio['totalCharges'];
         $amountPaid = round((float) $checkOut->amount_paid, 2);
 
         return view('check_outs.receipt', [
             'checkOut' => $checkOut,
             'reservation' => $reservation,
-            'nights' => $nights,
-            'roomCharges' => $roomCharges,
-            'additionalCharges' => $additionalCharges,
-            'additionalTotal' => $additionalTotal,
-            'totalCharges' => $totalCharges,
+            ...$folio,
             'amountPaid' => $amountPaid,
             'balance' => max(0, round($totalCharges - $amountPaid, 2)),
         ]);
@@ -161,13 +152,26 @@ class CheckOutController extends Controller
 
         abort_if($checkIn->status !== 'active', 404);
 
-        $reservation = $checkIn->reservation;
+        return view('check_outs.bill-preview', [
+            'checkIn' => $checkIn,
+            'reservation' => $checkIn->reservation,
+            ...$this->folio($checkIn->reservation, $checkIn->room),
+        ]);
+    }
+
+    /**
+     * Room charges for the booked nights plus any extra folio charges.
+     *
+     * @return array{nights: int, roomCharges: float, additionalCharges: Collection<int, HotelTransaction>, additionalTotal: float, totalCharges: float}
+     */
+    private function folio(?Reservation $reservation, ?Room $room): array
+    {
         $nights = $reservation?->check_in_date && $reservation?->check_out_date
             ? max(1, (int) $reservation->check_in_date->diffInDays($reservation->check_out_date))
             : 1;
-        $roomCharges = round((float) ($checkIn->room?->rate ?? 0) * $nights, 2);
+        $roomCharges = round((float) ($room?->rate ?? 0) * $nights, 2);
         $additionalCharges = HotelTransaction::query()
-            ->where('reservation_id', $checkIn->reservation_id)
+            ->where('reservation_id', $reservation?->id)
             ->whereNotIn('transaction_type', ['reservation', 'check_in', 'check_out'])
             ->where('status', '!=', 'void')
             ->where('amount', '>', 0)
@@ -175,15 +179,27 @@ class CheckOutController extends Controller
             ->get();
         $additionalTotal = round((float) $additionalCharges->sum('amount'), 2);
 
-        return view('check_outs.bill-preview', [
-            'checkIn' => $checkIn,
-            'reservation' => $reservation,
+        return [
             'nights' => $nights,
             'roomCharges' => $roomCharges,
             'additionalCharges' => $additionalCharges,
             'additionalTotal' => $additionalTotal,
             'totalCharges' => round($roomCharges + $additionalTotal, 2),
-        ]);
+        ];
+    }
+
+    private function ensurePaymentMatchesStatus(float $amountPaid, string $paymentStatus, float $totalCharges): void
+    {
+        $message = match (true) {
+            $paymentStatus === 'paid' && $amountPaid < $totalCharges => 'A paid bill must collect the full PHP '.number_format($totalCharges, 2).'. Choose Partial if the guest paid less.',
+            $paymentStatus === 'partial' && ($amountPaid <= 0 || $amountPaid >= $totalCharges) => 'A partial payment must be more than zero and less than the PHP '.number_format($totalCharges, 2).' total.',
+            $paymentStatus === 'unpaid' && $amountPaid > 0 => 'An unpaid bill cannot record a payment. Choose Partial or Paid instead.',
+            default => null,
+        };
+
+        if ($message) {
+            throw ValidationException::withMessages(['amount_paid' => $message]);
+        }
     }
 
     public function store(Request $request): RedirectResponse
@@ -209,6 +225,12 @@ class CheckOutController extends Controller
                     ->route('check-outs.create')
                     ->withErrors(['check_in_id' => 'This guest stay is no longer active and cannot be checked out.']), false];
             }
+
+            $this->ensurePaymentMatchesStatus(
+                round((float) ($data['amount_paid'] ?? 0), 2),
+                $data['payment_status'],
+                $this->folio($checkIn->reservation, $checkIn->room)['totalCharges'],
+            );
 
             $checkOut = CheckOut::create([
                 'check_in_id' => $checkIn->id,

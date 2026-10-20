@@ -62,12 +62,10 @@ class CreateOnlineReservation
                 ],
             );
 
-            $guest->update([
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name'],
-                'phone' => $data['phone'],
-                'address' => $data['address'] ?? $guest->address,
-            ]);
+            $guest->fill(array_filter([
+                'phone' => blank($guest->phone) ? $data['phone'] : null,
+                'address' => blank($guest->address) ? ($data['address'] ?? null) : null,
+            ]))->save();
 
             $reservation = Reservation::create([
                 'booking_reference' => $this->reference(),
