@@ -359,8 +359,9 @@
                     <label class="block sm:col-span-2">
                         <span class="text-xs font-bold uppercase tracking-wide text-slate-700">Role Access</span>
                         <select name="role" class="mt-2 w-full rounded-lg border-outline-variant px-4 py-3 text-sm focus:border-secondary focus:ring-secondary" required>
+                            <option value="" selected disabled>Select the staff member's role</option>
                             @foreach ($roleMeta as $role => $meta)
-                                <option value="{{ $role }}">{{ $meta['label'] }} - {{ $meta['department'] }}</option>
+                                <option value="{{ $role }}" @selected(old('role') === $role)>{{ $meta['label'] }} - {{ $meta['department'] }}</option>
                             @endforeach
                         </select>
                     </label>

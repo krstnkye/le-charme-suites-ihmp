@@ -11,6 +11,7 @@ use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentMessageController;
+use App\Http\Controllers\FirstAdminSetupController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\GuestIdentificationController;
 use App\Http\Controllers\HousekeepingController;
@@ -41,6 +42,8 @@ Route::get('/book/confirmation/{reference}', [PublicBookingController::class, 'c
     ->name('booking.confirmation');
 
 Route::middleware('guest')->group(function () {
+    Route::get('/setup', [FirstAdminSetupController::class, 'create'])->name('setup.create');
+    Route::post('/setup', [FirstAdminSetupController::class, 'store'])->middleware('throttle:5,1')->name('setup.store');
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
