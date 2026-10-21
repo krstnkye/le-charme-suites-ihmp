@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Charme Suites - IHMP Administrator Login</title>
+
+    @include('partials.offline-assets')
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#01162d',
+                        'primary-container': '#172b42',
+                        'secondary-fixed': '#ffdeaa',
+                        'secondary-fixed-dim': '#e6c185',
+                        'on-surface-variant': '#44474d',
+                        'on-surface': '#1c1c18',
+                        'outline-variant': '#c4c6cd',
+                        'surface-container-lowest': '#ffffff',
+                        'surface-container': '#f0eee8',
+                        surface: '#fcf9f3',
+                        'surface-variant': '#e5e2dc',
+                        'secondary-container': '#fdd79a',
+                        secondary: '#755a28',
+                        error: '#ba1a1a',
+                        'error-container': '#ffdad6',
+                        'on-error-container': '#93000a',
+                    },
+                    fontFamily: {
+                        'body-md': ['Manrope', 'sans-serif'],
+                        'label-md': ['Manrope', 'sans-serif'],
+                        'label-sm': ['Manrope', 'sans-serif'],
+                        'headline-md': ['Noto Serif', 'serif'],
+                        'title-md': ['Manrope', 'sans-serif'],
+                        'body-sm': ['Manrope', 'sans-serif'],
+                    },
+                    fontSize: {
+                        'body-sm': ['12px', { lineHeight: '18px', fontWeight: '400' }],
+                        'label-md': ['12px', { lineHeight: '16px', letterSpacing: '0.04em', fontWeight: '600' }],
+                        'label-sm': ['11px', { lineHeight: '14px', letterSpacing: '0.06em', fontWeight: '700' }],
+                        'headline-md': ['24px', { lineHeight: '32px', fontWeight: '500' }],
+                        'title-md': ['16px', { lineHeight: '24px', fontWeight: '600' }],
+                        'body-md': ['14px', { lineHeight: '22px', fontWeight: '400' }],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+    </style>
+    @include('partials.favicon')
+</head>
+<body class="min-h-screen bg-primary font-body-md text-on-surface antialiased selection:bg-secondary-container">
+    <main class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-primary px-4">
+        <div class="pointer-events-none absolute inset-0 opacity-10 bg-[radial-gradient(#ffdeaa_1px,transparent_1px)] [background-size:24px_24px]"></div>
+
+        <section class="relative my-8 w-full max-w-2xl rounded-xl border border-secondary-fixed-dim/30 bg-surface-container-lowest p-8 shadow-2xl sm:p-10">
+            <div class="mb-8 text-center">
+                <div class="mx-auto mb-4 max-w-sm overflow-hidden rounded-lg bg-white px-5 py-3">
+                    @include('partials.brand-logo', ['class' => 'h-auto w-full object-contain'])
+                </div>
+                <p class="mt-1 font-label-md text-label-md uppercase tracking-widest text-secondary">Subic Bay Philippines</p>
+                <div class="mx-auto my-3 h-0.5 w-12 bg-secondary opacity-60"></div>
+                <p class="font-body-sm text-body-sm font-medium text-on-surface-variant">
+                    Administrator Log In Console - Integrated Hotel Management Portal (IHMP) - IPT101
+                </p>
+            </div>
+
+            @if ($errors->any())
+                <div class="mb-5 flex items-start gap-2 rounded-lg border border-error/30 bg-error-container p-3 text-xs text-on-error-container">
+                    <span class="material-symbols-outlined mt-0.5 text-[18px] text-error">error</span>
+                    <div>{{ $errors->first() }}</div>
+                </div>
+            @endif
+
+            @if (session('status'))
+                <div class="mb-5 flex items-start gap-2 rounded-lg border border-emerald-300 bg-emerald-50 p-3 text-xs text-emerald-900">
+                    <span class="material-symbols-outlined mt-0.5 text-[18px] text-emerald-700">check_circle</span>
+                    <div>{{ session('status') }}</div>
+                </div>
+            @endif
+
+            <form id="login-form" method="POST" action="{{ route('admin.login.store') }}" class="space-y-4">
+                @csrf
+                <input name="role" type="hidden" value="admin">
+
+                <div>
+                    <label class="mb-1 block font-label-md text-label-md font-semibold text-on-surface" for="email">Work Email Address</label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-secondary">
+                            <span class="material-symbols-outlined text-lg">badge</span>
+                        </span>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            value="{{ old('email') }}"
+                            placeholder="admin@lecharmehotel.com"
+                            autocomplete="email"
+                            aria-describedby="email-help email-required-error"
+                            class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-3 font-body-md text-body-md text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary"
+                            required
+                            autofocus
+                        >
+                    </div>
+                    <p id="email-help" class="mt-1.5 text-xs text-on-surface-variant">Administrator accounts only.</p>
+                    <p id="email-required-error" class="mt-1.5 hidden items-center gap-1.5 text-xs font-semibold text-error" role="alert">
+                        <span class="material-symbols-outlined text-sm">error</span>
+                        Email address is required.
+                    </p>
+                </div>
+
+                <div>
+                    <label class="mb-1 block font-label-md text-label-md font-semibold text-on-surface" for="password">Security Passcode / Password</label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-secondary">
+                            <span class="material-symbols-outlined text-lg">lock</span>
+                        </span>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="Enter password"
+                            class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-10 font-body-md text-body-md text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary"
+                            required
+                        >
+                        <button class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-primary" id="toggle-password" type="button">
+                            <span class="material-symbols-outlined text-lg" id="password-icon">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-1 text-xs text-on-surface-variant">
+                    <label class="flex cursor-pointer items-center gap-1.5">
+                        <input name="remember" class="rounded border-outline-variant text-primary focus:ring-secondary" type="checkbox" checked>
+                        <span>Remember me</span>
+                    </label>
+                    <a class="font-semibold text-secondary hover:underline" href="{{ route('password.request') }}">Forgot password?</a>
+                </div>
+
+                <button class="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-secondary/20 bg-primary py-3 font-title-md text-title-md text-white shadow-md transition hover:bg-primary-container" type="submit">
+                    <span>Sign In as Administrator</span>
+                    <span class="material-symbols-outlined text-secondary-fixed">arrow_forward</span>
+                </button>
+            </form>
+
+            <div class="mt-6 border-t border-surface-variant pt-4 text-center">
+                <p class="text-xs text-on-surface-variant">
+                    Hotel staff?
+                    <a class="font-semibold text-secondary hover:underline" href="{{ route('login') }}">Go to the staff log in</a>
+                </p>
+                <p class="mt-2 text-xs font-semibold text-on-surface-variant">{{ config('hotel.address') }}</p>
+                <p class="mt-1 text-[11px] text-outline">{{ config('hotel.phone') }} · {{ config('hotel.email') }}</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('toggle-password').addEventListener('click', () => {
+            const password = document.getElementById('password');
+            const icon = document.getElementById('password-icon');
+            const isHidden = password.type === 'password';
+            password.type = isHidden ? 'text' : 'password';
+            icon.textContent = isHidden ? 'visibility_off' : 'visibility';
+        });
+
+        const loginForm = document.getElementById('login-form');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const emailRequiredError = document.getElementById('email-required-error');
+
+        const updateEmailRequirement = () => {
+            const emailIsMissing = password.value.length > 0 && email.value.trim().length === 0;
+
+            email.setCustomValidity(emailIsMissing ? 'Email address is required.' : '');
+            email.setAttribute('aria-invalid', emailIsMissing ? 'true' : 'false');
+            emailRequiredError.classList.toggle('hidden', !emailIsMissing);
+            emailRequiredError.classList.toggle('flex', emailIsMissing);
+            email.classList.toggle('border-error', emailIsMissing);
+            email.classList.toggle('ring-1', emailIsMissing);
+            email.classList.toggle('ring-error', emailIsMissing);
+            email.classList.toggle('border-outline-variant', !emailIsMissing);
+
+            return emailIsMissing;
+        };
+
+        password.addEventListener('input', updateEmailRequirement);
+        email.addEventListener('input', updateEmailRequirement);
+        loginForm.addEventListener('submit', (event) => {
+            if (updateEmailRequirement()) {
+                event.preventDefault();
+                email.focus();
+                email.reportValidity();
+            }
+        });
+
+        updateEmailRequirement();
+    </script>
+</body>
+</html>

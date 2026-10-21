@@ -10,12 +10,13 @@ class WorkEmailAuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_login_shows_all_roles_and_registration_excludes_admin(): void
+    public function test_staff_login_and_registration_exclude_admin(): void
     {
-        $expectedOrder = ['Admin', 'Receptionist', 'Billing', 'Housekeeping'];
+        $expectedOrder = ['Receptionist', 'Billing', 'Housekeeping'];
 
         $this->get(route('login'))
             ->assertOk()
+            ->assertDontSee('data-value="admin"', false)
             ->assertSeeInOrder($expectedOrder)
             ->assertSee('id="email-required-error"', false)
             ->assertSeeText('Email address is required.');
@@ -212,9 +213,94 @@ class WorkEmailAuthenticationTest extends TestCase
 
         $response->assertRedirect(route('login'));
         $response->assertSessionHasErrors([
-            'email' => 'The selected department does not match this account. Choose Admin and try again.',
+            'email' => 'The provided credentials do not match our records.',
         ]);
         $this->assertGuest();
+    }
+
+    public function test_admin_login_page_is_available_at_admin_url(): void
+    {
+        $this->get('/admin')
+            ->assertOk()
+            ->assertSeeText('Administrator Log In Console')
+            ->assertDontSee('role-card', false);
+    }
+
+    public function test_admin_can_sign_in_from_the_admin_page_only(): void
+    {
+        User::factory()->create([
+            'email' => 'admin@lecharmehotel.com',
+            'password' => 'password',
+            'role' => 'admin',
+        ]);
+
+        $this->post(route('admin.login.store'), [
+            'email' => 'admin@lecharmehotel.com',
+            'password' => 'password',
+        ])->assertRedirect(route('dashboard'));
+
+        $this->assertAuthenticated();
+        $this->post(route('logout'))->assertRedirect(route('admin.login'));
+    }
+
+    public function test_staff_account_cannot_sign_in_from_the_admin_page(): void
+    {
+        User::factory()->create([
+            'email' => 'employee@lecharmehotel.com',
+            'password' => 'password',
+            'role' => 'receptionist',
+        ]);
+
+        $this->from(route('admin.login'))->post(route('admin.login.store'), [
+            'email' => 'employee@lecharmehotel.com',
+            'password' => 'password',
+        ])->assertRedirect(route('admin.login'))->assertSessionHasErrors('email');
+
+        $this->assertGuest();
+    }
+
+    public function test_guests_opening_admin_pages_are_sent_to_the_admin_login(): void
+    {
+        $this->get(route('admin.accounts.create'))->assertRedirect(route('admin.login'));
+    }
+
+    public function test_admin_can_create_approved_staff_accounts_but_not_admins(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'email' => 'boss@lecharmehotel.com']);
+
+        $this->actingAs($admin)->get(route('admin.accounts.create'))
+            ->assertOk()
+            ->assertSeeText('Create Account')
+            ->assertDontSee('value="admin"', false);
+
+        $this->actingAs($admin)->post(route('admin.accounts.store'), [
+            'name' => 'New Cashier',
+            'email' => 'newcashier@lecharmehotel.com',
+            'role' => 'cashier',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ])->assertRedirect(route('admin.accounts.create'));
+
+        $created = User::where('email', 'newcashier@lecharmehotel.com')->first();
+        $this->assertSame('cashier', $created->role);
+        $this->assertNotNull($created->approved_at);
+
+        $this->actingAs($admin)->post(route('admin.accounts.store'), [
+            'name' => 'Sneaky Admin',
+            'email' => 'sneaky@lecharmehotel.com',
+            'role' => 'admin',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ])->assertSessionHasErrors('role');
+
+        $this->assertDatabaseMissing('users', ['email' => 'sneaky@lecharmehotel.com']);
+    }
+
+    public function test_non_admin_cannot_open_create_account(): void
+    {
+        $user = User::factory()->create(['role' => 'receptionist', 'email' => 'r@lecharmehotel.com']);
+
+        $this->actingAs($user)->get(route('admin.accounts.create'))->assertForbidden();
     }
 
     public function test_every_registered_department_opens_its_own_dashboard(): void
