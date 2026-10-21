@@ -153,6 +153,11 @@
             </form>
 
             <div class="mt-6 border-t border-surface-variant pt-4 text-center">
+                @unless (\App\Http\Controllers\FirstAdminSetupController::hasAdministrator())
+                    <p class="mb-3 rounded-lg border border-secondary/40 bg-[#fdd79a]/30 px-3 py-2 text-xs font-semibold text-primary">
+                        Using IHMP for the first time? <a class="font-bold text-secondary underline" href="{{ route('setup.create') }}">Set up the first administrator</a>
+                    </p>
+                @endunless
                 <p class="text-xs text-on-surface-variant">
                     Hotel staff?
                     <a class="font-semibold text-secondary hover:underline" href="{{ route('login') }}">Go to the staff log in</a>

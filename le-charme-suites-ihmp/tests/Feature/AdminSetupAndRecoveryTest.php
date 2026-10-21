@@ -20,7 +20,7 @@ class AdminSetupAndRecoveryTest extends TestCase
             'password_confirmation' => 'first-admin-pass',
         ]);
 
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect(route('admin.login'));
         $admin = User::where('email', 'manager@lecharmehotel.com')->firstOrFail();
         $this->assertSame('admin', $admin->role);
         $this->assertNotNull($admin->approved_at);
@@ -45,10 +45,12 @@ class AdminSetupAndRecoveryTest extends TestCase
     public function test_login_page_links_to_setup_only_when_no_administrator_exists(): void
     {
         $this->get(route('login'))->assertOk()->assertSeeText('Set up the first administrator');
+        $this->get(route('admin.login'))->assertOk()->assertSeeText('Set up the first administrator');
 
         User::factory()->create(['role' => 'admin']);
 
         $this->get(route('login'))->assertOk()->assertDontSeeText('Set up the first administrator');
+        $this->get(route('admin.login'))->assertOk()->assertDontSeeText('Set up the first administrator');
     }
 
     public function test_setup_requires_a_work_email(): void

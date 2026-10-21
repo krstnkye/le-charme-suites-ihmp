@@ -44,9 +44,9 @@ class FirstAdminSetupController extends Controller
             User::create($data + ['role' => 'admin', 'approved_at' => now()]);
         });
 
-        return to_route('login')
-            ->with('status', 'Administrator account created. Sign in with the Admin department selected.')
-            ->withInput(['email' => $data['email'], 'role' => 'admin']);
+        return to_route('admin.login')
+            ->with('status', 'Administrator account created. Sign in to continue.')
+            ->withInput(['email' => $data['email']]);
     }
 
     public static function hasAdministrator(): bool

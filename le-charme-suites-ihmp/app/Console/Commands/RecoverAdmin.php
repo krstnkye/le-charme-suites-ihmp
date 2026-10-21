@@ -60,7 +60,7 @@ class RecoverAdmin extends Command
             ! $user->wasRecentlyCreated => "{$email} is now an administrator with the new password.",
             default => "Administrator {$email} created.",
         });
-        $this->line('Sign in at /login with the Admin department selected.');
+        $this->line('Sign in at /admin, the administrator login page.');
 
         return self::SUCCESS;
     }

@@ -213,7 +213,7 @@ class WorkEmailAuthenticationTest extends TestCase
 
         $response->assertRedirect(route('login'));
         $response->assertSessionHasErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'The email or password does not match our records.',
         ]);
         $this->assertGuest();
     }
