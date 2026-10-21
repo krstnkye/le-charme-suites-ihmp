@@ -366,14 +366,6 @@
                             <span class="material-symbols-outlined text-base">download</span>
                             Export Room Rate Schedule
                         </button>
-                        <button class="inline-flex items-center gap-2 rounded-lg border border-secondary/40 bg-secondary-fixed/30 px-3.5 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-fixed/50" type="button">
-                            <span class="material-symbols-outlined text-base">trending_up</span>
-                            Apply Seasonal Surge
-                        </button>
-                        <button class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white shadow transition hover:bg-primary-container" type="button">
-                            <span class="material-symbols-outlined text-base text-secondary-fixed">add_circle</span>
-                            Create Rate Plan
-                        </button>
                     </div>
                 </section>
 
@@ -418,8 +410,6 @@
                             <span class="text-xs font-bold text-secondary">PHP</span>
                             <span class="material-symbols-outlined text-sm text-outline">expand_more</span>
                         </div>
-                        <button class="inline-flex items-center gap-1.5 rounded-lg border border-outline-variant px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-surface-container" type="button"><span class="material-symbols-outlined text-base">tune</span>Yield Rules Engine</button>
-                        <button class="inline-flex items-center gap-1.5 rounded-lg bg-surface-container px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-surface-container-high" type="button"><span class="material-symbols-outlined text-base">layers</span>Bulk Rate Adjustment</button>
                     </div>
                 </section>
 
@@ -480,8 +470,6 @@
                                             <td class="px-4 py-3.5 text-right">
                                                 <div class="flex items-center justify-end gap-1">
                                                     <button class="rounded {{ $selected ? 'bg-secondary text-white' : 'bg-surface-container text-primary hover:bg-secondary-fixed/40' }} px-2 py-1 text-[11px] font-bold transition" type="button">{{ $selected ? 'Inspect' : 'Edit' }}</button>
-                                                    <button class="rounded p-1 text-outline transition hover:text-primary" title="Audit History" type="button"><span class="material-symbols-outlined text-base">history</span></button>
-                                                    <button class="rounded p-1 text-outline transition hover:text-primary" title="Room Rate Restrictions" type="button"><span class="material-symbols-outlined text-base">rule</span></button>
                                                 </div>
                                             </td>
                                         </tr>

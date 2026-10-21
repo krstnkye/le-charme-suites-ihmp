@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DepartmentMessage;
 use App\Models\HousekeepingTask;
 use App\Models\LostFoundItem;
 use App\Models\MaintenanceReport;
@@ -178,6 +179,11 @@ class HousekeepingController extends Controller
                 ->latest()
                 ->get(),
             'housekeepingStaff' => User::where('role', 'housekeeping')->orderBy('name')->get(),
+            'housekeepingMessages' => DepartmentMessage::with(['sender', 'readers' => fn ($query) => $query->where('users.id', auth()->id())])
+                ->whereIn('recipient_department', ['all', 'housekeeping'])
+                ->latest()
+                ->take(20)
+                ->get(),
             'lostFoundItems' => LostFoundItem::with(['room', 'finder', 'releaser'])
                 ->orderByRaw("CASE status WHEN 'in_custody' THEN 1 ELSE 2 END")
                 ->latest('found_at')

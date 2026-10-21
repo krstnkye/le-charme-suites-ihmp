@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Guest;
+use App\Models\HousekeepingTask;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Models\RoomStatusLog;
@@ -612,95 +613,60 @@ class RoleAccessTest extends TestCase
                 ->assertSee('Dashboard')
                 ->assertDontSee('Reservations');
         }
+        HousekeepingTask::create([
+            'room_id' => $cleaningRoom->id,
+            'assigned_to' => $user->id,
+            'task_type' => 'turnover',
+            'title' => 'Prepare Room 701 for arrival',
+            'priority' => 'urgent',
+            'status' => 'queued',
+        ]);
+        HousekeepingTask::create([
+            'room_id' => $cleaningRoom->id,
+            'assigned_to' => $user->id,
+            'task_type' => 'guest_request',
+            'title' => 'Deliver two extra towels',
+            'priority' => 'normal',
+            'status' => 'queued',
+        ]);
+        HousekeepingTask::create([
+            'room_id' => $cleaningRoom->id,
+            'assigned_to' => $user->id,
+            'task_type' => 'turnover',
+            'title' => 'Earlier turnover',
+            'priority' => 'normal',
+            'status' => 'completed',
+            'completed_at' => now(),
+            'completion_notes' => 'Linen replaced and inspected.',
+        ]);
 
-        $this->actingAs($user)
-            ->get(route('housekeeping.page', 'cleaning-tasks'))
-            ->assertOk()
-            ->assertSee('Unit Room Preparation &amp; Cleaning Tasks List', false)
-            ->assertSee('Live Cleaning Task Board')
-            ->assertSee('Attendant Workload')
-            ->assertSee('Room 701');
-
-        $this->actingAs($user)
-            ->get(route('housekeeping.page', 'priority-rooms'))
-            ->assertOk()
-            ->assertSee('Priority Rooms &amp; Fast Cleaning', false)
-            ->assertSee('Housekeeping Rush Ready Status Command')
-            ->assertSee('Front Desk Messages')
-            ->assertSee('Room 701')
-            ->assertSee('Room 702');
-
-        $this->actingAs($user)
-            ->get(route('housekeeping.page', 'guest-requests'))
-            ->assertOk()
-            ->assertSee('Guest Service Requests &amp; In-Room Amenities Delivery', false)
-            ->assertSee('Live Request Assignment Board')
-            ->assertSee('Completed Requests Log &amp; Confirmation Signatures', false)
-            ->assertSee('Room 703');
-
-        $this->actingAs($user)
-            ->get(route('housekeeping.page', 'special-cleaning'))
-            ->assertOk()
-            ->assertSee('Special Cleaning &amp; Room Sanitation', false)
-            ->assertSee('Active Special Cleaning Tasks')
-            ->assertSee('Safety &amp; Compliance', false)
-            ->assertSee('Room 701')
-            ->assertSee('Room 702');
-
-        $this->actingAs($user)
-            ->get(route('housekeeping.page', 'completed-tasks'))
-            ->assertOk()
-            ->assertSee('Completed Tasks &amp; Shift Cleaning History', false)
-            ->assertSee('Shift 1 Completed Units Records')
-            ->assertSee('Audit Certificate Preview')
-            ->assertSee('Turnover certified by housekeeping supervisor.')
-            ->assertSee('701');
-
-        $this->actingAs($user)
-            ->get(route('housekeeping.page', 'report-issue'))
-            ->assertOk()
-            ->assertSee('Report Maintenance Defect or Room Discrepancy')
-            ->assertSee('action="'.route('maintenance-reports.store').'"', false)
-            ->assertSee('Submit Report')
-            ->assertSee('Message Front Desk')
-            ->assertSee('Room 701');
-
-        $this->actingAs($user)
-            ->get(route('housekeeping.page', 'reported-issues'))
-            ->assertOk()
-            ->assertSee('Reported Issues &amp; Facilities Work Orders Log', false)
-            ->assertSee('Open &amp; In Progress', false)
-            ->assertSee('Report New Issue');
-
-        $this->actingAs($user)
-            ->get(route('housekeeping.page', 'lost-found'))
-            ->assertOk()
-            ->assertSee('Lost &amp; Found Storage and Item History', false)
-            ->assertSee('Log a Found Item')
-            ->assertSee('action="'.route('lost-found-items.store').'"', false)
-            ->assertSee('Room 701');
-
-        $this->actingAs($user)
-            ->get(route('housekeeping.page', 'reports'))
-            ->assertOk()
-            ->assertSee('Housekeeping Operational Reports &amp; Response Time Analytics', false)
-            ->assertSee('Attendant Productivity &amp; Quality Audit Records', false)
-            ->assertSee('Daily Housekeeper Performance &amp; Pacing Records', false)
-            ->assertSee('Custom Report Builder');
-
-        $this->actingAs($user)
-            ->get(route('housekeeping.page', 'notifications'))
-            ->assertOk()
-            ->assertSee('Housekeeping Assignment Notifications &amp; Operational Alerts', false)
-            ->assertSee('Live Assignment Center')
-            ->assertSee('Radio Broadcast Log')
-            ->assertSee('Supervisor Assignment Summary');
-
-        foreach (['linen-supplies', 'linen-records', 'housekeeping-supplies'] as $removedPage) {
-            $this->actingAs($user)
-                ->get(route('housekeeping.page', $removedPage))
-                ->assertNotFound();
+        foreach (['tasks', 'cleaning-tasks', 'priority-rooms'] as $page) {
+            $this->actingAs($user)->get(route('housekeeping.page', $page))->assertOk()->assertSee('Prepare Room 701 for arrival');
         }
+
+        $this->actingAs($user)->get(route('housekeeping.page', 'guest-requests'))
+            ->assertOk()
+            ->assertSee('Deliver two extra towels')
+            ->assertDontSee('Prepare Room 701 for arrival');
+        $this->actingAs($user)->get(route('housekeeping.page', 'completed-tasks'))
+            ->assertOk()
+            ->assertSee('Linen replaced and inspected.')
+            ->assertDontSee('Deliver two extra towels');
+        $this->actingAs($user)->get(route('housekeeping.page', 'room-inspection'))
+            ->assertOk()
+            ->assertSee('Room 701')
+            ->assertSee('action="'.route('rooms.inspection.store', $cleaningRoom).'"', false);
+        $this->actingAs($user)->get(route('housekeeping.page', 'maintenance-requests'))
+            ->assertOk()
+            ->assertSee('Room 702')
+            ->assertDontSee(route('housekeeping.page', 'room-status'));
+        $this->actingAs($user)->get(route('housekeeping.page', 'reports'))
+            ->assertOk()
+            ->assertSee('Housekeeper Workload')
+            ->assertSee($user->name);
+        $this->actingAs($user)->get(route('housekeeping.page', 'notifications'))
+            ->assertOk()
+            ->assertSee('Turnover certified by housekeeping supervisor.');
     }
 
     public function test_other_departments_cannot_open_housekeeping_pages(): void

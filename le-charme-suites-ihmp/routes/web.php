@@ -26,6 +26,7 @@ use App\Http\Controllers\ReservationConfirmationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationDepositController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomInspectionController;
 use App\Http\Controllers\SystemManualController;
 use App\Http\Controllers\UiPreferenceController;
 use Illuminate\Support\Facades\Route;
@@ -130,6 +131,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:receptionist,housekeeping')->group(function () {
+        Route::post('/rooms/{room}/inspection', [RoomInspectionController::class, 'store'])
+            ->middleware('permission:rooms.write')
+            ->whereNumber('room')
+            ->name('rooms.inspection.store');
         Route::post('/lost-found-items', [LostFoundItemController::class, 'store'])
             ->middleware('permission:rooms.write')
             ->name('lost-found-items.store');

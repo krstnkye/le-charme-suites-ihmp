@@ -73,10 +73,6 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <button class="inline-flex items-center gap-1.5 rounded-lg border border-outline-variant bg-white px-4 py-2 text-sm font-bold text-primary shadow-sm transition hover:bg-surface-container" type="reset" form="settings-form">
-                    <span class="material-symbols-outlined text-[18px]">undo</span>
-                    Discard Drafts
-                </button>
                 <button class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-primary-container" type="submit" form="settings-form">
                     <span class="material-symbols-outlined text-[18px] text-secondary-fixed">save</span>
                     Quick Save Changes
