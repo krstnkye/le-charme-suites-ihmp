@@ -45,7 +45,6 @@
                 <div class="mt-1 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500"><span>Operations</span><span>/</span><span class="text-secondary">Transaction History</span><span>/</span><span>History Page</span></div>
             </div>
             <div class="flex flex-wrap items-center justify-end gap-3">
-                <button type="button" onclick="alert('Cash drawer access has been logged for audit review.')" class="hidden items-center gap-2 rounded-lg border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-container/30 md:flex"><span class="material-symbols-outlined text-base">lock_open</span>Open Cash Drawer</button>
                 <button type="button" onclick="window.print()" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex"><span class="material-symbols-outlined text-base text-secondary-fixed">verified_user</span>End-of-Shift Summary</button>
                 <div class="rounded-lg border border-line bg-white px-4 py-2 text-right shadow-sm"><p id="billing-date" class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Loading date</p><p id="billing-clock" class="font-mono text-sm font-bold text-primary">--:--:-- PHT</p></div>
             </div>

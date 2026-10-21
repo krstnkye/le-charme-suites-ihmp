@@ -278,10 +278,6 @@
                             </div>
                         </div>
                         <div class="mt-6 space-y-2.5 border-t border-surface-container-highest pt-5">
-                            <button class="flex w-full items-center justify-center gap-2 rounded-lg border border-outline-variant/60 bg-white px-4 py-2.5 text-sm font-bold text-primary shadow-sm transition hover:bg-surface-container" type="button" onclick="alert('Access simulation uses the selected role and current matrix settings.')">
-                                <span class="material-symbols-outlined text-base text-secondary">terminal</span>
-                                Simulate Role Access
-                            </button>
                             <button class="flex w-full items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold text-error transition hover:bg-error-container/30" type="button" data-revoke-action="override">
                                 <span class="material-symbols-outlined text-base">lock_reset</span>
                                 Revoke Overrides for {{ $roleTiers[$selectedRole] }}

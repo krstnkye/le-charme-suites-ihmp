@@ -91,14 +91,6 @@
                 <h1 class="mt-1 font-serif text-xl font-bold text-primary">Billing &amp; Cashier Dashboard</h1>
             </div>
             <div class="flex flex-wrap items-center justify-end gap-3">
-                <button type="button" onclick="document.getElementById('transaction-history')?.scrollIntoView({ behavior: 'smooth', block: 'start' })" class="hidden items-center gap-2 rounded-lg border border-rose-200 bg-white px-3 py-2 text-xs font-bold text-rose-700 shadow-sm transition hover:bg-rose-50 xl:flex">
-                    <span class="material-symbols-outlined text-base">cancel</span>
-                    Cancel Transaction
-                </button>
-                <button type="button" onclick="alert('Cash drawer access has been recorded for audit review.')" class="hidden items-center gap-2 rounded-lg border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-container/30 md:flex">
-                    <span class="material-symbols-outlined text-base">lock_open</span>
-                    Open Cash Drawer
-                </button>
                 <button type="button" onclick="window.print()" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex">
                     <span class="material-symbols-outlined text-base text-secondary-fixed">schedule</span>
                     End-of-Shift Summary
@@ -224,9 +216,6 @@
                         </div>
                         <div class="flex flex-wrap gap-1.5 text-xs font-bold">
                             <span class="rounded-full bg-primary px-3 py-1 text-white">All Departments</span>
-                            <span class="rounded-full bg-surface-mid px-3 py-1 text-slate-600">F&amp;B</span>
-                            <span class="rounded-full bg-surface-mid px-3 py-1 text-slate-600">Laundry</span>
-                            <span class="rounded-full bg-surface-mid px-3 py-1 text-slate-600">Spa</span>
                         </div>
                     </div>
                     <div class="custom-scroll overflow-x-auto">
@@ -276,9 +265,6 @@
                                                         <span class="material-symbols-outlined text-base">print</span>
                                                     </span>
                                                 @endif
-                                                <button type="button" onclick="alert('Void request noted for audit review: TXN-{{ str_pad($transaction->id, 5, '0', STR_PAD_LEFT) }}')" class="rounded p-1 text-rose-700 hover:bg-rose-50" title="Void or adjust">
-                                                    <span class="material-symbols-outlined text-base">cancel</span>
-                                                </button>
                                             </div>
                                         </td>
                                     </tr>

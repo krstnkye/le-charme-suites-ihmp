@@ -304,10 +304,6 @@
                             <p class="py-6 text-center text-sm font-semibold text-slate-500">No active users to display.</p>
                         @endforelse
                     </div>
-                    <button id="terminateRemoteSessions" class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-error px-3 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-red-800" type="button">
-                        <span class="material-symbols-outlined">emergency</span>
-                        Terminate All Remote Sessions
-                    </button>
                     <p class="mt-1.5 text-center text-[11px] text-slate-500">Requires master administrator confirmation.</p>
                 </div>
             </section>
@@ -341,12 +337,6 @@
                 const proof = JSON.parse(button.dataset.proofJson || '{}');
                 alert(JSON.stringify(proof, null, 2));
             });
-        });
-
-        document.getElementById('terminateRemoteSessions')?.addEventListener('click', () => {
-            if (confirm('Terminate all remote sessions in this admin simulation?')) {
-                alert('Remote session termination request recorded for administrator review.');
-            }
         });
 
         const auditRows = Array.from(document.querySelectorAll('[data-audit-row]'));

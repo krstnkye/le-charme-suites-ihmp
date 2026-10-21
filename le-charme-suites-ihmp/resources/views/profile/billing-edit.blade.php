@@ -46,8 +46,6 @@
             </div>
             <div class="flex flex-wrap items-center justify-end gap-3">
                 <span class="hidden items-center gap-2 rounded-full border border-line bg-surface-low px-3 py-1.5 text-xs font-bold text-slate-600 md:inline-flex"><span class="h-2 w-2 rounded-full bg-emerald-600"></span>Register 02</span>
-                <button type="button" onclick="alert('Cash drawer access has been logged for audit review.')" class="hidden items-center gap-2 rounded-lg border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-container/30 md:flex"><span class="material-symbols-outlined text-base">point_of_sale</span>Open Cash Drawer</button>
-                <button type="button" onclick="alert('The end-of-shift summary is ready for supervisor review.')" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex"><span class="material-symbols-outlined text-base text-secondary-fixed">receipt_long</span>End-of-Shift Summary</button>
                 <div class="rounded-lg border border-line bg-white px-4 py-2 text-right shadow-sm">
                     <p id="billing-date" class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Loading date</p>
                     <p id="billing-clock" class="font-mono text-sm font-bold text-primary">--:--:-- PHT</p>
@@ -259,7 +257,6 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap justify-end gap-3">
-                        <button class="inline-flex items-center gap-2 rounded-lg border border-line px-4 py-2 text-xs font-bold text-primary transition hover:bg-surface-low" type="button" onclick="alert('Recovery code generation is available to administrators only.')"><span class="material-symbols-outlined text-base">vpn_key</span>Recovery Codes</button>
                         <button class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-primary-container" type="submit"><span class="material-symbols-outlined text-base text-secondary-fixed">save</span>Save Profile Preferences</button>
                     </div>
                 </footer>

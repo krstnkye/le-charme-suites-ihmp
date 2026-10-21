@@ -49,8 +49,7 @@
                 <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMP <span class="font-sans text-sm font-semibold text-slate-500">| Shift Financial Summary</span></h1>
             </div>
             <div class="flex flex-wrap items-center justify-end gap-3">
-                <button type="button" onclick="alert('Cash drawer access has been logged for audit review.')" class="hidden items-center gap-2 rounded-lg border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-container/30 md:flex"><span class="material-symbols-outlined text-base">lock_open</span>Open Cash Drawer</button>
-                <button type="button" onclick="alert('The end-of-shift summary is ready for supervisor review.')" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex"><span class="material-symbols-outlined text-base text-secondary-fixed">schedule</span>End-of-Shift Summary</button>
+                <button onclick="window.print()" type="button" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex"><span class="material-symbols-outlined text-base text-secondary-fixed">schedule</span>End-of-Shift Summary</button>
                 <div class="rounded-lg border border-line bg-white px-4 py-2 text-right shadow-sm">
                     <p id="billing-date" class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Loading date</p>
                     <p id="billing-clock" class="font-mono text-sm font-bold text-primary">--:--:-- PHT</p>
@@ -75,7 +74,6 @@
                 <div class="no-print flex flex-wrap items-center gap-3">
                     <button type="button" onclick="document.getElementById('standard-report-directory').scrollIntoView({ behavior: 'smooth' })" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900"><span class="material-symbols-outlined text-secondary-fixed">play_arrow</span>Run Shift Balance Report</button>
                     <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-secondary">print</span>Print X-Reading</button>
-                    <button type="button" onclick="alert('Daily Z-reading has been scheduled for the end-of-day close.')" class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface-mid px-4 py-2.5 text-sm font-bold text-primary shadow-sm transition hover:bg-white"><span class="material-symbols-outlined text-secondary">event_repeat</span>Schedule Daily Z-Reading</button>
                 </div>
             </section>
 
@@ -129,9 +127,8 @@
                     <div class="mt-6 flex flex-col justify-between gap-4 border-t border-line pt-5 md:flex-row md:items-center">
                         <p class="inline-flex items-center gap-2 text-sm text-slate-600"><span class="material-symbols-outlined text-base text-emerald-700">check_circle</span>{{ $postedCount }} billing records available for the report</p>
                         <div class="no-print flex flex-wrap gap-3">
-                            <button type="button" onclick="alert('Report preview generated from current billing data.')" class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface-low px-4 py-2.5 text-sm font-bold text-primary transition hover:bg-white"><span class="material-symbols-outlined">visibility</span>Preview</button>
+                            <button onclick="window.print()" type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface-low px-4 py-2.5 text-sm font-bold text-primary transition hover:bg-white"><span class="material-symbols-outlined">visibility</span>Preview</button>
                             <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-secondary/90"><span class="material-symbols-outlined">picture_as_pdf</span>PDF Download</button>
-                            <button type="button" onclick="alert('The report has been prepared for email routing to management.')" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-slate-900"><span class="material-symbols-outlined">forward_to_inbox</span>Email to Board &amp; GM</button>
                         </div>
                     </div>
                 </section>

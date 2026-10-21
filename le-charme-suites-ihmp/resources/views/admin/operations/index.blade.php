@@ -12,15 +12,18 @@
     $selectedRoomType = $roomTypeRows->first();
     $officialRoomCatalog = config('hotel.room_types', []);
     $roomTypeAmenities = config('hotel.highlights', []);
-    $roomTypeWings = ['Main Wing', 'Ocean Wing', 'Executive Villas'];
-    $roomTypeCatalog = $roomTypeRows->map(function ($roomType, $index) use ($roomTypeWings, $officialRoomCatalog) {
+    $roomTypeFloors = \App\Models\Room::query()->get(['room_number', 'room_type'])
+        ->groupBy('room_type')
+        ->map(fn ($rooms) => 'Floor '.$rooms->map(fn ($room) => substr((string) $room->room_number, 0, 1))->unique()->sort()->implode(', '));
+    $floorOptions = \App\Models\Room::query()->pluck('room_number')->map(fn ($number) => substr((string) $number, 0, 1))->unique()->sort()->values();
+    $roomTypeCatalog = $roomTypeRows->map(function ($roomType, $index) use ($roomTypeFloors, $officialRoomCatalog) {
         $specification = $officialRoomCatalog[(string) $roomType[0]] ?? null;
         $bedConfiguration = $specification['bed_configuration'] ?? 'Custom configuration';
 
         return [
             'type' => (string) $roomType[0],
             'code' => strtoupper(substr(preg_replace('/[^A-Za-z]/', '', (string) $roomType[0]), 0, 3) ?: 'RMT') . '-' . str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT),
-            'wing' => $roomTypeWings[$index % count($roomTypeWings)],
+            'wing' => $roomTypeFloors[(string) $roomType[0]] ?? 'Floor not set',
             'inventory' => (string) $roomType[1],
             'capacity' => (string) $roomType[2],
             'average_rate' => (string) $roomType[3],
@@ -163,14 +166,6 @@
                             <span class="material-symbols-outlined text-lg">download</span>
                             Format: PDF
                         </button>
-                        <button id="scheduleReportRun" class="flex items-center gap-2 rounded-lg border border-outline-variant/40 bg-surface-container-high px-3.5 py-2 text-sm font-bold text-primary transition hover:bg-surface-container" type="button">
-                            <span class="material-symbols-outlined text-lg">schedule</span>
-                            Schedule Run
-                        </button>
-                        <button id="generateCustomReport" class="flex items-center gap-2 rounded-lg border border-secondary-fixed/30 bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-primary-container" type="button">
-                            <span class="material-symbols-outlined text-lg text-secondary-fixed">play_arrow</span>
-                            Generate Custom Report
-                        </button>
                     </div>
                 </section>
 
@@ -204,15 +199,6 @@
                                 <input class="w-full rounded-lg border border-outline-variant bg-white px-3 py-2 text-sm text-primary focus:border-secondary focus:ring-1 focus:ring-secondary/20" type="date" value="{{ now(config('app.timezone'))->toDateString() }}">
                             </label>
                             <label>
-                                <span class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Property Scope</span>
-                                <select class="w-full rounded-lg border border-outline-variant bg-white px-3 py-2 text-sm text-primary focus:border-secondary focus:ring-1 focus:ring-secondary/20">
-                                    <option>All Property Wings (Consolidated)</option>
-                                    <option>Main Wing Only</option>
-                                    <option>Ocean Wing Only</option>
-                                    <option>Executive Villas Only</option>
-                                </select>
-                            </label>
-                            <label>
                                 <span class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Currency Base</span>
                                 <select class="w-full rounded-lg border border-outline-variant bg-white px-3 py-2 text-sm text-primary focus:border-secondary focus:ring-1 focus:ring-secondary/20">
                                     <option>Philippine Peso (PHP) - Local</option>
@@ -239,7 +225,6 @@
                             <div class="flex flex-wrap items-center gap-3">
                                 <button data-report-action="preview" class="inline-flex items-center gap-2 rounded-lg border border-outline-variant bg-surface-container px-4 py-2 text-sm font-bold text-primary transition hover:bg-surface-container-high" type="button"><span class="material-symbols-outlined text-lg">visibility</span>Preview</button>
                                 <button data-report-action="download" class="inline-flex items-center gap-2 rounded-lg bg-secondary px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:brightness-110" type="button"><span class="material-symbols-outlined text-lg">picture_as_pdf</span>PDF Download</button>
-                                <button data-report-action="email" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white transition hover:bg-primary-container" type="button"><span class="material-symbols-outlined text-lg">forward_to_inbox</span>Email to Board & GM</button>
                             </div>
                         </div>
                     </div>
@@ -362,10 +347,10 @@
                         <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Configure standard room rates, seasonal rate changes, weekend rate rules, SBMA Freeport tax policies, and agreed company rates.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
-                        <button class="inline-flex items-center gap-2 rounded-lg border border-outline-variant/50 bg-white px-3.5 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-container" type="button">
+                        <a href="{{ route('admin.integration.export', ['dataset' => 'rooms', 'format' => 'csv']) }}" class="inline-flex items-center gap-2 rounded-lg border border-outline-variant/50 bg-white px-3.5 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-container" type="button">
                             <span class="material-symbols-outlined text-base">download</span>
                             Export Room Rate Schedule
-                        </button>
+                        </a>
                     </div>
                 </section>
 
@@ -392,20 +377,8 @@
 
                 <section class="flex flex-col items-center justify-between gap-4 rounded-xl border border-surface-container-highest bg-white p-4 shadow-sm lg:flex-row">
                     <div class="flex w-full items-center gap-1 overflow-x-auto pb-1 lg:w-auto lg:pb-0">
-                        @foreach (['All Active Plans', 'Standard Base Room Rates', 'Dynamic / Seasonal Yields', 'Corporate & Diplomatic OTA', 'Promotional Packages'] as $tab)
-                            <button class="whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-bold transition {{ $loop->first ? 'bg-primary text-white shadow-sm' : 'text-slate-600 hover:bg-surface-container hover:text-primary' }}" type="button">{{ $tab }}</button>
-                        @endforeach
                     </div>
                     <div class="flex w-full flex-wrap items-center justify-end gap-3 lg:w-auto">
-                        <div class="flex items-center gap-2 rounded-lg border border-outline-variant/60 bg-surface-container-low px-2.5 py-1.5">
-                            <span class="material-symbols-outlined text-base text-outline">apartment</span>
-                            <select class="border-none bg-transparent p-0 pr-6 text-xs font-semibold text-primary focus:outline-none focus:ring-0">
-                                <option>All Hotel Wings</option>
-                                <option>Main Wing</option>
-                                <option>Ocean Wing</option>
-                                <option>Executive Villas</option>
-                            </select>
-                        </div>
                         <div class="flex items-center gap-2 rounded-lg border border-outline-variant/60 bg-surface-container-low px-2.5 py-1.5">
                             <span class="text-xs font-bold text-secondary">PHP</span>
                             <span class="material-symbols-outlined text-sm text-outline">expand_more</span>
@@ -454,7 +427,7 @@
                                                     <span class="flex h-9 w-9 items-center justify-center rounded border {{ $selected ? 'border-secondary/40 bg-secondary-fixed/30 text-secondary' : 'border-outline-variant/40 bg-surface-container text-primary' }}"><span class="material-symbols-outlined text-lg">{{ $loop->iteration % 3 === 0 ? 'weekend' : ($loop->iteration % 2 === 0 ? 'single_bed' : 'bed') }}</span></span>
                                                     <div>
                                                         <p class="font-bold text-primary">{{ Str::headline($typeName) }}</p>
-                                                        <p class="font-mono text-[10px] text-outline">{{ $code }} - {{ $roomTypeWings[$loop->index % count($roomTypeWings)] }}</p>
+                                                        <p class="font-mono text-[10px] text-outline">{{ $code }} - {{ $roomTypeFloors[$typeName] ?? 'Floor not set' }}</p>
                                                     </div>
                                                 </div>
                                             </td>
@@ -469,7 +442,6 @@
                                             <td class="px-4 py-3.5"><span class="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800">Active</span></td>
                                             <td class="px-4 py-3.5 text-right">
                                                 <div class="flex items-center justify-end gap-1">
-                                                    <button class="rounded {{ $selected ? 'bg-secondary text-white' : 'bg-surface-container text-primary hover:bg-secondary-fixed/40' }} px-2 py-1 text-[11px] font-bold transition" type="button">{{ $selected ? 'Inspect' : 'Edit' }}</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -502,10 +474,6 @@
                                         <p class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-secondary">account_balance</span>SBMA eco-levy: 5%</p>
                                     </div>
                                 </div>
-                                <button class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-primary-container" type="button">
-                                    <span class="material-symbols-outlined text-base text-secondary-fixed">edit</span>
-                                    Edit Selected Rate
-                                </button>
                             </div>
                         </section>
 
@@ -582,9 +550,9 @@
                         </div>
                         <div class="relative">
                             <select id="roomTypeWingFilter" class="appearance-none rounded-lg border border-surface-container-highest bg-surface-container-low py-1.5 pl-3 pr-8 text-xs font-semibold text-primary outline-none focus:border-secondary">
-                                <option value="all">All Wings (3)</option>
-                                @foreach ($roomTypeWings as $wing)
-                                    <option value="{{ $wing }}">{{ $wing }}</option>
+                                <option value="all">All Floors</option>
+                                @foreach ($floorOptions as $floor)
+                                    <option value="{{ $floor }}">Floor {{ $floor }}</option>
                                 @endforeach
                             </select>
                             <span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-sm text-outline">expand_more</span>
@@ -616,7 +584,7 @@
                                 [$typeName, $inventory, $capacityRange, $averageRate, $availability] = $roomType;
                                 $code = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $typeName), 0, 3) ?: 'RMT') . '-' . str_pad((string) ($loop->iteration), 2, '0', STR_PAD_LEFT);
                                 $isSelected = $loop->first;
-                                $wing = $roomTypeWings[($loop->index) % count($roomTypeWings)];
+                                $wing = $roomTypeFloors[$typeName] ?? 'Floor not set';
                                 $officialSpecification = $officialRoomCatalog[$typeName] ?? null;
                                 $bedConfiguration = $officialSpecification['bed_configuration'] ?? 'Custom configuration';
                                 $bedType = str_contains($bedConfiguration, 'King') ? 'King Beds' : (str_contains($bedConfiguration, 'Queen') ? 'Twin Queens' : 'Suite Layouts');
@@ -940,12 +908,7 @@
                         }
 
                         if (action === 'preview' || action === 'run') {
-                            alert(`${reportTitle} is ready for preview using the current live database values.`);
-                            return;
-                        }
-
-                        if (action === 'email') {
-                            alert('Report email is ready to be sent to the Board and General Manager for review.');
+                            window.print();
                             return;
                         }
 
@@ -961,15 +924,7 @@
                 });
 
                 document.getElementById('reportFormatButton')?.addEventListener('click', () => {
-                    alert('Report export format is set to PDF for this admin session.');
-                });
-
-                document.getElementById('scheduleReportRun')?.addEventListener('click', () => {
-                    alert('Scheduled report run staged for the next night audit cycle.');
-                });
-
-                document.getElementById('generateCustomReport')?.addEventListener('click', () => {
-                    alert('Custom report generated from the selected date, scope, currency, and options.');
+                    window.print();
                 });
             }
 
@@ -999,7 +954,7 @@
                 roomTypeCards.forEach((card) => {
                     const searchable = `${card.dataset.type} ${card.dataset.code}`.toLowerCase();
                     const matchesSearch = !query || searchable.includes(query);
-                    const matchesWing = wing === 'all' || card.dataset.wing === wing;
+                    const matchesWing = wing === 'all' || card.dataset.wing.replace('Floor ', '').split(', ').includes(wing);
                     const matchesBed = bed === 'all' || card.dataset.bed === bed;
 
                     card.classList.toggle('hidden', !(matchesSearch && matchesWing && matchesBed));
@@ -1053,7 +1008,7 @@
                     return;
                 }
 
-                const headings = ['Code', 'Room Type', 'Wing', 'Inventory', 'Capacity', 'Average Rate', 'Availability', 'Bed Type'];
+                const headings = ['Code', 'Room Type', 'Floors', 'Inventory', 'Capacity', 'Average Rate', 'Availability', 'Bed Type'];
                 const rows = roomTypeCatalog.map((item) => [
                     item.code,
                     item.type,

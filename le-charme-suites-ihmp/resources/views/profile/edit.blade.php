@@ -113,10 +113,6 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="font-mono text-xs text-outline">Session Hash: {{ substr(sha1((string) $user->id), 0, 4) }}...{{ substr(sha1($user->email), -3) }}</span>
-                        <button class="inline-flex items-center gap-1.5 rounded-lg border border-outline-variant/50 bg-surface-container-high px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-surface-container-highest" type="button">
-                            <span class="material-symbols-outlined text-base">cached</span>
-                            Refresh Security Key
-                        </button>
                     </div>
                 </section>
 
@@ -245,7 +241,6 @@
                                         <p class="text-xs text-slate-500">Login details protected for the administrator account.</p>
                                     </div>
                                 </div>
-                                <button class="inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-1.5 text-xs font-bold text-white" type="button"><span class="material-symbols-outlined text-base">add</span>Register Key</button>
                             </div>
                             <div class="mt-4 space-y-3">
                                 @foreach ([
@@ -358,8 +353,6 @@
                             </div>
                         </div>
                         <div class="flex flex-wrap justify-end gap-3">
-                            <button class="inline-flex items-center gap-2 rounded-lg border border-outline-variant/60 px-4 py-2 text-xs font-bold text-primary transition hover:bg-surface-container-high" type="button"><span class="material-symbols-outlined text-base">download</span>Audit Signature</button>
-                            <button class="inline-flex items-center gap-2 rounded-lg border border-outline-variant/60 px-4 py-2 text-xs font-bold text-primary transition hover:bg-surface-container-high" type="button"><span class="material-symbols-outlined text-base">vpn_key</span>Recovery Codes</button>
                             <button class="inline-flex items-center gap-2 rounded-lg bg-primary-container px-5 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-primary" type="submit"><span class="material-symbols-outlined text-base text-secondary-fixed">save</span>Save Profile Preferences</button>
                         </div>
                     </footer>

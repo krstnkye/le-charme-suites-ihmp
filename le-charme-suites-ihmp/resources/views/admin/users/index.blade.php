@@ -324,10 +324,7 @@
                     </div>
 
                     <div class="mt-6 flex items-center justify-between border-t border-surface-container-highest pt-4">
-                        <button class="text-xs font-bold text-slate-500 transition hover:text-error" type="button">Reset to Standard</button>
                         <div class="flex items-center gap-2">
-                            <button class="rounded-lg border border-secondary px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10" type="button">Cancel</button>
-                            <button class="rounded-lg bg-secondary px-4 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#5b4313]" type="button">Save Overrides</button>
                         </div>
                     </div>
                 </section>
