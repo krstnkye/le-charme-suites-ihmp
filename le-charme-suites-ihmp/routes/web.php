@@ -19,6 +19,7 @@ use App\Http\Controllers\OnlineBookingFeedController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReservationChargeController;
 use App\Http\Controllers\ReservationConfirmationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationDepositController;
@@ -137,6 +138,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/reservations/{reservation}/deposits', [ReservationDepositController::class, 'store'])
             ->middleware('permission:guest_bills.write')
             ->name('reservations.deposits.store');
+        Route::post('/reservations/{reservation}/charges', [ReservationChargeController::class, 'store'])
+            ->middleware('permission:guest_bills.write')
+            ->name('reservations.charges.store');
         Route::get('/check-outs', [CheckOutController::class, 'index'])->middleware('permission:guest_bills.read')->name('check-outs.index');
         Route::get('/check-outs/history', [CheckOutController::class, 'history'])->middleware('permission:guest_bills.read')->name('check-outs.history');
         Route::get('/check-outs/create', [CheckOutController::class, 'create'])->middleware('permission:guest_bills.write')->name('check-outs.create');

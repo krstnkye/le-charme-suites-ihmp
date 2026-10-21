@@ -128,7 +128,7 @@
                         <h2 class="font-serif text-4xl font-bold leading-tight">Guest Charges &amp; Payments</h2>
                         <p class="mt-2 text-sm leading-6 text-blue-100">Record and review extra room charges, direct guest charges, cash payments, and payment records with activity history.</p>
                     </div>
-                    <a href="{{ route('check-outs.create') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-amber-700">
+                    <a href="{{ route('check-outs.create') }}#add-charge" class="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-amber-700">
                         <span class="material-symbols-outlined">add_circle</span>
                         Add Guest Charge
                     </a>

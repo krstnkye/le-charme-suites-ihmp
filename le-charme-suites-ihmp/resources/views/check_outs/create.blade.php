@@ -25,6 +25,7 @@
             'incidentals' => $incidentals,
             'deposit' => $deposit,
             'deposit_url' => $reservation ? route('reservations.deposits.store', $reservation) : null,
+            'charge_url' => $reservation ? route('reservations.charges.store', $reservation) : null,
             'balance' => $balance,
             'check_in' => $checkInDate?->format('M d, Y') ?: 'Not recorded',
             'check_out' => $checkOutDate?->format('M d, Y') ?: 'Pending',
@@ -136,7 +137,7 @@
                                         <td class="px-3 py-3.5 text-right font-mono font-semibold text-emerald-800">-PHP {{ number_format($stay['deposit'], 2) }}</td>
                                         <td class="px-4 py-3.5 text-right"><div class="font-mono text-base font-bold text-primary">PHP {{ number_format($stay['balance'], 2) }}</div><span class="text-[10px] font-bold uppercase text-secondary">Payment Pending</span></td>
                                         <td class="px-3 py-3.5 text-center"><span class="rounded-full {{ $stay['deposit'] > 0 ? 'bg-emerald-50 text-emerald-800' : 'bg-secondary-fixed text-primary' }} px-2 py-1 text-xs font-bold">{{ $stay['deposit'] > 0 ? 'Deposit Received' : 'No Deposit' }}</span></td>
-                                        <td class="px-4 py-3.5 text-center"><div class="flex items-center justify-center gap-1 text-slate-500"><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-primary" data-stay-id="{{ $stay['id'] }}" data-folio-action="view" title="View detailed guest bill" aria-label="View guest bill for Room {{ $stay['room'] }}"><span class="material-symbols-outlined text-base">visibility</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-secondary" data-stay-id="{{ $stay['id'] }}" data-folio-action="pay" title="Post payment" aria-label="Post payment for Room {{ $stay['room'] }}"><span class="material-symbols-outlined text-base">payments</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-emerald-700" data-stay-id="{{ $stay['id'] }}" data-folio-action="deposit" title="Record deposit / downpayment" aria-label="Record deposit for Room {{ $stay['room'] }}"><span class="material-symbols-outlined text-base">savings</span></button><a href="{{ $stay['bill_preview_url'] }}" target="_blank" rel="noopener" class="inline-flex rounded p-1 hover:bg-surface-mid hover:text-primary" title="Print guest bill"><span class="material-symbols-outlined text-base">print</span></a></div></td>
+                                        <td class="px-4 py-3.5 text-center"><div class="flex items-center justify-center gap-1 text-slate-500"><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-primary" data-stay-id="{{ $stay['id'] }}" data-folio-action="view" title="View detailed guest bill" aria-label="View guest bill for Room {{ $stay['room'] }}"><span class="material-symbols-outlined text-base">visibility</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-secondary" data-stay-id="{{ $stay['id'] }}" data-folio-action="pay" title="Post payment" aria-label="Post payment for Room {{ $stay['room'] }}"><span class="material-symbols-outlined text-base">payments</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-emerald-700" data-stay-id="{{ $stay['id'] }}" data-folio-action="deposit" title="Record deposit / downpayment" aria-label="Record deposit for Room {{ $stay['room'] }}"><span class="material-symbols-outlined text-base">savings</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-amber-700" data-stay-id="{{ $stay['id'] }}" data-folio-action="charge" title="Add extra charge" aria-label="Add extra charge for Room {{ $stay['room'] }}"><span class="material-symbols-outlined text-base">add_shopping_cart</span></button><a href="{{ $stay['bill_preview_url'] }}" target="_blank" rel="noopener" class="inline-flex rounded p-1 hover:bg-surface-mid hover:text-primary" title="Print guest bill"><span class="material-symbols-outlined text-base">print</span></a></div></td>
                                     </tr>
                                 @empty
                                     <tr><td colspan="8" class="px-4 py-12 text-center font-semibold text-slate-500">No active guest bills are waiting for Billing right now.</td></tr>
@@ -180,6 +181,15 @@
                                     <button form="depositForm" type="submit" class="col-span-2 rounded-lg border border-secondary bg-white px-3 py-2 text-xs font-bold text-secondary hover:bg-secondary hover:text-white">Save Deposit</button>
                                 </div>
                             </div>
+                            <div id="add-charge" class="border-t border-dashed border-line pt-3">
+                                <button type="button" id="toggleChargeForm" class="inline-flex items-center gap-1 text-xs font-bold text-secondary hover:underline disabled:cursor-not-allowed disabled:opacity-50"><span class="material-symbols-outlined text-sm">add_shopping_cart</span>Add an extra charge</button>
+                                <div id="chargeFields" class="mt-3 hidden grid-cols-2 gap-2">
+                                    <label class="text-[11px] font-bold uppercase text-slate-500">Charge type<select form="chargeForm" name="charge_category" class="mt-1 w-full rounded-lg border-line bg-white py-2 text-sm font-semibold focus:border-secondary focus:ring-secondary">@foreach (\App\Services\GuestBillService::CHARGE_CATEGORIES as $value => $label)<option value="{{ $value }}">{{ $label }}</option>@endforeach</select></label>
+                                    <label class="text-[11px] font-bold uppercase text-slate-500">Amount<input form="chargeForm" name="charge_amount" type="number" step="0.01" min="1" class="mt-1 w-full rounded-lg border-line bg-white py-2 text-sm font-semibold focus:border-secondary focus:ring-secondary"></label>
+                                    <label class="col-span-2 text-[11px] font-bold uppercase text-slate-500">Details <span class="font-normal normal-case">(optional, e.g. 2 bottled water, 1 soda)</span><input form="chargeForm" name="charge_description" maxlength="255" class="mt-1 w-full rounded-lg border-line bg-white py-2 text-sm focus:border-secondary focus:ring-secondary"></label>
+                                    <button form="chargeForm" type="submit" class="col-span-2 rounded-lg border border-secondary bg-white px-3 py-2 text-xs font-bold text-secondary hover:bg-secondary hover:text-white">Add Charge to Bill</button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="grid gap-4 sm:grid-cols-2">
@@ -195,6 +205,7 @@
                         </div>
                     </form>
                     <form id="depositForm" method="POST" action="" class="hidden">@csrf</form>
+                    <form id="chargeForm" method="POST" action="" class="hidden">@csrf</form>
 
                     <section class="rounded-xl border border-line bg-primary-container p-5 text-white shadow-sm"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed">cleaning_services</span><h3 class="font-serif text-xl font-bold">Room Cleaning Notice</h3></div><p class="mt-2 text-sm leading-6 text-blue-100">Completing the payment ends the stay, marks the room for cleaning, saves the room status, and records the transaction.</p></section>
                 </aside>
@@ -240,6 +251,8 @@
             document.getElementById('depositPreview').textContent = `-${currency(data.deposit)}`;
             document.getElementById('depositForm').action = data.deposit_url || '';
             document.getElementById('toggleDepositForm').disabled = !data.deposit_url;
+            document.getElementById('chargeForm').action = data.charge_url || '';
+            document.getElementById('toggleChargeForm').disabled = !data.charge_url;
             document.getElementById('balanceDuePreview').textContent = currency(data.balance);
             document.querySelectorAll('.folio-row').forEach((row) => {
                 const selected = stay && row.dataset.stayId === String(stay.id);
@@ -267,7 +280,19 @@
             setTimeout(() => element.classList.remove('ring-2', 'ring-secondary'), 1600);
         };
 
+        const chargeFields = document.getElementById('chargeFields');
+        const setChargeFieldsOpen = (open) => {
+            chargeFields.classList.toggle('hidden', !open);
+            chargeFields.classList.toggle('grid', open);
+        };
+        const openChargeForm = () => {
+            setChargeFieldsOpen(true);
+            spotlight(chargeFields);
+            chargeFields.querySelector('[name="charge_amount"]').focus({ preventScroll: true });
+        };
+
         document.getElementById('toggleDepositForm').addEventListener('click', () => setDepositFieldsOpen(depositFields.classList.contains('hidden')));
+        document.getElementById('toggleChargeForm').addEventListener('click', () => setChargeFieldsOpen(chargeFields.classList.contains('hidden')));
         document.querySelectorAll('.select-folio').forEach((button) => button.addEventListener('click', () => {
             chooseStay(button.dataset.stayId);
             const stay = selectedStay();
@@ -277,6 +302,8 @@
                 spotlight(amountInput);
                 amountInput.focus({ preventScroll: true });
                 amountInput.select();
+            } else if (button.dataset.folioAction === 'charge') {
+                openChargeForm();
             } else if (button.dataset.folioAction === 'deposit') {
                 setDepositFieldsOpen(true);
                 const depositAmount = depositFields.querySelector('[name="amount"]');
@@ -343,6 +370,7 @@
         }
 
         if (checkInSelect.value) renderStay(selectedStay()); else if (activeCheckIns.length === 1) chooseStay(activeCheckIns[0].id); else renderStay(null);
+        if (window.location.hash === '#add-charge' && selectedStay()) openChargeForm();
         updateBillingClock();
         setInterval(updateBillingClock, 1000);
     </script>

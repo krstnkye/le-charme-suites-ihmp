@@ -14,6 +14,20 @@ class GuestBillService
      */
     public const NON_CHARGE_TYPES = ['reservation', 'check_in', 'check_out', 'deposit', 'online_booking_request', 'booking_confirmation'];
 
+    /**
+     * Extra charges staff can post to a guest bill, keyed by transaction type.
+     */
+    public const CHARGE_CATEGORIES = [
+        'minibar' => 'Minibar',
+        'food_beverage' => 'Food & Beverage',
+        'room_service' => 'Room Service',
+        'laundry' => 'Laundry',
+        'spa' => 'Spa & Wellness',
+        'extra_bed' => 'Extra Bed / Extra Guest',
+        'damage' => 'Damage / Loss',
+        'other_charge' => 'Other Charge',
+    ];
+
     public const PAYMENT_METHODS = [
         'cash' => 'Cash',
         'card' => 'Credit / Debit Card',
