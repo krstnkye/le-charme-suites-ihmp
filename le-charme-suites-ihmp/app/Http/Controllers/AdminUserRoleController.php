@@ -20,6 +20,34 @@ class AdminUserRoleController extends Controller
         return view('admin.users.index', $this->viewData());
     }
 
+    public function createAccount(): View
+    {
+        return view('admin.accounts.create', [
+            'roleOptions' => collect(config('hotel.staff_roles'))->except('admin')->all(),
+            'totalUsers' => User::count(),
+        ]);
+    }
+
+    public function storeAccount(Request $request): RedirectResponse
+    {
+        $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', new WorkEmail, Rule::unique('users', 'email')],
+            'role' => ['required', 'in:receptionist,cashier,housekeeping'],
+            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::min(8)],
+        ], [
+            'password.confirmed' => 'Passwords do not match.',
+        ]);
+
+        // Accounts created by an administrator are approved immediately.
+        $user = User::create($validated + ['approved_at' => now()]);
+
+        return to_route('admin.accounts.create')
+            ->with('status', "Staff account created for {$user->name} ({$user->email}).");
+    }
+
     public function roles(): View
     {
         return view('admin.users.roles', $this->viewData());
