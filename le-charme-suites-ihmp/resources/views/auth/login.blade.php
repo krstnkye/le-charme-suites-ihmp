@@ -97,8 +97,8 @@
                         Selected Role: <span id="selected-role-label">None</span>
                     </span>
                 </div>
-                <div class="grid gap-2 sm:grid-cols-4">
-                    @foreach (config('hotel.staff_roles') as $value => $role)
+                <div class="grid gap-2 sm:grid-cols-3">
+                    @foreach (collect(config('hotel.staff_roles'))->except('admin') as $value => $role)
                         <button class="role-card relative cursor-pointer rounded-lg border border-surface-variant bg-surface-container px-3 py-3 text-center text-xs font-bold text-primary transition hover:border-secondary hover:bg-secondary-container {{ old('role') === $value ? 'is-selected' : '' }}" data-label="{{ $role['label'] }}" data-value="{{ $value }}" type="button" aria-pressed="{{ old('role') === $value ? 'true' : 'false' }}">
                             <span class="selected-check material-symbols-outlined absolute right-2 top-2 text-sm opacity-0 transition">check_circle</span>
                             <span class="material-symbols-outlined mb-1 block text-lg">{{ $role['icon'] }}</span>

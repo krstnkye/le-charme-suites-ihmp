@@ -33,6 +33,7 @@
             <div class="space-y-1">
                 <p class="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[#ffdeaa]">User &amp; Role Management</p>
                 <a href="{{ route('admin.users.index') }}" class="{{ $navBase }} {{ request()->routeIs('admin.users.index') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">group</span>Users</a>
+                <a href="{{ route('admin.accounts.create') }}" class="{{ $navBase }} {{ request()->routeIs('admin.accounts.*') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">person_add</span>Create Account</a>
                 <a href="{{ route('admin.roles.index') }}" class="{{ $navBase }} {{ request()->routeIs('admin.roles.index') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">admin_panel_settings</span>Roles</a>
                 <a href="{{ route('admin.permissions.index') }}" class="{{ $navBase }} {{ request()->routeIs('admin.permissions.index') ? $navActive : $navIdle }}"><span class="material-symbols-outlined">lock</span>Permissions</a>
             </div>

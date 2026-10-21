@@ -22,6 +22,11 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function showAdminLogin(): View
+    {
+        return view('auth.admin-login');
+    }
+
     public function showRegister(): View
     {
         return view('auth.register');
@@ -121,7 +126,7 @@ class AuthController extends Controller
             $credentials = $request->validate([
                 'email' => ['required', 'email', new WorkEmail],
                 'password' => ['required', 'string'],
-                'role' => ['required', 'in:admin,receptionist,cashier,housekeeping'],
+                'role' => ['required', 'in:receptionist,cashier,housekeeping'],
             ], [
                 'email.required' => 'Email address is required.',
             ]);
@@ -153,13 +158,47 @@ class AuthController extends Controller
 
         $this->recordActivity($request, 'LOGIN_FAILED', false, null, 'Email and password did not match an account.');
 
-        $message = $account && $account->role !== $credentials['role']
+        $message = $account && $account->role !== 'admin' && $account->role !== $credentials['role']
             ? 'The selected department does not match this account. Choose '.config("hotel.staff_roles.{$account->role}.label", ucfirst($account->role)).' and try again.'
             : 'The email or password does not match our records.';
 
         return back()
             ->withErrors(['email' => $message])
             ->onlyInput('email', 'role');
+    }
+
+    public function adminLogin(Request $request): RedirectResponse
+    {
+        $request->merge([
+            'email' => Str::lower(trim((string) $request->input('email'))),
+        ]);
+
+        try {
+            $credentials = $request->validate([
+                'email' => ['required', 'email', new WorkEmail],
+                'password' => ['required', 'string'],
+            ], [
+                'email.required' => 'Email address is required.',
+            ]);
+        } catch (ValidationException $exception) {
+            $this->recordActivity($request, 'ADMIN_LOGIN_FAILED', false, null, 'Administrator login rejected during validation.');
+
+            throw $exception;
+        }
+
+        // The role is forced server-side, so this form can only ever sign in administrators.
+        if (Auth::attemptWhen($credentials + ['role' => 'admin'], fn (User $user): bool => $user->isApproved(), $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            $this->recordActivity($request, 'ADMIN_LOGIN_SUCCESS', true, Auth::user(), 'Administrator signed in.');
+
+            return redirect()->intended(route('dashboard'));
+        }
+
+        $this->recordActivity($request, 'ADMIN_LOGIN_FAILED', false, null, 'Administrator credentials did not match an account.');
+
+        return back()
+            ->withErrors(['email' => 'The provided credentials do not match an administrator account.'])
+            ->onlyInput('email');
     }
 
     public function register(Request $request): RedirectResponse
@@ -192,12 +231,14 @@ class AuthController extends Controller
 
     public function logout(Request $request): RedirectResponse
     {
+        $wasAdmin = $request->user()?->role === 'admin';
+
         $this->recordActivity($request, 'LOGOUT', true, $request->user(), 'Staff member signed out.');
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route($wasAdmin ? 'admin.login' : 'login');
     }
 
     private function recordActivity(

@@ -46,6 +46,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/setup', [FirstAdminSetupController::class, 'store'])->middleware('throttle:5,1')->name('setup.store');
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
+    Route::get('/admin', [AuthController::class, 'showAdminLogin'])->name('admin.login');
+    Route::post('/admin', [AuthController::class, 'adminLogin'])->middleware('throttle:10,1')->name('admin.login.store');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1')->name('register.store');
     Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
@@ -105,6 +107,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/audit-logs', [AdminAuditLogController::class, 'index'])->name('admin.audit-logs.index');
         Route::get('/admin/guests', [AdminGuestController::class, 'index'])->name('admin.guests.index');
+        Route::get('/admin/create-account', [AdminUserRoleController::class, 'createAccount'])->name('admin.accounts.create');
+        Route::post('/admin/create-account', [AdminUserRoleController::class, 'storeAccount'])->name('admin.accounts.store');
         Route::get('/admin/users', [AdminUserRoleController::class, 'index'])->name('admin.users.index');
         Route::post('/admin/users', [AdminUserRoleController::class, 'store'])->name('admin.users.store');
         Route::put('/admin/users/{user}', [AdminUserRoleController::class, 'update'])->name('admin.users.update');
