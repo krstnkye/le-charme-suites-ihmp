@@ -15,6 +15,7 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\GuestIdentificationController;
 use App\Http\Controllers\HousekeepingController;
 use App\Http\Controllers\HousekeepingTaskController;
+use App\Http\Controllers\LostFoundItemController;
 use App\Http\Controllers\MaintenanceReportController;
 use App\Http\Controllers\OnlineBookingFeedController;
 use App\Http\Controllers\ProfileController;
@@ -129,6 +130,12 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:receptionist,housekeeping')->group(function () {
+        Route::post('/lost-found-items', [LostFoundItemController::class, 'store'])
+            ->middleware('permission:rooms.write')
+            ->name('lost-found-items.store');
+        Route::patch('/lost-found-items/{lostFoundItem}', [LostFoundItemController::class, 'update'])
+            ->middleware('permission:rooms.write')
+            ->name('lost-found-items.update');
         Route::post('/maintenance-reports', [MaintenanceReportController::class, 'store'])
             ->middleware('permission:rooms.write')
             ->name('maintenance-reports.store');

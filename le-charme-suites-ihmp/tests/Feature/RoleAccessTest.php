@@ -676,8 +676,8 @@ class RoleAccessTest extends TestCase
             ->get(route('housekeeping.page', 'lost-found'))
             ->assertOk()
             ->assertSee('Lost &amp; Found Storage and Item History', false)
-            ->assertSee('Items Currently in Custody')
-            ->assertSee('Item Records')
+            ->assertSee('Log a Found Item')
+            ->assertSee('action="'.route('lost-found-items.store').'"', false)
             ->assertSee('Room 701');
 
         $this->actingAs($user)

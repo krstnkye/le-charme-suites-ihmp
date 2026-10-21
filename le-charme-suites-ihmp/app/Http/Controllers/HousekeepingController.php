@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HousekeepingTask;
+use App\Models\LostFoundItem;
 use App\Models\MaintenanceReport;
 use App\Models\Room;
 use App\Models\RoomStatusLog;
@@ -177,6 +178,11 @@ class HousekeepingController extends Controller
                 ->latest()
                 ->get(),
             'housekeepingStaff' => User::where('role', 'housekeeping')->orderBy('name')->get(),
+            'lostFoundItems' => LostFoundItem::with(['room', 'finder', 'releaser'])
+                ->orderByRaw("CASE status WHEN 'in_custody' THEN 1 ELSE 2 END")
+                ->latest('found_at')
+                ->take(100)
+                ->get(),
             'maintenanceReports' => MaintenanceReport::with(['room', 'reporter', 'resolver'])
                 ->orderByRaw("CASE status WHEN 'open' THEN 1 WHEN 'in_progress' THEN 2 ELSE 3 END")
                 ->orderByRaw("CASE severity WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END")
