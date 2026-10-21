@@ -660,20 +660,17 @@ class RoleAccessTest extends TestCase
             ->get(route('housekeeping.page', 'report-issue'))
             ->assertOk()
             ->assertSee('Report Maintenance Defect or Room Discrepancy')
-            ->assertSee('Room Location &amp; Defect Classification', false)
-            ->assertSee('Save Maintenance Report')
-            ->assertSee('Maintenance Coordination')
-            ->assertSee('Open Department Messages')
+            ->assertSee('action="'.route('maintenance-reports.store').'"', false)
+            ->assertSee('Submit Report')
+            ->assertSee('Message Front Desk')
             ->assertSee('Room 701');
 
         $this->actingAs($user)
             ->get(route('housekeeping.page', 'reported-issues'))
             ->assertOk()
             ->assertSee('Reported Issues &amp; Facilities Work Orders Log', false)
-            ->assertSee('Open Housekeeping Reports')
-            ->assertSee('Verify &amp; Clear Room', false)
-            ->assertSee('Return-to-Service Dossier')
-            ->assertSee('Room 702');
+            ->assertSee('Open &amp; In Progress', false)
+            ->assertSee('Report New Issue');
 
         $this->actingAs($user)
             ->get(route('housekeeping.page', 'lost-found'))

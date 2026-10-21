@@ -15,6 +15,7 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\GuestIdentificationController;
 use App\Http\Controllers\HousekeepingController;
 use App\Http\Controllers\HousekeepingTaskController;
+use App\Http\Controllers\MaintenanceReportController;
 use App\Http\Controllers\OnlineBookingFeedController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicBookingController;
@@ -128,6 +129,15 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:receptionist,housekeeping')->group(function () {
+        Route::post('/maintenance-reports', [MaintenanceReportController::class, 'store'])
+            ->middleware('permission:rooms.write')
+            ->name('maintenance-reports.store');
+        Route::patch('/maintenance-reports/{maintenanceReport}', [MaintenanceReportController::class, 'update'])
+            ->middleware('permission:rooms.write')
+            ->name('maintenance-reports.update');
+        Route::get('/maintenance-reports/{maintenanceReport}/photo', [MaintenanceReportController::class, 'photo'])
+            ->middleware('permission:rooms.read')
+            ->name('maintenance-reports.photo');
         Route::post('/housekeeping-tasks', [HousekeepingTaskController::class, 'store'])->middleware('permission:rooms.write')->name('housekeeping-tasks.store');
         Route::patch('/housekeeping-tasks/{housekeepingTask}', [HousekeepingTaskController::class, 'update'])
             ->middleware('permission:rooms.write')

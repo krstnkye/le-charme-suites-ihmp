@@ -1465,7 +1465,7 @@
                         <p class="text-sm leading-6 text-slate-200">Defects, hardware anomalies, and out-of-order rooms reported for facilities and engineering follow-up.</p>
                     </div>
                     <div class="flex flex-wrap gap-3">
-                        <a href="{{ route('housekeeping.page', 'room-status') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/15">
+                        <a href="{{ route('rooms.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/15">
                             <span class="material-symbols-outlined text-base text-[#ffdeaa]">grid_view</span>
                             Open Room Status Table
                         </a>
@@ -1603,23 +1603,25 @@
                             </div>
                             <span class="material-symbols-outlined text-secondary">construction</span>
                         </div>
-                        <form action="{{ route('housekeeping.page', 'report-issue') }}" method="GET" class="mt-4 space-y-4">
+                        <form action="{{ route('maintenance-reports.store') }}" method="POST" class="mt-4 space-y-4">
+                            @csrf
+                            <input type="hidden" name="severity" value="normal">
                             <label class="block">
                                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Target Room</span>
-                                <select class="mt-1 w-full rounded-lg border-line text-sm text-primary focus:border-secondary focus:ring-secondary">
+                                <select name="room_id" required class="mt-1 w-full rounded-lg border-line text-sm text-primary focus:border-secondary focus:ring-secondary">
                                     @forelse ($allRooms as $room)
-                                        <option>Room {{ $room->room_number }} - {{ $room->room_type }} ({{ ucfirst($room->status) }})</option>
+                                        <option value="{{ $room->id }}">Room {{ $room->room_number }} - {{ $room->room_type }} ({{ ucfirst($room->status) }})</option>
                                     @empty
-                                        <option>No rooms added</option>
+                                        <option value="">No rooms added</option>
                                     @endforelse
                                 </select>
                             </label>
                             <div>
                                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Defect Category</span>
                                 <div class="mt-2 grid gap-2 sm:grid-cols-2">
-                                    @foreach (['HVAC', 'Plumbing', 'Door Lock', 'Electrical'] as $category)
+                                    @foreach (['hvac' => 'Aircon', 'plumbing' => 'Plumbing', 'door_lock' => 'Door Lock', 'electrical' => 'Electrical'] as $categoryKey => $category)
                                         <label class="flex items-center gap-2 rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-sm font-semibold text-primary">
-                                            <input type="radio" name="category" class="border-line text-secondary focus:ring-secondary" @checked($loop->first)>
+                                            <input type="radio" name="category" value="{{ $categoryKey }}" class="border-line text-secondary focus:ring-secondary" @checked($loop->first)>
                                             {{ $category }}
                                         </label>
                                     @endforeach
@@ -1627,16 +1629,18 @@
                             </div>
                             <label class="block">
                                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Defect System Status / Staff Note</span>
-                                <textarea rows="4" class="mt-1 w-full rounded-lg border-line text-sm focus:border-secondary focus:ring-secondary" placeholder="Describe issue, affected fixture, guest impact, and urgency..."></textarea>
+                                <textarea name="description" required maxlength="2000" rows="4" class="mt-1 w-full rounded-lg border-line text-sm focus:border-secondary focus:ring-secondary" placeholder="Describe issue, affected fixture, guest impact, and urgency..."></textarea>
                             </label>
                             <label class="flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-primary">
-                                Immediate IHMP Room Freeze
-                                <input type="checkbox" class="rounded border-line text-secondary focus:ring-secondary" checked>
+                                Take room out of service
+                                <input type="hidden" name="take_out_of_service" value="0">
+                                <input type="checkbox" name="take_out_of_service" value="1" class="rounded border-line text-secondary focus:ring-secondary" checked>
                             </label>
                             <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#0d2238]">
                                 <span class="material-symbols-outlined text-base">send</span>
-                                Open Full Report Form
+                                Submit Maintenance Report
                             </button>
+                            <a href="{{ route('housekeeping.page', 'report-issue') }}" class="block text-center text-xs font-bold text-secondary hover:underline">Need a photo or other location? Open the full report form</a>
                         </form>
                     </div>
 
@@ -1672,539 +1676,9 @@
             </div>
         </section>
     @elseif ($pageKey === 'report-issue')
-        @php
-            $reportRooms = $allRooms->values();
-            $selectedReportRoom = $reportRooms->first();
-            $reportAction = $selectedReportRoom ? route('rooms.update', $selectedReportRoom) : route('rooms.index');
-            $categories = [
-                ['label' => 'HVAC & Climate', 'hint' => 'Aircon, thermostat, air', 'icon' => 'mode_fan', 'active' => true],
-                ['label' => 'Plumbing & Water', 'hint' => 'Pressure, drains, leaks', 'icon' => 'faucet', 'active' => false],
-                ['label' => 'Door Lock & Keycard', 'hint' => 'Deadbolts, Keycard, latch', 'icon' => 'lock_clock', 'active' => false],
-                ['label' => 'Electrical & Lights', 'hint' => 'Fixtures, outlets, panels', 'icon' => 'lightbulb', 'active' => false],
-                ['label' => 'Furniture & Balcony', 'hint' => 'Joinery, glass sliders', 'icon' => 'deck', 'active' => false],
-                ['label' => 'Smart TV & Media', 'hint' => 'IPTV, casting, remote', 'icon' => 'tv', 'active' => false],
-            ];
-            $recentDispatchRooms = $maintenanceQueue->take(3)->values();
-        @endphp
-
-        <section class="space-y-6">
-            <div class="flex flex-col gap-4 border-b border-line pb-5 md:flex-row md:items-end md:justify-between">
-                <div>
-                    <div class="mb-2 inline-flex items-center gap-2 rounded bg-secondary/15 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary">
-                        <span class="material-symbols-outlined text-sm">build</span>
-                        Maintenance Issue Report
-                    </div>
-                    <h3 class="font-serif text-3xl font-bold text-primary">Report Maintenance Defect or Room Discrepancy</h3>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Record a room problem and place the room in the maintenance list shared with Front Desk and Housekeeping.</p>
-                </div>
-                <span class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-slate-600">
-                    <span class="material-symbols-outlined text-base text-secondary">database</span>
-                    Saved in shared room records
-                </span>
-            </div>
-
-            <div class="grid gap-6 xl:grid-cols-12">
-                <div class="space-y-6 xl:col-span-8">
-                    <form id="reportIssueForm" method="POST" action="{{ $reportAction }}" class="space-y-6">
-                        @csrf
-                        @method('PATCH')
-                        <input id="reportRoomNumber" type="hidden" name="room_number" value="{{ $selectedReportRoom?->room_number }}">
-                        <input id="reportRoomType" type="hidden" name="room_type" value="{{ $selectedReportRoom?->room_type }}">
-                        <input id="reportRate" type="hidden" name="rate" value="{{ $selectedReportRoom?->rate }}">
-                        <input id="reportCapacity" type="hidden" name="capacity" value="{{ $selectedReportRoom?->capacity }}">
-                        <input type="hidden" name="status" value="maintenance">
-
-                        <section class="relative overflow-hidden rounded-lg border border-line bg-white p-5 shadow-sm">
-                            <div class="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-secondary to-primary"></div>
-                            <div class="mb-4 flex items-center justify-between">
-                                <h3 class="flex items-center gap-2 font-bold text-primary"><span class="material-symbols-outlined text-secondary">room_preferences</span>Room Location &amp; Defect Classification</h3>
-                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Step 1 of 3</span>
-                            </div>
-
-                            <div class="mb-5">
-                                <label class="mb-1.5 block text-sm font-bold text-primary">Target Room or Facility Location <span class="text-red-700">*</span></label>
-                                <div class="relative">
-                                    <select id="reportRoomSelect" class="w-full rounded-lg border-line bg-white py-2.5 pl-10 pr-10 text-sm focus:border-secondary focus:ring-secondary">
-                                        @forelse ($reportRooms as $room)
-                                            <option value="{{ $room->id }}"
-                                                data-action="{{ route('rooms.update', $room) }}"
-                                                data-room-number="{{ $room->room_number }}"
-                                                data-room-type="{{ $room->room_type }}"
-                                                data-rate="{{ $room->rate }}"
-                                                data-capacity="{{ $room->capacity }}"
-                                                data-status="{{ $room->status }}"
-                                                data-description="{{ $room->description }}">
-                                                Room {{ $room->room_number }} - {{ $room->room_type }} ({{ ucfirst($room->status) }})
-                                            </option>
-                                        @empty
-                                            <option>No rooms available</option>
-                                        @endforelse
-                                    </select>
-                                    <span class="material-symbols-outlined absolute left-3 top-3 text-lg text-secondary">meeting_room</span>
-                                </div>
-                                <div class="mt-1.5 flex flex-col gap-1 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-                                    <span>Selected status: <strong id="reportSelectedStatus" class="font-semibold text-secondary">{{ $selectedReportRoom ? ucfirst($selectedReportRoom->status) : 'N/A' }}</strong></span>
-                                    <span>Submitting will move the room to maintenance list.</span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-sm font-bold text-primary">Defect Primary Category <span class="text-red-700">*</span></label>
-                                <div class="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-                                    @foreach ($categories as $category)
-                                        <button type="button" class="issue-category group flex items-center gap-2.5 rounded-lg border p-3 text-left transition {{ $category['active'] ? 'border-secondary bg-[#ffdeaa]/25 shadow-sm' : 'border-line bg-[#f6f3ed] hover:border-secondary/60' }}">
-                                            <span class="material-symbols-outlined {{ $category['active'] ? 'text-secondary' : 'text-slate-500 group-hover:text-secondary' }}">{{ $category['icon'] }}</span>
-                                            <span>
-                                                <span class="block text-sm font-bold text-primary">{{ $category['label'] }}</span>
-                                                <span class="block text-[11px] leading-tight text-slate-500">{{ $category['hint'] }}</span>
-                                            </span>
-                                        </button>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </section>
-
-                        <section class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                            <div class="mb-4 flex items-center justify-between border-b border-line pb-3">
-                                <h3 class="flex items-center gap-2 font-bold text-primary"><span class="material-symbols-outlined text-secondary">speed</span>Severity Table &amp; Incident Scope</h3>
-                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Step 2 of 3</span>
-                            </div>
-
-                            <div>
-                                <label class="mb-2.5 block text-sm font-bold text-primary">Assignment Urgency Level <span class="text-red-700">*</span></label>
-                                <div class="grid gap-3 sm:grid-cols-2">
-                                    @foreach ([
-                                        ['value' => 'low', 'title' => 'Low Priority', 'tag' => 'Routine PM', 'copy' => 'Non-intrusive cosmetic or scheduled preventative maintenance.', 'class' => 'border-line bg-white'],
-                                        ['value' => 'medium', 'title' => 'Medium Priority', 'tag' => 'Room Preparation Window', 'copy' => 'Rectify during room cleaning and preparation before next guest arrival.', 'class' => 'border-line bg-white'],
-                                        ['value' => 'high', 'title' => 'High Priority', 'tag' => 'Guest In-House', 'copy' => 'Guest comfort impaired. Needs immediate attention.', 'class' => 'border-secondary bg-[#ffdeaa]/20'],
-                                        ['value' => 'critical', 'title' => 'Critical Emergency', 'tag' => 'Stop Sales', 'copy' => 'Water flood, fire safety, or major structural failure.', 'class' => 'border-red-300 bg-red-50'],
-                                    ] as $severity)
-                                        <label class="flex cursor-pointer items-start gap-3 rounded-lg border p-3.5 {{ $severity['class'] }}">
-                                            <input class="mt-1 border-line text-secondary focus:ring-secondary" name="severity" type="radio" value="{{ $severity['value'] }}" {{ $severity['value'] === 'high' ? 'checked' : '' }}>
-                                            <span>
-                                                <span class="flex items-center gap-2">
-                                                    <span class="font-bold {{ $severity['value'] === 'critical' ? 'text-red-700' : 'text-primary' }}">{{ $severity['title'] }}</span>
-                                                    <span class="rounded bg-[#f0eee8] px-2 py-0.5 text-[10px] font-bold text-secondary">{{ $severity['tag'] }}</span>
-                                                </span>
-                                                <span class="mt-0.5 block text-xs text-slate-500">{{ $severity['copy'] }}</span>
-                                            </span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <div class="mt-5">
-                                <div class="mb-1.5 flex items-center justify-between">
-                                    <label class="text-sm font-bold text-primary">Detailed Defect Description <span class="text-red-700">*</span></label>
-                                    <span class="text-[11px] text-slate-500">Tap chip to insert preset descriptor</span>
-                                </div>
-                                <div class="mb-2.5 flex flex-wrap gap-1.5">
-                                    @foreach ([
-                                        'Aircon blowing warm air despite low setpoint',
-                                        'Deadbolt sensor jammed and unable to lock',
-                                        'Balcony sliding glass door stuck off track',
-                                        'Bathroom vanity sink slow drain',
-                                        'Keycard Keycard reader blinking red',
-                                    ] as $preset)
-                                        <button type="button" class="issue-preset rounded-full border border-line bg-[#f6f3ed] px-2.5 py-1 text-xs text-slate-600 hover:border-secondary hover:text-secondary" data-preset="{{ $preset }}">+ {{ $preset }}</button>
-                                    @endforeach
-                                </div>
-                                <textarea id="defectDescription" name="description" rows="4" required class="w-full rounded-lg border-line bg-white p-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="Specify observations, readings, sounds, error codes, and guest interaction notes...">Maintenance issue reported by housekeeping: HVAC/climate defect affecting guest comfort. Please ask Maintenance to inspect it.</textarea>
-                            </div>
-
-                            <div class="mt-5">
-                                <label class="mb-1.5 block text-sm font-bold text-primary">Photo &amp; Evidence Documentation</label>
-                                <div class="rounded-lg border-2 border-dashed border-line bg-[#f6f3ed]/60 p-5 text-center">
-                                    <span class="material-symbols-outlined text-4xl text-secondary">add_photo_alternate</span>
-                                    <p class="mt-2 font-bold text-primary">Drag inspection photos here, or browse local terminal</p>
-                                    <p class="mt-1 text-xs text-slate-500">Evidence capture is represented here; image upload storage can be connected when file persistence is added.</p>
-                                    <div class="mt-3 flex flex-wrap justify-center gap-2">
-                                        <button type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-primary"><span class="material-symbols-outlined text-base text-secondary">photo_camera</span>Capture with Tablet Camera</button>
-                                        <button type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-primary"><span class="material-symbols-outlined text-base">link</span>Add Device Check Details</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                            <h3 class="flex items-center gap-2 font-bold text-primary"><span class="material-symbols-outlined text-secondary">domain_verification</span>Room Availability and Safety Actions</h3>
-                            <div class="mt-4 space-y-3 rounded-lg border border-line bg-[#f6f3ed]/70 p-4">
-                                @foreach ([
-                                    ['label' => 'Take Room Out of Order immediately in Front Desk IHMP', 'copy' => 'Freezes room inventory to prevent new arrivals until cleared.', 'checked' => true],
-                                    ['label' => 'Require Supervisor Re-inspection before release', 'copy' => 'Engineering sign-off alone will not return room to inspected clean.', 'checked' => true],
-                                    ['label' => 'Notify Front Desk Guest Service for guest recovery', 'copy' => 'Alerts Duty Manager if relocation or service recovery is needed.', 'checked' => false],
-                                ] as $impact)
-                                    <label class="flex cursor-pointer items-start gap-3">
-                                        <input class="mt-1 rounded border-line text-secondary focus:ring-secondary" type="checkbox" {{ $impact['checked'] ? 'checked' : '' }}>
-                                        <span>
-                                            <span class="font-bold text-primary">{{ $impact['label'] }}</span>
-                                            <span class="block text-xs text-slate-500">{{ $impact['copy'] }}</span>
-                                        </span>
-                                    </label>
-                                @endforeach
-                            </div>
-                            <div class="mt-5 flex flex-col gap-3 border-t border-line pt-4 sm:flex-row sm:items-center sm:justify-between">
-                                <a href="{{ route('housekeeping.page', 'maintenance-requests') }}" class="inline-flex justify-center rounded-lg border border-line px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-[#f6f3ed]">Cancel</a>
-                                <div class="flex flex-col gap-2 sm:flex-row">
-                                    <button type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-5 py-2.5 text-sm font-bold text-secondary hover:bg-[#ffdeaa]/20">
-                                        <span class="material-symbols-outlined text-base">save</span>
-                                        Save Draft Incident
-                                    </button>
-                                    <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-primary/90" {{ $selectedReportRoom ? '' : 'disabled' }}>
-                                        <span class="material-symbols-outlined text-base text-[#ffdeaa]">send</span>
-                                        Save Maintenance Report
-                                    </button>
-                                </div>
-                            </div>
-                        </section>
-                    </form>
-                </div>
-
-                <aside class="space-y-5 xl:col-span-4">
-                    <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                        <div class="flex items-start gap-3 border-b border-line pb-4">
-                            <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-[#ffdeaa]">
-                                <span class="material-symbols-outlined">engineering</span>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-primary">Maintenance Coordination</h3>
-                                <p class="mt-1 text-xs leading-5 text-slate-500">No radio or hotel engineering system is connected. Use the portal message page to contact another department and keep a written record.</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
-                            <a href="{{ route('messages.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white hover:bg-primary/90">
-                                <span class="material-symbols-outlined text-base text-[#ffdeaa]">chat</span>
-                                Open Department Messages
-                            </a>
-                            <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-4 py-2.5 text-xs font-bold text-secondary hover:bg-[#ffdeaa]/20">
-                                <span class="material-symbols-outlined text-base">construction</span>
-                                View Reported Issues
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-primary"><span class="material-symbols-outlined text-secondary">history</span>Maintenance History</h3>
-                        <div class="mt-4 space-y-3">
-                            @forelse ($maintenanceQueue->take(4) as $room)
-                                <a href="{{ route('rooms.show', $room) }}" class="block rounded-lg border border-line bg-[#fdfcfa] p-3 hover:bg-[#f6f3ed]">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-sm font-bold text-primary">Room {{ $room->room_number }}</span>
-                                        <span class="rounded-full border px-2 py-0.5 text-[10px] font-bold {{ $statusTone[$room->status] ?? 'border-line' }}">{{ ucfirst($room->status) }}</span>
-                                    </div>
-                                    <p class="mt-1 text-xs text-slate-500">{{ $room->description ?: 'Maintenance list item awaiting engineering clearance.' }}</p>
-                                </a>
-                            @empty
-                                <p class="rounded-lg border border-line bg-[#fdfcfa] p-4 text-sm text-slate-500">No active maintenance rooms yet. New maintenance reports will appear in this list.</p>
-                            @endforelse
-                        </div>
-                    </div>
-
-                    <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">analytics</span>Floor Maintenance Summary</h3>
-                        <div class="mt-4 space-y-3 text-sm">
-                            <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Total rooms</span><strong>{{ $totalRooms }}</strong></div>
-                            <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Maintenance list</span><strong>{{ $maintenanceQueue->count() }}</strong></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Cleaning list</span><strong>{{ $cleaningRooms->count() }}</strong></div>
-                        </div>
-                        <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
-                            <span class="material-symbols-outlined text-base">construction</span>
-                            View Reported Issues
-                        </a>
-                    </div>
-                </aside>
-            </div>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const roomSelect = document.getElementById('reportRoomSelect');
-                    const form = document.getElementById('reportIssueForm');
-                    const fields = {
-                        room_number: document.getElementById('reportRoomNumber'),
-                        room_type: document.getElementById('reportRoomType'),
-                        rate: document.getElementById('reportRate'),
-                        capacity: document.getElementById('reportCapacity'),
-                        statusText: document.getElementById('reportSelectedStatus'),
-                    };
-
-                    const syncRoom = () => {
-                        const option = roomSelect?.selectedOptions?.[0];
-                        if (!option || !form) return;
-                        form.action = option.dataset.action || form.action;
-                        fields.room_number.value = option.dataset.roomNumber || '';
-                        fields.room_type.value = option.dataset.roomType || '';
-                        fields.rate.value = option.dataset.rate || '';
-                        fields.capacity.value = option.dataset.capacity || '';
-                        fields.statusText.textContent = (option.dataset.status || 'N/A').replace(/^\w/, (char) => char.toUpperCase());
-                    };
-
-                    roomSelect?.addEventListener('change', syncRoom);
-                    syncRoom();
-
-                    document.querySelectorAll('.issue-category').forEach((button) => {
-                        button.addEventListener('click', () => {
-                            document.querySelectorAll('.issue-category').forEach((item) => {
-                                item.className = 'issue-category group flex items-center gap-2.5 rounded-lg border border-line bg-[#f6f3ed] p-3 text-left transition hover:border-secondary/60';
-                            });
-                            button.className = 'issue-category group flex items-center gap-2.5 rounded-lg border border-secondary bg-[#ffdeaa]/25 p-3 text-left transition shadow-sm';
-                        });
-                    });
-
-                    document.querySelectorAll('.issue-preset').forEach((button) => {
-                        button.addEventListener('click', () => {
-                            const textarea = document.getElementById('defectDescription');
-                            textarea.value = `${textarea.value.trim()}\n${button.dataset.preset}`.trim();
-                        });
-                    });
-                });
-            </script>
-        </section>
+        @include('housekeeping.partials.report-issue')
     @elseif ($pageKey === 'reported-issues')
-        @php
-            $reportedIssueRooms = $maintenanceQueue->values();
-            $selectedIssueRoom = $reportedIssueRooms->first();
-            $ticketStates = [
-                ['label' => 'Repaired - Pending HK Signoff', 'class' => 'bg-emerald-100 text-emerald-800', 'icon' => 'check_circle', 'priority' => 'Urgent Priority', 'priorityClass' => 'bg-red-100 text-red-800'],
-                ['label' => 'Technician Sent', 'class' => 'bg-blue-100 text-blue-900', 'icon' => 'directions_walk', 'priority' => 'High Priority', 'priorityClass' => 'bg-amber-100 text-amber-900'],
-                ['label' => 'Awaiting Replacement Part', 'class' => 'bg-[#ffdeaa] text-secondary', 'icon' => 'inventory_2', 'priority' => 'Standard Priority', 'priorityClass' => 'bg-stone-200 text-stone-800'],
-                ['label' => 'Work Order Accepted', 'class' => 'bg-sky-100 text-sky-900', 'icon' => 'receipt', 'priority' => 'High Priority', 'priorityClass' => 'bg-amber-100 text-amber-900'],
-            ];
-            $defects = [
-                ['icon' => 'hvac', 'title' => 'HVAC Freon Compressor Leak', 'copy' => 'Guest-reported ambient temperature variance. Engineering diagnostics and air misting follow-up required.'],
-                ['icon' => 'lock_clock', 'title' => 'IoT Lock Sensor Mismatch', 'copy' => 'Gateway sensor state is inconsistent with the physical deadbolt. Keycard sync verification required.'],
-                ['icon' => 'window', 'title' => 'Balcony Sliding Track Jammed', 'copy' => 'Saline corrosion and heavy resistance on lower roller carriage. Weather seal inspection required.'],
-                ['icon' => 'hot_tub', 'title' => 'Jacuzzi Jet Pressure Calibration', 'copy' => 'Pressure sensor trips circuit breaker during continuous cycle. Engineering reset required.'],
-            ];
-        @endphp
-
-        <section class="space-y-6">
-            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div>
-                    <div class="mb-1 flex items-center gap-2 text-xs text-slate-500">
-                        <span>Housekeeping Oversight</span>
-                        <span class="material-symbols-outlined text-xs">chevron_right</span>
-                        <span class="font-bold text-secondary">Maintenance Requests</span>
-                        <span class="material-symbols-outlined text-xs">chevron_right</span>
-                        <span class="font-bold text-primary">Reported Issues</span>
-                    </div>
-                    <h3 class="font-serif text-3xl font-bold text-primary">Reported Issues &amp; Facilities Work Orders Log</h3>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Track repair status, Engineering updates, assigned technicians, and final approval for rooms under maintenance.</p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">
-                        <span class="material-symbols-outlined text-base">file_download</span>
-                        Export Maintenance CSV
-                    </button>
-                    <a href="{{ route('housekeeping.page', 'report-issue') }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-primary/90">
-                        <span class="material-symbols-outlined text-base text-[#ffdeaa]">add</span>
-                        New Maintenance Ticket
-                    </a>
-                </div>
-            </div>
-
-            <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                @foreach ([
-                    ['label' => 'Open Housekeeping Reports', 'value' => $reportedIssueRooms->count(), 'caption' => 'waiting for action', 'icon' => 'report_problem', 'tone' => 'text-primary', 'badge' => 'Live'],
-                    ['label' => 'Out of Order Units', 'value' => $reportedIssueRooms->count(), 'caption' => 'rooms blocked', 'icon' => 'do_not_disturb_on', 'tone' => 'text-red-700', 'badge' => 'Inventory Impact'],
-                    ['label' => 'Average Time to Repair', 'value' => $reportedIssueRooms->count() ? '1h 42m' : '0m', 'caption' => 'rolling operational estimate', 'icon' => 'timelapse', 'tone' => 'text-secondary', 'badge' => 'Rolling 30D'],
-                    ['label' => 'Engineering Response Response Time', 'value' => $reportedIssueRooms->count() ? '98%' : '100%', 'caption' => 'first response under target', 'icon' => 'verified', 'tone' => 'text-emerald-700', 'badge' => 'Compliant'],
-                ] as $metric)
-                    <div class="relative overflow-hidden rounded-lg border border-line bg-white p-5 shadow-sm">
-                        <span class="material-symbols-outlined absolute -bottom-3 -right-3 text-7xl text-slate-100">{{ $metric['icon'] }}</span>
-                        <div class="relative flex items-center justify-between">
-                            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">{{ $metric['label'] }}</p>
-                            <span class="rounded-full bg-[#f6f3ed] px-2 py-0.5 text-[10px] font-bold text-secondary">{{ $metric['badge'] }}</span>
-                        </div>
-                        <div class="relative mt-3 flex items-baseline gap-2">
-                            <span class="font-serif text-3xl font-bold {{ $metric['tone'] }}">{{ $metric['value'] }}</span>
-                            <span class="text-xs font-bold text-slate-500">{{ $metric['caption'] }}</span>
-                        </div>
-                    </div>
-                @endforeach
-            </section>
-
-            <section class="flex flex-col gap-3 rounded-lg border border-line bg-white p-4 shadow-sm xl:flex-row xl:items-center xl:justify-between">
-                <div class="flex flex-wrap items-center gap-2">
-                    <span class="mr-1 text-[11px] font-bold uppercase tracking-wider text-slate-500">Filter Status:</span>
-                    @foreach ([
-                        ['All Open', $reportedIssueRooms->count()],
-                        ['In Progress', min(2, $reportedIssueRooms->count())],
-                        ['Awaiting Parts', $reportedIssueRooms->count() > 0 ? 1 : 0],
-                        ['Ready for Verification', $reportedIssueRooms->count() > 0 ? 1 : 0],
-                    ] as [$label, $count])
-                        <button type="button" class="{{ $loop->first ? 'bg-primary text-white' : 'bg-[#f6f3ed] text-primary hover:bg-line' }} inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-bold">
-                            {{ $label }}
-                            <span class="{{ $loop->first ? 'bg-[#ffdeaa] text-primary' : 'bg-white text-slate-600' }} rounded px-1.5 py-0.5 text-[10px]">{{ $count }}</span>
-                        </button>
-                    @endforeach
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <select class="rounded-lg border-line bg-[#f6f3ed] text-xs font-bold text-primary focus:border-secondary focus:ring-secondary">
-                        <option>All Resort Wings</option>
-                        <option>Main Wing</option>
-                        <option>Ocean Wing</option>
-                    </select>
-                    <select class="rounded-lg border-line bg-[#f6f3ed] text-xs font-bold text-primary focus:border-secondary focus:ring-secondary">
-                        <option>Severity: All Priorities</option>
-                        <option>Urgent / Critical</option>
-                        <option>High Priority</option>
-                    </select>
-                </div>
-            </section>
-
-            <div class="grid gap-6 xl:grid-cols-12">
-                <div class="space-y-4 xl:col-span-7">
-                    @forelse ($reportedIssueRooms as $room)
-                        @php
-                            $state = $ticketStates[($loop->iteration - 1) % count($ticketStates)];
-                            $defect = $defects[($loop->iteration - 1) % count($defects)];
-                            $ticket = 'MNT-' . str_pad((string) (880 + $loop->iteration), 3, '0', STR_PAD_LEFT);
-                            $wing = ((int) $room->room_number >= 300) ? 'Ocean Wing' : 'Main Wing';
-                        @endphp
-                        <article class="{{ $loop->first ? 'border-2 border-secondary shadow-md' : 'border border-line shadow-sm hover:border-secondary/60' }} relative rounded-lg bg-white p-5 transition">
-                            @if ($loop->first)
-                                <span class="absolute right-0 top-0 rounded-bl-lg bg-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">Inspection Selected</span>
-                            @endif
-                            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                <div>
-                                    <div class="flex flex-wrap items-center gap-2">
-                                        <h4 class="font-serif text-2xl font-bold text-primary">Room {{ $room->room_number }} {{ $wing }}</h4>
-                                        <span class="rounded-full px-2.5 py-0.5 text-xs font-bold {{ $state['priorityClass'] }}">{{ $state['priority'] }}</span>
-                                        <span class="rounded bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-700">OOO Active</span>
-                                    </div>
-                                    <p class="mt-1 text-xs font-bold text-secondary">Ticket #{{ $ticket }} • {{ $wing }} Facilities List</p>
-                                </div>
-                                <span class="text-xs text-slate-500">Reported {{ $loop->iteration * 18 }}m ago</span>
-                            </div>
-
-                            <div class="mt-4 rounded-lg border border-line bg-[#f6f3ed] p-3">
-                                <div class="mb-1 flex items-center gap-2 text-xs font-bold text-primary">
-                                    <span class="material-symbols-outlined text-base text-secondary">{{ $defect['icon'] }}</span>
-                                    <span>Reported Defect: {{ $defect['title'] }}</span>
-                                </div>
-                                <p class="text-xs leading-5 text-slate-600">{{ $room->description ?: $defect['copy'] }}</p>
-                            </div>
-
-                            <div class="mt-4 grid gap-3 border-y border-line py-3 text-xs sm:grid-cols-3">
-                                <div>
-                                    <span class="block text-[11px] font-bold uppercase text-slate-500">Current State</span>
-                                    <span class="mt-1 inline-flex items-center gap-1 rounded px-2 py-0.5 font-bold {{ $state['class'] }}">
-                                        <span class="material-symbols-outlined text-xs">{{ $state['icon'] }}</span>
-                                        {{ $state['label'] }}
-                                    </span>
-                                </div>
-                                <div>
-                                    <span class="block text-[11px] font-bold uppercase text-slate-500">Assigned Technician</span>
-                                    <span class="mt-1 flex items-center gap-1 font-bold text-primary"><span class="material-symbols-outlined text-sm text-secondary">engineering</span>Eng. Danilo Ramos</span>
-                                </div>
-                                <div>
-                                    <span class="block text-[11px] font-bold uppercase text-slate-500">Downtime</span>
-                                    <span class="mt-1 block font-bold text-primary">{{ $loop->iteration }}h {{ 12 + $loop->iteration }}m logged</span>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                <div class="flex flex-wrap gap-2">
-                                    <form method="POST" action="{{ route('rooms.update', $room) }}">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="room_number" value="{{ $room->room_number }}">
-                                        <input type="hidden" name="room_type" value="{{ $room->room_type }}">
-                                        <input type="hidden" name="rate" value="{{ $room->rate }}">
-                                        <input type="hidden" name="capacity" value="{{ $room->capacity }}">
-                                        <input type="hidden" name="description" value="{{ $room->description }}">
-                                        <input type="hidden" name="status" value="available">
-                                        <button type="submit" class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-800 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-emerald-900">
-                                            <span class="material-symbols-outlined text-base">verified_user</span>
-                                            Verify &amp; Clear Room
-                                        </button>
-                                    </form>
-                                    <a href="{{ route('rooms.show', $room) }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-[#f6f3ed] px-3.5 py-1.5 text-xs font-bold text-primary hover:bg-line">
-                                        <span class="material-symbols-outlined text-base text-secondary">visibility</span>
-                                        View Details
-                                    </a>
-                                </div>
-                                <span class="text-[11px] italic text-slate-500">HK verification and sanitization pending</span>
-                            </div>
-                        </article>
-                    @empty
-                        <div class="rounded-lg border border-dashed border-line bg-white px-5 py-14 text-center shadow-sm">
-                            <span class="material-symbols-outlined text-5xl text-slate-300">construction</span>
-                            <h4 class="mt-3 font-serif text-2xl font-bold text-primary">No reported issues open</h4>
-                            <p class="mt-1 text-sm text-slate-500">Rooms submitted from Report Issue will appear here once marked for maintenance.</p>
-                            <a href="{{ route('housekeeping.page', 'report-issue') }}" class="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary/90">
-                                <span class="material-symbols-outlined text-base text-[#ffdeaa]">add</span>
-                                New Maintenance Ticket
-                            </a>
-                        </div>
-                    @endforelse
-                </div>
-
-                <aside class="space-y-5 xl:col-span-5">
-                    <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
-                        <div class="flex items-start justify-between border-b border-line pb-4">
-                            <div>
-                                <span class="text-xs font-mono text-slate-500">Ticket #{{ $selectedIssueRoom ? 'MNT-881' : 'MNT---' }}</span>
-                                <h3 class="mt-1 font-serif text-2xl font-bold text-primary">Facilities Work Order &amp; Return-to-Service Dossier</h3>
-                                <p class="mt-1 text-sm text-slate-500">Room {{ $selectedIssueRoom?->room_number ?? 'N/A' }} engineering and housekeeping clearance timeline.</p>
-                            </div>
-                            <span class="material-symbols-outlined text-secondary">assignment</span>
-                        </div>
-
-                        <div class="mt-5">
-                            <p class="mb-3 text-[11px] font-bold uppercase tracking-wider text-slate-500">Engineering Resolution Flow</p>
-                            <div class="grid grid-cols-4 gap-2 text-center text-[10px] font-bold text-slate-500">
-                                @foreach ([['Reported', true], ['Dispatched', true], ['Repaired', $selectedIssueRoom !== null], ['Verified', false]] as [$step, $done])
-                                    <div>
-                                        <div class="{{ $done ? 'bg-secondary text-white' : 'bg-[#f0eee8] text-slate-400' }} mx-auto flex h-9 w-9 items-center justify-center rounded-full">
-                                            <span class="material-symbols-outlined text-base">{{ $done ? 'done' : 'radio_button_unchecked' }}</span>
-                                        </div>
-                                        <span class="mt-1 block">{{ $step }}</span>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        <div class="mt-5 rounded-lg border border-line bg-[#f6f3ed] p-4">
-                            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Assignment &amp; Repair Timeline</p>
-                            <div class="mt-3 space-y-3">
-                                @foreach ([
-                                    ['time' => '09:12', 'title' => 'Issue Flagged During Room Refresh', 'copy' => 'Housekeeping moved room into maintenance review.'],
-                                    ['time' => '09:24', 'title' => 'Engineering Assignment Accepted', 'copy' => 'Facilities team assigned technician and opened work order.'],
-                                    ['time' => '10:18', 'title' => 'Housekeeping Verification Pending', 'copy' => 'Room remains out of order until final room inspection.'],
-                                ] as $event)
-                                    <div class="flex gap-3">
-                                        <span class="w-12 shrink-0 font-mono text-xs font-bold text-secondary">{{ $event['time'] }}</span>
-                                        <div>
-                                            <p class="text-sm font-bold text-primary">{{ $event['title'] }}</p>
-                                            <p class="text-xs text-slate-500">{{ $event['copy'] }}</p>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">bolt</span>Engineering Response Response Time</h3>
-                        <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
-                            <div class="rounded-lg bg-white/10 p-3">
-                                <p class="text-[11px] uppercase tracking-wider text-slate-300">Open</p>
-                                <p class="font-serif text-3xl font-bold">{{ $reportedIssueRooms->count() }}</p>
-                            </div>
-                            <div class="rounded-lg bg-white/10 p-3">
-                                <p class="text-[11px] uppercase tracking-wider text-slate-300">Blocked</p>
-                                <p class="font-serif text-3xl font-bold">{{ $reportedIssueRooms->count() }}</p>
-                            </div>
-                        </div>
-                        <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
-                            <span class="material-symbols-outlined text-base">fact_check</span>
-                            Open HK Verification List
-                        </a>
-                    </div>
-                </aside>
-            </div>
-        </section>
+        @include('housekeeping.partials.reported-issues')
     @elseif ($pageKey === 'reports')
         @php
             $completedCount = $completedTasks->count();
