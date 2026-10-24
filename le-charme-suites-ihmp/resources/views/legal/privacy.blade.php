@@ -21,7 +21,12 @@
 
     <section>
         <h2 class="font-display text-xl font-bold text-[#112235]">Where your data is kept</h2>
-        <p class="mt-2">All records stay in the portal's own local database on the hotel's computer or private network. The portal does not use third-party analytics, advertising, social media plugins, or external software development kits (SDKs). Its fonts, icons, and styling are stored locally, so pages load without contacting outside services. Links to the official hotel website open that separate site, which has its own privacy policy.</p>
+        @if (config('database.default') === 'pgsql')
+            <p class="mt-2">Records are stored in a PostgreSQL database hosted by Supabase, a cloud database provider that stores the data on the portal's behalf. Connections to it are encrypted, and only the portal's server holds the database password, so guests and staff never connect to Supabase directly.</p>
+        @else
+            <p class="mt-2">All records stay in the portal's own local database on the hotel's computer or private network.</p>
+        @endif
+        <p class="mt-2">The portal does not use third-party analytics, advertising, social media plugins, or external software development kits (SDKs). Its fonts, icons, and styling are stored locally, so pages load without contacting outside services. Links to the official hotel website open that separate site, which has its own privacy policy.</p>
     </section>
 
     <section>

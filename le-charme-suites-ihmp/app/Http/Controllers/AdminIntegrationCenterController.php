@@ -11,30 +11,20 @@ use App\Models\Room;
 use App\Services\DataExchangeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class AdminIntegrationCenterController extends Controller
 {
     public function index(Request $request, DataExchangeService $exchange): View
     {
-        $databasePath = (string) config('database.connections.sqlite.database');
-        if ($databasePath !== '' && $databasePath !== ':memory:' && ! str_starts_with($databasePath, DIRECTORY_SEPARATOR) && ! preg_match('/^[A-Za-z]:[\\\\\/]/', $databasePath)) {
-            $databasePath = base_path($databasePath);
-        }
-
-        $databaseIsFile = $databasePath !== ':memory:' && is_file($databasePath);
-
         return view('admin.integration.index', [
             'datasets' => $exchange->supportedDatasets(),
             'events' => IntegrationEvent::with('actor')->latest('occurred_at')->limit(30)->get(),
-            'databaseStatus' => [
-                'driver' => config('database.default'),
-                'path' => $databasePath,
-                'size' => $databaseIsFile ? filesize($databasePath) : 0,
-                'writable' => $databasePath === ':memory:' || ($databaseIsFile && is_writable($databasePath)),
-            ],
+            'databaseStatus' => $this->databaseStatus(),
             'recordCounts' => [
                 'Guests' => Guest::count(),
                 'Property Rooms' => (int) config('hotel.published_room_count', Room::count()),
@@ -51,6 +41,48 @@ class AdminIntegrationCenterController extends Controller
             'memoryUsage' => memory_get_usage(true),
             'memoryLimit' => ini_get('memory_limit'),
         ]);
+    }
+
+    /**
+     * Health of the active database: the local SQLite file, or a hosted PostgreSQL database such as Supabase.
+     *
+     * @return array{driver: string, path: string, size: int, writable: bool, is_cloud: bool}
+     */
+    private function databaseStatus(): array
+    {
+        $driver = (string) config('database.default');
+
+        if ($driver === 'pgsql') {
+            $connection = config('database.connections.pgsql');
+            $host = filled($connection['url'] ?? null)
+                ? (string) parse_url((string) $connection['url'], PHP_URL_HOST)
+                : (string) ($connection['host'] ?? '');
+
+            try {
+                $size = (int) DB::scalar('select pg_database_size(current_database())');
+                $isConnected = true;
+            } catch (Throwable) {
+                $size = 0;
+                $isConnected = false;
+            }
+
+            return ['driver' => $driver, 'path' => $host, 'size' => $size, 'writable' => $isConnected, 'is_cloud' => true];
+        }
+
+        $databasePath = (string) config('database.connections.sqlite.database');
+        if ($databasePath !== '' && $databasePath !== ':memory:' && ! str_starts_with($databasePath, DIRECTORY_SEPARATOR) && ! preg_match('/^[A-Za-z]:[\\\\\/]/', $databasePath)) {
+            $databasePath = base_path($databasePath);
+        }
+
+        $databaseIsFile = $databasePath !== ':memory:' && is_file($databasePath);
+
+        return [
+            'driver' => $driver,
+            'path' => $databasePath,
+            'size' => $databaseIsFile ? filesize($databasePath) : 0,
+            'writable' => $databasePath === ':memory:' || ($databaseIsFile && is_writable($databasePath)),
+            'is_cloud' => false,
+        ];
     }
 
     public function export(Request $request, DataExchangeService $exchange, string $dataset, string $format): Response

@@ -27,7 +27,7 @@
                         <div><p class="text-[10px] font-bold uppercase text-blue-100/70">Mode</p><p class="mt-1 text-sm font-bold">{{ $networkMode }}</p></div>
                         <div><p class="text-[10px] font-bold uppercase text-blue-100/70">Database</p><p class="mt-1 text-sm font-bold uppercase">{{ $databaseStatus['driver'] }}</p></div>
                         <div><p class="text-[10px] font-bold uppercase text-blue-100/70">API</p><p class="mt-1 text-sm font-bold {{ $apiEnabled ? 'text-emerald-300' : 'text-amber-200' }}">{{ $apiEnabled ? 'Enabled' : 'Disabled' }}</p></div>
-                        <div><p class="text-[10px] font-bold uppercase text-blue-100/70">Internet</p><p class="mt-1 text-sm font-bold text-emerald-300">Optional</p></div>
+                        <div><p class="text-[10px] font-bold uppercase text-blue-100/70">Internet</p><p class="mt-1 text-sm font-bold {{ $databaseStatus['is_cloud'] ? 'text-amber-200' : 'text-emerald-300' }}">{{ $databaseStatus['is_cloud'] ? 'Required' : 'Optional' }}</p></div>
                     </div>
                 </div>
             </section>
@@ -76,8 +76,8 @@
                     <div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary">database</span><h3 class="font-serif text-xl font-bold">Shared Database Health</h3></div>
                     <dl class="mt-4 space-y-3 text-sm">
                         <div class="flex justify-between gap-4"><dt class="text-slate-500">Driver</dt><dd class="font-bold uppercase">{{ $databaseStatus['driver'] }}</dd></div>
-                        <div class="flex justify-between gap-4"><dt class="text-slate-500">File size</dt><dd class="font-bold">{{ number_format($databaseStatus['size'] / 1024, 1) }} KB</dd></div>
-                        <div class="flex justify-between gap-4"><dt class="text-slate-500">Writable</dt><dd class="font-bold {{ $databaseStatus['writable'] ? 'text-emerald-700' : 'text-red-700' }}">{{ $databaseStatus['writable'] ? 'Yes' : 'No' }}</dd></div>
+                        <div class="flex justify-between gap-4"><dt class="text-slate-500">{{ $databaseStatus['is_cloud'] ? 'Database size' : 'File size' }}</dt><dd class="font-bold">{{ number_format($databaseStatus['size'] / 1024, 1) }} KB</dd></div>
+                        <div class="flex justify-between gap-4"><dt class="text-slate-500">{{ $databaseStatus['is_cloud'] ? 'Connected' : 'Writable' }}</dt><dd class="font-bold {{ $databaseStatus['writable'] ? 'text-emerald-700' : 'text-red-700' }}">{{ $databaseStatus['writable'] ? 'Yes' : 'No' }}</dd></div>
                     </dl>
                     <p class="mt-4 break-all rounded bg-slate-50 p-3 font-mono text-[11px] text-slate-500">{{ $databaseStatus['path'] }}</p>
                 </div>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
                     <div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary">lan</span><h3 class="font-serif text-xl font-bold">Inter / Intranet Operation</h3></div>
-                    <div class="mt-4 space-y-3 text-sm leading-6 text-slate-600"><p><strong class="text-primary">Intranet:</strong> departments access one host over private Wi-Fi/LAN and share one database.</p><p><strong class="text-primary">Internet:</strong> optional for Git updates or approved external integrations.</p><p><strong class="text-primary">Slow link:</strong> local assets and capped API payloads reduce bandwidth use.</p></div>
+                    <div class="mt-4 space-y-3 text-sm leading-6 text-slate-600"><p><strong class="text-primary">Intranet:</strong> departments access one host over private Wi-Fi/LAN and share one database.</p><p><strong class="text-primary">Internet:</strong> {{ $databaseStatus['is_cloud'] ? 'required, because the shared database is hosted on Supabase (cloud PostgreSQL).' : 'optional for Git updates or approved external integrations.' }}</p><p><strong class="text-primary">Slow link:</strong> local assets and capped API payloads reduce bandwidth use.</p></div>
                 </div>
             </section>
 

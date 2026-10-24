@@ -19,6 +19,17 @@ class LegalPagesTest extends TestCase
         $this->get(route('legal.cookies'))->assertOk()->assertSeeText(config('session.cookie'));
     }
 
+    public function test_privacy_policy_names_where_the_database_is_hosted(): void
+    {
+        $this->get(route('legal.privacy'))->assertOk()->assertSeeText('local database')->assertDontSeeText('Supabase');
+
+        config(['database.default' => 'pgsql']);
+        $cloudPolicy = view('legal.privacy')->render();
+        config(['database.default' => 'sqlite']);
+
+        $this->assertStringContainsString('hosted by Supabase', $cloudPolicy);
+    }
+
     public function test_guests_go_back_to_the_login_page(): void
     {
         $this->get(route('legal.privacy'))
