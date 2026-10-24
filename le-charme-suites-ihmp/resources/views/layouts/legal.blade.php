@@ -24,16 +24,26 @@
     </div>
     <header class="ihms-focus-light border-b border-white/10 bg-[#0c1c2e] text-white shadow-sm">
         <div class="mx-auto flex min-h-20 max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-            <a href="{{ route('booking.create') }}" class="flex min-w-0 items-center gap-3">
+            @php($homeUrl = auth()->check() ? route('dashboard') : route('login'))
+            <a href="{{ $homeUrl }}" class="flex min-w-0 items-center gap-3">
                 <span class="flex h-14 w-32 shrink-0 items-center justify-center rounded-lg bg-white px-3 shadow-sm">
-                    <img src="{{ asset('images/le-charme-logo-white.png') }}" alt="Le Charmé Suites booking home" class="h-11 w-full object-contain">
+                    <img src="{{ asset('images/le-charme-logo-white.png') }}" alt="Le Charmé Suites home" class="h-11 w-full object-contain">
                 </span>
                 <span class="hidden truncate font-display text-xl font-bold sm:block">Le Charmé Suites Subic</span>
             </a>
-            <a href="{{ route('login') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-[#c5a36a]/60 px-3 py-2 text-sm font-bold transition hover:bg-white/10">
-                <span class="material-symbols-outlined text-base text-[#c5a36a]" aria-hidden="true">lock</span>
-                Staff Sign In
-            </a>
+            <nav class="flex shrink-0 items-center gap-2" aria-label="Page actions">
+                @auth
+                    <button type="button" data-legal-back data-fallback-url="{{ $homeUrl }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-2 text-sm font-bold transition hover:border-white/50 hover:bg-white/10" aria-label="Go back to the previous page">
+                        <span class="material-symbols-outlined text-lg" aria-hidden="true">arrow_back</span>
+                        Back
+                    </button>
+                @else
+                    <a href="{{ route('login') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-2 text-sm font-bold transition hover:border-white/50 hover:bg-white/10" aria-label="Back to the login page">
+                        <span class="material-symbols-outlined text-lg" aria-hidden="true">arrow_back</span>
+                        Back to Login
+                    </a>
+                @endauth
+            </nav>
         </div>
     </header>
 
@@ -55,11 +65,22 @@
 
     <footer class="ihms-focus-light border-t border-white/10 bg-[#0c1c2e] py-6 text-xs text-slate-300">
         <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-3 px-4 text-center sm:px-6 md:flex-row md:text-left">
-            <span><span class="font-display font-bold text-white">Le Charmé Suites IHMP</span> · Academic capstone prototype</span>
+            <span><span class="font-display font-bold text-white">Le Charmé Suites IHMP</span> · Academic mini thesis prototype</span>
             <a href="mailto:{{ config('hotel.email') }}" class="transition hover:text-white">{{ config('hotel.email') }}</a>
         </div>
     </footer>
 
     @include('partials.cookie-notice')
+    <script>
+        document.querySelector('[data-legal-back]')?.addEventListener('click', (event) => {
+            const cameFromThisPortal = document.referrer.startsWith(window.location.origin);
+
+            if (cameFromThisPortal && window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.assign(event.currentTarget.dataset.fallbackUrl);
+            }
+        });
+    </script>
 </body>
 </html>

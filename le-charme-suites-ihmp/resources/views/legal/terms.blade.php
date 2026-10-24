@@ -5,7 +5,7 @@
 @section('content')
     <section>
         <h2 class="font-display text-xl font-bold text-[#112235]">About this portal</h2>
-        <p class="mt-2">Le Charmé Suites IHMP is an academic capstone prototype. It is not connected to the official Le Charmé Suites reservation system, and a request made here does not create a real hotel reservation. By using the portal you agree to these terms.</p>
+        <p class="mt-2">Le Charmé Suites IHMP is an academic mini thesis prototype. It is not connected to the official Le Charmé Suites reservation system, and a request made here does not create a real hotel reservation. By using the portal you agree to these terms.</p>
     </section>
 
     <section>

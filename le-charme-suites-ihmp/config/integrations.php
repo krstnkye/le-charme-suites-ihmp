@@ -11,11 +11,11 @@ return [
     ],
 
     /*
-    | IHMP is an academic capstone prototype. It is not connected to the hotel's live
+    | IHMP is an academic mini thesis prototype. It is not connected to the hotel's live
     | reservation system and must never hold real guest data. The website booking
     | simulator stands in for the official website so the integration can be demonstrated.
     */
-    'academic_notice' => 'Academic capstone prototype. This portal is not connected to the official Le Charmé Suites reservation system, does not confirm real stays, and uses sample data only. Do not enter real personal information.',
+    'academic_notice' => 'Academic mini thesis prototype. This portal is not connected to the official Le Charmé Suites reservation system, does not confirm real stays, and uses sample data only. Do not enter real personal information.',
 
     'booking_sources' => [
         'front_desk' => 'Front Desk',

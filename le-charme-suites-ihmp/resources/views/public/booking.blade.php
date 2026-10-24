@@ -219,7 +219,7 @@
 
     <footer class="ihms-focus-light border-t border-white/10 bg-[#0c1c2e] py-7 text-xs text-slate-400">
         <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-center sm:px-6 md:flex-row md:text-left lg:px-8">
-            <div><span class="font-display font-bold text-white">Le Charmé Suites IHMP</span><span class="ml-2">Academic capstone prototype · Not the hotel's official booking system</span></div>
+            <div><span class="font-display font-bold text-white">Le Charmé Suites IHMP</span><span class="ml-2">Academic mini thesis prototype · Not the hotel's official booking system</span></div>
             <div class="flex flex-wrap justify-center gap-x-5 gap-y-2">
                 <a href="{{ config('hotel.website') }}" target="_blank" rel="noopener noreferrer" class="transition hover:text-white">Official Website</a>
                 <a href="mailto:{{ config('hotel.email') }}" class="transition hover:text-white">Front Desk Support</a>

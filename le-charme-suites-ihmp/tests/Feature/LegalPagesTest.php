@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Room;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -16,6 +17,25 @@ class LegalPagesTest extends TestCase
         $this->get(route('legal.terms'))->assertOk()->assertSeeText('Terms of Service');
         $this->get(route('legal.refunds'))->assertOk()->assertSeeText('All confirmed reservations are non-refundable.');
         $this->get(route('legal.cookies'))->assertOk()->assertSeeText(config('session.cookie'));
+    }
+
+    public function test_guests_go_back_to_the_login_page(): void
+    {
+        $this->get(route('legal.privacy'))
+            ->assertOk()
+            ->assertSee('href="'.route('login').'"', false)
+            ->assertSeeText('Back to Login')
+            ->assertDontSee('data-fallback-url', false);
+    }
+
+    public function test_signed_in_staff_go_back_to_the_previous_page(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->get(route('legal.terms'))
+            ->assertOk()
+            ->assertSee('data-legal-back', false)
+            ->assertSee('data-fallback-url="'.route('dashboard').'"', false)
+            ->assertDontSeeText('Back to Login');
     }
 
     public function test_booking_page_links_policies_and_shows_cookie_notice(): void

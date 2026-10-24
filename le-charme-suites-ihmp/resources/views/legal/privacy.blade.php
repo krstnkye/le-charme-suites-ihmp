@@ -5,7 +5,7 @@
 @section('content')
     <section>
         <h2 class="font-display text-xl font-bold text-[#112235]">Who we are</h2>
-        <p class="mt-2">Le Charmé Suites IHMP (Integrated Hotel Management Portal) is an academic capstone prototype built for Le Charmé Suites, {{ config('hotel.address') }}. It is not the hotel's official reservation system and runs on sample data. Please do not enter real personal information. This policy follows the Philippine Data Privacy Act of 2012 (Republic Act No. 10173).</p>
+        <p class="mt-2">Le Charmé Suites IHMP (Integrated Hotel Management Portal) is an academic mini thesis prototype built for Le Charmé Suites, {{ config('hotel.address') }}. It is not the hotel's official reservation system and runs on sample data. Please do not enter real personal information. This policy follows the Philippine Data Privacy Act of 2012 (Republic Act No. 10173).</p>
     </section>
 
     <section>

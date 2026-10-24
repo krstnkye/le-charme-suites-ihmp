@@ -18,7 +18,7 @@ class OfficialWebsiteSimulationTest extends TestCase
 
         $response->assertOk();
         $response->assertSeeText('Official website integration simulation');
-        $response->assertSeeText('Academic capstone prototype.');
+        $response->assertSeeText('Academic mini thesis prototype.');
         $response->assertSee('action="'.route('website-simulation.store').'"', false);
     }
 
