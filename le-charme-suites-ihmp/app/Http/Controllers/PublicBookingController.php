@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reservation;
-use App\Models\Room;
 use App\Services\CreateOnlineReservation;
+use App\Services\RoomAvailabilityService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -56,11 +56,8 @@ class PublicBookingController extends Controller
     {
         return [
             'roomTypes' => collect(config('hotel.room_types')),
-            'availableCounts' => Room::query()
-                ->whereNotIn('status', ['maintenance'])
-                ->selectRaw('room_type, count(*) as total')
-                ->groupBy('room_type')
-                ->pluck('total', 'room_type'),
+            'availableCounts' => app(RoomAvailabilityService::class)->summary()['by_type']
+                ->map(fn (array $counts): int => $counts['available']),
             'isWebsiteSimulation' => $isWebsiteSimulation,
             'formAction' => route($isWebsiteSimulation ? 'website-simulation.store' : 'booking.store'),
         ];

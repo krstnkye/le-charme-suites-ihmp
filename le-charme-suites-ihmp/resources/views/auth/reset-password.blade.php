@@ -49,5 +49,6 @@
             </div>
         </section>
     </main>
+    @include('partials.cookie-notice')
 </body>
 </html>

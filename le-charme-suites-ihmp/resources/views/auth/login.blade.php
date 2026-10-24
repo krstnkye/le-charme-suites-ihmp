@@ -166,8 +166,8 @@
                             class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-10 font-body-md text-body-md text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary"
                             required
                         >
-                        <button class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-primary" id="toggle-password" type="button">
-                            <span class="material-symbols-outlined text-lg" id="password-icon">visibility</span>
+                        <button class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-primary" id="toggle-password" type="button" aria-label="Show password" aria-controls="password" aria-pressed="false">
+                            <span class="material-symbols-outlined text-lg" id="password-icon" aria-hidden="true">visibility</span>
                         </button>
                     </div>
                 </div>
@@ -197,6 +197,9 @@
                 </p>
                 <p class="mt-2 text-xs font-semibold text-on-surface-variant">{{ config('hotel.address') }}</p>
                 <p class="mt-1 text-[11px] text-outline">{{ config('hotel.phone') }} · {{ config('hotel.email') }}</p>
+                <nav class="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1 text-[11px]" aria-label="Policies">
+                    @include('partials.legal-links', ['linkClass' => 'font-semibold text-secondary hover:underline'])
+                </nav>
             </div>
         </section>
     </main>
@@ -226,6 +229,9 @@
             const isHidden = password.type === 'password';
             password.type = isHidden ? 'text' : 'password';
             icon.textContent = isHidden ? 'visibility_off' : 'visibility';
+            const toggle = document.getElementById('toggle-password');
+            toggle.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+            toggle.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
         });
 
         const loginForm = document.getElementById('login-form');
@@ -260,5 +266,6 @@
 
         updateEmailRequirement();
     </script>
+    @include('partials.cookie-notice')
 </body>
 </html>

@@ -33,6 +33,10 @@ Route::post('/website-booking', [PublicBookingController::class, 'storeWebsiteSi
 Route::get('/book/confirmation/{reference}', [PublicBookingController::class, 'confirmation'])
     ->middleware('throttle:30,1')
     ->name('booking.confirmation');
+Route::view('/privacy-policy', 'legal.privacy')->name('legal.privacy');
+Route::view('/terms-of-service', 'legal.terms')->name('legal.terms');
+Route::view('/refund-policy', 'legal.refunds')->name('legal.refunds');
+Route::view('/cookie-policy', 'legal.cookies')->name('legal.cookies');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

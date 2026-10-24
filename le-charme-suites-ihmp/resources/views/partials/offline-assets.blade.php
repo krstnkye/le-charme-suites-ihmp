@@ -22,6 +22,24 @@
             }
         };
 
+        /*
+         * Material Symbols render ligature words such as "calendar_month", which screen readers
+         * would read aloud. Hide decorative icons, and name icon-only controls that lack a label.
+         */
+        const labelIconOnlyControls = () => {
+            document.querySelectorAll('.material-symbols-outlined:not([aria-hidden])').forEach((icon) => {
+                const control = icon.closest('a, button, [role="button"]');
+                const iconText = icon.textContent.trim();
+
+                if (control && !control.hasAttribute('aria-label') && !control.hasAttribute('aria-labelledby') && control.textContent.replace(iconText, '').trim() === '' && !control.title) {
+                    control.setAttribute('aria-label', iconText.replace(/_/g, ' '));
+                }
+
+                icon.setAttribute('aria-hidden', 'true');
+            });
+        };
+
+        window.addEventListener('DOMContentLoaded', labelIconOnlyControls);
         window.addEventListener('DOMContentLoaded', updateConnectionNotice);
         window.addEventListener('online', updateConnectionNotice);
         window.addEventListener('offline', updateConnectionNotice);

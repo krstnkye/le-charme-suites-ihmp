@@ -1,7 +1,8 @@
 :root {
     --ihms-motion-fast: 150ms;
     --ihms-motion-base: 220ms;
-    --ihms-focus: rgba(117, 90, 40, 0.32);
+    --ihms-focus: #755a28;
+    --ihms-focus-light: #e6cda3;
 }
 
 html {
@@ -31,6 +32,10 @@ textarea:focus-visible,
 summary:focus-visible {
     outline: 3px solid var(--ihms-focus);
     outline-offset: 2px;
+}
+
+.ihms-focus-light :focus-visible {
+    outline-color: var(--ihms-focus-light);
 }
 
 button:not(:disabled):hover,

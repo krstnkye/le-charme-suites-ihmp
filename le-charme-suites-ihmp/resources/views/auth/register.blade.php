@@ -186,6 +186,9 @@
                 </p>
                 <p class="mt-2 text-xs font-semibold text-on-surface-variant">{{ config('hotel.address') }}</p>
                 <p class="mt-1 text-[11px] text-outline">{{ config('hotel.phone') }} · {{ config('hotel.email') }}</p>
+                <nav class="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1 text-[11px]" aria-label="Policies">
+                    @include('partials.legal-links', ['linkClass' => 'font-semibold text-secondary hover:underline'])
+                </nav>
             </div>
         </section>
     </main>
@@ -245,5 +248,6 @@
             }
         });
     </script>
+    @include('partials.cookie-notice')
 </body>
 </html>

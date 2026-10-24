@@ -18,11 +18,12 @@
     </script>
 </head>
 <body class="flex min-h-screen flex-col bg-[#f8f6f0] font-body text-slate-800 antialiased selection:bg-amber-200">
+    <a href="#main-content" class="sr-only z-[60] rounded-lg bg-white px-4 py-2 text-sm font-bold text-[#112235] shadow focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Skip to main content</a>
     <div class="border-b border-amber-300 bg-amber-50 px-4 py-2 text-center text-[11px] font-semibold leading-5 text-amber-900" role="note">
         <span class="material-symbols-outlined align-middle text-sm" aria-hidden="true">school</span>
         {{ config('integrations.academic_notice') }}
     </div>
-    <header class="sticky top-0 z-50 border-b border-white/10 bg-[#0c1c2e] text-white shadow-sm">
+    <header class="ihms-focus-light sticky top-0 z-50 border-b border-white/10 bg-[#0c1c2e] text-white shadow-sm">
         <div class="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
             <a href="{{ route($isWebsiteSimulation ? 'website-simulation.create' : 'booking.create') }}" class="group flex min-w-0 items-center gap-3 sm:gap-4" aria-label="Le Charmé Suites booking home">
                 <span class="flex h-14 w-32 shrink-0 items-center justify-center rounded-lg bg-white px-3 shadow-sm sm:w-36">
@@ -51,7 +52,7 @@
         </div>
     </header>
 
-    <main class="flex-1">
+    <main id="main-content" class="flex-1">
         <section class="relative overflow-hidden border-b border-amber-900/20 bg-gradient-to-b from-[#0c1c2e] via-[#112235] to-[#172b42] text-white">
             <div class="pointer-events-none absolute inset-0 opacity-[0.06] bg-[radial-gradient(#c5a36a_1px,transparent_1px)] [background-size:24px_24px]"></div>
             <div class="relative z-10 mx-auto grid max-w-7xl items-center gap-8 px-4 py-12 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:px-8 lg:py-16">
@@ -92,7 +93,7 @@
         <section class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-12 lg:px-8 lg:py-14">
             <div class="lg:col-span-7">
                 <div>
-                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#9c7938]">Accommodation catalogue</p>
+                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#7a5d26]">Accommodation catalogue</p>
                     <h2 class="mt-1 font-display text-3xl font-bold text-[#112235]">Rooms & Suites</h2>
                     <p class="mt-2 text-sm text-slate-600">Five official room types and published starting rates from Le Charmé Suites.</p>
                 </div>
@@ -110,10 +111,10 @@
                             <div class="flex flex-1 flex-col p-5">
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
-                                        <h3 class="font-display text-xl font-bold text-[#112235] transition group-hover:text-[#9c7938]">{{ $name }}</h3>
+                                        <h3 class="font-display text-xl font-bold text-[#112235] transition group-hover:text-[#7a5d26]">{{ $name }}</h3>
                                         <p class="mt-1.5 text-xs leading-5 text-slate-500">{{ $details['description'] }}</p>
                                     </div>
-                                    <span class="material-symbols-outlined text-[#9c7938]">bed</span>
+                                    <span class="material-symbols-outlined text-[#7a5d26]">bed</span>
                                 </div>
                                 <div class="my-4 grid grid-cols-2 gap-x-2 gap-y-2 border-t border-slate-100 pt-3 text-xs text-slate-600">
                                     <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-slate-400">square_foot</span>{{ $details['size_sqm'] }} sqm</span>
@@ -122,13 +123,13 @@
                                     <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-slate-400">shower</span>{{ $details['bathrooms'] }} bathroom{{ $details['bathrooms'] > 1 ? 's' : '' }}</span>
                                 </div>
                                 <div class="mt-auto flex items-end justify-between gap-3 border-t border-slate-100 pt-4">
-                                    <p><span class="block text-[11px] font-medium uppercase tracking-wider text-slate-400">From</span><strong class="font-display text-lg text-[#112235]">PHP {{ number_format($details['rate'], 2) }}</strong> <span class="text-xs text-slate-500">/ night</span></p>
+                                    <p><span class="block text-[11px] font-medium uppercase tracking-wider text-slate-500">From</span><strong class="font-display text-lg text-[#112235]">PHP {{ number_format($details['rate'], 2) }}</strong> <span class="text-xs text-slate-500">/ night</span></p>
                                     @php($inventory = $availableCounts[$name] ?? 0)
                                     <span @class([
                                         'inline-flex rounded-md border px-2.5 py-1 text-[11px] font-bold',
                                         'border-emerald-200 bg-emerald-50 text-emerald-700' => $inventory > 0,
                                         'border-amber-200 bg-amber-50 text-amber-800' => $inventory === 0,
-                                    ])>{{ $inventory > 0 ? $inventory.' available' : 'Request only' }}</span>
+                                    ])>{{ $inventory > 0 ? $inventory.' available today' : 'Check dates' }}</span>
                                 </div>
                             </div>
                         </article>
@@ -136,14 +137,14 @@
                 </div>
 
                 <div class="mt-5 flex items-start gap-3.5 rounded-xl border border-amber-200/70 bg-amber-50/70 p-4 text-xs leading-5 text-amber-950">
-                    <span class="material-symbols-outlined flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 text-[#9c7938]">directions_bike</span>
+                    <span class="material-symbols-outlined flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 text-[#7a5d26]">directions_bike</span>
                     <p><strong>Bike-Friendly Destination:</strong> Le Charmé Suites features in-room bike racks and dedicated support tailored for triathletes and leisure cyclists.</p>
                 </div>
 
                 <section class="mt-8 border-t border-slate-200 pt-7" aria-labelledby="hotel-services-title">
                     <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
                         <div>
-                            <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#9c7938]">On-property experience</p>
+                            <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#7a5d26]">On-property experience</p>
                             <h2 id="hotel-services-title" class="mt-1 font-display text-2xl font-bold text-[#112235]">Hotel Facilities & Dining</h2>
                         </div>
                         <span class="text-xs font-semibold text-slate-500">Established {{ config('hotel.established_since') }}</span>
@@ -151,7 +152,7 @@
                     <div class="mt-5 grid gap-2 sm:grid-cols-2">
                         @foreach (config('hotel.facilities', []) as $facility)
                             <div class="flex min-w-0 items-center gap-3 rounded-lg border border-slate-200 bg-white px-3.5 py-3 transition hover:border-[#c5a36a]/70 hover:shadow-sm">
-                                <span class="material-symbols-outlined flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-amber-50 text-lg text-[#9c7938]">{{ $facility['icon'] }}</span>
+                                <span class="material-symbols-outlined flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-amber-50 text-lg text-[#7a5d26]">{{ $facility['icon'] }}</span>
                                 <div class="min-w-0">
                                     <p class="truncate text-sm font-bold text-[#112235]">{{ $facility['name'] }}</p>
                                     <p class="mt-0.5 text-[11px] text-slate-500">{{ $facility['category'] }} · {{ $facility['hours'] }}</p>
@@ -170,7 +171,7 @@
                         <p class="mt-1">This page stands in for the booking form on <a class="font-bold underline" href="{{ config('integrations.official_website.url') }}" target="_blank" rel="noopener noreferrer">lecharmehotels.com</a>. IHMP has no access to the hotel's real website or guest data, so bookings made here demonstrate how a website booking would reach the front desk.</p>
                     </div>
                 @endif
-                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#9c7938]">{{ $isWebsiteSimulation ? 'Website booking request' : 'Secure booking request' }}</p>
+                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#7a5d26]">{{ $isWebsiteSimulation ? 'Website booking request' : 'Online booking request' }}</p>
                 <h2 class="mt-1 font-display text-3xl font-bold text-[#112235]">Reserve online</h2>
                 <p class="mt-2 text-xs leading-5 text-slate-500">Your request appears instantly in the IHMP front desk queue as a pending booking. Staff confirmation is required before arrival.</p>
 
@@ -195,27 +196,62 @@
                         <label class="text-xs font-bold text-slate-700" for="check_out_date">Check-out<input id="check_out_date" name="check_out_date" type="date" min="{{ today()->addDay()->toDateString() }}" value="{{ old('check_out_date') }}" required class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm transition focus:border-[#c5a36a] focus:ring-[#c5a36a]/30"></label>
                     </div>
                     <label class="block text-xs font-bold text-slate-700" for="number_of_guests">Guests<input id="number_of_guests" name="number_of_guests" type="number" min="1" max="7" value="{{ old('number_of_guests', 2) }}" required class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm transition focus:border-[#c5a36a] focus:ring-[#c5a36a]/30"></label>
-                    <label class="block text-xs font-bold text-slate-700" for="notes">Special requests <span class="font-normal text-slate-400">(Optional)</span><textarea id="notes" name="notes" rows="3" placeholder="Bike rack requirements, dietary notes, arrival window..." class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm transition focus:border-[#c5a36a] focus:ring-[#c5a36a]/30">{{ old('notes') }}</textarea></label>
-                    <label class="flex items-start gap-2 text-xs leading-5 text-slate-600"><input name="privacy_consent" value="1" type="checkbox" required @checked(old('privacy_consent')) class="mt-1 rounded border-slate-300 text-[#112235] focus:ring-[#c5a36a]">I consent to Le Charmé Suites using these details to process and contact me about this booking.</label>
+                    <label class="block text-xs font-bold text-slate-700" for="notes">Special requests <span class="font-normal text-slate-500">(Optional)</span><textarea id="notes" name="notes" rows="3" placeholder="Bike rack requirements, dietary notes, arrival window..." class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm transition focus:border-[#c5a36a] focus:ring-[#c5a36a]/30">{{ old('notes') }}</textarea></label>
+                    <section class="rounded-lg border border-slate-200 bg-[#fcf9f3] p-4 text-xs leading-5 text-slate-700" aria-labelledby="price-summary-title" aria-live="polite">
+                        <h3 id="price-summary-title" class="font-bold text-[#112235]">Price summary</h3>
+                        <dl class="mt-2 space-y-1">
+                            <div class="flex justify-between gap-3"><dt>Nightly rate</dt><dd id="price-rate" class="font-semibold">Choose a room</dd></div>
+                            <div class="flex justify-between gap-3"><dt>Nights</dt><dd id="price-nights" class="font-semibold">Choose your dates</dd></div>
+                            <div class="flex justify-between gap-3 border-t border-slate-200 pt-1 text-sm"><dt class="font-bold text-[#112235]">Room total</dt><dd id="price-total" class="font-bold text-[#112235]">-</dd></div>
+                        </dl>
+                        <p class="mt-2 text-slate-600">No payment is taken now. Early check-in, late check-out, and any services you use during your stay are charged separately, only on request, and itemized on your bill. Confirmed reservations follow the hotel's <a href="{{ route('legal.refunds') }}" target="_blank" class="font-bold text-[#7a5d26] underline">cancellation terms</a>.</p>
+                    </section>
+                    <label class="flex items-start gap-2 text-xs leading-5 text-slate-600"><input name="privacy_consent" value="1" type="checkbox" required @checked(old('privacy_consent')) class="mt-1 rounded border-slate-300 text-[#112235] focus:ring-[#c5a36a]"><span>I am at least 18 years old, I agree to the <a href="{{ route('legal.terms') }}" target="_blank" class="font-bold text-[#7a5d26] underline">Terms of Service</a>, and I consent to Le Charmé Suites using these details to process and contact me about this booking as described in the <a href="{{ route('legal.privacy') }}" target="_blank" class="font-bold text-[#7a5d26] underline">Privacy Policy</a>.</span></label>
                     <button class="flex w-full items-center justify-center gap-2 rounded-lg border border-[#c5a36a]/40 bg-[#112235] px-4 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#0c1c2e] hover:shadow-lg active:translate-y-0" type="submit">
                         Submit Booking Request
                         <span class="material-symbols-outlined text-lg text-[#c5a36a]">arrow_forward</span>
                     </button>
-                    <p class="text-center text-[10px] leading-4 text-slate-400">Sample data only · Secure local processing · No payment is collected</p>
+                    <p class="text-center text-[11px] leading-4 text-slate-500">Sample data only · Stored on the hotel's local system · No payment is collected online</p>
                 </form>
             </aside>
         </section>
     </main>
 
-    <footer class="border-t border-white/10 bg-[#0c1c2e] py-7 text-xs text-slate-400">
+    <footer class="ihms-focus-light border-t border-white/10 bg-[#0c1c2e] py-7 text-xs text-slate-400">
         <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-center sm:px-6 md:flex-row md:text-left lg:px-8">
             <div><span class="font-display font-bold text-white">Le Charmé Suites IHMP</span><span class="ml-2">Academic capstone prototype · Not the hotel's official booking system</span></div>
             <div class="flex flex-wrap justify-center gap-x-5 gap-y-2">
                 <a href="{{ config('hotel.website') }}" target="_blank" rel="noopener noreferrer" class="transition hover:text-white">Official Website</a>
                 <a href="mailto:{{ config('hotel.email') }}" class="transition hover:text-white">Front Desk Support</a>
                 <a href="tel:{{ preg_replace('/[^+0-9]/', '', config('hotel.phone')) }}" class="transition hover:text-white">{{ config('hotel.phone') }}</a>
+                @include('partials.legal-links', ['linkClass' => 'transition hover:text-white'])
             </div>
         </div>
     </footer>
+
+    @include('partials.cookie-notice')
+    <script>
+        (() => {
+            const rates = @json($roomTypes->map(fn (array $details): float => (float) $details['rate']));
+            const roomType = document.getElementById('room_type');
+            const checkIn = document.getElementById('check_in_date');
+            const checkOut = document.getElementById('check_out_date');
+            const peso = (amount) => 'PHP ' + amount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            const updatePriceSummary = () => {
+                const rate = rates[roomType.value];
+                const nights = checkIn.value && checkOut.value
+                    ? Math.round((Date.parse(checkOut.value) - Date.parse(checkIn.value)) / 86400000)
+                    : 0;
+
+                document.getElementById('price-rate').textContent = rate ? peso(rate) : 'Choose a room';
+                document.getElementById('price-nights').textContent = nights > 0 ? String(nights) : 'Choose your dates';
+                document.getElementById('price-total').textContent = rate && nights > 0 ? peso(rate * nights) : '-';
+            };
+
+            [roomType, checkIn, checkOut].forEach((field) => field.addEventListener('change', updatePriceSummary));
+            updatePriceSummary();
+        })();
+    </script>
 </body>
 </html>
