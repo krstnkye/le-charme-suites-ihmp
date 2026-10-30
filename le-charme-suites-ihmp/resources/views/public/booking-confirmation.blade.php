@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Booking Request Received - Le Charmé Suites</title>@include('partials.offline-assets') @include('partials.favicon')<script>tailwind.config={theme:{extend:{fontFamily:{body:['Manrope'],display:['Noto Serif']}}}};</script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Booking Request Received - Le Charmé Suites</title>@include('partials.offline-assets') @include('partials.favicon')<script>tailwind.config={theme:{extend:{fontFamily:{body:['Manrope'],display:['Manrope']}}}};</script></head>
 <body class="min-h-screen bg-[#f7f4ee] font-body text-[#01162d]">
     <div class="border-b border-amber-300 bg-amber-50 px-4 py-2 text-center text-[11px] font-semibold leading-5 text-amber-900" role="note">
         <span class="material-symbols-outlined align-middle text-sm" aria-hidden="true">school</span>

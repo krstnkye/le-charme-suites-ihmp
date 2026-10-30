@@ -17,9 +17,9 @@
         [data-page-back] {
             align-items: center;
             background: #fff;
-            border: 1px solid #c4c6cd;
+            border: 1px solid #d3d3cd;
             border-radius: 6px;
-            color: #01162d;
+            color: #161a20;
             display: inline-flex;
             font-size: .875rem;
             font-weight: 700;
@@ -31,12 +31,12 @@
 
         [data-page-back]:hover {
             background: #f7f4ee;
-            border-color: #755a28;
+            border-color: #5b6069;
         }
 
         [data-page-back]:focus-visible {
             box-shadow: 0 0 0 3px rgba(230, 193, 133, .55);
-            outline: 2px solid #01162d;
+            outline: 2px solid #161a20;
             outline-offset: 2px;
         }
     </style>

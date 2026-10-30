@@ -6,19 +6,19 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Le Charmé Suites IHMP')</title>
     @include('partials.offline-assets')
-    <script>tailwind.config = { theme: { extend: { fontFamily: { body: ['Manrope', 'sans-serif'], headline: ['Noto Serif', 'serif'] } } } };</script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { body: ['Manrope', 'sans-serif'], headline: ['Manrope', 'sans-serif'] } } } };</script>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
     <style>
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; line-height: 1; }
         body { font-family: Manrope, sans-serif; }
-        .ihms-serif { font-family: 'Noto Serif', serif; }
-        .ihms-card { background: #fff; border: 1px solid #e5e2dc; box-shadow: 0 4px 16px -3px rgba(1, 22, 45, .08); }
+        .ihms-serif { font-family: Manrope, sans-serif; }
+        .ihms-card { background: #fff; border: 1px solid #e4e4df; border-radius: 10px; }
     </style>
     @stack('styles')
     @include('partials.favicon')
 </head>
-<body class="min-h-screen bg-[#fcf9f3] text-[#1c1c18] antialiased">
+<body class="min-h-screen bg-[#f5f5f2] text-[#161a20] antialiased">
     @php
         $role = auth()->user()?->role;
         $hasFrontDeskSidebar = $role === 'receptionist';
@@ -27,32 +27,36 @@
     @if ($hasFrontDeskSidebar)
         @include('partials.front-desk-sidebar')
     @else
-        <aside class="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-white/10 bg-[#01162d] p-5 text-white lg:block">
-            <a href="{{ route('dashboard') }}" class="block rounded-lg bg-white p-3 shadow-sm">
-                @include('partials.brand-logo', ['class' => 'mx-auto h-auto w-full max-w-[190px] object-contain'])
-                <span class="mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">Integrated Hotel Management Portal</span>
-            </a>
-            <nav class="mt-8 space-y-1 text-sm font-semibold">
-                <a class="block rounded-lg px-3 py-2.5 hover:bg-[#172b42]" href="{{ route('dashboard') }}">Dashboard</a>
-                @if (in_array($role, ['admin', 'receptionist'], true))
-                    <a class="block rounded-lg px-3 py-2.5 hover:bg-[#172b42]" href="{{ route('guests.index') }}">Guests</a>
-                    <a class="block rounded-lg px-3 py-2.5 hover:bg-[#172b42]" href="{{ route('reservations.index') }}">Reservations</a>
-                    <a class="block rounded-lg px-3 py-2.5 hover:bg-[#172b42]" href="{{ route('check-ins.index') }}">Check-ins</a>
-                @endif
-                @if (in_array($role, ['admin', 'receptionist', 'housekeeping'], true))<a class="block rounded-lg px-3 py-2.5 hover:bg-[#172b42]" href="{{ route('rooms.index') }}">Rooms</a>@endif
-                @if (in_array($role, ['admin', 'receptionist', 'cashier'], true))<a class="block rounded-lg px-3 py-2.5 hover:bg-[#172b42]" href="{{ route('check-outs.index') }}">Check-outs</a>@endif
-                @if (in_array($role, ['admin', 'cashier', 'owner'], true))<a class="block rounded-lg px-3 py-2.5 hover:bg-[#172b42]" href="{{ route('reports.index') }}">Reports</a>@endif
+        <aside data-lc-shell class="lc-sidebar hidden w-64 lg:flex" aria-label="Portal Sidebar">
+            <div class="lc-sidebar-head">
+                <a href="{{ route('dashboard') }}" class="lc-brand">
+                    @include('partials.brand-logo', ['class' => 'w-full'])
+                    <span class="lc-brand-scope"><strong>Hotel management portal</strong></span>
+                </a>
+            </div>
+            <nav class="lc-sidebar-nav" aria-label="Portal navigation">
+                <div class="lc-nav-group">
+                    <a @class(['lc-nav-link', 'is-active' => request()->routeIs('dashboard')]) href="{{ route('dashboard') }}"><span class="material-symbols-outlined" aria-hidden="true">dashboard</span>Dashboard</a>
+                    @if (in_array($role, ['admin', 'receptionist'], true))
+                        <a @class(['lc-nav-link', 'is-active' => request()->routeIs('guests.*')]) href="{{ route('guests.index') }}"><span class="material-symbols-outlined" aria-hidden="true">group</span>Guests</a>
+                        <a @class(['lc-nav-link', 'is-active' => request()->routeIs('reservations.*')]) href="{{ route('reservations.index') }}"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>Reservations</a>
+                        <a @class(['lc-nav-link', 'is-active' => request()->routeIs('check-ins.*')]) href="{{ route('check-ins.index') }}"><span class="material-symbols-outlined" aria-hidden="true">login</span>Check-ins</a>
+                    @endif
+                    @if (in_array($role, ['admin', 'receptionist', 'housekeeping'], true))<a @class(['lc-nav-link', 'is-active' => request()->routeIs('rooms.*')]) href="{{ route('rooms.index') }}"><span class="material-symbols-outlined" aria-hidden="true">bed</span>Rooms</a>@endif
+                    @if (in_array($role, ['admin', 'receptionist', 'cashier'], true))<a @class(['lc-nav-link', 'is-active' => request()->routeIs('check-outs.*')]) href="{{ route('check-outs.index') }}"><span class="material-symbols-outlined" aria-hidden="true">logout</span>Check-outs</a>@endif
+                    @if (in_array($role, ['admin', 'cashier', 'owner'], true))<a @class(['lc-nav-link', 'is-active' => request()->routeIs('reports.*')]) href="{{ route('reports.index') }}"><span class="material-symbols-outlined" aria-hidden="true">monitoring</span>Reports</a>@endif
+                </div>
             </nav>
         </aside>
     @endif
 
     <div class="lg:ml-64">
-        <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-[#e5e2dc] bg-white px-5 py-3 shadow-sm sm:px-8">
-            <div class="min-w-0"><p class="text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">@yield('section_label', 'Integrated Hotel Management Portal')</p><h1 class="ihms-serif truncate text-xl font-semibold text-[#01162d] sm:text-2xl">@yield('page_title', 'Dashboard')</h1></div>
+        <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-[#e4e4df] bg-[#f5f5f2] px-5 py-3 sm:px-8">
+            <div class="min-w-0"><p class="text-xs text-[#5b6069]">@yield('section_label', 'Integrated Hotel Management Portal')</p><h1 class="truncate text-lg font-semibold text-[#161a20]">@yield('page_title', 'Dashboard')</h1></div>
             <div class="flex shrink-0 items-center gap-3">
-                <div class="hidden text-right sm:block"><p class="text-xs font-bold text-[#01162d]">{{ auth()->user()?->name }}</p><p id="ihms-layout-clock" class="text-[11px] text-slate-500">{{ now(config('app.timezone'))->format('M d, Y • h:i A') }}</p></div>
-                <a href="{{ route('profile.edit') }}" class="flex h-9 w-9 items-center justify-center rounded-full bg-[#fdd79a] text-xs font-bold text-[#271900]" aria-label="Open my profile">{{ strtoupper(substr(auth()->user()?->name ?? 'ST', 0, 1)) }}</a>
-                @unless ($hasFrontDeskSidebar)<form method="POST" action="{{ route('logout') }}">@csrf<button class="rounded-lg border border-[#c4c6cd] px-3 py-2 text-xs font-bold text-[#01162d] hover:bg-[#f6f3ed]">Logout</button></form>@endunless
+                <div class="hidden text-right sm:block"><p class="text-sm font-semibold text-[#161a20]">{{ auth()->user()?->name }}</p><p id="ihms-layout-clock" class="text-xs tabular-nums text-[#5b6069]">{{ now(config('app.timezone'))->format('M d, Y • h:i A') }}</p></div>
+                <a href="{{ route('profile.edit') }}" class="lc-avatar h-9 w-9" aria-label="Open my profile">{{ strtoupper(substr(auth()->user()?->name ?? 'ST', 0, 1)) }}</a>
+                @unless ($hasFrontDeskSidebar)<form method="POST" action="{{ route('logout') }}">@csrf<button class="lc-btn lc-btn-quiet">Logout</button></form>@endunless
             </div>
         </header>
 

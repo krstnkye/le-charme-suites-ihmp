@@ -11,19 +11,19 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        'secondary-fixed': '#ffdeaa',
-                        'secondary-fixed-dim': '#e6c185',
-                        'on-surface-variant': '#44474d',
-                        'on-surface': '#1c1c18',
-                        'outline-variant': '#c4c6cd',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        'secondary-fixed': '#e8e8e4',
+                        'secondary-fixed-dim': '#d3d3cd',
+                        'on-surface-variant': '#4a4f57',
+                        'on-surface': '#161a20',
+                        'outline-variant': '#d3d3cd',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container': '#f0eee8',
-                        surface: '#fcf9f3',
-                        'surface-variant': '#e5e2dc',
-                        'secondary-container': '#fdd79a',
-                        secondary: '#755a28',
+                        'surface-container': '#ebebe7',
+                        surface: '#f5f5f2',
+                        'surface-variant': '#e4e4df',
+                        'secondary-container': '#e8e8e4',
+                        secondary: '#5b6069',
                         error: '#ba1a1a',
                         'error-container': '#ffdad6',
                         'on-error-container': '#93000a',
@@ -32,7 +32,7 @@
                         'body-md': ['Manrope', 'sans-serif'],
                         'label-md': ['Manrope', 'sans-serif'],
                         'label-sm': ['Manrope', 'sans-serif'],
-                        'headline-md': ['Noto Serif', 'serif'],
+                        'headline-md': ['Manrope', 'sans-serif'],
                         'title-md': ['Manrope', 'sans-serif'],
                         'body-sm': ['Manrope', 'sans-serif'],
                     },
@@ -56,15 +56,15 @@
         }
 
         .role-card.is-selected {
-            background: #01162d;
-            border-color: #755a28;
+            background: #161a20;
+            border-color: #5b6069;
             color: #ffffff;
             box-shadow: 0 0 0 2px rgba(117, 90, 40, 0.28), 0 12px 24px -18px rgba(1, 22, 45, 0.7);
         }
 
         .role-card.is-selected .material-symbols-outlined,
         .role-card.is-selected .selected-check {
-            color: #ffdeaa;
+            color: #e8e8e4;
         }
 
         .role-card.is-selected .selected-check {

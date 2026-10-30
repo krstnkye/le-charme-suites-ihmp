@@ -10,25 +10,25 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        'secondary-container': '#fdd79a',
-                        background: '#fcf9f3',
-                        surface: '#fcf9f3',
-                        'surface-container': '#f0eee8',
-                        'surface-container-low': '#f6f3ed',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        'secondary-container': '#e8e8e4',
+                        background: '#f5f5f2',
+                        surface: '#f5f5f2',
+                        'surface-container': '#ebebe7',
+                        'surface-container-low': '#f0f0ec',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container-highest': '#e5e2dc',
-                        'surface-variant': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
+                        'surface-container-highest': '#e4e4df',
+                        'surface-variant': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
                         error: '#ba1a1a',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -43,7 +43,7 @@
         }
 
         .nav-shell {
-            background-color: #172b42;
+            background-color: #2a2f37;
             background-image: radial-gradient(rgba(255, 222, 170, 0.14) 1px, transparent 1px);
             background-size: 26px 26px;
         }
@@ -53,15 +53,15 @@
         }
 
         .role-card:has(input:checked) {
-            background: #01162d;
-            border-color: #755a28;
+            background: #161a20;
+            border-color: #5b6069;
             color: #ffffff;
             box-shadow: 0 0 0 2px rgba(117, 90, 40, 0.28), 0 12px 24px -18px rgba(1, 22, 45, 0.7);
         }
 
         .role-card:has(input:checked) .material-symbols-outlined,
         .role-card:has(input:checked) .selected-check {
-            color: #ffdeaa;
+            color: #e8e8e4;
         }
 
         .role-card:has(input:checked) .selected-check {
@@ -119,7 +119,7 @@
                 </div>
                 <div class="flex flex-wrap items-baseline gap-3">
                     <h1 class="font-serif text-4xl font-semibold tracking-tight">Create Staff Account</h1>
-                    <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#5b4313]">{{ $totalUsers }} Active Personnel</span>
+                    <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#3f444c]">{{ $totalUsers }} Active Personnel</span>
                 </div>
                 <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Create accounts for receptionist, billing, and housekeeping staff. Accounts created here can sign in right away. Administrator accounts cannot be created here.</p>
             </section>

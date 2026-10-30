@@ -36,29 +36,29 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        'secondary-fixed-dim': '#e6c185',
-                        'on-secondary-fixed-variant': '#5b4313',
-                        surface: '#fcf9f3',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        'secondary-fixed-dim': '#d3d3cd',
+                        'on-secondary-fixed-variant': '#3f444c',
+                        surface: '#f5f5f2',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container-low': '#f6f3ed',
-                        'surface-container': '#f0eee8',
-                        'surface-container-high': '#ebe8e2',
-                        'surface-variant': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
-                        'on-surface': '#1c1c18',
-                        'on-surface-variant': '#44474d',
+                        'surface-container-low': '#f0f0ec',
+                        'surface-container': '#ebebe7',
+                        'surface-container-high': '#e9e9e5',
+                        'surface-variant': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
+                        'on-surface': '#161a20',
+                        'on-surface-variant': '#4a4f57',
                         error: '#ba1a1a',
                         'error-container': '#ffdad6',
                         'on-error-container': '#93000a',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -71,7 +71,7 @@
         }
 
         .bg-ihms-grid {
-            background-color: #01162d;
+            background-color: #161a20;
             background-image: radial-gradient(rgba(255, 222, 170, 0.16) 1px, transparent 1px);
             background-size: 24px 24px;
         }
@@ -103,7 +103,7 @@
                 </div>
             </header>
 
-            <main class="flex-1 bg-ihms-grid p-4 sm:p-6 lg:p-8">
+            <main class="flex-1 p-4 sm:p-6 lg:p-8">
                 <div class="mx-auto max-w-7xl space-y-6">
                     @if (session('status'))
                         <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
@@ -305,7 +305,7 @@
 
                         <aside class="col-span-12 overflow-hidden rounded-xl border-2 border-secondary/40 bg-surface-container-lowest shadow-xl xl:col-span-4">
                             @if ($selected)
-                                <div class="bg-primary p-5 text-white">
+                                <div class="lc-flip bg-primary p-5 text-white">
                                     <div class="flex items-center justify-between gap-3">
                                         <span class="rounded bg-secondary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">Record Preview</span>
                                         <span class="font-mono text-xs font-bold text-secondary-fixed">#LC-{{ str_pad($selected->id, 5, '0', STR_PAD_LEFT) }}</span>

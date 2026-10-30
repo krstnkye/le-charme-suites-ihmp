@@ -1,0 +1,569 @@
+/*
+ * Le Charmé Suites portal design layer.
+ *
+ * Loaded on every page after the Tailwind runtime config. Pages still use
+ * Tailwind utilities; this file sets the shared tokens, the sidebar shell and
+ * the app-wide type, surface and browser-chrome rules so every role's screens
+ * read as one product.
+ */
+:root {
+    --lc-ground: #f5f5f2;
+    --lc-surface: #ffffff;
+    --lc-raised: #f0f0ec;
+    --lc-active: #e9e9e5;
+    --lc-border: #e4e4df;
+    --lc-rule: #eeeeea;
+    --lc-control: #d3d3cd;
+    --lc-ink: #161a20;
+    --lc-ink-hover: #2a2f37;
+    --lc-muted: #5b6069;
+    --lc-faint: #6b7079;
+    /* Bay teal: the one data hue (occupancy, selection, focus). */
+    --lc-accent: #17707f;
+    --lc-accent-soft: #e3f0f1;
+    --lc-accent-ink: #0e4f5a;
+    --lc-positive: #247b50;
+    --lc-negative: #c4242a;
+    --lc-radius-card: 10px;
+    --lc-radius-control: 8px;
+    --lc-font: Manrope, ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ---------- Browser surfaces ---------- */
+
+html {
+    -webkit-font-smoothing: antialiased;
+    accent-color: var(--lc-accent);
+    caret-color: var(--lc-accent);
+}
+
+:root body {
+    font-family: var(--lc-font);
+    font-feature-settings: "ss01" 0;
+}
+
+::selection {
+    background: var(--lc-accent-soft);
+    color: var(--lc-accent-ink);
+}
+
+* {
+    scrollbar-color: #c9cac4 transparent;
+    scrollbar-width: thin;
+}
+
+/* One typeface: the serif utilities and helpers render in the text face. */
+:root .font-serif,
+:root .font-headline,
+:root .ihms-serif {
+    font-family: var(--lc-font);
+    letter-spacing: -0.015em;
+}
+
+/* Figures line up wherever numbers sit in tables. */
+:root td,
+:root th {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- App screens (any page with a portal sidebar) ---------- */
+
+:root:has([data-universal-sidebar], [data-lc-shell]) body {
+    background-color: var(--lc-ground);
+    color: var(--lc-ink);
+}
+
+/* App titles are app-sized, not landing-page sized. */
+:root:has([data-universal-sidebar], [data-lc-shell]) main h1,
+:root:has([data-universal-sidebar], [data-lc-shell]) header h1 {
+    font-size: 1.625rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 2rem;
+}
+
+:root:has([data-universal-sidebar], [data-lc-shell]) header h1 {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+}
+
+:root:has([data-universal-sidebar], [data-lc-shell]) main h2 {
+    font-size: 1.125rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    line-height: 1.5rem;
+}
+
+:root:has([data-universal-sidebar], [data-lc-shell]) main h3 {
+    font-weight: 650;
+    letter-spacing: -0.005em;
+}
+
+/* No tracked uppercase eyebrow labels: sentence case at a readable size. */
+:root:has([data-universal-sidebar], [data-lc-shell]) .uppercase {
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+:root:has([data-universal-sidebar], [data-lc-shell]) [class*="tracking-wide"],
+:root:has([data-universal-sidebar], [data-lc-shell]) [class*="tracking-widest"],
+:root:has([data-universal-sidebar], [data-lc-shell]) [class*="tracking-["] {
+    letter-spacing: 0;
+}
+
+:root:has([data-universal-sidebar], [data-lc-shell]) [class*="text-[9px]"],
+:root:has([data-universal-sidebar], [data-lc-shell]) [class*="text-[10px]"] {
+    font-size: 11px;
+    line-height: 16px;
+}
+
+/* Surfaces at rest are flat: a border or a tone step, never a shadow. */
+:root:has([data-universal-sidebar], [data-lc-shell]) main :is(.shadow-sm, .shadow, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl, .shadow-inner, [class*="shadow-["], .ihms-card):not(.fixed):not(.absolute):not(dialog):not([role="dialog"]):not([role="menu"]) {
+    box-shadow: none;
+}
+
+/* Decorative blurred colour blobs. */
+:root main [class*="blur-3xl"],
+:root main [class*="blur-2xl"] {
+    display: none;
+}
+
+/* Thick coloured edges on cards read as template; keep them as a hairline. */
+:root:has([data-universal-sidebar], [data-lc-shell]) main [class*="border-l-4"]:not(td):not(th),
+:root:has([data-universal-sidebar], [data-lc-shell]) main [class*="border-l-[3px]"]:not(td):not(th) {
+    border-left-width: 1px;
+}
+
+:root:has([data-universal-sidebar], [data-lc-shell]) main [class*="border-t-4"] {
+    border-top-width: 1px;
+}
+
+/* Tables: grey sentence-case headers on the surface, no header band. */
+:root:has([data-universal-sidebar], [data-lc-shell]) main thead,
+:root:has([data-universal-sidebar], [data-lc-shell]) main thead tr {
+    background-color: transparent;
+}
+
+:root:has([data-universal-sidebar], [data-lc-shell]) main thead th {
+    color: var(--lc-muted);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+:root:has([data-universal-sidebar], [data-lc-shell]) main tbody tr:hover {
+    background-color: #fafaf8;
+}
+
+/* ---------- Sidebar shell ---------- */
+
+.lc-sidebar {
+    background: var(--lc-ground);
+    border-right: 1px solid var(--lc-border);
+    color: var(--lc-ink);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--lc-font);
+    height: 100vh;
+    inset-block: 0;
+    left: 0;
+    position: fixed;
+    z-index: 40;
+}
+
+.lc-sidebar-head {
+    padding: 18px 16px 12px;
+}
+
+.lc-brand {
+    align-items: flex-start;
+    border-radius: var(--lc-radius-control);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 4px 6px 6px;
+    text-decoration: none;
+}
+
+.lc-brand img {
+    height: auto;
+    max-width: 118px;
+}
+
+.lc-brand-scope {
+    color: var(--lc-muted);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+}
+
+.lc-brand-scope strong {
+    color: var(--lc-ink);
+    font-weight: 650;
+}
+
+.lc-sidebar-action {
+    align-items: center;
+    background: var(--lc-ink);
+    border-radius: var(--lc-radius-control);
+    color: #fff;
+    display: flex;
+    font-size: 13px;
+    font-weight: 650;
+    gap: 8px;
+    height: 36px;
+    justify-content: center;
+    margin-top: 14px;
+    padding: 0 12px;
+    text-decoration: none;
+}
+
+.lc-sidebar-action:hover {
+    background: var(--lc-ink-hover);
+}
+
+.lc-sidebar-action .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.lc-sidebar-nav {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 18px;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 8px 12px 16px;
+}
+
+.lc-nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lc-nav-label {
+    color: var(--lc-faint);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+    padding: 0 10px 4px;
+}
+
+.lc-nav-link {
+    align-items: center;
+    border-radius: var(--lc-radius-control);
+    color: #3f444c;
+    display: flex;
+    font-size: 14px;
+    font-weight: 550;
+    gap: 10px;
+    line-height: 20px;
+    min-height: 34px;
+    padding: 6px 10px;
+    text-align: left;
+    text-decoration: none;
+    width: 100%;
+}
+
+.lc-nav-link .material-symbols-outlined {
+    color: var(--lc-faint);
+    font-size: 19px;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+}
+
+.lc-nav-link:hover {
+    background: var(--lc-active);
+    color: var(--lc-ink);
+}
+
+.lc-nav-link.is-active {
+    background: var(--lc-active);
+    color: var(--lc-ink);
+    font-weight: 650;
+}
+
+.lc-nav-link.is-active .material-symbols-outlined {
+    color: var(--lc-ink);
+}
+
+.lc-nav-link .lc-nav-meta {
+    color: var(--lc-faint);
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: auto;
+}
+
+.lc-nav-sub {
+    border-radius: 6px;
+    color: var(--lc-muted);
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    margin-left: 29px;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+.lc-nav-sub:hover {
+    background: var(--lc-active);
+    color: var(--lc-ink);
+}
+
+.lc-nav-sub.is-active {
+    color: var(--lc-ink);
+    font-weight: 650;
+}
+
+.lc-sidebar-foot {
+    border-top: 1px solid var(--lc-border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px 14px;
+}
+
+.lc-sidebar-user {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    padding: 6px 10px 8px;
+}
+
+.lc-avatar {
+    align-items: center;
+    background: var(--lc-accent-soft);
+    border-radius: 999px;
+    color: var(--lc-accent-ink);
+    display: inline-flex;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    height: 30px;
+    justify-content: center;
+    width: 30px;
+}
+
+.lc-sidebar-user p {
+    line-height: 18px;
+    margin: 0;
+}
+
+.lc-sidebar-note {
+    background: var(--lc-raised);
+    border-radius: var(--lc-radius-control);
+    color: var(--lc-muted);
+    font-size: 12px;
+    line-height: 18px;
+    padding: 10px 12px;
+}
+
+.lc-sidebar-note strong {
+    color: var(--lc-ink);
+    display: block;
+    font-weight: 650;
+}
+
+/* ---------- Shared building blocks for redesigned screens ---------- */
+
+.lc-page-head {
+    align-items: flex-end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.lc-page-head p {
+    color: var(--lc-muted);
+    font-size: 14px;
+    line-height: 20px;
+    margin-top: 4px;
+    max-width: 62ch;
+}
+
+.lc-btn {
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: var(--lc-radius-control);
+    display: inline-flex;
+    font-size: 13px;
+    font-weight: 650;
+    gap: 8px;
+    height: 36px;
+    justify-content: center;
+    padding: 0 14px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.lc-btn .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.lc-btn-primary {
+    background: var(--lc-ink);
+    color: #fff;
+}
+
+.lc-btn-primary:hover {
+    background: var(--lc-ink-hover);
+}
+
+.lc-btn-quiet {
+    background: var(--lc-surface);
+    border-color: var(--lc-control);
+    color: var(--lc-ink);
+}
+
+.lc-btn-quiet:hover {
+    background: var(--lc-raised);
+}
+
+.lc-stat-strip {
+    background: var(--lc-surface);
+    border: 1px solid var(--lc-border);
+    border-radius: var(--lc-radius-card);
+    display: grid;
+    grid-template-columns: repeat(var(--lc-cols, 4), minmax(0, 1fr));
+}
+
+.lc-stat {
+    padding: 16px 20px;
+}
+
+.lc-stat + .lc-stat {
+    border-left: 1px solid var(--lc-rule);
+}
+
+.lc-stat dt {
+    color: var(--lc-muted);
+    font-size: 13px;
+    font-weight: 550;
+    line-height: 18px;
+}
+
+.lc-stat dd {
+    color: var(--lc-ink);
+    font-size: 26px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 32px;
+    margin-top: 6px;
+}
+
+.lc-stat dd small {
+    color: var(--lc-faint);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
+    margin-left: 4px;
+}
+
+.lc-stat .lc-stat-note {
+    color: var(--lc-faint);
+    font-size: 12px;
+    line-height: 16px;
+    margin-top: 4px;
+}
+
+@media (max-width: 767px) {
+    .lc-stat-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .lc-stat:nth-child(odd) {
+        border-left: 0;
+    }
+
+    .lc-stat:nth-child(n + 3) {
+        border-top: 1px solid var(--lc-rule);
+    }
+}
+
+/* ---------- Former dark hero banners, now light working panels ---------- */
+
+:root .lc-flip {
+    background: var(--lc-surface);
+    background-image: none;
+    border: 1px solid var(--lc-border);
+    border-radius: var(--lc-radius-card);
+    box-shadow: none;
+    color: var(--lc-ink);
+}
+
+:root .lc-flip .pointer-events-none.absolute {
+    display: none;
+}
+
+:root .lc-flip :is(.text-white, [class*="text-white/"], .text-secondary-fixed, [class*="text-secondary-fixed/"], [class*="text-[#e8e8e4]"], [class*="text-[#c9ced6]"], [class*="text-[#9aa1ab]"], [class*="text-blue-"], [class*="text-slate-2"], [class*="text-slate-3"], [class*="text-on-primary"], [class*="text-amber-1"], [class*="text-amber-2"]):not([class*="bg-primary"]):not([class*="bg-[#161a20]"]):not([class*="bg-[#2a2f37]"]):not([class*="bg-[#5b6069]"]):not([class*="bg-secondary"]):not([class*="bg-emerald-"]):not([class*="bg-red-"]):not([class*="bg-rose-"]) {
+    color: var(--lc-muted);
+}
+
+:root .lc-flip :is(h1, h2, h3, strong, b, dd, [class*="text-2xl"], [class*="text-3xl"], [class*="text-4xl"], [class*="text-5xl"], [class*="font-bold"], [class*="font-semibold"]):is(.text-white, [class*="text-white/"], .text-secondary-fixed, [class*="text-[#e8e8e4]"]):not([class*="bg-"]) {
+    color: var(--lc-ink);
+}
+
+:root .lc-flip :is([class*="bg-white/"], [class*="bg-primary/"], [class*="bg-[#161a20]/"], [class*="bg-black/"], [class*="bg-secondary/"], [class*="bg-secondary-fixed/"], .bg-primary-container, [class*="bg-[#2a2f37]"]):not(a):not(button) {
+    background-color: var(--lc-raised);
+    color: var(--lc-ink);
+}
+
+:root .lc-flip :is(a, button):is([class*="bg-white/"], [class*="bg-primary/"], [class*="bg-secondary/"]) {
+    background-color: var(--lc-surface);
+    border: 1px solid var(--lc-control);
+    color: var(--lc-ink);
+}
+
+:root .lc-flip :is([class*="border-white"], [class*="border-secondary-fixed"], [class*="border-secondary/"], [class*="border-primary-container"], [class*="border-[#2a2f37]"], [class*="divide-white"] > *) {
+    border-color: var(--lc-rule);
+}
+
+:root .lc-flip .material-symbols-outlined:not([class*="bg-"]) {
+    color: var(--lc-faint);
+}
+
+/* Top bars sit on the page ground. */
+:root:has([data-universal-sidebar], [data-lc-shell]) header.sticky {
+    backdrop-filter: none;
+    background-color: var(--lc-ground);
+    box-shadow: none;
+}
+
+/* Icons boxed in tinted squares beside KPI labels read as template chrome. */
+:root:has([data-universal-sidebar], [data-lc-shell]) main :is(span, div)[class*="h-10"][class*="w-10"][class*="rounded-lg"]:has(> .material-symbols-outlined:only-child),
+:root:has([data-universal-sidebar], [data-lc-shell]) main :is(span, div)[class*="h-11"][class*="w-11"][class*="rounded"]:has(> .material-symbols-outlined:only-child),
+:root:has([data-universal-sidebar], [data-lc-shell]) main :is(span, div)[class*="h-12"][class*="w-12"][class*="rounded"]:has(> .material-symbols-outlined:only-child) {
+    background: transparent;
+    border: 0;
+    color: var(--lc-faint);
+    height: auto;
+    width: auto;
+}
+
+/* Header initials: one quiet avatar style everywhere. */
+:root:has([data-universal-sidebar], [data-lc-shell]) header :is(a, span, div).rounded-full:is([class*="h-9"], [class*="h-10"], [class*="h-11"]):not(:has(img)) {
+    background: var(--lc-accent-soft);
+    border: 0;
+    box-shadow: none;
+    color: var(--lc-accent-ink);
+    font-size: 12px;
+    height: 34px;
+    width: 34px;
+    --tw-ring-shadow: 0 0 #0000;
+}
+
+/* Card titles inside app screens stay at card size. */
+:root:has([data-universal-sidebar], [data-lc-shell]) main :is(h3, h4):is([class*="text-xl"], [class*="text-2xl"], [class*="text-3xl"]) {
+    font-size: 1.125rem;
+    font-weight: 650;
+    line-height: 1.5rem;
+}
+
+:root:has([data-universal-sidebar], [data-lc-shell]) main p:is([class*="text-4xl"], [class*="text-5xl"]) {
+    font-size: 1.875rem;
+    letter-spacing: -0.02em;
+    line-height: 2.25rem;
+}

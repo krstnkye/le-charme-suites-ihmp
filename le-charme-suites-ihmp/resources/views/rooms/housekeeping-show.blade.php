@@ -203,7 +203,7 @@
                                         @endforeach
                                     </select>
                                 </label>
-                                <button type="submit" class="rounded-lg bg-secondary px-4 py-2 text-sm font-bold text-white transition hover:bg-[#5b4313]">
+                                <button type="submit" class="rounded-lg bg-secondary px-4 py-2 text-sm font-bold text-white transition hover:bg-[#2a2f37]">
                                     {{ $activeTask ? 'Update Assignment' : 'Assign Task' }}
                                 </button>
                             </form>
@@ -307,7 +307,7 @@
                     </div>
                 </div>
 
-                <div class="rounded-xl bg-primary p-6 text-white shadow-sm">
+                <div class="lc-flip rounded-xl bg-primary p-6 text-white shadow-sm">
                     <h3 class="flex items-center gap-2 font-serif text-xl font-bold">
                         <span class="material-symbols-outlined text-secondary">sensor_occupied</span>
                         Readiness Snapshot

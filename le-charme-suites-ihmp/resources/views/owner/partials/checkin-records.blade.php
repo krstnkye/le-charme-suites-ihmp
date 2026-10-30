@@ -10,7 +10,7 @@
     $securityBond = $activeStayCount * 2000;
 @endphp
 
-<section class="relative overflow-hidden rounded-2xl border border-primary-container bg-primary p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-2xl border border-primary-container bg-primary p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -right-20 -top-24 h-80 w-80 rounded-full bg-secondary/15 blur-3xl"></div>
     <div class="pointer-events-none absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-white/10 blur-2xl"></div>
     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
@@ -252,7 +252,7 @@
             <span class="material-symbols-outlined text-emerald-600">task_alt</span>
         </div>
     </div>
-    <div class="rounded-xl border border-primary-container bg-primary-container p-5 text-white shadow-sm">
+    <div class="lc-flip rounded-xl border border-primary-container bg-primary-container p-5 text-white shadow-sm">
         <div class="flex items-center justify-between"><span class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed"><span class="material-symbols-outlined text-xs">policy</span>Executive Governance Protocol</span></div>
         <h3 class="mt-1 font-serif text-xl font-bold">Immutable SBMA Audit Chain</h3>
         <p class="mt-1 text-sm leading-6 text-blue-100">Express checkouts, keycard re-encodings, deposit release authorizations, and manual room status overrides are reserved for operational departments.</p>

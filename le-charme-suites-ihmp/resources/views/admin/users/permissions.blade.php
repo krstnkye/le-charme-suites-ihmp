@@ -36,27 +36,27 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        'secondary-container': '#fdd79a',
-                        background: '#fcf9f3',
-                        surface: '#fcf9f3',
-                        'surface-container': '#f0eee8',
-                        'surface-container-low': '#f6f3ed',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        'secondary-container': '#e8e8e4',
+                        background: '#f5f5f2',
+                        surface: '#f5f5f2',
+                        'surface-container': '#ebebe7',
+                        'surface-container-low': '#f0f0ec',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container-high': '#ebe8e2',
-                        'surface-container-highest': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
+                        'surface-container-high': '#e9e9e5',
+                        'surface-container-highest': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
                         error: '#ba1a1a',
                         'error-container': '#ffdad6',
                         'on-error-container': '#93000a',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -71,7 +71,7 @@
         }
 
         .nav-shell {
-            background-color: #172b42;
+            background-color: #2a2f37;
             background-image: radial-gradient(rgba(255, 222, 170, 0.14) 1px, transparent 1px);
             background-size: 26px 26px;
         }
@@ -312,12 +312,12 @@
                         </div>
                     </section>
 
-                    <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/20 bg-primary p-5 text-white shadow-lg">
+                    <section class="lc-flip relative overflow-hidden rounded-xl border border-secondary-fixed/20 bg-primary p-5 text-white shadow-lg">
                         <div class="relative z-10 flex items-center justify-between gap-4">
                             <div>
                                 <span class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Command Scope</span>
                                 <h5 class="mt-1 text-lg font-bold">{{ $roleTiers[$selectedRole] }} Access</h5>
-                                <p class="mt-1 text-xs leading-5 text-[#b4c8e5]">{{ $roleDepartments[$selectedRole] }} permission profile for {{ $roleLabels[$selectedRole] }}.</p>
+                                <p class="mt-1 text-xs leading-5 text-[#c9ced6]">{{ $roleDepartments[$selectedRole] }} permission profile for {{ $roleLabels[$selectedRole] }}.</p>
                             </div>
                             <div class="flex h-10 w-10 items-center justify-center rounded-full border border-secondary-fixed/40 bg-primary-container text-secondary-fixed">
                                 <span class="material-symbols-outlined text-xl">admin_panel_settings</span>

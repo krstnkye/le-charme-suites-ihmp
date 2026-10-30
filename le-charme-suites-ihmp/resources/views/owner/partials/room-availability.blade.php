@@ -27,7 +27,7 @@
     ];
 @endphp
 
-<section class="relative overflow-hidden rounded-2xl border border-primary-container bg-primary p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-2xl border border-primary-container bg-primary p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -right-16 top-0 h-full w-1/2 bg-gradient-to-l from-secondary/20 to-transparent"></div>
     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
         <div class="max-w-4xl">
@@ -245,7 +245,7 @@
             </div>
         </div>
 
-        <div class="rounded-2xl border border-primary-container bg-gradient-to-br from-primary to-[#07111f] p-6 text-white shadow-md">
+        <div class="lc-flip rounded-2xl border border-primary-container bg-gradient-to-br from-primary to-[#161a20] p-6 text-white shadow-md">
             <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-secondary-fixed">
                 <span class="material-symbols-outlined text-base">verified_user</span>
                 Forward Calendar Governance

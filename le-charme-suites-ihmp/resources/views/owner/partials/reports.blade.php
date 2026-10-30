@@ -57,7 +57,7 @@
     ];
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
         <div class="max-w-4xl">
@@ -147,7 +147,7 @@
 <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">
     <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Compliance Status</p><h3 class="mt-2 font-serif text-2xl font-bold">Audit Ready</h3><p class="mt-3 text-sm leading-6 text-slate-600">All owner-visible reports preserve record separation from administrative edit controls.</p><div class="mt-4 rounded-lg bg-emerald-50 p-3 text-xs font-bold text-emerald-700">No owner editing privileges</div></div>
     <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Record Sources</p><div class="mt-4 space-y-2 text-sm"><div class="flex justify-between"><span>Guests</span><strong>{{ $guests->count() }}</strong></div><div class="flex justify-between"><span>Rooms</span><strong>{{ $rooms->count() }}</strong></div><div class="flex justify-between"><span>Transactions</span><strong>{{ $transactions->count() }}</strong></div><div class="flex justify-between"><span>Housekeeping Logs</span><strong>{{ $housekeepingLogs->count() }}</strong></div></div></div>
-    <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Executive Advisory</p><h3 class="mt-2 font-serif text-2xl font-bold">Reports Are Monitoring Views</h3><p class="mt-3 text-sm leading-6 text-blue-100">Operational record changes remain with departments and administrators. Owner reports are intended for review, audit, and decision support.</p></div>
+    <div class="lc-flip rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Executive Advisory</p><h3 class="mt-2 font-serif text-2xl font-bold">Reports Are Monitoring Views</h3><p class="mt-3 text-sm leading-6 text-blue-100">Operational record changes remain with departments and administrators. Owner reports are intended for review, audit, and decision support.</p></div>
 </section>
 
 <script>

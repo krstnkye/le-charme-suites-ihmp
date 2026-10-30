@@ -30,7 +30,7 @@
     ])->values();
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/10"></div>
     <div class="pointer-events-none absolute bottom-0 right-24 h-36 w-36 rounded-full bg-secondary-fixed/10"></div>
     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
@@ -225,7 +225,7 @@
         <p class="mt-3 text-sm leading-6 text-slate-600">Room hygiene inspections are verified digitally by housekeeping before front-desk clearance. Owner access is read-only.</p>
         <div class="mt-4 rounded-lg bg-surface-low p-3 text-xs font-semibold text-slate-600">Current discrepancy rate: <span class="font-bold text-emerald-700">0.00%</span></div>
     </div>
-    <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md">
+    <div class="lc-flip rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md">
         <p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Executive Advisory</p>
         <h3 class="mt-2 font-serif text-2xl font-bold">Operational Record Guardrail</h3>
         <p class="mt-3 text-sm leading-6 text-blue-100">Owner / Management can monitor status, cleanliness, and turnover conditions. Room updates remain controlled by housekeeping, front desk, and administrators.</p>

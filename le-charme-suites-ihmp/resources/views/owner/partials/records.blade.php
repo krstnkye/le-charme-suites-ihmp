@@ -100,7 +100,7 @@
     ];
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-secondary-fixed/5">
         <span class="material-symbols-outlined text-[220px]">inventory_2</span>
     </div>

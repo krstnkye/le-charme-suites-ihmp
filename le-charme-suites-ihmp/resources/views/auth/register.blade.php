@@ -11,22 +11,22 @@
             theme: {
                 extend: {
                     colors: {
-                        surface: '#fcf9f3',
-                        primary: '#01162d',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        'secondary-container': '#fdd79a',
+                        surface: '#f5f5f2',
+                        primary: '#161a20',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        'secondary-container': '#e8e8e4',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container': '#f0eee8',
-                        'surface-variant': '#e5e2dc',
-                        'outline-variant': '#c4c6cd',
-                        'on-surface': '#1c1c18',
-                        'on-surface-variant': '#44474d',
+                        'surface-container': '#ebebe7',
+                        'surface-variant': '#e4e4df',
+                        'outline-variant': '#d3d3cd',
+                        'on-surface': '#161a20',
+                        'on-surface-variant': '#4a4f57',
                         error: '#ba1a1a',
                     },
                     fontFamily: {
                         body: ['Manrope', 'sans-serif'],
-                        headline: ['Noto Serif', 'serif'],
+                        headline: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -40,15 +40,15 @@
         }
 
         .role-card:has(input:checked) {
-            background: #01162d;
-            border-color: #755a28;
+            background: #161a20;
+            border-color: #5b6069;
             color: #ffffff;
             box-shadow: 0 0 0 2px rgba(117, 90, 40, 0.28), 0 12px 24px -18px rgba(1, 22, 45, 0.7);
         }
 
         .role-card:has(input:checked) .material-symbols-outlined,
         .role-card:has(input:checked) .selected-check {
-            color: #ffdeaa;
+            color: #e8e8e4;
         }
 
         .role-card:has(input:checked) .selected-check {
@@ -62,7 +62,7 @@
     <main class="relative flex min-h-screen items-center justify-center px-4 py-10">
         <div class="pointer-events-none absolute inset-0 opacity-10 bg-[radial-gradient(#ffdeaa_1px,transparent_1px)] [background-size:24px_24px]"></div>
 
-        <section class="relative w-full max-w-2xl rounded-xl border border-[#e6c185]/40 bg-surface-container-lowest p-8 shadow-2xl sm:p-10">
+        <section class="relative w-full max-w-2xl rounded-xl border border-[#d3d3cd]/40 bg-surface-container-lowest p-8 shadow-2xl sm:p-10">
             <div class="mb-8 text-center">
                 <div class="mx-auto mb-4 max-w-sm overflow-hidden rounded-lg bg-white px-5 py-3">
                     @include('partials.brand-logo', ['class' => 'h-auto w-full object-contain'])
@@ -173,7 +173,7 @@
 
                 <p class="rounded-lg border border-secondary/20 bg-secondary-container/20 px-3 py-2 text-xs text-on-surface-variant">A system administrator must approve new accounts before they can sign in.</p>
 
-                <button class="flex w-full items-center justify-center gap-2 rounded-lg border border-secondary/20 bg-primary px-5 py-3 text-base font-bold text-surface shadow-md transition hover:bg-[#172b42]" type="submit">
+                <button class="flex w-full items-center justify-center gap-2 rounded-lg border border-secondary/20 bg-primary px-5 py-3 text-base font-bold text-surface shadow-md transition hover:bg-[#2a2f37]" type="submit">
                     <span>Create IHMP Account</span>
                     <span class="material-symbols-outlined text-secondary-fixed">arrow_forward</span>
                 </button>

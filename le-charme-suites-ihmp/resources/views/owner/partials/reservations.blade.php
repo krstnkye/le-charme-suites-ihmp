@@ -22,7 +22,7 @@
     $filterEnd = now('Asia/Manila')->addDays(14)->toDateString();
 @endphp
 
-<section class="relative overflow-hidden rounded-2xl border border-secondary-fixed/20 bg-primary-container p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-2xl border border-secondary-fixed/20 bg-primary-container p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -bottom-10 -right-10 opacity-[0.06]">
         <span class="material-symbols-outlined text-[260px]">hotel_class</span>
     </div>

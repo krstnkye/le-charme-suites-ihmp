@@ -1,4 +1,4 @@
-@php($fieldClass = 'mt-2 w-full rounded-lg border border-[#c4c6cd] bg-white px-4 py-3 text-sm text-[#01162d] shadow-sm outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20')
+@php($fieldClass = 'mt-2 w-full rounded-lg border border-[#d3d3cd] bg-white px-4 py-3 text-sm text-[#161a20] shadow-sm outline-none transition focus:border-[#17707f] focus:ring-2 focus:ring-[#17707f]/20')
 @php($labelClass = 'block text-xs font-bold uppercase tracking-wider text-slate-600')
 <div class="grid gap-5 sm:grid-cols-2">
     <div><label for="room_number" class="{{ $labelClass }}">Room number <span class="text-red-600">*</span></label><input id="room_number" name="room_number" value="{{ old('room_number', $room->room_number ?? '') }}" class="{{ $fieldClass }}" required></div>

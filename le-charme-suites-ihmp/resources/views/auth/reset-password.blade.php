@@ -6,16 +6,16 @@
     <title>Reset Password - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
     @include('partials.favicon')
-    <script>tailwind.config = { theme: { extend: { fontFamily: { body: ['Manrope'], headline: ['Noto Serif'] } } } };</script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { body: ['Manrope'], headline: ['Manrope'] } } } };</script>
 </head>
-<body class="min-h-screen bg-[#01162d] font-body text-[#1c1c18] antialiased">
+<body class="min-h-screen bg-[#161a20] font-body text-[#161a20] antialiased">
     <main class="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
         <div class="pointer-events-none absolute inset-0 opacity-10 bg-[radial-gradient(#ffdeaa_1px,transparent_1px)] [background-size:24px_24px]"></div>
-        <section class="relative w-full max-w-lg rounded-xl border border-[#e6c185]/40 bg-white p-7 shadow-2xl sm:p-10">
+        <section class="relative w-full max-w-lg rounded-xl border border-[#d3d3cd]/40 bg-white p-7 shadow-2xl sm:p-10">
             <div class="text-center">
                 <div class="mx-auto mb-5 max-w-xs rounded-lg bg-white px-5 py-3">@include('partials.brand-logo', ['class' => 'h-auto w-full object-contain'])</div>
-                <p class="text-xs font-bold uppercase tracking-[0.22em] text-[#755a28]">Secure account recovery</p>
-                <h1 class="mt-2 font-headline text-3xl font-bold text-[#01162d]">Create a new password</h1>
+                <p class="text-xs font-bold uppercase tracking-[0.22em] text-[#5b6069]">Secure account recovery</p>
+                <h1 class="mt-2 font-headline text-3xl font-bold text-[#161a20]">Create a new password</h1>
                 <p class="mt-3 text-sm leading-6 text-slate-600">Choose a strong password with at least eight characters for your IHMP staff account.</p>
             </div>
 
@@ -29,23 +29,23 @@
             <form method="POST" action="{{ route('password.update') }}" class="mt-6 space-y-4">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
-                <label class="block text-sm font-bold text-[#01162d]" for="email">Work Email Address
-                    <input id="email" name="email" type="email" value="{{ old('email', $email) }}" required autocomplete="email" class="mt-1.5 w-full rounded-lg border border-slate-300 bg-[#fcf9f3] px-3 py-3 text-sm focus:border-[#755a28] focus:ring-[#755a28]">
+                <label class="block text-sm font-bold text-[#161a20]" for="email">Work Email Address
+                    <input id="email" name="email" type="email" value="{{ old('email', $email) }}" required autocomplete="email" class="mt-1.5 w-full rounded-lg border border-slate-300 bg-[#f5f5f2] px-3 py-3 text-sm focus:border-[#17707f] focus:ring-[#17707f]">
                 </label>
-                <label class="block text-sm font-bold text-[#01162d]" for="password">New Password
-                    <input id="password" name="password" type="password" required autocomplete="new-password" placeholder="Minimum 8 characters" class="mt-1.5 w-full rounded-lg border border-slate-300 bg-[#fcf9f3] px-3 py-3 text-sm focus:border-[#755a28] focus:ring-[#755a28]">
+                <label class="block text-sm font-bold text-[#161a20]" for="password">New Password
+                    <input id="password" name="password" type="password" required autocomplete="new-password" placeholder="Minimum 8 characters" class="mt-1.5 w-full rounded-lg border border-slate-300 bg-[#f5f5f2] px-3 py-3 text-sm focus:border-[#17707f] focus:ring-[#17707f]">
                 </label>
-                <label class="block text-sm font-bold text-[#01162d]" for="password_confirmation">Confirm New Password
-                    <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password" class="mt-1.5 w-full rounded-lg border border-slate-300 bg-[#fcf9f3] px-3 py-3 text-sm focus:border-[#755a28] focus:ring-[#755a28]">
+                <label class="block text-sm font-bold text-[#161a20]" for="password_confirmation">Confirm New Password
+                    <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password" class="mt-1.5 w-full rounded-lg border border-slate-300 bg-[#f5f5f2] px-3 py-3 text-sm focus:border-[#17707f] focus:ring-[#17707f]">
                 </label>
-                <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#01162d] px-4 py-3 text-sm font-bold text-white shadow transition hover:bg-[#172b42]">
-                    <span class="material-symbols-outlined text-lg text-[#ffdeaa]">lock_reset</span>
+                <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#161a20] px-4 py-3 text-sm font-bold text-white shadow transition hover:bg-[#2a2f37]">
+                    <span class="material-symbols-outlined text-lg text-[#e8e8e4]">lock_reset</span>
                     Reset password
                 </button>
             </form>
 
             <div class="mt-6 border-t border-slate-200 pt-5 text-center">
-                <a href="{{ route('login') }}" class="inline-flex items-center gap-1.5 text-sm font-bold text-[#755a28] hover:underline"><span class="material-symbols-outlined text-lg">arrow_back</span>Back to sign in</a>
+                <a href="{{ route('login') }}" class="inline-flex items-center gap-1.5 text-sm font-bold text-[#5b6069] hover:underline"><span class="material-symbols-outlined text-lg">arrow_back</span>Back to sign in</a>
             </div>
         </section>
     </main>

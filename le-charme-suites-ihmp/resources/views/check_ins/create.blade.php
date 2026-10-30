@@ -52,23 +52,23 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        background: '#fcf9f3',
-                        surface: '#fcf9f3',
-                        'surface-container': '#f0eee8',
-                        'surface-container-low': '#f6f3ed',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        background: '#f5f5f2',
+                        surface: '#f5f5f2',
+                        'surface-container': '#ebebe7',
+                        'surface-container-low': '#f0f0ec',
                         'surface-container-lowest': '#ffffff',
-                        'surface-variant': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
+                        'surface-variant': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
                         error: '#ba1a1a',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -83,7 +83,7 @@
         }
 
         .nav-shell {
-            background-color: #01162d;
+            background-color: #161a20;
             background-image: radial-gradient(rgba(255, 222, 170, 0.16) 1px, transparent 1px);
             background-size: 26px 26px;
         }
@@ -98,9 +98,9 @@
 
         .receipt-sheet {
             box-sizing: border-box;
-            border: 1px solid #c4c6cd;
+            border: 1px solid #d3d3cd;
             background: #ffffff;
-            color: #1c1c18;
+            color: #161a20;
             min-height: 270mm;
             padding: 9mm 10mm;
             position: relative;
@@ -108,9 +108,9 @@
 
         .receipt-section-title {
             align-items: center;
-            background: #ebe8e2;
-            border-left: 4px solid #755a28;
-            color: #01162d;
+            background: #e9e9e5;
+            border-left: 4px solid #5b6069;
+            color: #161a20;
             display: flex;
             font-size: 8pt;
             font-weight: 800;
@@ -128,7 +128,7 @@
         }
 
         .receipt-field {
-            border: 1px solid #c4c6cd;
+            border: 1px solid #d3d3cd;
             border-radius: 2px;
             padding: 2.4mm 3mm;
         }
@@ -143,7 +143,7 @@
         }
 
         .receipt-value {
-            color: #01162d;
+            color: #161a20;
             display: block;
             font-size: 9pt;
             font-weight: 700;
@@ -152,13 +152,13 @@
         }
 
         .receipt-barcode {
-            background: repeating-linear-gradient(90deg, #01162d 0, #01162d 1px, transparent 1px, transparent 3px, #01162d 3px, #01162d 5px, transparent 5px, transparent 7px);
+            background: repeating-linear-gradient(90deg, #161a20 0, #161a20 1px, transparent 1px, transparent 3px, #161a20 3px, #161a20 5px, transparent 5px, transparent 7px);
             height: 10mm;
             width: 43mm;
         }
 
         .receipt-perforation {
-            border-top: 2px dashed #74777e;
+            border-top: 2px dashed #6b7079;
             margin-top: 5mm;
             padding-top: 4mm;
             position: relative;
@@ -188,7 +188,7 @@
 
             .registration-card {
                 display: block !important;
-                color: #01162d;
+                color: #161a20;
                 font-family: Arial, sans-serif;
             }
 
@@ -533,25 +533,25 @@
 
     <section id="registrationCard" class="registration-card" aria-hidden="true">
         <div class="receipt-sheet">
-            <header style="border-bottom: 2px solid #01162d; padding-bottom: 4mm;">
+            <header style="border-bottom: 2px solid #161a20; padding-bottom: 4mm;">
                 <div style="display: flex; justify-content: space-between; gap: 8mm;">
                     <div style="display: flex; align-items: center; gap: 4mm;">
                         <img src="{{ asset('images/le-charme-logo-white.png') }}" alt="Le Charme Suites" style="width: 40mm; height: 17mm; object-fit: contain;">
                         <div>
-                            <strong style="display: block; color: #01162d; font-family: Georgia, serif; font-size: 15pt;">LE CHARMÉ SUITES</strong>
+                            <strong style="display: block; color: #161a20; font-family: Georgia, serif; font-size: 15pt;">LE CHARMÉ SUITES</strong>
                             <span style="display: block; color: #64748b; font-size: 7.5pt; margin-top: 1mm;">{{ config('hotel.location') }}</span>
-                            <span style="display: block; color: #755a28; font-size: 7pt; font-weight: 700; margin-top: 1mm;">Integrated Hotel Management Portal (IHMP)</span>
+                            <span style="display: block; color: #5b6069; font-size: 7pt; font-weight: 700; margin-top: 1mm;">Integrated Hotel Management Portal (IHMP)</span>
                         </div>
                     </div>
                     <div style="min-width: 49mm; text-align: right;">
-                        <span style="background: #f0eee8; border: 1px solid #c4c6cd; color: #64748b; display: inline-block; font-size: 6.8pt; font-weight: 700; letter-spacing: 0.6px; padding: 1mm 2mm; text-transform: uppercase;">Official Registration Receipt</span>
-                        <strong id="cardReference" style="display: block; color: #01162d; font-family: monospace; font-size: 12pt; margin-top: 1.5mm;">--</strong>
+                        <span style="background: #ebebe7; border: 1px solid #d3d3cd; color: #64748b; display: inline-block; font-size: 6.8pt; font-weight: 700; letter-spacing: 0.6px; padding: 1mm 2mm; text-transform: uppercase;">Official Registration Receipt</span>
+                        <strong id="cardReference" style="display: block; color: #161a20; font-family: monospace; font-size: 12pt; margin-top: 1.5mm;">--</strong>
                         <span id="cardPreparedAt" style="color: #64748b; display: block; font-size: 7pt; margin-top: 1mm;"></span>
                     </div>
                 </div>
-                <div style="align-items: end; border-top: 1px solid #e5e2dc; display: flex; justify-content: space-between; margin-top: 3mm; padding-top: 2.5mm;">
+                <div style="align-items: end; border-top: 1px solid #e4e4df; display: flex; justify-content: space-between; margin-top: 3mm; padding-top: 2.5mm;">
                     <div>
-                        <strong style="color: #01162d; font-size: 8.5pt; letter-spacing: 0.7px; text-transform: uppercase;">Guest Registration Card & Stay Receipt</strong>
+                        <strong style="color: #161a20; font-size: 8.5pt; letter-spacing: 0.7px; text-transform: uppercase;">Guest Registration Card & Stay Receipt</strong>
                         <span style="color: #64748b; display: block; font-size: 6.8pt; margin-top: 0.8mm;">Prepared for guest verification, arrival intake, and stay acknowledgement</span>
                     </div>
                     <div>
@@ -562,7 +562,7 @@
             </header>
 
             <section style="margin-top: 4mm;">
-                <div class="receipt-section-title"><span>1. Guest Identification & Contact</span><span id="cardIdentityBadge" style="color: #755a28; font-size: 6.5pt;">Verification pending</span></div>
+                <div class="receipt-section-title"><span>1. Guest Identification & Contact</span><span id="cardIdentityBadge" style="color: #5b6069; font-size: 6.5pt;">Verification pending</span></div>
                 <div class="receipt-grid">
                     <div class="receipt-field" style="grid-column: span 7;"><span class="receipt-label">Principal guest</span><span id="cardGuest" class="receipt-value">--</span></div>
                     <div class="receipt-field" style="grid-column: span 5;"><span class="receipt-label">Government ID / Passport</span><span id="cardIdentification" class="receipt-value">--</span></div>
@@ -576,13 +576,13 @@
             <section style="margin-top: 4mm;">
                 <div class="receipt-section-title"><span>2. Room Allocation & Stay Charge Summary</span><span>Rates recorded in PHP</span></div>
                 <div class="receipt-grid">
-                    <div class="receipt-field" style="background: #f6f3ed; grid-column: span 3;"><span class="receipt-label">Room assigned</span><span id="cardRoom" class="receipt-value">--</span><span id="cardRoomCapacity" style="color: #64748b; display: block; font-size: 6.8pt; margin-top: 1mm;">--</span></div>
+                    <div class="receipt-field" style="background: #f0f0ec; grid-column: span 3;"><span class="receipt-label">Room assigned</span><span id="cardRoom" class="receipt-value">--</span><span id="cardRoomCapacity" style="color: #64748b; display: block; font-size: 6.8pt; margin-top: 1mm;">--</span></div>
                     <div class="receipt-field" style="grid-column: span 3;"><span class="receipt-label">Arrival / check-in</span><span id="cardArrival" class="receipt-value">--</span><span style="color: #64748b; display: block; font-size: 6.8pt; margin-top: 1mm;">{{ config('hotel.check_in_time') }}</span></div>
                     <div class="receipt-field" style="grid-column: span 3;"><span class="receipt-label">Departure / check-out</span><span id="cardDeparture" class="receipt-value">--</span><span style="color: #64748b; display: block; font-size: 6.8pt; margin-top: 1mm;">{{ config('hotel.check_out_time') }}</span></div>
                     <div class="receipt-field" style="grid-column: span 3;"><span class="receipt-label">Registered occupancy</span><span id="cardStay" class="receipt-value">--</span></div>
                     <div class="receipt-field" style="grid-column: span 4;"><span class="receipt-label">Nightly room rate</span><span id="cardRate" class="receipt-value">--</span></div>
                     <div class="receipt-field" style="grid-column: span 4;"><span class="receipt-label">Estimated room total</span><span id="cardTotal" class="receipt-value">--</span></div>
-                    <div class="receipt-field" style="background: #fff8eb; grid-column: span 4;"><span class="receipt-label">Suggested guarantee / deposit</span><span id="cardDeposit" class="receipt-value" style="color: #755a28;">--</span></div>
+                    <div class="receipt-field" style="background: #fff8eb; grid-column: span 4;"><span class="receipt-label">Suggested guarantee / deposit</span><span id="cardDeposit" class="receipt-value" style="color: #5b6069;">--</span></div>
                 </div>
             </section>
 
@@ -600,8 +600,8 @@
                 </div>
             </section>
 
-            <section style="border: 1px solid #c4c6cd; margin-top: 4mm; padding: 3mm;">
-                <strong style="color: #01162d; display: block; font-size: 7.5pt; letter-spacing: 0.55px; text-transform: uppercase;">4. Guest Acknowledgement & Data Handling</strong>
+            <section style="border: 1px solid #d3d3cd; margin-top: 4mm; padding: 3mm;">
+                <strong style="color: #161a20; display: block; font-size: 7.5pt; letter-spacing: 0.55px; text-transform: uppercase;">4. Guest Acknowledgement & Data Handling</strong>
                 <div style="column-gap: 6mm; columns: 2; color: #475569; font-size: 6.8pt; line-height: 1.45; margin-top: 2mm;">
                     <p style="margin: 0 0 1.5mm;"><strong>Stay details.</strong> The guest confirms the room, occupancy, arrival date, departure date, and estimated charges shown above.</p>
                     <p style="margin: 0 0 1.5mm;"><strong>Hotel policies.</strong> The guest agrees to observe published hotel rules, the non-smoking policy, property-care requirements, and the standard {{ config('hotel.check_out_time') }} check-out time.</p>
@@ -611,17 +611,17 @@
             </section>
 
             <section style="display: grid; gap: 14mm; grid-template-columns: 1fr 1fr; margin-top: 12mm;">
-                <div style="border-top: 1px solid #01162d; color: #475569; font-size: 7.5pt; padding-top: 2mm; text-align: center;">Guest signature over printed name / date</div>
-                <div style="border-top: 1px solid #01162d; color: #475569; font-size: 7.5pt; padding-top: 2mm; text-align: center;">Front Desk representative: <strong id="cardPreparedBy">--</strong></div>
+                <div style="border-top: 1px solid #161a20; color: #475569; font-size: 7.5pt; padding-top: 2mm; text-align: center;">Guest signature over printed name / date</div>
+                <div style="border-top: 1px solid #161a20; color: #475569; font-size: 7.5pt; padding-top: 2mm; text-align: center;">Front Desk representative: <strong id="cardPreparedBy">--</strong></div>
             </section>
 
             <section class="receipt-perforation">
-                <div style="align-items: center; background: #f6f3ed; border: 1px solid #c4c6cd; display: flex; gap: 4mm; justify-content: space-between; padding: 3mm 4mm;">
-                    <div style="background: #01162d; color: #ffdeaa; display: flex; font-size: 13pt; font-weight: 800; height: 13mm; align-items: center; justify-content: center; min-width: 18mm; padding: 0 2mm;"><span id="cardCounterRoom">--</span></div>
+                <div style="align-items: center; background: #f0f0ec; border: 1px solid #d3d3cd; display: flex; gap: 4mm; justify-content: space-between; padding: 3mm 4mm;">
+                    <div style="background: #161a20; color: #e8e8e4; display: flex; font-size: 13pt; font-weight: 800; height: 13mm; align-items: center; justify-content: center; min-width: 18mm; padding: 0 2mm;"><span id="cardCounterRoom">--</span></div>
                     <div style="flex: 1;">
-                        <strong id="cardCounterGuest" style="color: #01162d; display: block; font-size: 9pt;">--</strong>
+                        <strong id="cardCounterGuest" style="color: #161a20; display: block; font-size: 9pt;">--</strong>
                         <span id="cardCounterStay" style="color: #64748b; display: block; font-size: 7pt; margin-top: 1mm;">--</span>
-                        <span id="cardCounterReference" style="color: #755a28; display: block; font-family: monospace; font-size: 6.8pt; margin-top: 1mm;">--</span>
+                        <span id="cardCounterReference" style="color: #5b6069; display: block; font-family: monospace; font-size: 6.8pt; margin-top: 1mm;">--</span>
                     </div>
                     <div style="color: #475569; font-size: 6.8pt; line-height: 1.5; text-align: right;">
                         <div>Front Desk: <strong>{{ config('hotel.phone') }}</strong></div>
@@ -630,7 +630,7 @@
                 </div>
             </section>
 
-            <footer style="border-top: 1px solid #e5e2dc; color: #64748b; display: flex; font-family: monospace; font-size: 6.2pt; justify-content: space-between; margin-top: 3mm; padding-top: 2mm;">
+            <footer style="border-top: 1px solid #e4e4df; color: #64748b; display: flex; font-family: monospace; font-size: 6.2pt; justify-content: space-between; margin-top: 3mm; padding-top: 2mm;">
                 <span>IHMP GUEST REGISTRATION RECEIPT &middot; {{ config('hotel.address') }}</span>
                 <span id="cardAuditReference">--</span>
             </footer>

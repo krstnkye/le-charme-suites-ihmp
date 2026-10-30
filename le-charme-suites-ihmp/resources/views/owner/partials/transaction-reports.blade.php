@@ -78,7 +78,7 @@
     ];
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -right-14 -top-20 h-80 w-80 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
         <div class="max-w-4xl">
@@ -192,7 +192,7 @@
 <section class="grid grid-cols-1 gap-5 md:grid-cols-3">
     <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Audit Velocity</p><h3 class="mt-2 font-serif text-2xl font-bold">Owner Ready</h3><p class="mt-2 text-sm leading-6 text-slate-600">Reports are available for review and export without giving owner accounts record-editing permissions.</p></div>
     <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Governance Protocol</p><h3 class="mt-2 font-serif text-2xl font-bold">Read-Only Control</h3><p class="mt-2 text-sm leading-6 text-slate-600">Financial corrections, voids, and postings remain restricted to department users and administrators.</p></div>
-    <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Immutable Report Chain</p><h3 class="mt-2 font-serif text-2xl font-bold">{{ $statementHash }}</h3><p class="mt-2 text-sm leading-6 text-blue-100">Hash generated from current totals, settled amount, tax estimate, and report date.</p></div>
+    <div class="lc-flip rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Immutable Report Chain</p><h3 class="mt-2 font-serif text-2xl font-bold">{{ $statementHash }}</h3><p class="mt-2 text-sm leading-6 text-blue-100">Hash generated from current totals, settled amount, tax estimate, and report date.</p></div>
 </section>
 
 <script>

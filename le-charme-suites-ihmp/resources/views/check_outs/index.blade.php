@@ -37,19 +37,19 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-container': '#fdd79a',
-                        'secondary-fixed': '#ffdeaa',
-                        surface: '#fcf9f3',
-                        'surface-low': '#f6f3ed',
-                        'surface-mid': '#f0eee8',
-                        line: '#e5e2dc',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-container': '#e8e8e4',
+                        'secondary-fixed': '#e8e8e4',
+                        surface: '#f5f5f2',
+                        'surface-low': '#f0f0ec',
+                        'surface-mid': '#ebebe7',
+                        line: '#e4e4df',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -61,8 +61,8 @@
             vertical-align: middle;
         }
         .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f0eee8; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #c4c6cd; border-radius: 999px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #ebebe7; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #d3d3cd; border-radius: 999px; }
         @media print {
             aside, header, .no-print { display: none !important; }
             main { margin: 0 !important; padding: 0 !important; }
@@ -117,7 +117,7 @@
                 </div>
             @endif
 
-            <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
+            <section class="lc-flip relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
                 <div class="pointer-events-none absolute -bottom-16 -right-12 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
                 <div class="relative z-10 flex flex-col justify-between gap-5 xl:flex-row xl:items-center">
                     <div class="max-w-4xl">

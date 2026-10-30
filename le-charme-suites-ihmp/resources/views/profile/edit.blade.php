@@ -23,26 +23,26 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        'secondary-fixed-dim': '#e6c185',
-                        'secondary-container': '#fdd79a',
-                        background: '#fcf9f3',
-                        surface: '#fcf9f3',
-                        'surface-container': '#f0eee8',
-                        'surface-container-low': '#f6f3ed',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        'secondary-fixed-dim': '#d3d3cd',
+                        'secondary-container': '#e8e8e4',
+                        background: '#f5f5f2',
+                        surface: '#f5f5f2',
+                        'surface-container': '#ebebe7',
+                        'surface-container-low': '#f0f0ec',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container-high': '#ebe8e2',
-                        'surface-container-highest': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
+                        'surface-container-high': '#e9e9e5',
+                        'surface-container-highest': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
                         error: '#ba1a1a',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -57,14 +57,14 @@
         }
 
         .nav-shell {
-            background-color: #172b42;
+            background-color: #2a2f37;
             background-image: radial-gradient(rgba(255, 222, 170, 0.14) 1px, transparent 1px);
             background-size: 26px 26px;
         }
 
         .hotel-card {
-            background: #fdfcfa;
-            border: 1px solid #ede8df;
+            background: #fafaf8;
+            border: 1px solid #e9e9e5;
             box-shadow: 0 4px 16px -2px rgba(23, 43, 66, .05), 0 1px 3px rgba(197, 163, 106, .08);
         }
     </style>
@@ -371,21 +371,21 @@
     @else
         @include('partials.front-desk-sidebar', ['active' => 'profile'])
 
-        <div class="min-h-screen bg-[#fcf9f3] lg:ml-64">
-            <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-[#e5e2dc] bg-white px-5 py-3 shadow-sm sm:px-8">
+        <div class="min-h-screen bg-[#f5f5f2] lg:ml-64">
+            <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-[#e4e4df] bg-white px-5 py-3 shadow-sm sm:px-8">
                 <div class="flex min-w-0 items-center gap-3">
-                    <span class="material-symbols-outlined text-xl text-[#755a28]">desk</span>
+                    <span class="material-symbols-outlined text-xl text-[#5b6069]">desk</span>
                     <div class="min-w-0">
                         <p class="truncate text-xs font-semibold text-slate-500">Front Desk Console / Agent Profile</p>
-                        <p class="truncate font-serif text-lg font-semibold text-[#01162d]">Shift Profile &amp; Authority</p>
+                        <p class="truncate font-serif text-lg font-semibold text-[#161a20]">Shift Profile &amp; Authority</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <div class="hidden rounded-lg border border-[#e5e2dc] bg-[#f6f3ed] px-3 py-1.5 text-right sm:block">
-                        <p id="profile-clock" class="text-xs font-bold text-[#01162d]" data-timezone="{{ config('app.timezone') }}">{{ now(config('app.timezone'))->format('M d, Y - h:i A') }}</p>
+                    <div class="hidden rounded-lg border border-[#e4e4df] bg-[#f0f0ec] px-3 py-1.5 text-right sm:block">
+                        <p id="profile-clock" class="text-xs font-bold text-[#161a20]" data-timezone="{{ config('app.timezone') }}">{{ now(config('app.timezone'))->format('M d, Y - h:i A') }}</p>
                         <p class="text-[10px] uppercase tracking-wider text-slate-500">Philippine Standard Time</p>
                     </div>
-                    <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#755a28] bg-[#01162d] text-xs font-bold text-[#ffdeaa]">{{ $initials }}</span>
+                    <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#5b6069] bg-[#161a20] text-xs font-bold text-[#e8e8e4]">{{ $initials }}</span>
                 </div>
             </header>
 
@@ -408,53 +408,53 @@
                     </div>
                 @endif
 
-                <section class="relative overflow-hidden rounded-xl border border-[#755a28]/30 bg-[#01162d] p-6 text-white shadow-sm sm:p-8">
+                <section class="lc-flip relative overflow-hidden rounded-xl border border-[#5b6069]/30 bg-[#161a20] p-6 text-white shadow-sm sm:p-8">
                     <span class="material-symbols-outlined pointer-events-none absolute -bottom-12 right-4 text-[220px] text-white opacity-[0.04]">shield</span>
                     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
                         <div>
-                            <span class="inline-flex items-center gap-2 rounded-full border border-[#ffdeaa]/30 bg-[#ffdeaa]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#ffdeaa]"><span class="material-symbols-outlined text-sm">verified</span>Front Office Operations · Shift Credentials</span>
+                            <span class="inline-flex items-center gap-2 rounded-full border border-[#e8e8e4]/30 bg-[#e8e8e4]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#e8e8e4]"><span class="material-symbols-outlined text-sm">verified</span>Front Office Operations · Shift Credentials</span>
                             <h1 class="mt-3 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">Front Desk Agent Profile &amp; Station Authority</h1>
-                            <p class="mt-2 max-w-3xl text-sm leading-6 text-[#b4c8e5]">Manage your verified employee identity, work-email credentials, and frontline access for Le Charmé Suites hotel operations.</p>
+                            <p class="mt-2 max-w-3xl text-sm leading-6 text-[#c9ced6]">Manage your verified employee identity, work-email credentials, and frontline access for Le Charmé Suites hotel operations.</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <a href="{{ route('reservations.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-[#ffdeaa] px-4 py-2.5 text-xs font-bold text-[#271900] shadow-sm transition hover:bg-[#e6c185]"><span class="material-symbols-outlined text-base">add</span>New Reservation</a>
+                            <a href="{{ route('reservations.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-[#e8e8e4] px-4 py-2.5 text-xs font-bold text-[#161a20] shadow-sm transition hover:bg-[#d3d3cd]"><span class="material-symbols-outlined text-base">add</span>New Reservation</a>
                             <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-white/15"><span class="material-symbols-outlined text-base">arrow_back</span>Front Desk Center</a>
                         </div>
                     </div>
 
                     <div class="relative z-10 mt-6 grid grid-cols-2 gap-3 border-t border-white/10 pt-6 sm:grid-cols-3 xl:grid-cols-5">
-                        <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Active Agent</p><p class="mt-1 truncate text-sm font-bold">{{ $user->name }}</p><span class="text-[11px] text-[#b4c8e5]">Front Office</span></div>
-                        <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Agent Badge ID</p><p class="mt-1 font-mono text-sm font-bold">LCS-FDA-{{ str_pad((string) $user->id, 4, '0', STR_PAD_LEFT) }}</p><span class="text-[11px] text-[#b4c8e5]">{{ $employeeId }}</span></div>
-                        <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Authority</p><p class="mt-1 text-sm font-bold">Front Desk</p><span class="text-[11px] text-[#b4c8e5]">Role key: {{ $role }}</span></div>
-                        <div class="rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Account Status</p><p class="mt-1 flex items-center gap-1.5 text-sm font-bold text-emerald-300"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Active</p><span class="text-[11px] text-[#b4c8e5]">Local access enabled</span></div>
-                        <div class="col-span-2 rounded-lg border border-[#ffdeaa]/15 bg-[#172b42] p-3.5 sm:col-span-1"><p class="text-[10px] font-bold uppercase tracking-wider text-[#ffdeaa]">Member Since</p><p class="mt-1 text-sm font-bold">{{ $user->created_at?->timezone(config('app.timezone'))->format('M d, Y') }}</p><span class="text-[11px] text-[#b4c8e5]">IHMP personnel record</span></div>
+                        <div class="rounded-lg border border-[#e8e8e4]/15 bg-[#2a2f37] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#e8e8e4]">Active Agent</p><p class="mt-1 truncate text-sm font-bold">{{ $user->name }}</p><span class="text-[11px] text-[#c9ced6]">Front Office</span></div>
+                        <div class="rounded-lg border border-[#e8e8e4]/15 bg-[#2a2f37] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#e8e8e4]">Agent Badge ID</p><p class="mt-1 font-mono text-sm font-bold">LCS-FDA-{{ str_pad((string) $user->id, 4, '0', STR_PAD_LEFT) }}</p><span class="text-[11px] text-[#c9ced6]">{{ $employeeId }}</span></div>
+                        <div class="rounded-lg border border-[#e8e8e4]/15 bg-[#2a2f37] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#e8e8e4]">Authority</p><p class="mt-1 text-sm font-bold">Front Desk</p><span class="text-[11px] text-[#c9ced6]">Role key: {{ $role }}</span></div>
+                        <div class="rounded-lg border border-[#e8e8e4]/15 bg-[#2a2f37] p-3.5"><p class="text-[10px] font-bold uppercase tracking-wider text-[#e8e8e4]">Account Status</p><p class="mt-1 flex items-center gap-1.5 text-sm font-bold text-emerald-300"><span class="h-2 w-2 rounded-full bg-emerald-400"></span>Active</p><span class="text-[11px] text-[#c9ced6]">Local access enabled</span></div>
+                        <div class="col-span-2 rounded-lg border border-[#e8e8e4]/15 bg-[#2a2f37] p-3.5 sm:col-span-1"><p class="text-[10px] font-bold uppercase tracking-wider text-[#e8e8e4]">Member Since</p><p class="mt-1 text-sm font-bold">{{ $user->created_at?->timezone(config('app.timezone'))->format('M d, Y') }}</p><span class="text-[11px] text-[#c9ced6]">IHMP personnel record</span></div>
                     </div>
                 </section>
 
                 <div class="grid grid-cols-1 gap-6 xl:grid-cols-12">
                     <div class="space-y-6 xl:col-span-7">
                         <section class="hotel-card relative overflow-hidden rounded-xl p-6">
-                            <div class="absolute inset-x-0 top-0 h-1.5 bg-[#755a28]"></div>
-                            <div class="flex flex-col gap-5 border-b border-[#e5e2dc] pb-5 sm:flex-row sm:items-center">
+                            <div class="absolute inset-x-0 top-0 h-1.5 bg-[#161a20]"></div>
+                            <div class="flex flex-col gap-5 border-b border-[#e4e4df] pb-5 sm:flex-row sm:items-center">
                                 <div class="relative shrink-0">
                                     @if ($user->profile_photo_path)
-                                        <img src="{{ route('profile.photo', ['v' => $user->updated_at?->timestamp]) }}" alt="{{ $user->name }} profile photo" class="h-24 w-24 rounded-xl border-2 border-[#755a28] object-cover shadow-md" data-profile-photo-preview>
-                                        <span class="hidden h-24 w-24 items-center justify-center rounded-xl border-2 border-[#755a28] bg-[#01162d] font-serif text-3xl font-bold text-[#ffdeaa] shadow-md" data-profile-photo-placeholder>{{ $initials }}</span>
+                                        <img src="{{ route('profile.photo', ['v' => $user->updated_at?->timestamp]) }}" alt="{{ $user->name }} profile photo" class="h-24 w-24 rounded-xl border-2 border-[#5b6069] object-cover shadow-md" data-profile-photo-preview>
+                                        <span class="hidden h-24 w-24 items-center justify-center rounded-xl border-2 border-[#5b6069] bg-[#161a20] font-serif text-3xl font-bold text-[#e8e8e4] shadow-md" data-profile-photo-placeholder>{{ $initials }}</span>
                                     @else
-                                        <img src="" alt="New profile photo preview" class="hidden h-24 w-24 rounded-xl border-2 border-[#755a28] object-cover shadow-md" data-profile-photo-preview>
-                                        <span class="flex h-24 w-24 items-center justify-center rounded-xl border-2 border-[#755a28] bg-[#01162d] font-serif text-3xl font-bold text-[#ffdeaa] shadow-md" data-profile-photo-placeholder>{{ $initials }}</span>
+                                        <img src="" alt="New profile photo preview" class="hidden h-24 w-24 rounded-xl border-2 border-[#5b6069] object-cover shadow-md" data-profile-photo-preview>
+                                        <span class="flex h-24 w-24 items-center justify-center rounded-xl border-2 border-[#5b6069] bg-[#161a20] font-serif text-3xl font-bold text-[#e8e8e4] shadow-md" data-profile-photo-placeholder>{{ $initials }}</span>
                                     @endif
-                                    <span class="absolute -bottom-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#755a28] text-white shadow-sm"><span class="material-symbols-outlined text-base">verified</span></span>
+                                    <span class="absolute -bottom-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#161a20] text-white shadow-sm"><span class="material-symbols-outlined text-base">verified</span></span>
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <div class="flex flex-wrap items-start justify-between gap-2">
-                                        <div><h2 class="font-serif text-2xl font-semibold text-[#01162d]">{{ $user->name }}</h2><p class="mt-1 text-sm font-bold text-[#755a28]">Front Desk Agent · Rooms Division</p></div>
-                                        <span class="rounded-full border border-[#755a28]/30 bg-[#fdd79a]/25 px-3 py-1 font-mono text-xs font-bold text-[#5b4313]">{{ $employeeId }}</span>
+                                        <div><h2 class="font-serif text-2xl font-semibold text-[#161a20]">{{ $user->name }}</h2><p class="mt-1 text-sm font-bold text-[#5b6069]">Front Desk Agent · Rooms Division</p></div>
+                                        <span class="rounded-full border border-[#5b6069]/30 bg-[#e8e8e4]/25 px-3 py-1 font-mono text-xs font-bold text-[#3f444c]">{{ $employeeId }}</span>
                                     </div>
                                     <div class="mt-4 grid gap-2 text-xs text-slate-600 sm:grid-cols-2">
-                                        <span class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-[#755a28]">domain</span>Front Office Department</span>
-                                        <span class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-[#755a28]">desktop_windows</span>IHMP Front Desk Station</span>
-                                        <span class="flex items-center gap-2 sm:col-span-2"><span class="material-symbols-outlined text-base text-[#755a28]">mail</span><span class="truncate">{{ $user->email }}</span></span>
+                                        <span class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-[#5b6069]">domain</span>Front Office Department</span>
+                                        <span class="flex items-center gap-2"><span class="material-symbols-outlined text-base text-[#5b6069]">desktop_windows</span>IHMP Front Desk Station</span>
+                                        <span class="flex items-center gap-2 sm:col-span-2"><span class="material-symbols-outlined text-base text-[#5b6069]">mail</span><span class="truncate">{{ $user->email }}</span></span>
                                     </div>
                                 </div>
                             </div>
@@ -463,17 +463,17 @@
                                 @csrf
                                 @method('PUT')
                                 @include('profile.partials.photo-field')
-                                <div class="mb-5 flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f0eee8] text-[#755a28]"><span class="material-symbols-outlined">manage_accounts</span></span><div><h3 class="font-bold text-[#01162d]">Official Personnel Details</h3><p class="text-xs text-slate-500">Update your own account record and sign-in credentials.</p></div></div>
+                                <div class="mb-5 flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#ebebe7] text-[#5b6069]"><span class="material-symbols-outlined">manage_accounts</span></span><div><h3 class="font-bold text-[#161a20]">Official Personnel Details</h3><p class="text-xs text-slate-500">Update your own account record and sign-in credentials.</p></div></div>
                                 <div class="grid gap-5 sm:grid-cols-2">
-                                    <label class="sm:col-span-2"><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Full name</span><input name="name" value="{{ old('name', $user->name) }}" required autocomplete="name" class="w-full rounded-lg border border-[#c4c6cd] bg-white px-3 py-2.5 text-sm text-[#01162d] outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20"></label>
-                                    <label class="sm:col-span-2"><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Official work email</span><input type="email" name="email" value="{{ old('email', $user->email) }}" required autocomplete="email" class="w-full rounded-lg border border-[#c4c6cd] bg-white px-3 py-2.5 text-sm text-[#01162d] outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20"><span class="mt-1 block text-[11px] text-slate-500">Use your approved @lecharmehotel.com address.</span></label>
-                                    <label class="sm:col-span-2"><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Current password</span><input type="password" name="current_password" autocomplete="current-password" class="w-full rounded-lg border border-[#c4c6cd] bg-white px-3 py-2.5 text-sm text-[#01162d] outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20" placeholder="Required to change your email or password"></label>
-                                    <label><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">New password</span><input type="password" name="password" autocomplete="new-password" class="w-full rounded-lg border border-[#c4c6cd] bg-white px-3 py-2.5 text-sm text-[#01162d] outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20" placeholder="Leave blank to keep current"></label>
-                                    <label><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Confirm password</span><input type="password" name="password_confirmation" autocomplete="new-password" class="w-full rounded-lg border border-[#c4c6cd] bg-white px-3 py-2.5 text-sm text-[#01162d] outline-none transition focus:border-[#755a28] focus:ring-2 focus:ring-[#755a28]/20" placeholder="Repeat new password"></label>
+                                    <label class="sm:col-span-2"><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Full name</span><input name="name" value="{{ old('name', $user->name) }}" required autocomplete="name" class="w-full rounded-lg border border-[#d3d3cd] bg-white px-3 py-2.5 text-sm text-[#161a20] outline-none transition focus:border-[#17707f] focus:ring-2 focus:ring-[#17707f]/20"></label>
+                                    <label class="sm:col-span-2"><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Official work email</span><input type="email" name="email" value="{{ old('email', $user->email) }}" required autocomplete="email" class="w-full rounded-lg border border-[#d3d3cd] bg-white px-3 py-2.5 text-sm text-[#161a20] outline-none transition focus:border-[#17707f] focus:ring-2 focus:ring-[#17707f]/20"><span class="mt-1 block text-[11px] text-slate-500">Use your approved @lecharmehotel.com address.</span></label>
+                                    <label class="sm:col-span-2"><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Current password</span><input type="password" name="current_password" autocomplete="current-password" class="w-full rounded-lg border border-[#d3d3cd] bg-white px-3 py-2.5 text-sm text-[#161a20] outline-none transition focus:border-[#17707f] focus:ring-2 focus:ring-[#17707f]/20" placeholder="Required to change your email or password"></label>
+                                    <label><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">New password</span><input type="password" name="password" autocomplete="new-password" class="w-full rounded-lg border border-[#d3d3cd] bg-white px-3 py-2.5 text-sm text-[#161a20] outline-none transition focus:border-[#17707f] focus:ring-2 focus:ring-[#17707f]/20" placeholder="Leave blank to keep current"></label>
+                                    <label><span class="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-600">Confirm password</span><input type="password" name="password_confirmation" autocomplete="new-password" class="w-full rounded-lg border border-[#d3d3cd] bg-white px-3 py-2.5 text-sm text-[#161a20] outline-none transition focus:border-[#17707f] focus:ring-2 focus:ring-[#17707f]/20" placeholder="Repeat new password"></label>
                                 </div>
-                                <div class="mt-6 flex flex-col-reverse gap-3 border-t border-[#e5e2dc] pt-5 sm:flex-row sm:items-center sm:justify-between">
-                                    <p class="flex items-center gap-2 text-xs text-slate-500"><span class="material-symbols-outlined text-base text-[#755a28]">shield_lock</span>Changes apply only to your signed-in account.</p>
-                                    <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-[#01162d] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#172b42]"><span class="material-symbols-outlined text-base text-[#ffdeaa]">save</span>Save Profile Changes</button>
+                                <div class="mt-6 flex flex-col-reverse gap-3 border-t border-[#e4e4df] pt-5 sm:flex-row sm:items-center sm:justify-between">
+                                    <p class="flex items-center gap-2 text-xs text-slate-500"><span class="material-symbols-outlined text-base text-[#5b6069]">shield_lock</span>Changes apply only to your signed-in account.</p>
+                                    <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-[#161a20] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#2a2f37]"><span class="material-symbols-outlined text-base text-[#e8e8e4]">save</span>Save Profile Changes</button>
                                 </div>
                             </form>
                         </section>
@@ -481,7 +481,7 @@
 
                     <aside class="space-y-6 xl:col-span-5">
                         <section class="hotel-card rounded-xl p-6">
-                            <div class="flex items-center justify-between border-b border-[#e5e2dc] pb-4"><div class="flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#fdd79a]/35 text-[#755a28]"><span class="material-symbols-outlined">admin_panel_settings</span></span><div><h2 class="font-bold text-[#01162d]">Station Authority</h2><p class="text-xs text-slate-500">Frontline access assigned to this role</p></div></div><span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700">Authorized</span></div>
+                            <div class="flex items-center justify-between border-b border-[#e4e4df] pb-4"><div class="flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#e8e8e4]/35 text-[#5b6069]"><span class="material-symbols-outlined">admin_panel_settings</span></span><div><h2 class="font-bold text-[#161a20]">Station Authority</h2><p class="text-xs text-slate-500">Frontline access assigned to this role</p></div></div><span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700">Authorized</span></div>
                             <div class="mt-4 grid gap-3 sm:grid-cols-2">
                                 @foreach ([
                                     ['icon' => 'calendar_month', 'title' => 'Reservations', 'detail' => 'Create and manage stays'],
@@ -489,22 +489,22 @@
                                     ['icon' => 'badge', 'title' => 'Guest Records', 'detail' => 'Maintain guest profiles'],
                                     ['icon' => 'bed', 'title' => 'Room Status', 'detail' => 'View live availability'],
                                 ] as $authority)
-                                    <div class="rounded-lg border border-[#e5e2dc] bg-[#f6f3ed] p-3.5"><span class="material-symbols-outlined text-xl text-[#755a28]">{{ $authority['icon'] }}</span><h3 class="mt-2 text-sm font-bold text-[#01162d]">{{ $authority['title'] }}</h3><p class="mt-0.5 text-xs text-slate-500">{{ $authority['detail'] }}</p></div>
+                                    <div class="rounded-lg border border-[#e4e4df] bg-[#f0f0ec] p-3.5"><span class="material-symbols-outlined text-xl text-[#5b6069]">{{ $authority['icon'] }}</span><h3 class="mt-2 text-sm font-bold text-[#161a20]">{{ $authority['title'] }}</h3><p class="mt-0.5 text-xs text-slate-500">{{ $authority['detail'] }}</p></div>
                                 @endforeach
                             </div>
                         </section>
 
                         <section class="hotel-card rounded-xl p-6">
-                            <div class="flex items-center gap-3 border-b border-[#e5e2dc] pb-4"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f0eee8] text-[#755a28]"><span class="material-symbols-outlined">security</span></span><div><h2 class="font-bold text-[#01162d]">Security &amp; Account Status</h2><p class="text-xs text-slate-500">Current credential protection</p></div></div>
+                            <div class="flex items-center gap-3 border-b border-[#e4e4df] pb-4"><span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#ebebe7] text-[#5b6069]"><span class="material-symbols-outlined">security</span></span><div><h2 class="font-bold text-[#161a20]">Security &amp; Account Status</h2><p class="text-xs text-slate-500">Current credential protection</p></div></div>
                             <dl class="mt-4 space-y-3 text-sm">
-                                <div class="flex items-center justify-between gap-4 rounded-lg bg-[#f6f3ed] px-4 py-3"><dt class="flex items-center gap-2 text-slate-600"><span class="material-symbols-outlined text-lg text-[#755a28]">alternate_email</span>Work email</dt><dd class="font-bold text-emerald-700">Approved domain</dd></div>
-                                <div class="flex items-center justify-between gap-4 rounded-lg bg-[#f6f3ed] px-4 py-3"><dt class="flex items-center gap-2 text-slate-600"><span class="material-symbols-outlined text-lg text-[#755a28]">password</span>Password</dt><dd class="font-bold text-[#01162d]">Protected</dd></div>
-                                <div class="flex items-center justify-between gap-4 rounded-lg bg-[#f6f3ed] px-4 py-3"><dt class="flex items-center gap-2 text-slate-600"><span class="material-symbols-outlined text-lg text-[#755a28]">history</span>Last profile update</dt><dd class="text-right text-xs font-bold text-[#01162d]">{{ $user->updated_at?->timezone(config('app.timezone'))->format('M d, Y') }}</dd></div>
+                                <div class="flex items-center justify-between gap-4 rounded-lg bg-[#f0f0ec] px-4 py-3"><dt class="flex items-center gap-2 text-slate-600"><span class="material-symbols-outlined text-lg text-[#5b6069]">alternate_email</span>Work email</dt><dd class="font-bold text-emerald-700">Approved domain</dd></div>
+                                <div class="flex items-center justify-between gap-4 rounded-lg bg-[#f0f0ec] px-4 py-3"><dt class="flex items-center gap-2 text-slate-600"><span class="material-symbols-outlined text-lg text-[#5b6069]">password</span>Password</dt><dd class="font-bold text-[#161a20]">Protected</dd></div>
+                                <div class="flex items-center justify-between gap-4 rounded-lg bg-[#f0f0ec] px-4 py-3"><dt class="flex items-center gap-2 text-slate-600"><span class="material-symbols-outlined text-lg text-[#5b6069]">history</span>Last profile update</dt><dd class="text-right text-xs font-bold text-[#161a20]">{{ $user->updated_at?->timezone(config('app.timezone'))->format('M d, Y') }}</dd></div>
                             </dl>
                         </section>
 
-                        <section class="rounded-xl border border-[#e5e2dc] bg-[#f0eee8] p-5">
-                            <div class="flex items-start gap-3"><span class="material-symbols-outlined mt-0.5 text-[#755a28]">info</span><div><h2 class="font-bold text-[#01162d]">Credential Support</h2><p class="mt-1 text-sm leading-6 text-slate-600">Contact an administrator to change your department, role authority, or employee badge assignment.</p><a href="{{ route('messages.index') }}" class="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#755a28] hover:underline">Open Department Messages<span class="material-symbols-outlined text-sm">arrow_forward</span></a></div></div>
+                        <section class="rounded-xl border border-[#e4e4df] bg-[#ebebe7] p-5">
+                            <div class="flex items-start gap-3"><span class="material-symbols-outlined mt-0.5 text-[#5b6069]">info</span><div><h2 class="font-bold text-[#161a20]">Credential Support</h2><p class="mt-1 text-sm leading-6 text-slate-600">Contact an administrator to change your department, role authority, or employee badge assignment.</p><a href="{{ route('messages.index') }}" class="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#5b6069] hover:underline">Open Department Messages<span class="material-symbols-outlined text-sm">arrow_forward</span></a></div></div>
                         </section>
                     </aside>
                 </div>

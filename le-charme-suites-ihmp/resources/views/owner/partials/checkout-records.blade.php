@@ -10,7 +10,7 @@
     $auditHash = substr(md5('owner-checkout-'.$cycleTotal.'-'.$checkOuts->count()), 0, 4).'-'.substr(md5((string) $settledTotal), 0, 4).'-'.substr(md5((string) $todayCheckOuts->count()), 0, 4);
 @endphp
 
-<section class="relative overflow-hidden rounded-2xl border border-secondary/20 bg-primary-container p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-2xl border border-secondary/20 bg-primary-container p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -bottom-16 -right-16 opacity-[0.06]">
         <span class="material-symbols-outlined text-[260px]">hotel_class</span>
     </div>

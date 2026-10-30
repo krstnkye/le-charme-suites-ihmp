@@ -21,25 +21,25 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        'secondary-container': '#fdd79a',
-                        background: '#fcf9f3',
-                        surface: '#fcf9f3',
-                        'surface-container': '#f0eee8',
-                        'surface-container-low': '#f6f3ed',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        'secondary-container': '#e8e8e4',
+                        background: '#f5f5f2',
+                        surface: '#f5f5f2',
+                        'surface-container': '#ebebe7',
+                        'surface-container-low': '#f0f0ec',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container-highest': '#e5e2dc',
-                        'surface-variant': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
+                        'surface-container-highest': '#e4e4df',
+                        'surface-variant': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
                         error: '#ba1a1a',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -54,7 +54,7 @@
         }
 
         .nav-shell {
-            background-color: #172b42;
+            background-color: #2a2f37;
             background-image: radial-gradient(rgba(255, 222, 170, 0.14) 1px, transparent 1px);
             background-size: 26px 26px;
         }
@@ -119,7 +119,7 @@
                     </div>
                     <div class="flex flex-wrap items-baseline gap-3">
                         <h1 class="font-serif text-4xl font-semibold tracking-tight">Role-Based Access Control Console</h1>
-                        <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#5b4313]">{{ $totalUsers }} Active Personnel</span>
+                        <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#3f444c]">{{ $totalUsers }} Active Personnel</span>
                     </div>
                     <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage access levels, authorized computers, staff roles, and activity review across the hotel system.</p>
                 </div>
@@ -327,7 +327,7 @@
                         <button class="text-xs font-bold text-slate-500 transition hover:text-error" type="button">Reset to Standard</button>
                         <div class="flex items-center gap-2">
                             <button class="rounded-lg border border-secondary px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10" type="button">Cancel</button>
-                            <button class="rounded-lg bg-secondary px-4 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#5b4313]" type="button">Save Overrides</button>
+                            <button class="rounded-lg bg-secondary px-4 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#2a2f37]" type="button">Save Overrides</button>
                         </div>
                     </div>
                 </section>

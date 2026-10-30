@@ -57,7 +57,7 @@
     $auditHash = substr(strtoupper(hash('sha256', 'owner-billing-records-'.$recordCount.'-'.$grossBilledVolume)), 0, 4).'-'.substr(strtoupper(hash('sha256', 'tax-'.$taxTracked)), 0, 4).'-'.substr(strtoupper(hash('sha256', 'settled-'.$settledCount)), 0, 4);
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -bottom-20 -right-16 text-secondary-fixed/5">
         <span class="material-symbols-outlined text-[260px]">receipt_long</span>
     </div>
