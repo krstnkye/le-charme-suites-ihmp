@@ -567,3 +567,115 @@ html {
     letter-spacing: -0.02em;
     line-height: 2.25rem;
 }
+
+/* The former gold button fill is the primary ink now; grey fills read as disabled. */
+:root .bg-secondary:is(a, button) {
+    background-color: var(--lc-ink);
+    color: #fff;
+}
+
+:root .bg-secondary:is(a, button):hover {
+    background-color: var(--lc-ink-hover);
+}
+
+/* Former gold-on-navy badges that now sit on light ground. */
+:root :is([class*="bg-secondary-container/"], [class*="bg-secondary/"], [class*="bg-secondary-fixed/"], .bg-secondary-fixed, .bg-surface-container, .bg-surface-container-low):is(.text-secondary-fixed, [class*="text-[#e8e8e4]"]) {
+    color: var(--lc-ink);
+}
+
+/* ---------- Sign-in pages: the hotel's own room beside the form ---------- */
+
+.lc-auth {
+    background: var(--lc-ground);
+    display: grid;
+    inset: 0;
+    overflow-y: auto;
+    position: fixed;
+    z-index: 50;
+}
+
+@media (min-width: 1024px) {
+    .lc-auth {
+        grid-template-columns: minmax(0, 1fr) minmax(480px, 640px);
+    }
+}
+
+.lc-auth-photo {
+    display: none;
+    margin: 0;
+    position: relative;
+}
+
+@media (min-width: 1024px) {
+    .lc-auth-photo {
+        display: block;
+        min-height: 100vh;
+    }
+}
+
+.lc-auth-photo img {
+    height: 100%;
+    inset: 0;
+    object-fit: cover;
+    position: absolute;
+    width: 100%;
+}
+
+.lc-auth-photo figcaption {
+    background: linear-gradient(to top, rgba(10, 12, 15, .62), rgba(10, 12, 15, 0));
+    bottom: 0;
+    color: rgba(255, 255, 255, .86);
+    font-size: 14px;
+    inset-inline: 0;
+    line-height: 20px;
+    padding: 96px 40px 36px;
+    position: absolute;
+}
+
+.lc-auth-photo figcaption strong {
+    color: #fff;
+    display: block;
+    font-size: 22px;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    line-height: 28px;
+    margin-bottom: 4px;
+}
+
+.lc-auth-panel {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.lc-auth-form {
+    max-width: 30rem;
+    position: relative;
+    width: 100%;
+}
+
+:root .lc-auth-form > div:first-child {
+    text-align: left;
+}
+
+.lc-auth-logo {
+    height: auto;
+    margin-bottom: 20px;
+    max-width: 168px;
+}
+
+:root .lc-auth .uppercase {
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+:root .lc-auth [class*="tracking-"] {
+    letter-spacing: 0;
+}
+
+:root .lc-auth .shadow-sm,
+:root .lc-auth .shadow,
+:root .lc-auth .shadow-md {
+    box-shadow: none;
+}

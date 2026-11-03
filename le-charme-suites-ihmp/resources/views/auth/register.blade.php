@@ -58,17 +58,18 @@
     </style>
     @include('partials.favicon')
 </head>
-<body class="h-full overflow-y-auto bg-primary font-body text-on-surface antialiased selection:bg-secondary-container">
-    <main class="relative flex min-h-screen items-center justify-center px-4 py-10">
-        <div class="pointer-events-none absolute inset-0 opacity-10 bg-[radial-gradient(#ffdeaa_1px,transparent_1px)] [background-size:24px_24px]"></div>
+<body class="h-full overflow-y-auto bg-[#f5f5f2] font-body text-on-surface antialiased selection:bg-secondary-container">
+    <main class="lc-auth">
+        <figure class="lc-auth-photo" aria-hidden="true">
+            <img src="{{ asset('images/rooms/family-room.jpg') }}" alt="">
+            <figcaption><strong>Family Room</strong>Le Charmé Bldg. 1131 Palm St., Subic Bay Freeport Zone</figcaption>
+        </figure>
+        <div class="lc-auth-panel">
 
-        <section class="relative w-full max-w-2xl rounded-xl border border-[#d3d3cd]/40 bg-surface-container-lowest p-8 shadow-2xl sm:p-10">
+        <section class="lc-auth-form">
             <div class="mb-8 text-center">
-                <div class="mx-auto mb-4 max-w-sm overflow-hidden rounded-lg bg-white px-5 py-3">
-                    @include('partials.brand-logo', ['class' => 'h-auto w-full object-contain'])
-                </div>
-                <p class="mt-1 text-xs font-bold uppercase tracking-[0.24em] text-secondary">Subic Bay Philippines</p>
-                <div class="mx-auto my-3 h-0.5 w-12 bg-secondary opacity-60"></div>
+                @include('partials.brand-logo', ['class' => 'lc-auth-logo'])
+                
                 <p class="text-sm font-medium text-on-surface-variant">Integrated Hotel Management Portal account registration</p>
             </div>
 
@@ -188,6 +189,7 @@
                 <p class="mt-1 text-[11px] text-outline">{{ config('hotel.phone') }} · {{ config('hotel.email') }}</p>
             </div>
         </section>
+        </div>
     </main>
     <script>
         const selectedRoleLabel = document.getElementById('selected-role-label');

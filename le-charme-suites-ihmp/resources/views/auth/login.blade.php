@@ -56,15 +56,15 @@
         }
 
         .role-card.is-selected {
-            background: #161a20;
-            border-color: #5b6069;
-            color: #ffffff;
-            box-shadow: 0 0 0 2px rgba(117, 90, 40, 0.28), 0 12px 24px -18px rgba(1, 22, 45, 0.7);
+            background: #e3f0f1;
+            border-color: #17707f;
+            color: #0e4f5a;
+            box-shadow: inset 0 0 0 1px #17707f;
         }
 
         .role-card.is-selected .material-symbols-outlined,
         .role-card.is-selected .selected-check {
-            color: #e8e8e4;
+            color: #17707f;
         }
 
         .role-card.is-selected .selected-check {
@@ -74,17 +74,18 @@
     </style>
     @include('partials.favicon')
 </head>
-<body class="min-h-screen bg-primary font-body-md text-on-surface antialiased selection:bg-secondary-container">
-    <main class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-primary px-4">
-        <div class="pointer-events-none absolute inset-0 opacity-10 bg-[radial-gradient(#ffdeaa_1px,transparent_1px)] [background-size:24px_24px]"></div>
+<body class="min-h-screen bg-[#f5f5f2] font-body-md text-on-surface antialiased selection:bg-secondary-container">
+    <main class="lc-auth">
+        <figure class="lc-auth-photo" aria-hidden="true">
+            <img src="{{ asset('images/rooms/charme-suite.jpg') }}" alt="">
+            <figcaption><strong>Charmé Suite</strong>Le Charmé Bldg. 1131 Palm St., Subic Bay Freeport Zone</figcaption>
+        </figure>
+        <div class="lc-auth-panel">
 
-        <section class="relative my-8 w-full max-w-2xl rounded-xl border border-secondary-fixed-dim/30 bg-surface-container-lowest p-8 shadow-2xl sm:p-10">
+        <section class="lc-auth-form">
             <div class="mb-8 text-center">
-                <div class="mx-auto mb-4 max-w-sm overflow-hidden rounded-lg bg-white px-5 py-3">
-                    @include('partials.brand-logo', ['class' => 'h-auto w-full object-contain'])
-                </div>
-                <p class="mt-1 font-label-md text-label-md uppercase tracking-widest text-secondary">Subic Bay Philippines</p>
-                <div class="mx-auto my-3 h-0.5 w-12 bg-secondary opacity-60"></div>
+                @include('partials.brand-logo', ['class' => 'lc-auth-logo'])
+                
                 <p class="font-body-sm text-body-sm font-medium text-on-surface-variant">
                     Staff Log In Console - Integrated Hotel Management Portal (IHMP) - IPT101
                 </p>
@@ -199,6 +200,7 @@
                 <p class="mt-1 text-[11px] text-outline">{{ config('hotel.phone') }} · {{ config('hotel.email') }}</p>
             </div>
         </section>
+        </div>
     </main>
 
     <script>

@@ -8,12 +8,16 @@
     @include('partials.favicon')
     <script>tailwind.config = { theme: { extend: { fontFamily: { body: ['Manrope'], headline: ['Manrope'] } } } };</script>
 </head>
-<body class="min-h-screen bg-[#161a20] font-body text-[#161a20] antialiased">
-    <main class="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
-        <div class="pointer-events-none absolute inset-0 opacity-10 bg-[radial-gradient(#ffdeaa_1px,transparent_1px)] [background-size:24px_24px]"></div>
-        <section class="relative w-full max-w-lg rounded-xl border border-[#d3d3cd]/40 bg-white p-7 shadow-2xl sm:p-10">
+<body class="min-h-screen bg-[#f5f5f2] font-body text-[#161a20] antialiased">
+    <main class="lc-auth">
+        <figure class="lc-auth-photo" aria-hidden="true">
+            <img src="{{ asset('images/rooms/deluxe-twin.jpg') }}" alt="">
+            <figcaption><strong>Deluxe Twin</strong>Le Charmé Bldg. 1131 Palm St., Subic Bay Freeport Zone</figcaption>
+        </figure>
+        <div class="lc-auth-panel">
+        <section class="lc-auth-form">
             <div class="text-center">
-                <div class="mx-auto mb-5 max-w-xs rounded-lg bg-white px-5 py-3">@include('partials.brand-logo', ['class' => 'h-auto w-full object-contain'])</div>
+                @include('partials.brand-logo', ['class' => 'lc-auth-logo'])
                 <p class="text-xs font-bold uppercase tracking-[0.22em] text-[#5b6069]">Account recovery</p>
                 <h1 class="mt-2 font-headline text-3xl font-bold text-[#161a20]">Forgot your password?</h1>
                 <p class="mt-3 text-sm leading-6 text-slate-600">Enter your assigned Le Charme work email. We will send a secure, time-limited reset link if it belongs to an account.</p>
@@ -51,6 +55,7 @@
                 <a href="{{ route('login') }}" class="inline-flex items-center gap-1.5 text-sm font-bold text-[#5b6069] hover:underline"><span class="material-symbols-outlined text-lg">arrow_back</span>Back to sign in</a>
             </div>
         </section>
+        </div>
     </main>
 </body>
 </html>
