@@ -22,7 +22,7 @@
     ])->values();
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-white/10 to-transparent"></div>
     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
         <div class="max-w-4xl">

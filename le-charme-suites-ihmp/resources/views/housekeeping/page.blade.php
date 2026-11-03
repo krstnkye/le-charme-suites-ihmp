@@ -28,17 +28,17 @@
 @endphp
 
 @section('content')
-    <section class="rounded-lg bg-primary p-6 text-white shadow-lg">
+    <section class="lc-flip rounded-lg bg-primary p-6 text-white shadow-lg">
         <div class="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
             <div>
-                <p class="text-xs font-bold uppercase tracking-[0.22em] text-[#ffdeaa]">{{ $page['group'] }}</p>
+                <p class="text-xs font-bold uppercase tracking-[0.22em] text-[#e8e8e4]">{{ $page['group'] }}</p>
                 <h2 class="mt-2 flex items-center gap-3 font-serif text-3xl font-bold">
-                    <span class="material-symbols-outlined text-[#ffdeaa]">{{ $page['icon'] }}</span>
+                    <span class="material-symbols-outlined text-[#e8e8e4]">{{ $page['icon'] }}</span>
                     {{ $page['title'] }}
                 </h2>
                 <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-200">{{ $page['subtitle'] }}</p>
             </div>
-            <a href="{{ route('rooms.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-[#ffdeaa]/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/15">
+            <a href="{{ route('rooms.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-[#e8e8e4]/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/15">
                 <span class="material-symbols-outlined text-base">bed</span>
                 Open Room Status
             </a>
@@ -67,13 +67,13 @@
     @if (in_array($pageKey, ['tasks', 'assigned-rooms', 'cleaning-tasks', 'priority-rooms', 'completed-tasks'], true))
         <section class="grid gap-6 xl:grid-cols-[1fr_360px]">
             <div class="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
-                <div class="flex flex-col justify-between gap-3 border-b border-line bg-[#f6f3ed] p-5 sm:flex-row sm:items-center">
+                <div class="flex flex-col justify-between gap-3 border-b border-line bg-[#f0f0ec] p-5 sm:flex-row sm:items-center">
                     <div><p class="text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Shared Database Workflow</p><h3 class="mt-1 font-serif text-2xl font-bold">Live Housekeeping Work Orders</h3><p class="mt-1 text-sm text-slate-500">Assignments, progress, due times, and completion history are visible to authorized departments.</p></div>
                     <span class="rounded bg-primary px-3 py-1.5 text-xs font-bold text-white">{{ $housekeepingTasks->whereNotIn('status', ['completed', 'cancelled'])->count() }} Active</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[820px] text-left text-sm">
-                        <thead class="bg-[#fdfcfa] text-[11px] font-bold uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Room / Task</th><th class="px-4 py-3">Assigned to</th><th class="px-4 py-3">Priority</th><th class="px-4 py-3">Due</th><th class="px-4 py-3">Status & Action</th></tr></thead>
+                        <thead class="bg-[#fafaf8] text-[11px] font-bold uppercase tracking-wider text-slate-500"><tr><th class="px-4 py-3">Room / Task</th><th class="px-4 py-3">Assigned to</th><th class="px-4 py-3">Priority</th><th class="px-4 py-3">Due</th><th class="px-4 py-3">Status & Action</th></tr></thead>
                         <tbody class="divide-y divide-line">
                             @forelse ($housekeepingTasks as $task)
                                 <tr>
@@ -123,7 +123,7 @@
 
     @if ($pageKey === 'assigned-rooms')
         <section class="rounded-lg border border-line bg-white shadow-sm">
-            <div class="border-b border-line bg-[#f6f3ed] p-5">
+            <div class="border-b border-line bg-[#f0f0ec] p-5">
                 <div class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
                     <div>
                         <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-secondary">Housekeeping Assignment Deck</p>
@@ -146,7 +146,7 @@
                     ['Priority Rooms', $priorityRooms->count(), 'priority_high', 'text-red-700'],
                     ['Completed Logs', $completedTasks->count(), 'done_all', 'text-emerald-700'],
                 ] as [$label, $value, $icon, $color])
-                    <div class="rounded-lg border border-line bg-[#fdfcfa] p-4">
+                    <div class="rounded-lg border border-line bg-[#fafaf8] p-4">
                         <div class="flex items-center justify-between">
                             <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">{{ $label }}</p>
                             <span class="material-symbols-outlined {{ $color }}">{{ $icon }}</span>
@@ -162,14 +162,14 @@
                 <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                     <div class="flex items-center gap-2">
                         <h3 class="font-serif text-2xl font-bold">Turnover Queue</h3>
-                        <span class="rounded bg-[#f6f3ed] px-2 py-0.5 text-xs font-semibold text-slate-600">{{ $assignedRooms->count() }} Rooms Allocated</span>
+                        <span class="rounded bg-[#f0f0ec] px-2 py-0.5 text-xs font-semibold text-slate-600">{{ $assignedRooms->count() }} Rooms Allocated</span>
                     </div>
                     <p class="text-xs text-slate-500">Sorted by: <strong class="text-primary">Priority & SLA Urgency</strong></p>
                 </div>
 
                 @if ($activeAssignedRoom)
                     <article class="overflow-hidden rounded-lg border-2 border-secondary/60 bg-white shadow-md">
-                        <div class="h-1.5 bg-gradient-to-r from-[#c5a36a] to-[#f6f3ed]"></div>
+                        <div class="h-1.5 bg-gradient-to-r from-[#17707f] to-[#f0f0ec]"></div>
                         <div class="p-5">
                             <div class="flex flex-col justify-between gap-4 border-b border-line pb-4 lg:flex-row lg:items-start">
                                 <div class="flex items-start gap-3">
@@ -210,7 +210,7 @@
                                         [false, 'Amenity and supply replenishment'],
                                         [false, 'Final scent, lights, and PMS notes'],
                                     ] as [$checked, $label])
-                                        <label class="{{ $loop->last ? 'md:col-span-2' : '' }} flex cursor-pointer items-center gap-2.5 rounded-lg border {{ $checked ? 'border-line bg-[#f6f3ed]' : 'border-secondary/40 bg-white shadow-sm' }} p-2.5 text-sm hover:bg-[#f6f3ed]">
+                                        <label class="{{ $loop->last ? 'md:col-span-2' : '' }} flex cursor-pointer items-center gap-2.5 rounded-lg border {{ $checked ? 'border-line bg-[#f0f0ec]' : 'border-secondary/40 bg-white shadow-sm' }} p-2.5 text-sm hover:bg-[#f0f0ec]">
                                             <input type="checkbox" @checked($checked) class="h-4 w-4 rounded border-line text-secondary focus:ring-secondary">
                                             <span class="{{ $checked ? 'text-slate-500 line-through' : 'font-semibold text-primary' }}">{{ $label }}</span>
                                         </label>
@@ -220,16 +220,16 @@
 
                             <div class="mt-5 flex flex-col justify-between gap-3 border-t border-line pt-4 sm:flex-row sm:items-center">
                                 <div class="flex flex-wrap gap-2">
-                                    <button type="button" class="inline-flex items-center gap-1.5 rounded-lg bg-[#f6f3ed] px-3 py-2 text-xs font-bold text-primary hover:bg-line">
+                                    <button type="button" class="inline-flex items-center gap-1.5 rounded-lg bg-[#f0f0ec] px-3 py-2 text-xs font-bold text-primary hover:bg-line">
                                         <span class="material-symbols-outlined text-base">pause_circle</span>
                                         Pause Timer
                                     </button>
-                                    <a href="{{ route('housekeeping.page', 'notifications') }}" class="inline-flex items-center gap-1.5 rounded-lg bg-[#f6f3ed] px-3 py-2 text-xs font-bold text-primary hover:bg-line">
+                                    <a href="{{ route('housekeeping.page', 'notifications') }}" class="inline-flex items-center gap-1.5 rounded-lg bg-[#f0f0ec] px-3 py-2 text-xs font-bold text-primary hover:bg-line">
                                         <span class="material-symbols-outlined text-base">call</span>
                                         Call Supervisor
                                     </a>
                                 </div>
-                                <a href="{{ route('rooms.edit', $activeAssignedRoom) }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#5b4313]">
+                                <a href="{{ route('rooms.edit', $activeAssignedRoom) }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#2a2f37]">
                                     <span class="material-symbols-outlined text-lg">verified</span>
                                     Complete & Request Inspection
                                 </a>
@@ -243,7 +243,7 @@
                         <article class="rounded-lg border border-line bg-white p-4 shadow-sm transition hover:border-secondary/40">
                             <div class="flex flex-col justify-between gap-3 md:flex-row md:items-center">
                                 <div class="flex items-center gap-3">
-                                    <div class="flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-lg bg-[#f6f3ed] text-primary">
+                                    <div class="flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-lg bg-[#f0f0ec] text-primary">
                                         <span class="text-[10px] font-bold uppercase text-slate-500">Rm</span>
                                         <span class="text-base font-extrabold leading-none">{{ $room->room_number }}</span>
                                     </div>
@@ -256,7 +256,7 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <a href="{{ route('rooms.show', $room) }}" class="rounded border border-line px-3 py-1.5 text-xs font-bold text-primary hover:bg-[#f6f3ed]">View</a>
+                                    <a href="{{ route('rooms.show', $room) }}" class="rounded border border-line px-3 py-1.5 text-xs font-bold text-primary hover:bg-[#f0f0ec]">View</a>
                                     <a href="{{ route('rooms.edit', $room) }}" class="inline-flex items-center gap-1.5 rounded bg-primary px-3 py-1.5 text-xs font-bold text-white hover:bg-primary/90">
                                         <span class="material-symbols-outlined text-base">play_arrow</span>
                                         Start / Update
@@ -297,7 +297,7 @@
                             <span class="material-symbols-outlined text-secondary">cleaning_bucket</span>
                             Cart Supplies & Par
                         </h3>
-                        <span class="rounded bg-[#ffdeaa]/50 px-2 py-0.5 text-[10px] font-bold text-secondary">Housekeeping Cart</span>
+                        <span class="rounded bg-[#e8e8e4]/50 px-2 py-0.5 text-[10px] font-bold text-secondary">Housekeeping Cart</span>
                     </div>
                     <div class="mt-4 space-y-4">
                         @foreach ([
@@ -338,7 +338,7 @@
                                     </div>
                                     <span class="text-[11px] font-bold text-amber-900">Open</span>
                                 </div>
-                                <a href="{{ route('rooms.show', $room) }}" class="mt-3 inline-flex w-full justify-center rounded bg-secondary px-2.5 py-1.5 text-[11px] font-bold text-white hover:bg-[#5b4313]">Mark Delivered</a>
+                                <a href="{{ route('rooms.show', $room) }}" class="mt-3 inline-flex w-full justify-center rounded bg-secondary px-2.5 py-1.5 text-[11px] font-bold text-white hover:bg-[#2a2f37]">Mark Delivered</a>
                             </div>
                         @empty
                             <p class="rounded-lg bg-white px-3 py-3 text-sm text-slate-500">No guest delivery requests on the floor.</p>
@@ -366,14 +366,14 @@
         <section class="grid gap-5 xl:grid-cols-12">
             <aside class="space-y-5 xl:col-span-4">
                 <div class="rounded-lg border border-line bg-white shadow-sm">
-                    <div class="border-b border-line bg-[#f6f3ed] p-5">
+                    <div class="border-b border-line bg-[#f0f0ec] p-5">
                         <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">Inspection Queue</p>
                         <h3 class="mt-1 font-serif text-2xl font-bold">QA Release Command</h3>
                         <p class="mt-1 text-sm text-slate-500">Rooms awaiting final inspection before front desk release.</p>
                     </div>
                     <div class="divide-y divide-line">
                         @forelse ($inspectionRooms as $room)
-                            <a href="{{ route('rooms.edit', $room) }}" class="flex items-center justify-between gap-3 p-4 transition hover:bg-[#f6f3ed]">
+                            <a href="{{ route('rooms.edit', $room) }}" class="flex items-center justify-between gap-3 p-4 transition hover:bg-[#f0f0ec]">
                                 <div>
                                     <p class="font-bold">Room {{ $room->room_number }} - {{ $room->room_type }}</p>
                                     <p class="mt-1 text-xs text-slate-500">{{ $room->description ?: 'Ready for supervisor quality audit.' }}</p>
@@ -409,12 +409,12 @@
                     </h3>
                     <div class="mt-4 space-y-3">
                         @forelse ($recentRoomLogs->take(4) as $log)
-                            <div class="rounded-lg bg-[#f6f3ed] px-3 py-2 text-sm">
+                            <div class="rounded-lg bg-[#f0f0ec] px-3 py-2 text-sm">
                                 <p class="font-bold">Room {{ $log->room?->room_number ?? 'N/A' }} changed to {{ ucfirst($log->status) }}</p>
                                 <p class="text-xs text-slate-500">{{ $log->changed_at?->diffForHumans() }}</p>
                             </div>
                         @empty
-                            <p class="rounded-lg bg-[#f6f3ed] px-3 py-3 text-sm text-slate-500">No recent inspection history yet.</p>
+                            <p class="rounded-lg bg-[#f0f0ec] px-3 py-3 text-sm text-slate-500">No recent inspection history yet.</p>
                         @endforelse
                     </div>
                 </div>
@@ -422,7 +422,7 @@
 
             <div class="space-y-5 xl:col-span-8">
                 <div class="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
-                    <div class="flex flex-col justify-between gap-4 border-b border-line bg-[#f6f3ed] p-5 lg:flex-row lg:items-center">
+                    <div class="flex flex-col justify-between gap-4 border-b border-line bg-[#f0f0ec] p-5 lg:flex-row lg:items-center">
                         <div>
                             <div class="flex flex-wrap items-center gap-3">
                                 <h3 class="font-serif text-2xl font-bold">
@@ -432,7 +432,7 @@
                                         No Room Selected
                                     @endif
                                 </h3>
-                                <span class="rounded border border-secondary/40 bg-[#ffdeaa]/50 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-secondary">Supervisor QA</span>
+                                <span class="rounded border border-secondary/40 bg-[#e8e8e4]/50 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-secondary">Supervisor QA</span>
                             </div>
                             <div class="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
                                 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base text-secondary">badge</span> Attendant: Housekeeping Team</span>
@@ -466,7 +466,7 @@
                                 <article class="rounded-lg border border-secondary/30 bg-white p-4 shadow-sm transition hover:border-secondary">
                                     <div class="flex flex-col justify-between gap-3 md:flex-row md:items-center">
                                         <div class="flex items-start gap-3">
-                                            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f6f3ed] text-primary">
+                                            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f0f0ec] text-primary">
                                                 <span class="material-symbols-outlined">{{ $icon }}</span>
                                             </span>
                                             <div>
@@ -474,7 +474,7 @@
                                                 <p class="mt-1 text-sm text-slate-500">{{ $description }}</p>
                                             </div>
                                         </div>
-                                        <div class="inline-flex shrink-0 rounded-lg border border-line bg-[#f6f3ed] p-1">
+                                        <div class="inline-flex shrink-0 rounded-lg border border-line bg-[#f0f0ec] p-1">
                                             <button type="button" class="inspection-toggle rounded bg-primary px-3 py-1 text-xs font-bold text-white shadow-sm">Passed</button>
                                             <button type="button" class="inspection-toggle rounded px-3 py-1 text-xs font-semibold text-slate-500 hover:text-primary">Remediate</button>
                                             <button type="button" class="inspection-toggle rounded px-3 py-1 text-xs font-semibold text-slate-500 hover:text-red-700">Fail</button>
@@ -494,7 +494,7 @@
                             </div>
                             <div class="mt-4 grid gap-3 sm:grid-cols-3">
                                 @foreach ([['Bed Linen Proof', 'verified'], ['Bathroom Proof', 'verified'], ['Attach Additional Photo', 'add_a_photo']] as [$label, $icon])
-                                    <button type="button" class="aspect-video rounded-lg border {{ $loop->last ? 'border-dashed border-slate-300 bg-[#f6f3ed]' : 'border-line bg-primary' }} p-3 text-left transition hover:border-secondary">
+                                    <button type="button" class="aspect-video rounded-lg border {{ $loop->last ? 'border-dashed border-slate-300 bg-[#f0f0ec]' : 'border-line bg-primary' }} p-3 text-left transition hover:border-secondary">
                                         <div class="flex h-full flex-col justify-end rounded-md {{ $loop->last ? 'items-center justify-center text-center text-secondary' : 'bg-gradient-to-t from-black/30 to-transparent text-white' }} p-3">
                                             <span class="material-symbols-outlined">{{ $icon }}</span>
                                             <span class="mt-1 text-xs font-bold">{{ $label }}</span>
@@ -510,7 +510,7 @@
                                 <span>Supervisor Quality Observations & Attendant Feedback</span>
                                 <span class="text-xs font-normal text-slate-500">Logged into inspection record</span>
                             </label>
-                            <textarea class="w-full rounded-lg border-line bg-[#f6f3ed] p-3 text-sm focus:border-secondary focus:ring-secondary" rows="3" placeholder="Enter turnover observations...">@if ($inspectionTarget)Room {{ $inspectionTarget->room_number }} reviewed for release. Validate all visible room standards before changing status to available.@endif</textarea>
+                            <textarea class="w-full rounded-lg border-line bg-[#f0f0ec] p-3 text-sm focus:border-secondary focus:ring-secondary" rows="3" placeholder="Enter turnover observations...">@if ($inspectionTarget)Room {{ $inspectionTarget->room_number }} reviewed for release. Validate all visible room standards before changing status to available.@endif</textarea>
                         </div>
 
                         <div class="flex flex-col items-center justify-between gap-4 border-t border-line pt-5 sm:flex-row">
@@ -525,12 +525,12 @@
                                         Fail & Return
                                     </a>
                                     <a href="{{ route('rooms.edit', $inspectionTarget) }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90">
-                                        <span class="material-symbols-outlined text-lg text-[#ffdeaa]">check_circle</span>
+                                        <span class="material-symbols-outlined text-lg text-[#e8e8e4]">check_circle</span>
                                         Approve & Release to PMS
                                     </a>
                                 @else
                                     <a href="{{ route('rooms.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90">
-                                        <span class="material-symbols-outlined text-lg text-[#ffdeaa]">bed</span>
+                                        <span class="material-symbols-outlined text-lg text-[#e8e8e4]">bed</span>
                                         Open Room Status
                                     </a>
                                 @endif
@@ -563,7 +563,7 @@
                         if (button.textContent.trim() === 'Fail') {
                             button.className = 'inspection-toggle rounded bg-red-700 px-3 py-1 text-xs font-bold text-white shadow-sm';
                         } else if (button.textContent.trim() === 'Remediate') {
-                            button.className = 'inspection-toggle rounded bg-[#ffdeaa] px-3 py-1 text-xs font-bold text-secondary shadow-sm';
+                            button.className = 'inspection-toggle rounded bg-[#e8e8e4] px-3 py-1 text-xs font-bold text-secondary shadow-sm';
                         } else {
                             button.className = 'inspection-toggle rounded bg-primary px-3 py-1 text-xs font-bold text-white shadow-sm';
                         }
@@ -594,9 +594,9 @@
 
         <section class="space-y-5">
             <div class="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
-                <div class="grid gap-5 border-b border-line bg-primary p-5 text-white xl:grid-cols-[1fr_auto] xl:items-center">
+                <div class="lc-flip grid gap-5 border-b border-line bg-primary p-5 text-white xl:grid-cols-[1fr_auto] xl:items-center">
                     <div>
-                        <div class="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[#ffdeaa]">
+                        <div class="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[#e8e8e4]">
                             <span class="material-symbols-outlined text-base">priority_high</span>
                             Housekeeping Rush Readiness Command
                         </div>
@@ -605,7 +605,7 @@
                     </div>
                     <div class="rounded-lg border border-white/15 bg-white/10 p-4">
                         <p class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Priority Queue</p>
-                        <p class="mt-1 font-serif text-4xl font-bold text-[#ffdeaa]">{{ $priorityQueue->count() }}</p>
+                        <p class="mt-1 font-serif text-4xl font-bold text-[#e8e8e4]">{{ $priorityQueue->count() }}</p>
                         <p class="text-xs text-slate-300">live {{ Str::plural('room', $priorityQueue->count()) }}</p>
                     </div>
                 </div>
@@ -617,7 +617,7 @@
                         ['label' => 'Ready Rooms', 'value' => $availableRooms, 'icon' => 'verified', 'tone' => 'text-emerald-700', 'bar' => $totalRooms ? round(($availableRooms / max($totalRooms, 1)) * 100) : 0],
                         ['label' => 'Primary Progress', 'value' => $priorityCompletion.'%', 'icon' => 'speed', 'tone' => 'text-secondary', 'bar' => $priorityCompletion],
                     ] as $metric)
-                        <div class="rounded-lg border border-line bg-[#fdfcfa] p-4">
+                        <div class="rounded-lg border border-line bg-[#fafaf8] p-4">
                             <div class="flex items-center justify-between">
                                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">{{ $metric['label'] }}</p>
                                 <span class="material-symbols-outlined {{ $metric['tone'] }}">{{ $metric['icon'] }}</span>
@@ -641,7 +641,7 @@
                         </div>
                     </div>
                     <a href="{{ route('housekeeping.page', 'cleaning-tasks') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary/90">
-                        <span class="material-symbols-outlined text-base text-[#ffdeaa]">bolt</span>
+                        <span class="material-symbols-outlined text-base text-[#e8e8e4]">bolt</span>
                         Dispatch Backup Attendants
                     </a>
                 </div>
@@ -656,8 +656,8 @@
                                 <p class="mt-1 text-sm text-slate-500">Rooms are pulled from live room statuses marked cleaning or maintenance.</p>
                             </div>
                             <div class="flex flex-wrap gap-2">
-                                <a href="{{ route('rooms.index', ['status' => 'maintenance']) }}" class="rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-xs font-bold text-primary hover:bg-line">Maintenance Holds</a>
-                                <a href="{{ route('rooms.index', ['status' => 'cleaning']) }}" class="rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-xs font-bold text-primary hover:bg-line">Cleaning Queue</a>
+                                <a href="{{ route('rooms.index', ['status' => 'maintenance']) }}" class="rounded-lg border border-line bg-[#f0f0ec] px-3 py-2 text-xs font-bold text-primary hover:bg-line">Maintenance Holds</a>
+                                <a href="{{ route('rooms.index', ['status' => 'cleaning']) }}" class="rounded-lg border border-line bg-[#f0f0ec] px-3 py-2 text-xs font-bold text-primary hover:bg-line">Cleaning Queue</a>
                             </div>
                         </div>
 
@@ -671,13 +671,13 @@
                                     $team = $dispatchTeams[($loop->iteration - 1) % count($dispatchTeams)];
                                     $releaseWindow = now()->addMinutes($isMaintenance ? 45 + ($loop->iteration * 10) : 20 + ($loop->iteration * 7))->format('h:i A');
                                 @endphp
-                                <article class="rounded-lg border {{ $isMaintenance ? 'border-red-200' : 'border-amber-300' }} bg-[#fdfcfa] p-4 shadow-sm">
+                                <article class="rounded-lg border {{ $isMaintenance ? 'border-red-200' : 'border-amber-300' }} bg-[#fafaf8] p-4 shadow-sm">
                                     <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                                         <div class="min-w-0">
                                             <div class="mb-2 flex flex-wrap items-center gap-2">
                                                 <span class="rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider {{ $statusClass }}">{{ $statusLabel }}</span>
                                                 @if ($loop->first)
-                                                    <span class="rounded-full bg-primary px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-[#ffdeaa]">Top Priority</span>
+                                                    <span class="rounded-full bg-primary px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-[#e8e8e4]">Top Priority</span>
                                                 @endif
                                             </div>
                                             <h4 class="font-serif text-2xl font-bold text-primary">Room {{ $room->room_number }} - {{ $room->room_type }}</h4>
@@ -714,25 +714,25 @@
                                         </div>
                                         <div class="h-2 overflow-hidden rounded-full bg-line"><div class="h-full rounded-full {{ $isMaintenance ? 'bg-red-600' : 'bg-secondary' }}" style="width: {{ $progress }}%"></div></div>
                                         <div class="mt-3 grid gap-2 text-xs md:grid-cols-3">
-                                            <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f6f3ed] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Linen cart staged</span>
-                                            <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f6f3ed] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Supervisor QA required</span>
-                                            <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f6f3ed] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Front desk handoff pending</span>
+                                            <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f0f0ec] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Linen cart staged</span>
+                                            <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f0f0ec] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Supervisor QA required</span>
+                                            <span class="inline-flex items-center gap-1 rounded border border-line bg-[#f0f0ec] px-2 py-1"><span class="material-symbols-outlined text-sm text-secondary">task_alt</span>Front desk handoff pending</span>
                                         </div>
                                     </div>
 
                                     <div class="mt-4 flex flex-wrap justify-end gap-2">
-                                        <a href="{{ route('housekeeping.page', 'notifications') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">
+                                        <a href="{{ route('housekeeping.page', 'notifications') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:bg-[#f0f0ec]">
                                             <span class="material-symbols-outlined text-base">radio</span>
                                             Radio Lead
                                         </a>
                                         <a href="{{ route('rooms.edit', $room) }}" class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white hover:bg-primary/90">
-                                            <span class="material-symbols-outlined text-base text-[#ffdeaa]">fact_check</span>
+                                            <span class="material-symbols-outlined text-base text-[#e8e8e4]">fact_check</span>
                                             Update Room Status
                                         </a>
                                     </div>
                                 </article>
                             @empty
-                                <div class="rounded-lg border border-dashed border-line bg-[#fdfcfa] px-5 py-14 text-center">
+                                <div class="rounded-lg border border-dashed border-line bg-[#fafaf8] px-5 py-14 text-center">
                                     <span class="material-symbols-outlined text-5xl text-slate-300">task_alt</span>
                                     <h4 class="mt-3 font-serif text-2xl font-bold text-primary">No priority rooms right now</h4>
                                     <p class="mt-1 text-sm text-slate-500">Rooms marked cleaning or maintenance will appear here automatically.</p>
@@ -750,7 +750,7 @@
                         </div>
                         <div class="mt-4 space-y-3">
                             @foreach ($intercomNotes as $note)
-                                <div class="rounded-lg border border-line bg-[#fdfcfa] p-3">
+                                <div class="rounded-lg border border-line bg-[#fafaf8] p-3">
                                     <div class="flex items-center justify-between gap-2">
                                         <p class="text-xs font-bold text-primary">{{ $note['source'] }}</p>
                                         <span class="text-[11px] text-slate-500">{{ $note['time'] }}</span>
@@ -764,14 +764,14 @@
                     <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
                         <h3 class="flex items-center gap-2 font-bold"><span class="material-symbols-outlined text-secondary">room_service</span>Expedite Depot Carts</h3>
                         <div class="mt-4 space-y-2 text-sm">
-                            <div class="flex justify-between rounded-lg border border-line bg-[#f6f3ed] px-3 py-2"><span>Rush Linen Cart</span><strong class="text-emerald-700">{{ $rushTurnoverCount > 0 ? 'Ready' : 'Standby' }}</strong></div>
-                            <div class="flex justify-between rounded-lg border border-line bg-[#f6f3ed] px-3 py-2"><span>Maintenance Kit</span><strong class="{{ $maintenanceHoldCount > 0 ? 'text-red-700' : 'text-emerald-700' }}">{{ $maintenanceHoldCount > 0 ? 'Dispatch' : 'Clear' }}</strong></div>
-                            <div class="flex justify-between rounded-lg border border-line bg-[#f6f3ed] px-3 py-2"><span>QA Tablet</span><strong class="text-secondary">Synced</strong></div>
+                            <div class="flex justify-between rounded-lg border border-line bg-[#f0f0ec] px-3 py-2"><span>Rush Linen Cart</span><strong class="text-emerald-700">{{ $rushTurnoverCount > 0 ? 'Ready' : 'Standby' }}</strong></div>
+                            <div class="flex justify-between rounded-lg border border-line bg-[#f0f0ec] px-3 py-2"><span>Maintenance Kit</span><strong class="{{ $maintenanceHoldCount > 0 ? 'text-red-700' : 'text-emerald-700' }}">{{ $maintenanceHoldCount > 0 ? 'Dispatch' : 'Clear' }}</strong></div>
+                            <div class="flex justify-between rounded-lg border border-line bg-[#f0f0ec] px-3 py-2"><span>QA Tablet</span><strong class="text-secondary">Synced</strong></div>
                         </div>
                     </div>
 
-                    <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">assignment_late</span>Priority SLA Summary</h3>
+                    <div class="lc-flip rounded-lg bg-primary p-5 text-white shadow-sm">
+                        <h3 class="flex items-center gap-2 font-bold text-[#e8e8e4]"><span class="material-symbols-outlined">assignment_late</span>Priority SLA Summary</h3>
                         <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
                             <div class="rounded-lg bg-white/10 p-3">
                                 <p class="text-[11px] uppercase tracking-wider text-slate-300">Open</p>
@@ -782,7 +782,7 @@
                                 <p class="font-serif text-3xl font-bold">{{ $completedTasks->count() }}</p>
                             </div>
                         </div>
-                        <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
+                        <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#2a2f37]">
                             <span class="material-symbols-outlined text-base">rule</span>
                             Open Supervisor Inspection
                         </a>
@@ -807,7 +807,7 @@
 
         <section class="space-y-5">
             <div class="rounded-lg border border-line bg-white shadow-sm">
-                <div class="flex flex-col gap-4 border-b border-line bg-[#f6f3ed] p-5 xl:flex-row xl:items-center xl:justify-between">
+                <div class="flex flex-col gap-4 border-b border-line bg-[#f0f0ec] p-5 xl:flex-row xl:items-center xl:justify-between">
                     <div>
                         <div class="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-secondary">
                             <span class="h-2.5 w-2.5 rounded-full bg-secondary"></span>
@@ -820,7 +820,7 @@
                         @foreach ([['Main Wing', $totalRooms], ['Ocean Wing', $occupiedRooms], ['Executive Villas', $maintenanceQueue->count()]] as [$wing, $count])
                             <button type="button" class="{{ $loop->first ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-line' }} inline-flex items-center gap-2 rounded-lg border border-line px-3 py-2 text-xs font-bold">
                                 {{ $wing }}
-                                <span class="{{ $loop->first ? 'bg-[#ffdeaa] text-primary' : 'bg-[#f0eee8] text-slate-600' }} rounded px-1.5 py-0.5 text-[10px]">{{ $count }}</span>
+                                <span class="{{ $loop->first ? 'bg-[#e8e8e4] text-primary' : 'bg-[#ebebe7] text-slate-600' }} rounded px-1.5 py-0.5 text-[10px]">{{ $count }}</span>
                             </button>
                         @endforeach
                     </div>
@@ -833,7 +833,7 @@
                         ['label' => 'Pending QA Review', 'value' => $qaQueue, 'icon' => 'fact_check', 'tone' => 'text-secondary'],
                         ['label' => 'Shift Completion', 'value' => $completionRate . '%', 'icon' => 'speed', 'tone' => 'text-emerald-700'],
                     ] as $metric)
-                        <div class="rounded-lg border border-line bg-[#fdfcfa] p-4">
+                        <div class="rounded-lg border border-line bg-[#fafaf8] p-4">
                             <div class="flex items-center justify-between">
                                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">{{ $metric['label'] }}</p>
                                 <span class="material-symbols-outlined {{ $metric['tone'] }}">{{ $metric['icon'] }}</span>
@@ -853,12 +853,12 @@
                                 <p class="mt-1 text-sm text-slate-500">Showing {{ $activeCleaningCount }} active room turnover {{ Str::plural('task', $activeCleaningCount) }} from the rooms table.</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
-                                <a href="{{ route('rooms.index', ['status' => 'cleaning']) }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-xs font-bold text-primary hover:bg-line">
+                                <a href="{{ route('rooms.index', ['status' => 'cleaning']) }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-[#f0f0ec] px-3 py-2 text-xs font-bold text-primary hover:bg-line">
                                     <span class="material-symbols-outlined text-base">filter_alt</span>
                                     Cleaning Only
                                 </a>
                                 <a href="{{ route('housekeeping.page', 'priority-rooms') }}" class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white hover:bg-primary/90">
-                                    <span class="material-symbols-outlined text-base text-[#ffdeaa]">priority_high</span>
+                                    <span class="material-symbols-outlined text-base text-[#e8e8e4]">priority_high</span>
                                     Priority Rooms
                                 </a>
                             </div>
@@ -866,7 +866,7 @@
 
                         <div class="overflow-x-auto">
                             <table class="w-full min-w-[920px] text-left text-sm">
-                                <thead class="bg-[#f0eee8] text-xs font-bold uppercase tracking-wider text-slate-600">
+                                <thead class="bg-[#ebebe7] text-xs font-bold uppercase tracking-wider text-slate-600">
                                     <tr>
                                         <th class="px-4 py-3">Room</th>
                                         <th class="px-3 py-3">Room Type</th>
@@ -884,10 +884,10 @@
                                             $stage = $loop->first ? 'In Progress' : ($loop->iteration % 3 === 0 ? 'Pending Inspection' : 'Queued');
                                             $stageClass = $stage === 'In Progress'
                                                 ? 'border-amber-300 bg-amber-100 text-amber-900'
-                                                : ($stage === 'Pending Inspection' ? 'border-purple-200 bg-purple-50 text-purple-900' : 'border-line bg-[#f6f3ed] text-slate-600');
+                                                : ($stage === 'Pending Inspection' ? 'border-purple-200 bg-purple-50 text-purple-900' : 'border-line bg-[#f0f0ec] text-slate-600');
                                             $attendant = $attendants[$loop->index % count($attendants)];
                                         @endphp
-                                        <tr class="bg-white/80 transition hover:bg-[#f6f3ed]">
+                                        <tr class="bg-white/80 transition hover:bg-[#f0f0ec]">
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center gap-2">
                                                     <div class="h-8 w-1.5 rounded-full {{ $loop->first ? 'bg-orange-500' : 'bg-secondary' }}"></div>
@@ -927,7 +927,7 @@
                                             </td>
                                             <td class="px-4 py-3 text-right">
                                                 <div class="flex items-center justify-end gap-1">
-                                                    <a href="{{ route('rooms.show', $room) }}" class="rounded p-1.5 text-slate-500 hover:bg-[#f6f3ed] hover:text-primary" title="View checklist"><span class="material-symbols-outlined text-base">checklist</span></a>
+                                                    <a href="{{ route('rooms.show', $room) }}" class="rounded p-1.5 text-slate-500 hover:bg-[#f0f0ec] hover:text-primary" title="View checklist"><span class="material-symbols-outlined text-base">checklist</span></a>
                                                     <a href="{{ route('rooms.edit', $room) }}" class="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white hover:bg-primary/90">Update</a>
                                                 </div>
                                             </td>
@@ -941,7 +941,7 @@
                             </table>
                         </div>
 
-                        <div class="flex flex-col gap-3 border-t border-line bg-[#f6f3ed] px-4 py-3 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="flex flex-col gap-3 border-t border-line bg-[#f0f0ec] px-4 py-3 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
                             <span>Showing <strong class="text-primary">{{ $activeCleaningCount }}</strong> active cleaning {{ Str::plural('unit', $activeCleaningCount) }}</span>
                             <span>Completed today: <strong class="text-secondary">{{ $completedTasks->count() }}</strong></span>
                         </div>
@@ -952,20 +952,20 @@
                     <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
                         <div class="flex items-center justify-between border-b border-line pb-3">
                             <h3 class="flex items-center gap-2 font-bold"><span class="material-symbols-outlined text-secondary">badge</span>Attendant Workload</h3>
-                            <span class="rounded bg-[#ffdeaa]/60 px-2 py-0.5 text-[11px] font-bold text-secondary">{{ count($attendants) }} on Duty</span>
+                            <span class="rounded bg-[#e8e8e4]/60 px-2 py-0.5 text-[11px] font-bold text-secondary">{{ count($attendants) }} on Duty</span>
                         </div>
                         <div class="mt-4 space-y-3">
                             @foreach ($attendants as $attendant)
                                 @php
                                     $workload = min(100, round(($attendant['done'] / max($attendant['quota'], 1)) * 100));
                                 @endphp
-                                <div class="rounded-lg border border-line bg-[#fdfcfa] p-3">
+                                <div class="rounded-lg border border-line bg-[#fafaf8] p-3">
                                     <div class="mb-2 flex items-center justify-between gap-2">
                                         <div class="flex items-center gap-2">
                                             <span class="{{ $attendant['tone'] }} flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold text-white">{{ $attendant['initials'] }}</span>
                                             <span class="text-xs font-bold text-primary">{{ $attendant['name'] }}</span>
                                         </div>
-                                        <span class="rounded bg-[#f6f3ed] px-2 py-0.5 text-[10px] font-bold text-slate-600">{{ $attendant['room'] ? 'Room ' . $attendant['room'] : 'Available' }}</span>
+                                        <span class="rounded bg-[#f0f0ec] px-2 py-0.5 text-[10px] font-bold text-slate-600">{{ $attendant['room'] ? 'Room ' . $attendant['room'] : 'Available' }}</span>
                                     </div>
                                     <div class="mb-1 flex justify-between text-[11px] text-slate-500"><span>Quota: {{ $attendant['done'] }} of {{ $attendant['quota'] }}</span><span>{{ $workload }}%</span></div>
                                     <div class="h-1.5 overflow-hidden rounded-full bg-line"><div class="h-full rounded-full bg-secondary" style="width: {{ $workload }}%"></div></div>
@@ -973,18 +973,18 @@
                             @endforeach
                         </div>
                         <button type="button" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2.5 text-xs font-bold text-white hover:bg-primary/90">
-                            <span class="material-symbols-outlined text-base text-[#ffdeaa]">shuffle</span>
+                            <span class="material-symbols-outlined text-base text-[#e8e8e4]">shuffle</span>
                             Auto-Balance Attendant Loads
                         </button>
                     </div>
 
                     <div class="rounded-lg bg-primary p-4 text-white shadow-sm">
                         <div class="mb-2 flex items-center justify-between">
-                            <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">radio</span>Housekeeping Channel 3</h3>
+                            <h3 class="flex items-center gap-2 font-bold text-[#e8e8e4]"><span class="material-symbols-outlined">radio</span>Housekeeping Channel 3</h3>
                             <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
                         </div>
                         <p class="text-xs leading-5 text-slate-300">Broadcast coordination notes across all active attendants on Shift 1.</p>
-                        <a href="{{ route('housekeeping.page', 'notifications') }}" class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
+                        <a href="{{ route('housekeeping.page', 'notifications') }}" class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#2a2f37]">
                             <span class="material-symbols-outlined text-base">campaign</span>
                             Open Notifications
                         </a>
@@ -1003,7 +1003,7 @@
             $requestTemplates = [
                 ['priority' => 'Critical Priority', 'class' => 'border-red-200 bg-red-50 text-red-800', 'accent' => 'bg-red-600', 'sla' => '10 mins', 'remaining' => '05:40', 'item' => 'Extra Percale Duvet', 'detail' => 'King size linen set with hypoallergenic pillows', 'icon' => 'bed', 'source' => 'Front Desk Concierge'],
                 ['priority' => 'Moderate Priority', 'class' => 'border-amber-300 bg-amber-100 text-amber-900', 'accent' => 'bg-secondary', 'sla' => '15 mins', 'remaining' => '10:15', 'item' => 'Bathrobes & Premium Towels', 'detail' => 'Two robe sets with fresh bath towel bundle', 'icon' => 'dry_cleaning', 'source' => 'Guest Mobile Request'],
-                ['priority' => 'Standard Request', 'class' => 'border-line bg-[#f6f3ed] text-slate-700', 'accent' => 'bg-slate-400', 'sla' => '25 mins', 'remaining' => '18:30', 'item' => 'Toiletry Amenity Pack', 'detail' => 'Dental kits, shaving kit, slippers, and bottled water', 'icon' => 'styler', 'source' => 'In-Room Tablet'],
+                ['priority' => 'Standard Request', 'class' => 'border-line bg-[#f0f0ec] text-slate-700', 'accent' => 'bg-slate-400', 'sla' => '25 mins', 'remaining' => '18:30', 'item' => 'Toiletry Amenity Pack', 'detail' => 'Dental kits, shaving kit, slippers, and bottled water', 'icon' => 'styler', 'source' => 'In-Room Tablet'],
             ];
             $activeRequests = $requestQueue->count();
             $runnerCount = min($activeRequests, count($attendants));
@@ -1022,12 +1022,12 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     @foreach (['All', 'Urgent', 'Moderate', 'Standard'] as $filter)
-                        <button type="button" class="guest-request-filter rounded-lg border border-line px-3 py-2 text-xs font-bold {{ $loop->first ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-[#f6f3ed]' }}" data-filter="{{ strtolower($filter) }}">
+                        <button type="button" class="guest-request-filter rounded-lg border border-line px-3 py-2 text-xs font-bold {{ $loop->first ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-[#f0f0ec]' }}" data-filter="{{ strtolower($filter) }}">
                             {{ $filter }}
                         </button>
                     @endforeach
                     <a href="{{ route('housekeeping.page', 'notifications') }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-primary/90">
-                        <span class="material-symbols-outlined text-base text-[#ffdeaa]">add</span>
+                        <span class="material-symbols-outlined text-base text-[#e8e8e4]">add</span>
                         Log Inbound Guest Request
                     </a>
                 </div>
@@ -1085,7 +1085,7 @@
                                     <span class="material-symbols-outlined text-base text-slate-500">person</span>
                                     <span class="font-semibold">In-house guest</span>
                                     @if ($loop->first)
-                                        <span class="rounded bg-[#ffdeaa]/70 px-1.5 py-0.5 text-[10px] font-bold text-secondary">VIP</span>
+                                        <span class="rounded bg-[#e8e8e4]/70 px-1.5 py-0.5 text-[10px] font-bold text-secondary">VIP</span>
                                     @endif
                                 </div>
                                 <p class="mt-1 text-[11px] italic text-slate-500">Requested via {{ $template['source'] }}</p>
@@ -1100,7 +1100,7 @@
                                         <p class="text-sm text-slate-600">{{ $template['detail'] }}</p>
                                     </div>
                                 </div>
-                                <div class="mt-3 rounded-lg border border-line bg-[#f6f3ed] p-2 text-xs text-slate-600">
+                                <div class="mt-3 rounded-lg border border-line bg-[#f0f0ec] p-2 text-xs text-slate-600">
                                     <span class="font-bold text-primary">Guest note:</span> Please deliver quietly and confirm completion with front desk.
                                 </div>
                             </div>
@@ -1126,15 +1126,15 @@
 
                             <div class="lg:col-span-3">
                                 <button type="button" class="guest-request-deliver inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90">
-                                    <span class="material-symbols-outlined text-base text-[#ffdeaa]">task_alt</span>
+                                    <span class="material-symbols-outlined text-base text-[#e8e8e4]">task_alt</span>
                                     Mark Delivered
                                 </button>
                                 <div class="mt-2 grid grid-cols-2 gap-2">
-                                    <a href="{{ route('housekeeping.page', 'notifications') }}" class="inline-flex items-center justify-center gap-1 rounded-lg border border-secondary px-2 py-1.5 text-xs font-bold text-secondary hover:bg-[#ffdeaa]/30">
+                                    <a href="{{ route('housekeeping.page', 'notifications') }}" class="inline-flex items-center justify-center gap-1 rounded-lg border border-secondary px-2 py-1.5 text-xs font-bold text-secondary hover:bg-[#e8e8e4]/30">
                                         <span class="material-symbols-outlined text-base">phone_in_talk</span>
                                         Call Runner
                                     </a>
-                                    <a href="{{ route('rooms.show', $room) }}" class="inline-flex items-center justify-center gap-1 rounded-lg border border-line px-2 py-1.5 text-xs font-bold text-slate-600 hover:bg-[#f6f3ed] hover:text-primary">
+                                    <a href="{{ route('rooms.show', $room) }}" class="inline-flex items-center justify-center gap-1 rounded-lg border border-line px-2 py-1.5 text-xs font-bold text-slate-600 hover:bg-[#f0f0ec] hover:text-primary">
                                         <span class="material-symbols-outlined text-base">swap_horiz</span>
                                         Reassign
                                     </a>
@@ -1158,13 +1158,13 @@
                         <p class="mt-1 text-sm text-slate-500">Recent room updates are used as the housekeeping confirmation ledger until request records are separated into their own table.</p>
                     </div>
                     <div class="flex gap-2">
-                        <button type="button" class="rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">Export Billing CSV</button>
-                        <button type="button" class="rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">Columns</button>
+                        <button type="button" class="rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:bg-[#f0f0ec]">Export Billing CSV</button>
+                        <button type="button" class="rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:bg-[#f0f0ec]">Columns</button>
                     </div>
                 </div>
                 <div class="mt-4 overflow-x-auto">
                     <table class="w-full min-w-[820px] text-left text-sm">
-                        <thead class="bg-[#f0eee8] text-xs font-bold uppercase tracking-wider text-slate-600">
+                        <thead class="bg-[#ebebe7] text-xs font-bold uppercase tracking-wider text-slate-600">
                             <tr>
                                 <th class="px-4 py-3">Ticket / Room</th>
                                 <th class="px-3 py-3">Delivered Amenities</th>
@@ -1184,7 +1184,7 @@
                                     <td class="px-3 py-3">{{ $attendants[($loop->iteration - 1) % count($attendants)]['name'] }}</td>
                                     <td class="px-3 py-3">{{ optional($log->changed_at)->format('M d, h:i A') }}</td>
                                     <td class="px-4 py-3 text-right">
-                                        <a href="{{ $log->room ? route('rooms.show', $log->room) : route('housekeeping.page', 'notifications') }}" class="rounded-lg border border-line px-3 py-1.5 text-xs font-bold text-primary hover:bg-[#f6f3ed]">View</a>
+                                        <a href="{{ $log->room ? route('rooms.show', $log->room) : route('housekeeping.page', 'notifications') }}" class="rounded-lg border border-line px-3 py-1.5 text-xs font-bold text-primary hover:bg-[#f0f0ec]">View</a>
                                     </td>
                                 </tr>
                             @empty
@@ -1206,7 +1206,7 @@
                         button.addEventListener('click', () => {
                             const filter = button.dataset.filter;
                             filterButtons.forEach((item) => {
-                                item.className = 'guest-request-filter rounded-lg border border-line px-3 py-2 text-xs font-bold bg-white text-slate-600 hover:bg-[#f6f3ed]';
+                                item.className = 'guest-request-filter rounded-lg border border-line px-3 py-2 text-xs font-bold bg-white text-slate-600 hover:bg-[#f0f0ec]';
                             });
                             button.className = 'guest-request-filter rounded-lg border border-line px-3 py-2 text-xs font-bold bg-primary text-white';
                             cards.forEach((card) => {
@@ -1254,7 +1254,7 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <a href="{{ route('rooms.index', ['status' => 'maintenance']) }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-primary/90">
-                        <span class="material-symbols-outlined text-base text-[#ffdeaa]">add_circle</span>
+                        <span class="material-symbols-outlined text-base text-[#e8e8e4]">add_circle</span>
                         Schedule Specialized Treatment
                     </a>
                 </div>
@@ -1286,7 +1286,7 @@
                     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <div class="flex flex-wrap items-center gap-2">
                             <h3 class="font-serif text-2xl font-bold text-primary">Active Specialized Cleanings</h3>
-                            <span class="rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-[#ffdeaa]">Live Chamber Feeds</span>
+                            <span class="rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-[#e8e8e4]">Live Chamber Feeds</span>
                         </div>
                         <div class="flex flex-wrap gap-2 text-xs">
                             @foreach (['All Protocols', 'Ozone Only', 'Bio-Extract'] as $filter)
@@ -1305,7 +1305,7 @@
                             <div class="absolute left-0 right-0 top-0 h-1 {{ $protocol['accent'] }}"></div>
                             <div class="flex flex-col gap-4 border-b border-line pb-4 md:flex-row md:items-start md:justify-between">
                                 <div class="flex gap-3">
-                                    <div class="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-lg bg-primary text-[#ffdeaa] shadow-inner">
+                                    <div class="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-lg bg-primary text-[#e8e8e4] shadow-inner">
                                         <span class="text-[10px] font-bold uppercase">{{ $room->room_type === 'Suite' ? 'Suite' : 'Room' }}</span>
                                         <span class="font-bold leading-none">{{ $room->room_number }}</span>
                                     </div>
@@ -1327,17 +1327,17 @@
                             </div>
 
                             <div class="my-4 grid gap-3 md:grid-cols-3">
-                                <div class="rounded-lg border border-line bg-[#f6f3ed] p-3">
+                                <div class="rounded-lg border border-line bg-[#f0f0ec] p-3">
                                     <p class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500"><span class="material-symbols-outlined text-sm text-secondary">assignment_late</span>Remediation Trigger</p>
                                     <p class="mt-2 text-sm font-bold text-primary">{{ $protocol['trigger'] }}</p>
                                     <p class="mt-1 text-[11px] text-slate-500">Live room status: {{ ucfirst($room->status) }}</p>
                                 </div>
-                                <div class="rounded-lg border border-line bg-[#f6f3ed] p-3">
+                                <div class="rounded-lg border border-line bg-[#f0f0ec] p-3">
                                     <p class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500"><span class="material-symbols-outlined text-sm text-secondary">precision_manufacturing</span>Hardware Apparatus</p>
                                     <p class="mt-2 text-sm font-bold text-primary">{{ $protocol['apparatus'] }}</p>
                                     <p class="mt-1 text-[11px] text-emerald-700">Telemetry: output optimal</p>
                                 </div>
-                                <div class="rounded-lg border border-line bg-[#f6f3ed] p-3">
+                                <div class="rounded-lg border border-line bg-[#f0f0ec] p-3">
                                     <p class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500"><span class="material-symbols-outlined text-sm text-secondary">badge</span>Assigned Specialist</p>
                                     <p class="mt-2 text-sm font-bold text-primary">{{ $specialist }}</p>
                                     <p class="mt-1 text-[11px] text-slate-500">Certified deep-clean technician</p>
@@ -1380,7 +1380,7 @@
                                 ['name' => 'BioCide AllergenShield IV', 'meta' => 'Hypoallergenic misting agent', 'icon' => 'sanitizer'],
                                 ['name' => 'EcoGentle Upholstery Extract', 'meta' => 'pH 6.8 citrus formulation', 'icon' => 'water_drop'],
                             ] as $binder)
-                                <div class="flex items-center justify-between rounded-lg border border-line bg-[#f6f3ed] p-3">
+                                <div class="flex items-center justify-between rounded-lg border border-line bg-[#f0f0ec] p-3">
                                     <div class="flex items-center gap-2">
                                         <span class="material-symbols-outlined text-secondary">{{ $binder['icon'] }}</span>
                                         <div>
@@ -1402,7 +1402,7 @@
                                 ['item' => 'Chemical gloves available', 'state' => 'Passed'],
                                 ['item' => 'Air quality meter calibrated', 'state' => 'Due at shift end'],
                             ] as $ppe)
-                                <div class="flex items-center justify-between rounded-lg border border-line bg-[#fdfcfa] px-3 py-2 text-sm">
+                                <div class="flex items-center justify-between rounded-lg border border-line bg-[#fafaf8] px-3 py-2 text-sm">
                                     <span>{{ $ppe['item'] }}</span>
                                     <strong class="{{ $ppe['state'] === 'Passed' ? 'text-emerald-700' : 'text-secondary' }}">{{ $ppe['state'] }}</strong>
                                 </div>
@@ -1410,8 +1410,8 @@
                         </div>
                     </div>
 
-                    <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">sensors</span>Environmental Telemetry</h3>
+                    <div class="lc-flip rounded-lg bg-primary p-5 text-white shadow-sm">
+                        <h3 class="flex items-center gap-2 font-bold text-[#e8e8e4]"><span class="material-symbols-outlined">sensors</span>Environmental Telemetry</h3>
                         <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
                             <div class="rounded-lg bg-white/10 p-3">
                                 <p class="text-[11px] uppercase tracking-wider text-slate-300">Humidity</p>
@@ -1422,7 +1422,7 @@
                                 <p class="font-serif text-3xl font-bold">0.04</p>
                             </div>
                         </div>
-                        <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
+                        <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#2a2f37]">
                             <span class="material-symbols-outlined text-base">verified</span>
                             Open Final Inspection
                         </a>
@@ -1449,7 +1449,7 @@
             $engineers = ['Engr. Danilo Ramos', 'Engr. Patricia Velasco', 'Engr. Carlo Reyes'];
         @endphp
         <section class="space-y-6">
-            <div class="relative overflow-hidden rounded-lg border border-line bg-primary p-6 text-white shadow-sm">
+            <div class="lc-flip relative overflow-hidden rounded-lg border border-line bg-primary p-6 text-white shadow-sm">
                 <div class="absolute inset-y-0 left-0 w-1.5 bg-secondary"></div>
                 <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                     <div class="max-w-3xl space-y-2">
@@ -1465,10 +1465,10 @@
                     </div>
                     <div class="flex flex-wrap gap-3">
                         <a href="{{ route('housekeeping.page', 'room-status') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/15">
-                            <span class="material-symbols-outlined text-base text-[#ffdeaa]">grid_view</span>
+                            <span class="material-symbols-outlined text-base text-[#e8e8e4]">grid_view</span>
                             Open Room Status Matrix
                         </a>
-                        <a href="{{ route('housekeeping.page', 'report-issue') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#5b4313]">
+                        <a href="{{ route('housekeeping.page', 'report-issue') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#2a2f37]">
                             <span class="material-symbols-outlined text-base">assignment_add</span>
                             Report Defect / Work Order
                         </a>
@@ -1503,7 +1503,7 @@
             <div class="grid gap-6 xl:grid-cols-12">
                 <section class="space-y-4 xl:col-span-8">
                     <div class="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
-                        <div class="flex flex-col gap-3 border-b border-line bg-[#f6f3ed] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="flex flex-col gap-3 border-b border-line bg-[#f0f0ec] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
                             <div>
                                 <div class="flex flex-wrap items-center gap-2">
                                     <h3 class="font-serif text-2xl font-bold text-primary">Active Work Orders &amp; Defects</h3>
@@ -1529,7 +1529,7 @@
                                     $engineer = $engineers[($loop->iteration - 1) % count($engineers)];
                                     $isMaintenance = $room->status === 'maintenance';
                                     $isOccupied = $room->status === 'occupied';
-                                    $severityClass = $isMaintenance ? 'bg-red-700 text-white' : ($isOccupied ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-[#f6f3ed] text-secondary border border-line');
+                                    $severityClass = $isMaintenance ? 'bg-red-700 text-white' : ($isOccupied ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-[#f0f0ec] text-secondary border border-line');
                                     $severityText = $isMaintenance ? 'Urgent / OOO Frozen' : ($isOccupied ? 'High Priority Stayover' : 'Scheduled Maintenance');
                                     $accentClass = $isMaintenance ? 'bg-red-700' : ($isOccupied ? 'bg-amber-500' : 'bg-secondary');
                                     $ticketNumber = 'MNT-' . str_pad((string) (880 + $loop->iteration + (int) $room->id), 3, '0', STR_PAD_LEFT);
@@ -1567,11 +1567,11 @@
                                             </div>
                                         </div>
                                         <div class="flex shrink-0 flex-wrap gap-2 lg:flex-col">
-                                            <a href="{{ route('rooms.edit', $room) }}" class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-secondary px-3.5 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
+                                            <a href="{{ route('rooms.edit', $room) }}" class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-secondary px-3.5 py-2 text-xs font-bold text-white hover:bg-[#2a2f37]">
                                                 <span class="material-symbols-outlined text-sm">verified</span>
                                                 Verify &amp; Clear Room
                                             </a>
-                                            <a href="{{ route('housekeeping.page', 'report-issue') }}" class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-line bg-white px-3.5 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">
+                                            <a href="{{ route('housekeeping.page', 'report-issue') }}" class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-line bg-white px-3.5 py-2 text-xs font-bold text-primary hover:bg-[#f0f0ec]">
                                                 <span class="material-symbols-outlined text-sm text-secondary">sensors</span>
                                                 Add Engineering Note
                                             </a>
@@ -1617,7 +1617,7 @@
                                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Defect Category</span>
                                 <div class="mt-2 grid gap-2 sm:grid-cols-2">
                                     @foreach (['HVAC', 'Plumbing', 'Door Lock', 'Electrical'] as $category)
-                                        <label class="flex items-center gap-2 rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-sm font-semibold text-primary">
+                                        <label class="flex items-center gap-2 rounded-lg border border-line bg-[#f0f0ec] px-3 py-2 text-sm font-semibold text-primary">
                                             <input type="radio" name="category" class="border-line text-secondary focus:ring-secondary" @checked($loop->first)>
                                             {{ $category }}
                                         </label>
@@ -1644,25 +1644,25 @@
                         <p class="mt-2 text-sm leading-6 text-slate-500">The portal does not claim a radio or engineering staff connection. Reported room issues are saved in the shared room records and can be discussed through department messages.</p>
                         <div class="mt-4 grid gap-2">
                             <a href="{{ route('messages.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white hover:bg-primary/90">
-                                <span class="material-symbols-outlined text-base text-[#ffdeaa]">chat</span>
+                                <span class="material-symbols-outlined text-base text-[#e8e8e4]">chat</span>
                                 Open Department Messages
                             </a>
-                            <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-4 py-2.5 text-xs font-bold text-secondary hover:bg-[#ffdeaa]/20">
+                            <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-4 py-2.5 text-xs font-bold text-secondary hover:bg-[#e8e8e4]/20">
                                 <span class="material-symbols-outlined text-base">construction</span>
                                 View Reported Issues
                             </a>
                         </div>
                     </div>
 
-                    <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">query_stats</span>Facilities Snapshot</h3>
+                    <div class="lc-flip rounded-lg bg-primary p-5 text-white shadow-sm">
+                        <h3 class="flex items-center gap-2 font-bold text-[#e8e8e4]"><span class="material-symbols-outlined">query_stats</span>Facilities Snapshot</h3>
                         <div class="mt-4 space-y-3 text-sm">
                             <div class="flex justify-between border-b border-white/10 pb-2"><span>Total rooms</span><strong>{{ $totalRooms }}</strong></div>
                             <div class="flex justify-between border-b border-white/10 pb-2"><span>Maintenance queue</span><strong>{{ $maintenanceQueue->count() }}</strong></div>
                             <div class="flex justify-between border-b border-white/10 pb-2"><span>Cleaning queue</span><strong>{{ $cleaningRooms->count() }}</strong></div>
                             <div class="flex justify-between"><span>Priority rooms</span><strong>{{ $priorityRooms->count() }}</strong></div>
                         </div>
-                        <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#5b4313]">
+                        <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#2a2f37]">
                             <span class="material-symbols-outlined text-base">handyman</span>
                             View Reported Issues
                         </a>
@@ -1751,7 +1751,7 @@
                                 <label class="mb-2 block text-sm font-bold text-primary">Defect Primary Category <span class="text-red-700">*</span></label>
                                 <div class="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
                                     @foreach ($categories as $category)
-                                        <button type="button" class="issue-category group flex items-center gap-2.5 rounded-lg border p-3 text-left transition {{ $category['active'] ? 'border-secondary bg-[#ffdeaa]/25 shadow-sm' : 'border-line bg-[#f6f3ed] hover:border-secondary/60' }}">
+                                        <button type="button" class="issue-category group flex items-center gap-2.5 rounded-lg border p-3 text-left transition {{ $category['active'] ? 'border-secondary bg-[#e8e8e4]/25 shadow-sm' : 'border-line bg-[#f0f0ec] hover:border-secondary/60' }}">
                                             <span class="material-symbols-outlined {{ $category['active'] ? 'text-secondary' : 'text-slate-500 group-hover:text-secondary' }}">{{ $category['icon'] }}</span>
                                             <span>
                                                 <span class="block text-sm font-bold text-primary">{{ $category['label'] }}</span>
@@ -1775,7 +1775,7 @@
                                     @foreach ([
                                         ['value' => 'low', 'title' => 'Low Priority', 'tag' => 'Routine PM', 'copy' => 'Non-intrusive cosmetic or scheduled preventative maintenance.', 'class' => 'border-line bg-white'],
                                         ['value' => 'medium', 'title' => 'Medium Priority', 'tag' => 'Turnover Window', 'copy' => 'Rectify during room turnover before next guest arrival.', 'class' => 'border-line bg-white'],
-                                        ['value' => 'high', 'title' => 'High Priority', 'tag' => 'Guest In-House', 'copy' => 'Guest comfort impaired. Requires rapid dispatch.', 'class' => 'border-secondary bg-[#ffdeaa]/20'],
+                                        ['value' => 'high', 'title' => 'High Priority', 'tag' => 'Guest In-House', 'copy' => 'Guest comfort impaired. Requires rapid dispatch.', 'class' => 'border-secondary bg-[#e8e8e4]/20'],
                                         ['value' => 'critical', 'title' => 'Critical Emergency', 'tag' => 'Stop Sales', 'copy' => 'Water flood, fire safety, or major structural failure.', 'class' => 'border-red-300 bg-red-50'],
                                     ] as $severity)
                                         <label class="flex cursor-pointer items-start gap-3 rounded-lg border p-3.5 {{ $severity['class'] }}">
@@ -1783,7 +1783,7 @@
                                             <span>
                                                 <span class="flex items-center gap-2">
                                                     <span class="font-bold {{ $severity['value'] === 'critical' ? 'text-red-700' : 'text-primary' }}">{{ $severity['title'] }}</span>
-                                                    <span class="rounded bg-[#f0eee8] px-2 py-0.5 text-[10px] font-bold text-secondary">{{ $severity['tag'] }}</span>
+                                                    <span class="rounded bg-[#ebebe7] px-2 py-0.5 text-[10px] font-bold text-secondary">{{ $severity['tag'] }}</span>
                                                 </span>
                                                 <span class="mt-0.5 block text-xs text-slate-500">{{ $severity['copy'] }}</span>
                                             </span>
@@ -1805,7 +1805,7 @@
                                         'Bathroom vanity sink slow drain',
                                         'Keycard RFID reader blinking red',
                                     ] as $preset)
-                                        <button type="button" class="issue-preset rounded-full border border-line bg-[#f6f3ed] px-2.5 py-1 text-xs text-slate-600 hover:border-secondary hover:text-secondary" data-preset="{{ $preset }}">+ {{ $preset }}</button>
+                                        <button type="button" class="issue-preset rounded-full border border-line bg-[#f0f0ec] px-2.5 py-1 text-xs text-slate-600 hover:border-secondary hover:text-secondary" data-preset="{{ $preset }}">+ {{ $preset }}</button>
                                     @endforeach
                                 </div>
                                 <textarea id="defectDescription" name="description" rows="4" required class="w-full rounded-lg border-line bg-white p-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="Specify observations, readings, sounds, error codes, and guest interaction notes...">Maintenance issue reported by housekeeping: HVAC/climate defect affecting guest comfort. Please dispatch Engineering for inspection.</textarea>
@@ -1813,7 +1813,7 @@
 
                             <div class="mt-5">
                                 <label class="mb-1.5 block text-sm font-bold text-primary">Photo &amp; Evidence Documentation</label>
-                                <div class="rounded-lg border-2 border-dashed border-line bg-[#f6f3ed]/60 p-5 text-center">
+                                <div class="rounded-lg border-2 border-dashed border-line bg-[#f0f0ec]/60 p-5 text-center">
                                     <span class="material-symbols-outlined text-4xl text-secondary">add_photo_alternate</span>
                                     <p class="mt-2 font-bold text-primary">Drag inspection photos here, or browse local terminal</p>
                                     <p class="mt-1 text-xs text-slate-500">Evidence capture is represented here; image upload storage can be connected when file persistence is added.</p>
@@ -1827,7 +1827,7 @@
 
                         <section class="rounded-lg border border-line bg-white p-5 shadow-sm">
                             <h3 class="flex items-center gap-2 font-bold text-primary"><span class="material-symbols-outlined text-secondary">domain_verification</span>PMS Inventory Impact &amp; Protocol Enforcement</h3>
-                            <div class="mt-4 space-y-3 rounded-lg border border-line bg-[#f6f3ed]/70 p-4">
+                            <div class="mt-4 space-y-3 rounded-lg border border-line bg-[#f0f0ec]/70 p-4">
                                 @foreach ([
                                     ['label' => 'Take Room Out of Order immediately in Front Desk PMS', 'copy' => 'Freezes room inventory to prevent new arrivals until cleared.', 'checked' => true],
                                     ['label' => 'Require Supervisor Re-inspection before release', 'copy' => 'Engineering sign-off alone will not return room to inspected clean.', 'checked' => true],
@@ -1843,14 +1843,14 @@
                                 @endforeach
                             </div>
                             <div class="mt-5 flex flex-col gap-3 border-t border-line pt-4 sm:flex-row sm:items-center sm:justify-between">
-                                <a href="{{ route('housekeeping.page', 'maintenance-requests') }}" class="inline-flex justify-center rounded-lg border border-line px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-[#f6f3ed]">Cancel</a>
+                                <a href="{{ route('housekeeping.page', 'maintenance-requests') }}" class="inline-flex justify-center rounded-lg border border-line px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-[#f0f0ec]">Cancel</a>
                                 <div class="flex flex-col gap-2 sm:flex-row">
-                                    <button type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-5 py-2.5 text-sm font-bold text-secondary hover:bg-[#ffdeaa]/20">
+                                    <button type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-5 py-2.5 text-sm font-bold text-secondary hover:bg-[#e8e8e4]/20">
                                         <span class="material-symbols-outlined text-base">save</span>
                                         Save Draft Incident
                                     </button>
                                     <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-primary/90" {{ $selectedReportRoom ? '' : 'disabled' }}>
-                                        <span class="material-symbols-outlined text-base text-[#ffdeaa]">send</span>
+                                        <span class="material-symbols-outlined text-base text-[#e8e8e4]">send</span>
                                         Save Maintenance Report
                                     </button>
                                 </div>
@@ -1862,7 +1862,7 @@
                 <aside class="space-y-5 xl:col-span-4">
                     <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
                         <div class="flex items-start gap-3 border-b border-line pb-4">
-                            <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-[#ffdeaa]">
+                            <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-[#e8e8e4]">
                                 <span class="material-symbols-outlined">engineering</span>
                             </div>
                             <div>
@@ -1872,10 +1872,10 @@
                         </div>
                         <div class="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
                             <a href="{{ route('messages.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white hover:bg-primary/90">
-                                <span class="material-symbols-outlined text-base text-[#ffdeaa]">chat</span>
+                                <span class="material-symbols-outlined text-base text-[#e8e8e4]">chat</span>
                                 Open Department Messages
                             </a>
-                            <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-4 py-2.5 text-xs font-bold text-secondary hover:bg-[#ffdeaa]/20">
+                            <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-4 py-2.5 text-xs font-bold text-secondary hover:bg-[#e8e8e4]/20">
                                 <span class="material-symbols-outlined text-base">construction</span>
                                 View Reported Issues
                             </a>
@@ -1886,7 +1886,7 @@
                         <h3 class="flex items-center gap-2 font-bold text-primary"><span class="material-symbols-outlined text-secondary">history</span>Maintenance History</h3>
                         <div class="mt-4 space-y-3">
                             @forelse ($maintenanceQueue->take(4) as $room)
-                                <a href="{{ route('rooms.show', $room) }}" class="block rounded-lg border border-line bg-[#fdfcfa] p-3 hover:bg-[#f6f3ed]">
+                                <a href="{{ route('rooms.show', $room) }}" class="block rounded-lg border border-line bg-[#fafaf8] p-3 hover:bg-[#f0f0ec]">
                                     <div class="flex items-center justify-between">
                                         <span class="text-sm font-bold text-primary">Room {{ $room->room_number }}</span>
                                         <span class="rounded-full border px-2 py-0.5 text-[10px] font-bold {{ $statusTone[$room->status] ?? 'border-line' }}">{{ ucfirst($room->status) }}</span>
@@ -1894,19 +1894,19 @@
                                     <p class="mt-1 text-xs text-slate-500">{{ $room->description ?: 'Maintenance queue item awaiting engineering clearance.' }}</p>
                                 </a>
                             @empty
-                                <p class="rounded-lg border border-line bg-[#fdfcfa] p-4 text-sm text-slate-500">No active maintenance rooms yet. New work orders submitted here will appear in this queue.</p>
+                                <p class="rounded-lg border border-line bg-[#fafaf8] p-4 text-sm text-slate-500">No active maintenance rooms yet. New work orders submitted here will appear in this queue.</p>
                             @endforelse
                         </div>
                     </div>
 
-                    <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">analytics</span>Floor Maintenance Snapshot</h3>
+                    <div class="lc-flip rounded-lg bg-primary p-5 text-white shadow-sm">
+                        <h3 class="flex items-center gap-2 font-bold text-[#e8e8e4]"><span class="material-symbols-outlined">analytics</span>Floor Maintenance Snapshot</h3>
                         <div class="mt-4 space-y-3 text-sm">
                             <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Total rooms</span><strong>{{ $totalRooms }}</strong></div>
                             <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Maintenance queue</span><strong>{{ $maintenanceQueue->count() }}</strong></div>
                             <div class="flex justify-between"><span class="text-slate-300">Cleaning queue</span><strong>{{ $cleaningRooms->count() }}</strong></div>
                         </div>
-                        <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
+                        <a href="{{ route('housekeeping.page', 'reported-issues') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#2a2f37]">
                             <span class="material-symbols-outlined text-base">construction</span>
                             View Reported Issues
                         </a>
@@ -1943,9 +1943,9 @@
                     document.querySelectorAll('.issue-category').forEach((button) => {
                         button.addEventListener('click', () => {
                             document.querySelectorAll('.issue-category').forEach((item) => {
-                                item.className = 'issue-category group flex items-center gap-2.5 rounded-lg border border-line bg-[#f6f3ed] p-3 text-left transition hover:border-secondary/60';
+                                item.className = 'issue-category group flex items-center gap-2.5 rounded-lg border border-line bg-[#f0f0ec] p-3 text-left transition hover:border-secondary/60';
                             });
-                            button.className = 'issue-category group flex items-center gap-2.5 rounded-lg border border-secondary bg-[#ffdeaa]/25 p-3 text-left transition shadow-sm';
+                            button.className = 'issue-category group flex items-center gap-2.5 rounded-lg border border-secondary bg-[#e8e8e4]/25 p-3 text-left transition shadow-sm';
                         });
                     });
 
@@ -1965,7 +1965,7 @@
             $ticketStates = [
                 ['label' => 'Repaired - Pending HK Signoff', 'class' => 'bg-emerald-100 text-emerald-800', 'icon' => 'check_circle', 'priority' => 'Urgent Priority', 'priorityClass' => 'bg-red-100 text-red-800'],
                 ['label' => 'Technician Dispatched', 'class' => 'bg-blue-100 text-blue-900', 'icon' => 'directions_walk', 'priority' => 'High Priority', 'priorityClass' => 'bg-amber-100 text-amber-900'],
-                ['label' => 'Awaiting Replacement Part', 'class' => 'bg-[#ffdeaa] text-secondary', 'icon' => 'inventory_2', 'priority' => 'Standard Priority', 'priorityClass' => 'bg-stone-200 text-stone-800'],
+                ['label' => 'Awaiting Replacement Part', 'class' => 'bg-[#e8e8e4] text-secondary', 'icon' => 'inventory_2', 'priority' => 'Standard Priority', 'priorityClass' => 'bg-stone-200 text-stone-800'],
                 ['label' => 'Work Order Accepted', 'class' => 'bg-sky-100 text-sky-900', 'icon' => 'receipt', 'priority' => 'High Priority', 'priorityClass' => 'bg-amber-100 text-amber-900'],
             ];
             $defects = [
@@ -1990,12 +1990,12 @@
                     <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Tracking status, engineering progress, technician dispatch, and return-to-service sign-offs for rooms currently marked for maintenance.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary hover:bg-[#f6f3ed]">
+                    <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary hover:bg-[#f0f0ec]">
                         <span class="material-symbols-outlined text-base">file_download</span>
                         Export Maintenance CSV
                     </button>
                     <a href="{{ route('housekeeping.page', 'report-issue') }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-primary/90">
-                        <span class="material-symbols-outlined text-base text-[#ffdeaa]">add</span>
+                        <span class="material-symbols-outlined text-base text-[#e8e8e4]">add</span>
                         New Maintenance Ticket
                     </a>
                 </div>
@@ -2012,7 +2012,7 @@
                         <span class="material-symbols-outlined absolute -bottom-3 -right-3 text-7xl text-slate-100">{{ $metric['icon'] }}</span>
                         <div class="relative flex items-center justify-between">
                             <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">{{ $metric['label'] }}</p>
-                            <span class="rounded-full bg-[#f6f3ed] px-2 py-0.5 text-[10px] font-bold text-secondary">{{ $metric['badge'] }}</span>
+                            <span class="rounded-full bg-[#f0f0ec] px-2 py-0.5 text-[10px] font-bold text-secondary">{{ $metric['badge'] }}</span>
                         </div>
                         <div class="relative mt-3 flex items-baseline gap-2">
                             <span class="font-serif text-3xl font-bold {{ $metric['tone'] }}">{{ $metric['value'] }}</span>
@@ -2031,19 +2031,19 @@
                         ['Awaiting Parts', $reportedIssueRooms->count() > 0 ? 1 : 0],
                         ['Ready for Verification', $reportedIssueRooms->count() > 0 ? 1 : 0],
                     ] as [$label, $count])
-                        <button type="button" class="{{ $loop->first ? 'bg-primary text-white' : 'bg-[#f6f3ed] text-primary hover:bg-line' }} inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-bold">
+                        <button type="button" class="{{ $loop->first ? 'bg-primary text-white' : 'bg-[#f0f0ec] text-primary hover:bg-line' }} inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-bold">
                             {{ $label }}
-                            <span class="{{ $loop->first ? 'bg-[#ffdeaa] text-primary' : 'bg-white text-slate-600' }} rounded px-1.5 py-0.5 text-[10px]">{{ $count }}</span>
+                            <span class="{{ $loop->first ? 'bg-[#e8e8e4] text-primary' : 'bg-white text-slate-600' }} rounded px-1.5 py-0.5 text-[10px]">{{ $count }}</span>
                         </button>
                     @endforeach
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <select class="rounded-lg border-line bg-[#f6f3ed] text-xs font-bold text-primary focus:border-secondary focus:ring-secondary">
+                    <select class="rounded-lg border-line bg-[#f0f0ec] text-xs font-bold text-primary focus:border-secondary focus:ring-secondary">
                         <option>All Resort Wings</option>
                         <option>Main Wing</option>
                         <option>Ocean Wing</option>
                     </select>
-                    <select class="rounded-lg border-line bg-[#f6f3ed] text-xs font-bold text-primary focus:border-secondary focus:ring-secondary">
+                    <select class="rounded-lg border-line bg-[#f0f0ec] text-xs font-bold text-primary focus:border-secondary focus:ring-secondary">
                         <option>Severity: All Priorities</option>
                         <option>Urgent / Critical</option>
                         <option>High Priority</option>
@@ -2076,7 +2076,7 @@
                                 <span class="text-xs text-slate-500">Reported {{ $loop->iteration * 18 }}m ago</span>
                             </div>
 
-                            <div class="mt-4 rounded-lg border border-line bg-[#f6f3ed] p-3">
+                            <div class="mt-4 rounded-lg border border-line bg-[#f0f0ec] p-3">
                                 <div class="mb-1 flex items-center gap-2 text-xs font-bold text-primary">
                                     <span class="material-symbols-outlined text-base text-secondary">{{ $defect['icon'] }}</span>
                                     <span>Reported Defect: {{ $defect['title'] }}</span>
@@ -2118,7 +2118,7 @@
                                             Verify &amp; Clear Room
                                         </button>
                                     </form>
-                                    <a href="{{ route('rooms.show', $room) }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-[#f6f3ed] px-3.5 py-1.5 text-xs font-bold text-primary hover:bg-line">
+                                    <a href="{{ route('rooms.show', $room) }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-[#f0f0ec] px-3.5 py-1.5 text-xs font-bold text-primary hover:bg-line">
                                         <span class="material-symbols-outlined text-base text-secondary">visibility</span>
                                         View Details
                                     </a>
@@ -2132,7 +2132,7 @@
                             <h4 class="mt-3 font-serif text-2xl font-bold text-primary">No reported issues open</h4>
                             <p class="mt-1 text-sm text-slate-500">Rooms submitted from Report Issue will appear here once marked for maintenance.</p>
                             <a href="{{ route('housekeeping.page', 'report-issue') }}" class="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary/90">
-                                <span class="material-symbols-outlined text-base text-[#ffdeaa]">add</span>
+                                <span class="material-symbols-outlined text-base text-[#e8e8e4]">add</span>
                                 New Maintenance Ticket
                             </a>
                         </div>
@@ -2155,7 +2155,7 @@
                             <div class="grid grid-cols-4 gap-2 text-center text-[10px] font-bold text-slate-500">
                                 @foreach ([['Reported', true], ['Dispatched', true], ['Repaired', $selectedIssueRoom !== null], ['Verified', false]] as [$step, $done])
                                     <div>
-                                        <div class="{{ $done ? 'bg-secondary text-white' : 'bg-[#f0eee8] text-slate-400' }} mx-auto flex h-9 w-9 items-center justify-center rounded-full">
+                                        <div class="{{ $done ? 'bg-secondary text-white' : 'bg-[#ebebe7] text-slate-400' }} mx-auto flex h-9 w-9 items-center justify-center rounded-full">
                                             <span class="material-symbols-outlined text-base">{{ $done ? 'done' : 'radio_button_unchecked' }}</span>
                                         </div>
                                         <span class="mt-1 block">{{ $step }}</span>
@@ -2164,7 +2164,7 @@
                             </div>
                         </div>
 
-                        <div class="mt-5 rounded-lg border border-line bg-[#f6f3ed] p-4">
+                        <div class="mt-5 rounded-lg border border-line bg-[#f0f0ec] p-4">
                             <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Dispatch &amp; Repair Timeline</p>
                             <div class="mt-3 space-y-3">
                                 @foreach ([
@@ -2184,8 +2184,8 @@
                         </div>
                     </div>
 
-                    <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">bolt</span>Engineering Response SLA</h3>
+                    <div class="lc-flip rounded-lg bg-primary p-5 text-white shadow-sm">
+                        <h3 class="flex items-center gap-2 font-bold text-[#e8e8e4]"><span class="material-symbols-outlined">bolt</span>Engineering Response SLA</h3>
                         <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
                             <div class="rounded-lg bg-white/10 p-3">
                                 <p class="text-[11px] uppercase tracking-wider text-slate-300">Open</p>
@@ -2196,7 +2196,7 @@
                                 <p class="font-serif text-3xl font-bold">{{ $reportedIssueRooms->count() }}</p>
                             </div>
                         </div>
-                        <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
+                        <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#2a2f37]">
                             <span class="material-symbols-outlined text-base">fact_check</span>
                             Open HK Verification Queue
                         </a>
@@ -2245,7 +2245,7 @@
                             Generate Custom Report
                         </button>
                         <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90">
-                            <span class="material-symbols-outlined text-base text-[#ffdeaa]">download</span>
+                            <span class="material-symbols-outlined text-base text-[#e8e8e4]">download</span>
                             Export Departmental Dossier
                         </button>
                     </div>
@@ -2259,7 +2259,7 @@
                         <span class="font-serif text-3xl font-bold text-primary">{{ $qaYield }}%</span>
                         <span class="text-xs font-bold text-secondary">5-Star Standard</span>
                     </div>
-                    <div class="mt-4 h-1.5 rounded-full bg-[#f0eee8]"><div class="h-full rounded-full bg-secondary" style="width: {{ $qaYield }}%"></div></div>
+                    <div class="mt-4 h-1.5 rounded-full bg-[#ebebe7]"><div class="h-full rounded-full bg-secondary" style="width: {{ $qaYield }}%"></div></div>
                 </div>
                 <div class="rounded-lg border border-line bg-white p-5 shadow-sm">
                     <p class="text-sm text-slate-500">VIP Rush SLA Compliance</p>
@@ -2295,11 +2295,11 @@
                                 <h3 class="font-serif text-2xl font-bold text-primary">Operational Exception Intelligence</h3>
                                 <p class="mt-1 text-sm text-slate-500">Housekeeping exceptions grouped for daily stand-up review.</p>
                             </div>
-                            <span class="rounded-full bg-[#f6f3ed] px-3 py-1 text-xs font-bold text-secondary">{{ collect($issueInsights)->sum('value') }} report signals</span>
+                            <span class="rounded-full bg-[#f0f0ec] px-3 py-1 text-xs font-bold text-secondary">{{ collect($issueInsights)->sum('value') }} report signals</span>
                         </div>
                         <div class="mt-4 grid gap-3 md:grid-cols-3">
                             @foreach ($issueInsights as $insight)
-                                <div class="rounded-lg border border-line bg-[#fdfcfa] p-4">
+                                <div class="rounded-lg border border-line bg-[#fafaf8] p-4">
                                     <div class="flex items-start justify-between gap-3">
                                         <div>
                                             <p class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ $insight['label'] }}</p>
@@ -2326,7 +2326,7 @@
                         </div>
                         <div class="overflow-x-auto">
                             <table class="min-w-full text-left text-sm">
-                                <thead class="bg-[#f0eee8] text-xs uppercase tracking-wider text-slate-600">
+                                <thead class="bg-[#ebebe7] text-xs uppercase tracking-wider text-slate-600">
                                     <tr>
                                         <th class="px-5 py-3">Attendant / Zone</th>
                                         <th class="px-5 py-3">Rooms Completed</th>
@@ -2359,9 +2359,9 @@
                         @foreach ($reportCards as $card)
                             <article class="rounded-lg border border-line bg-white p-5 shadow-sm transition hover:border-secondary">
                                 <div class="flex items-start gap-4">
-                                    <span class="material-symbols-outlined flex h-12 w-12 shrink-0 items-center justify-center rounded-lg {{ $card['tone'] === 'red' ? 'bg-red-50 text-red-700' : 'bg-[#ffdeaa]/40 text-secondary' }}">{{ $card['icon'] }}</span>
+                                    <span class="material-symbols-outlined flex h-12 w-12 shrink-0 items-center justify-center rounded-lg {{ $card['tone'] === 'red' ? 'bg-red-50 text-red-700' : 'bg-[#e8e8e4]/40 text-secondary' }}">{{ $card['icon'] }}</span>
                                     <div>
-                                        <span class="inline-block rounded bg-[#f6f3ed] px-2 py-0.5 text-xs font-bold text-slate-600">{{ $card['badge'] }}</span>
+                                        <span class="inline-block rounded bg-[#f0f0ec] px-2 py-0.5 text-xs font-bold text-slate-600">{{ $card['badge'] }}</span>
                                         <h4 class="mt-2 font-bold text-primary">{{ $card['title'] }}</h4>
                                         <p class="mt-2 text-sm leading-5 text-slate-600">{{ $card['body'] }}</p>
                                     </div>
@@ -2382,7 +2382,7 @@
                                 <p class="text-xs font-bold uppercase tracking-[0.18em] text-secondary">Report Console</p>
                                 <h3 class="mt-1 font-serif text-2xl font-bold text-primary">Custom Report Builder</h3>
                             </div>
-                            <span class="material-symbols-outlined rounded-lg bg-[#f6f3ed] p-2 text-secondary">summarize</span>
+                            <span class="material-symbols-outlined rounded-lg bg-[#f0f0ec] p-2 text-secondary">summarize</span>
                         </div>
                         <form class="mt-5 space-y-4" onsubmit="event.preventDefault();">
                             <div>
@@ -2405,13 +2405,13 @@
                                 </div>
                             </div>
                             <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90">
-                                <span class="material-symbols-outlined text-base text-[#ffdeaa]">analytics</span>
+                                <span class="material-symbols-outlined text-base text-[#e8e8e4]">analytics</span>
                                 Generate Report Preview
                             </button>
                         </form>
                     </div>
 
-                    <div class="rounded-lg border border-line bg-[#f6f3ed] p-5">
+                    <div class="rounded-lg border border-line bg-[#f0f0ec] p-5">
                         <h3 class="flex items-center gap-2 font-bold text-primary">
                             <span class="material-symbols-outlined text-secondary">shield</span>
                             Compliance Snapshot
@@ -2442,11 +2442,11 @@
         @endphp
 
         <section class="space-y-6">
-            <div class="relative overflow-hidden rounded-2xl border border-[#172b42]/40 bg-gradient-to-r from-primary via-[#172b42] to-primary p-7 text-white shadow-xl">
-                <div class="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#ffdeaa]/10 blur-3xl"></div>
+            <div class="lc-flip relative overflow-hidden rounded-2xl border border-[#2a2f37]/40 bg-gradient-to-r from-primary via-[#2a2f37] to-primary p-7 text-white shadow-xl">
+                <div class="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#e8e8e4]/10 blur-3xl"></div>
                 <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
                     <div class="max-w-3xl">
-                        <div class="inline-flex items-center gap-2 rounded-full border border-[#ffdeaa]/40 bg-[#ffdeaa]/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[#ffdeaa]">
+                        <div class="inline-flex items-center gap-2 rounded-full border border-[#e8e8e4]/40 bg-[#e8e8e4]/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[#e8e8e4]">
                             <span class="material-symbols-outlined text-sm">done_all</span>
                             Housekeeping Tasks &amp; Turnover Workspace
                         </div>
@@ -2456,17 +2456,17 @@
                         </p>
                     </div>
                     <div class="flex flex-wrap gap-3">
-                        <select class="rounded-lg border border-white/20 bg-[#172b42] px-3 py-2.5 text-xs font-bold text-white focus:border-[#ffdeaa] focus:ring-[#ffdeaa]">
+                        <select class="rounded-lg border border-white/20 bg-[#2a2f37] px-3 py-2.5 text-xs font-bold text-white focus:border-[#e8e8e4] focus:ring-[#e8e8e4]">
                             <option>All Wings ({{ $totalRooms }} Units)</option>
                             <option>Main Wing</option>
                             <option>Ocean Wing</option>
                             <option>Villa Sector</option>
                         </select>
-                        <a href="{{ route('rooms.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-bold text-white transition hover:border-[#ffdeaa]/60 hover:bg-white/15">
-                            <span class="material-symbols-outlined text-base text-[#ffdeaa]">dashboard</span>
+                        <a href="{{ route('rooms.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-bold text-white transition hover:border-[#e8e8e4]/60 hover:bg-white/15">
+                            <span class="material-symbols-outlined text-base text-[#e8e8e4]">dashboard</span>
                             Open Room Status
                         </a>
-                        <a href="{{ route('housekeeping.page', 'priority-rooms') }}" class="inline-flex items-center gap-2 rounded-lg bg-[#ffdeaa] px-4 py-2.5 text-xs font-extrabold text-primary shadow-lg transition hover:bg-[#e6c185]">
+                        <a href="{{ route('housekeeping.page', 'priority-rooms') }}" class="inline-flex items-center gap-2 rounded-lg bg-[#e8e8e4] px-4 py-2.5 text-xs font-extrabold text-primary shadow-lg transition hover:bg-[#d3d3cd]">
                             <span class="material-symbols-outlined text-base">add_circle</span>
                             Dispatch Urgent Turnover
                         </a>
@@ -2485,10 +2485,10 @@
                     <div class="rounded-xl border border-line bg-white p-5 shadow-sm transition hover:shadow-md">
                         <div class="flex items-start justify-between">
                             <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">{{ $metric['label'] }}</p>
-                            <span class="material-symbols-outlined rounded-lg bg-[#f6f3ed] p-2 {{ $metric['tone'] }}">{{ $metric['icon'] }}</span>
+                            <span class="material-symbols-outlined rounded-lg bg-[#f0f0ec] p-2 {{ $metric['tone'] }}">{{ $metric['icon'] }}</span>
                         </div>
                         <p class="mt-4 font-serif text-3xl font-bold {{ $metric['tone'] }}">{{ $metric['value'] }}</p>
-                        <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-[#f0eee8]">
+                        <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-[#ebebe7]">
                             <div class="h-full rounded-full {{ $metric['bar'] }}" style="width: {{ min(100, $metric['percent']) }}%"></div>
                         </div>
                         <p class="mt-2 text-xs font-semibold text-slate-500">{{ $metric['caption'] }}</p>
@@ -2500,11 +2500,11 @@
                 <section class="space-y-4 xl:col-span-8">
                     <div class="rounded-xl border border-line bg-white p-4 shadow-sm">
                         <div class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
-                            <div class="flex flex-wrap items-center gap-2 rounded-lg border border-line bg-[#f6f3ed] p-1">
+                            <div class="flex flex-wrap items-center gap-2 rounded-lg border border-line bg-[#f0f0ec] p-1">
                                 <a href="{{ route('housekeeping.page', 'cleaning-tasks') }}" class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-xs font-bold text-white shadow-sm">
-                                    <span class="material-symbols-outlined text-base text-[#ffdeaa]">local_fire_department</span>
+                                    <span class="material-symbols-outlined text-base text-[#e8e8e4]">local_fire_department</span>
                                     Active Cleaning Tasks
-                                    <span class="rounded-full bg-[#ffdeaa] px-1.5 text-[10px] text-primary">{{ $cleaningRooms->count() }}</span>
+                                    <span class="rounded-full bg-[#e8e8e4] px-1.5 text-[10px] text-primary">{{ $cleaningRooms->count() }}</span>
                                 </a>
                                 <a href="{{ route('housekeeping.page', 'priority-rooms') }}" class="inline-flex items-center gap-2 rounded-md px-4 py-2 text-xs font-bold text-slate-600 hover:bg-white">
                                     <span class="material-symbols-outlined text-base text-amber-600">stars</span>
@@ -2522,7 +2522,7 @@
                                     <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base text-slate-400">search</span>
                                     <input type="search" placeholder="Search room, attendant..." class="w-56 rounded-lg border-line py-2 pl-9 text-xs focus:border-secondary focus:ring-secondary">
                                 </label>
-                                <button type="button" class="rounded-lg border border-line bg-[#f6f3ed] p-2 text-slate-600 hover:bg-line" title="Filter Options">
+                                <button type="button" class="rounded-lg border border-line bg-[#f0f0ec] p-2 text-slate-600 hover:bg-line" title="Filter Options">
                                     <span class="material-symbols-outlined text-lg">tune</span>
                                 </button>
                             </div>
@@ -2560,7 +2560,7 @@
                                             <p class="mt-0.5 text-xs text-slate-500">{{ $room->capacity }} guests capacity - PHP {{ number_format($room->rate, 2) }} room class</p>
                                         </div>
                                     </div>
-                                    <div class="rounded-lg border border-line bg-[#f6f3ed] px-3 py-2">
+                                    <div class="rounded-lg border border-line bg-[#f0f0ec] px-3 py-2">
                                         <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">SLA Pacing</p>
                                         <p class="font-mono text-xs font-bold text-primary">{{ $room->status === 'maintenance' ? 'Engineering response' : '32m target turnover' }}</p>
                                     </div>
@@ -2568,7 +2568,7 @@
                                 <div class="grid gap-4 pt-4 md:grid-cols-12 md:items-center">
                                     <div class="flex items-center gap-3 md:col-span-4">
                                         <div class="relative">
-                                            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-[#f0eee8] text-xs font-bold text-primary ring-2 ring-line">{{ $attendant['initials'] }}</div>
+                                            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-[#ebebe7] text-xs font-bold text-primary ring-2 ring-line">{{ $attendant['initials'] }}</div>
                                             <span class="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
                                         </div>
                                         <div>
@@ -2581,15 +2581,15 @@
                                             <span class="text-slate-600">{{ $room->status === 'maintenance' ? 'Repair triage & room hold' : 'Sanitization & linen reset' }}</span>
                                             <span class="font-mono text-secondary">{{ $progress }}%</span>
                                         </div>
-                                        <div class="h-2 overflow-hidden rounded-full bg-[#f0eee8]">
+                                        <div class="h-2 overflow-hidden rounded-full bg-[#ebebe7]">
                                             <div class="h-full rounded-full {{ $barClass }}" style="width: {{ $progress }}%"></div>
                                         </div>
                                         <p class="text-[10px] text-slate-400">{{ $room->status === 'maintenance' ? 'Awaiting engineering clearance' : 'Checklist pacing is actively monitored' }}</p>
                                     </div>
                                     <div class="flex justify-end gap-2 md:col-span-4">
-                                        <a href="{{ route('rooms.edit', $room) }}" class="rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-xs font-bold text-primary hover:bg-line">Audit QA</a>
+                                        <a href="{{ route('rooms.edit', $room) }}" class="rounded-lg border border-line bg-[#f0f0ec] px-3 py-2 text-xs font-bold text-primary hover:bg-line">Audit QA</a>
                                         <a href="{{ route('rooms.show', $room) }}" class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-white hover:bg-primary/90">
-                                            <span class="material-symbols-outlined text-sm text-[#ffdeaa]">check</span>
+                                            <span class="material-symbols-outlined text-sm text-[#e8e8e4]">check</span>
                                             Verify &amp; Release
                                         </a>
                                     </div>
@@ -2614,7 +2614,7 @@
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full min-w-[680px] text-left text-xs">
-                                <thead class="border-b border-line bg-[#f6f3ed] text-[10px] uppercase tracking-wider text-slate-500">
+                                <thead class="border-b border-line bg-[#f0f0ec] text-[10px] uppercase tracking-wider text-slate-500">
                                     <tr>
                                         <th class="px-3 py-2.5">Room Key</th>
                                         <th class="px-3 py-2.5">Task Scope</th>
@@ -2654,9 +2654,9 @@
                         </div>
                         <div class="mt-4 space-y-3">
                             @foreach ($attendants as $attendant)
-                                <div class="flex items-center justify-between rounded-lg border border-line bg-[#f6f3ed] p-3">
+                                <div class="flex items-center justify-between rounded-lg border border-line bg-[#f0f0ec] p-3">
                                     <div class="flex items-center gap-3">
-                                        <div class="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-bold text-[#ffdeaa]">{{ $attendant['initials'] }}</div>
+                                        <div class="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-bold text-[#e8e8e4]">{{ $attendant['initials'] }}</div>
                                         <div>
                                             <p class="text-xs font-bold text-primary">{{ $attendant['name'] }}</p>
                                             <p class="text-[10px] text-slate-500">{{ $attendant['zone'] }}</p>
@@ -2671,8 +2671,8 @@
                         </div>
                     </div>
 
-                    <div class="rounded-xl border border-line bg-primary p-5 text-white shadow-sm">
-                        <h4 class="flex items-center gap-2 text-sm font-bold text-[#ffdeaa]">
+                    <div class="lc-flip rounded-xl border border-line bg-primary p-5 text-white shadow-sm">
+                        <h4 class="flex items-center gap-2 text-sm font-bold text-[#e8e8e4]">
                             <span class="material-symbols-outlined">sensors</span>
                             Live Operations Telemetry
                         </h4>
@@ -2729,16 +2729,16 @@
                         <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Guest service dispatches, amenity drop-offs, and specialized turn-down items handled by housekeeping.</p>
                     </div>
                     <div class="flex flex-wrap gap-3">
-                        <a href="{{ route('rooms.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-line bg-[#f6f3ed] px-4 py-2.5 text-sm font-bold text-primary shadow-sm hover:bg-line">
+                        <a href="{{ route('rooms.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-line bg-[#f0f0ec] px-4 py-2.5 text-sm font-bold text-primary shadow-sm hover:bg-line">
                             <span class="material-symbols-outlined text-base text-secondary">grid_view</span>
                             Open Room Status Matrix
                         </a>
-                        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-bold text-slate-600 shadow-sm hover:bg-[#f6f3ed]">
+                        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-bold text-slate-600 shadow-sm hover:bg-[#f0f0ec]">
                             <span class="material-symbols-outlined text-base">file_download</span>
                             Export Log
                         </button>
                         <a href="{{ route('housekeeping.page', 'guest-requests') }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90">
-                            <span class="material-symbols-outlined text-base text-[#ffdeaa]">add</span>
+                            <span class="material-symbols-outlined text-base text-[#e8e8e4]">add</span>
                             Log New Service Request
                         </a>
                     </div>
@@ -2767,9 +2767,9 @@
 
             <div class="grid gap-6 xl:grid-cols-3">
                 <section class="overflow-hidden rounded-xl border border-line bg-white shadow-sm xl:col-span-2">
-                    <div class="flex flex-col justify-between gap-3 border-b border-line bg-[#f6f3ed] p-4 md:flex-row md:items-center">
+                    <div class="flex flex-col justify-between gap-3 border-b border-line bg-[#f0f0ec] p-4 md:flex-row md:items-center">
                         <div class="flex items-center gap-3">
-                            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-[#ffdeaa]">
+                            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-[#e8e8e4]">
                                 <span class="material-symbols-outlined text-lg">room_service</span>
                             </div>
                             <div>
@@ -2789,11 +2789,11 @@
                                 $isUrgent = $loop->first;
                                 $attendant = $attendants[$loop->index % count($attendants)];
                             @endphp
-                            <article class="rounded-lg border p-4 shadow-sm transition hover:border-secondary {{ $isUrgent ? 'border-amber-300 bg-amber-50/30' : 'border-line bg-[#f6f3ed]/40' }}">
+                            <article class="rounded-lg border p-4 shadow-sm transition hover:border-secondary {{ $isUrgent ? 'border-amber-300 bg-amber-50/30' : 'border-line bg-[#f0f0ec]/40' }}">
                                 <div class="flex flex-col justify-between gap-3 md:flex-row md:items-start">
                                     <div class="flex items-start gap-3">
                                         <div class="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-lg border border-secondary/30 bg-primary text-white shadow-sm">
-                                            <span class="text-[9px] font-semibold uppercase tracking-wider text-[#ffdeaa]">Room</span>
+                                            <span class="text-[9px] font-semibold uppercase tracking-wider text-[#e8e8e4]">Room</span>
                                             <span class="font-serif text-xl font-bold leading-none">{{ $room->room_number }}</span>
                                         </div>
                                         <div>
@@ -2819,7 +2819,7 @@
                                             <span class="material-symbols-outlined text-sm">check_circle</span>
                                             {{ $isUrgent ? 'Mark Delivered' : 'Verify Placement' }}
                                         </button>
-                                        <button type="button" class="inline-flex items-center gap-1 rounded border border-line bg-white px-3 py-1.5 text-xs font-bold text-primary hover:bg-[#f6f3ed]">
+                                        <button type="button" class="inline-flex items-center gap-1 rounded border border-line bg-white px-3 py-1.5 text-xs font-bold text-primary hover:bg-[#f0f0ec]">
                                             <span class="material-symbols-outlined text-sm text-secondary">radio</span>
                                             Call Radio
                                         </button>
@@ -2828,14 +2828,14 @@
                             </article>
                         @endforeach
                     </div>
-                    <div class="flex items-center justify-between border-t border-line bg-[#f6f3ed] px-4 py-3 text-xs text-slate-500">
+                    <div class="flex items-center justify-between border-t border-line bg-[#f0f0ec] px-4 py-3 text-xs text-slate-500">
                         <span>{{ max(2, $activeRequests) }} dispatches logged today - 100% on-time turnaround rate</span>
                         <a href="{{ route('housekeeping.page', 'guest-requests') }}" class="font-bold text-secondary hover:underline">View Past 24h Delivered Guest Bill</a>
                     </div>
                 </section>
 
                 <section class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
-                    <div class="flex items-center justify-between border-b border-line bg-[#f6f3ed] p-4">
+                    <div class="flex items-center justify-between border-b border-line bg-[#f0f0ec] p-4">
                         <div class="flex items-center gap-3">
                             <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary/20 text-secondary">
                                 <span class="material-symbols-outlined text-lg">sanitizer</span>
@@ -2850,7 +2850,7 @@
                     <div class="flex h-full flex-col justify-between space-y-3.5 p-4">
                         <div class="space-y-3">
                             @foreach ($specialRooms as $room)
-                                <div class="rounded-lg border border-line bg-[#f6f3ed]/50 p-4 transition hover:border-secondary">
+                                <div class="rounded-lg border border-line bg-[#f0f0ec]/50 p-4 transition hover:border-secondary">
                                     <div class="flex items-start justify-between gap-2">
                                         <div class="flex items-center gap-2">
                                             <span class="h-2 w-2 rounded-full {{ $loop->first ? 'bg-blue-500' : 'bg-emerald-500' }}"></span>
@@ -2884,9 +2884,9 @@
             </div>
 
             <section class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
-                <div class="flex flex-col justify-between gap-3 border-b border-line bg-[#f6f3ed] p-4 sm:flex-row sm:items-center">
+                <div class="flex flex-col justify-between gap-3 border-b border-line bg-[#f0f0ec] p-4 sm:flex-row sm:items-center">
                     <div class="flex items-center gap-3">
-                        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-[#ffdeaa]">
+                        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-[#e8e8e4]">
                             <span class="material-symbols-outlined text-lg">hotel</span>
                         </div>
                         <div>
@@ -2905,13 +2905,13 @@
                             $isLiveRequest = $guestRequestRooms->contains('id', $room->id);
                             $statusClass = match ($room->status) {
                                 'available' => 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200',
-                                'occupied' => 'bg-primary text-[#ffdeaa] ring-1 ring-secondary/30',
+                                'occupied' => 'bg-primary text-[#e8e8e4] ring-1 ring-secondary/30',
                                 'cleaning' => 'bg-amber-100 text-amber-900 ring-1 ring-amber-200',
                                 'maintenance' => 'bg-red-100 text-red-800 ring-1 ring-red-200',
                                 default => 'bg-slate-100 text-slate-700',
                             };
                         @endphp
-                        <div class="flex min-h-52 flex-col justify-between space-y-3 p-4 transition hover:bg-[#f6f3ed]/50 {{ $isLiveRequest ? 'bg-amber-50/40' : '' }}">
+                        <div class="flex min-h-52 flex-col justify-between space-y-3 p-4 transition hover:bg-[#f0f0ec]/50 {{ $isLiveRequest ? 'bg-amber-50/40' : '' }}">
                             <div>
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="font-serif text-xl font-bold text-primary">Room {{ $room->room_number }}</span>
@@ -2958,12 +2958,12 @@
                     <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Historical log of certified room sanitizations, completion timestamps, supervisor sign-offs, and PMS release records from real room status activity.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-xs font-bold text-primary shadow-sm hover:bg-[#f6f3ed]">
+                    <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-xs font-bold text-primary shadow-sm hover:bg-[#f0f0ec]">
                         <span class="material-symbols-outlined text-base text-secondary">print</span>
                         Print Physical Ledger
                     </button>
                     <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-primary/90">
-                        <span class="material-symbols-outlined text-base text-[#ffdeaa]">file_download</span>
+                        <span class="material-symbols-outlined text-base text-[#e8e8e4]">file_download</span>
                         Export Shift Turnover Ledger
                     </button>
                 </div>
@@ -2973,7 +2973,7 @@
                 <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
                     <div>
                         <label class="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">Hotel Wing</label>
-                        <select class="w-full rounded-lg border-line bg-[#f6f3ed] text-sm focus:border-secondary focus:ring-secondary">
+                        <select class="w-full rounded-lg border-line bg-[#f0f0ec] text-sm focus:border-secondary focus:ring-secondary">
                             <option>All Wings</option>
                             <option>Main Wing</option>
                             <option>Ocean Wing</option>
@@ -2982,7 +2982,7 @@
                     </div>
                     <div>
                         <label class="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">Shift Schedule</label>
-                        <select class="w-full rounded-lg border-secondary bg-[#f6f3ed] text-sm focus:border-secondary focus:ring-secondary">
+                        <select class="w-full rounded-lg border-secondary bg-[#f0f0ec] text-sm focus:border-secondary focus:ring-secondary">
                             <option>Shift 1 Today: 06:00 - 14:30</option>
                             <option>Shift 2: 14:00 - 22:30</option>
                             <option>Shift 3: 22:00 - 06:30</option>
@@ -2990,7 +2990,7 @@
                     </div>
                     <div>
                         <label class="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">Attendant Filter</label>
-                        <select class="w-full rounded-lg border-line bg-[#f6f3ed] text-sm focus:border-secondary focus:ring-secondary">
+                        <select class="w-full rounded-lg border-line bg-[#f0f0ec] text-sm focus:border-secondary focus:ring-secondary">
                             <option>All Attendants</option>
                             @foreach ($attendants as $attendant)
                                 <option>{{ $attendant }}</option>
@@ -2999,17 +2999,17 @@
                     </div>
                     <div>
                         <label class="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">Audit Date Range</label>
-                        <div class="flex items-center rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-sm">
+                        <div class="flex items-center rounded-lg border border-line bg-[#f0f0ec] px-3 py-2 text-sm">
                             <span class="material-symbols-outlined mr-2 text-base text-slate-500">calendar_today</span>
                             {{ now()->format('M d, Y') }} Today
                         </div>
                     </div>
                     <div class="flex items-end gap-2">
-                        <button type="button" class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#f0eee8] px-3 py-2 text-xs font-bold text-primary hover:bg-line">
+                        <button type="button" class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#ebebe7] px-3 py-2 text-xs font-bold text-primary hover:bg-line">
                             <span class="material-symbols-outlined text-base">tune</span>
                             Refine Criteria
                         </button>
-                        <button type="button" class="rounded-lg border border-line p-2 text-slate-500 hover:bg-[#f6f3ed]" title="Clear filters">
+                        <button type="button" class="rounded-lg border border-line p-2 text-slate-500 hover:bg-[#f0f0ec]" title="Clear filters">
                             <span class="material-symbols-outlined text-lg">refresh</span>
                         </button>
                     </div>
@@ -3039,18 +3039,18 @@
 
             <div class="grid gap-6 xl:grid-cols-12">
                 <section class="overflow-hidden rounded-lg border border-line bg-white shadow-sm xl:col-span-8">
-                    <div class="flex flex-col gap-3 border-b border-line bg-[#f6f3ed] p-4 md:flex-row md:items-center md:justify-between">
+                    <div class="flex flex-col gap-3 border-b border-line bg-[#f0f0ec] p-4 md:flex-row md:items-center md:justify-between">
                         <div class="flex flex-wrap items-center gap-2">
                             <span class="material-symbols-outlined text-primary">fact_check</span>
                             <h3 class="font-bold text-primary">Shift 1 Completed Units Ledger</h3>
-                            <span class="rounded-full bg-[#ffdeaa] px-2.5 py-0.5 text-xs font-bold text-secondary">Live Sync Active</span>
+                            <span class="rounded-full bg-[#e8e8e4] px-2.5 py-0.5 text-xs font-bold text-secondary">Live Sync Active</span>
                         </div>
                         <span class="text-xs font-semibold text-slate-500">Showing {{ $completedLedger->take(8)->count() }} of {{ $completedCount }} units</span>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full min-w-[980px] text-left text-sm">
-                            <thead class="bg-[#f0eee8] text-xs font-bold uppercase tracking-wider text-slate-600">
+                            <thead class="bg-[#ebebe7] text-xs font-bold uppercase tracking-wider text-slate-600">
                                 <tr>
                                     <th class="px-4 py-3">Room &amp; Wing</th>
                                     <th class="px-3 py-3">Room Type</th>
@@ -3071,7 +3071,7 @@
                                         $wing = ((int) ($log->room?->room_number ?? 0) >= 300) ? 'Ocean Wing' : 'Main Wing';
                                         $cleaningType = $log->status === 'available' ? 'Turnover Certified' : 'Status Confirmation';
                                     @endphp
-                                    <tr class="{{ $loop->first ? 'border-l-4 border-l-secondary bg-[#ffdeaa]/20' : 'hover:bg-[#f6f3ed]' }} transition">
+                                    <tr class="{{ $loop->first ? 'border-l-4 border-l-secondary bg-[#e8e8e4]/20' : 'hover:bg-[#f0f0ec]' }} transition">
                                         <td class="px-4 py-3">
                                             <div class="flex items-center gap-2">
                                                 <span class="font-serif text-2xl font-bold text-primary">{{ $log->room?->room_number ?? 'N/A' }}</span>
@@ -3097,7 +3097,7 @@
                                             <p class="text-xs font-semibold text-emerald-700">{{ $log->changed_at?->format('M d, Y') ?? 'Pending timestamp' }}</p>
                                         </td>
                                         <td class="px-3 py-3 text-center">
-                                            <span class="rounded-full bg-[#ffdeaa] px-2 py-0.5 text-xs font-bold text-secondary">{{ $score }}/100</span>
+                                            <span class="rounded-full bg-[#e8e8e4] px-2 py-0.5 text-xs font-bold text-secondary">{{ $score }}/100</span>
                                         </td>
                                         <td class="px-3 py-3">
                                             <p class="flex items-center gap-1 font-semibold text-primary"><span class="material-symbols-outlined text-base text-secondary">verified</span>Maria Santos</p>
@@ -3112,7 +3112,7 @@
                                         <td class="px-4 py-3 text-right">
                                             <div class="flex justify-end gap-1">
                                                 <a href="{{ $log->room ? route('rooms.show', $log->room) : route('housekeeping.page', 'notifications') }}" class="rounded p-1 text-secondary hover:bg-secondary/15" title="View audit certificate"><span class="material-symbols-outlined text-lg">description</span></a>
-                                                <a href="{{ $log->room ? route('rooms.edit', $log->room) : route('housekeeping.page', 'notifications') }}" class="rounded p-1 text-slate-500 hover:bg-[#f6f3ed]" title="Attendant notes"><span class="material-symbols-outlined text-lg">notes</span></a>
+                                                <a href="{{ $log->room ? route('rooms.edit', $log->room) : route('housekeeping.page', 'notifications') }}" class="rounded p-1 text-slate-500 hover:bg-[#f0f0ec]" title="Attendant notes"><span class="material-symbols-outlined text-lg">notes</span></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -3136,16 +3136,16 @@
                             <p class="mt-1 text-sm text-slate-500">{{ $selectedLog?->notes ?: 'Select a completed unit to inspect its audit details.' }}</p>
                         </div>
                         <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
-                            <div class="rounded-lg border border-line bg-[#f6f3ed] p-3">
+                            <div class="rounded-lg border border-line bg-[#f0f0ec] p-3">
                                 <p class="text-[11px] font-bold uppercase text-slate-500">QA Score</p>
                                 <p class="mt-1 font-serif text-2xl font-bold text-secondary">{{ $selectedLog ? '100' : '--' }}/100</p>
                             </div>
-                            <div class="rounded-lg border border-line bg-[#f6f3ed] p-3">
+                            <div class="rounded-lg border border-line bg-[#f0f0ec] p-3">
                                 <p class="text-[11px] font-bold uppercase text-slate-500">PMS Release</p>
                                 <p class="mt-1 font-bold text-emerald-700">{{ $selectedLog ? ucfirst($selectedLog->status) : 'Pending' }}</p>
                             </div>
                         </div>
-                        <div class="mt-4 rounded-lg border border-line bg-[#fdfcfa] p-3 text-sm">
+                        <div class="mt-4 rounded-lg border border-line bg-[#fafaf8] p-3 text-sm">
                             <p class="font-bold text-primary">Attendant Log &amp; Notes</p>
                             <p class="mt-2 leading-6 text-slate-600">{{ $selectedLog?->notes ?: 'No attendant notes have been recorded for today.' }}</p>
                         </div>
@@ -3155,14 +3155,14 @@
                         </div>
                     </div>
 
-                    <div class="rounded-lg bg-primary p-5 text-white shadow-sm">
-                        <h3 class="flex items-center gap-2 font-bold text-[#ffdeaa]"><span class="material-symbols-outlined">analytics</span>Shift Turnover Summary</h3>
+                    <div class="lc-flip rounded-lg bg-primary p-5 text-white shadow-sm">
+                        <h3 class="flex items-center gap-2 font-bold text-[#e8e8e4]"><span class="material-symbols-outlined">analytics</span>Shift Turnover Summary</h3>
                         <div class="mt-4 space-y-3 text-sm">
                             <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Certified rooms</span><strong>{{ $completedCount }}</strong></div>
                             <div class="flex justify-between border-b border-white/10 pb-2"><span class="text-slate-300">Released rooms</span><strong>{{ $releasedCount }}</strong></div>
                             <div class="flex justify-between"><span class="text-slate-300">Open tasks</span><strong>{{ $cleaningRooms->count() + $maintenanceQueue->count() }}</strong></div>
                         </div>
-                        <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#5b4313]">
+                        <a href="{{ route('housekeeping.page', 'room-inspection') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs font-bold text-white hover:bg-[#2a2f37]">
                             <span class="material-symbols-outlined text-base">fact_check</span>
                             Open Inspection Queue
                         </a>
@@ -3241,7 +3241,7 @@
                             Print Custody Barcode Labels
                         </button>
                         <a href="{{ route('rooms.index') }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90">
-                            <span class="material-symbols-outlined text-base text-[#ffdeaa]">add</span>
+                            <span class="material-symbols-outlined text-base text-[#e8e8e4]">add</span>
                             Log Discovered Item
                         </a>
                     </div>
@@ -3291,7 +3291,7 @@
                     </label>
                     <div class="flex flex-wrap gap-2">
                         @foreach (['All', 'Electronics', 'Jewelry & Valuables', 'Garments/Luggage', 'Documents/Passports'] as $category)
-                            <button type="button" class="rounded-full border px-3 py-2 text-xs font-bold {{ $loop->first ? 'border-primary bg-primary text-white' : 'border-line bg-[#f6f3ed] text-primary hover:border-secondary' }}">{{ $category }}</button>
+                            <button type="button" class="rounded-full border px-3 py-2 text-xs font-bold {{ $loop->first ? 'border-primary bg-primary text-white' : 'border-line bg-[#f0f0ec] text-primary hover:border-secondary' }}">{{ $category }}</button>
                         @endforeach
                     </div>
                     <div class="flex flex-wrap gap-2">
@@ -3309,17 +3309,17 @@
                             <h3 class="font-serif text-2xl font-bold text-primary">Items Currently in Custody</h3>
                             <p class="mt-1 text-sm text-slate-500">Recovered belongings tied to room turnover and inspection activity.</p>
                         </div>
-                        <span class="rounded-full bg-[#f6f3ed] px-3 py-1 text-xs font-bold text-secondary">{{ $lostFoundItems->count() }} open records</span>
+                        <span class="rounded-full bg-[#f0f0ec] px-3 py-1 text-xs font-bold text-secondary">{{ $lostFoundItems->count() }} open records</span>
                     </div>
                     <div class="space-y-4 p-5">
                         @forelse ($lostFoundItems as $item)
                             <article class="rounded-lg border p-5 shadow-sm {{ $item['tone'] }}">
                                 <div class="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
                                     <div class="flex gap-4">
-                                        <span class="material-symbols-outlined flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary text-[#ffdeaa]">{{ $item['icon'] }}</span>
+                                        <span class="material-symbols-outlined flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary text-[#e8e8e4]">{{ $item['icon'] }}</span>
                                         <div>
                                             <div class="flex flex-wrap items-center gap-2">
-                                                <span class="rounded-full border border-secondary/30 bg-[#ffdeaa]/50 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-secondary">{{ $item['reference'] }}</span>
+                                                <span class="rounded-full border border-secondary/30 bg-[#e8e8e4]/50 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-secondary">{{ $item['reference'] }}</span>
                                                 <span class="rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider {{ $item['statusClass'] }}">{{ $item['status'] }}</span>
                                             </div>
                                             <h4 class="mt-3 font-serif text-2xl font-bold text-primary">{{ $item['item'] }}</h4>
@@ -3386,7 +3386,7 @@
                                     <p class="text-xs font-bold uppercase tracking-[0.18em] text-secondary">Locked &amp; Verified</p>
                                     <h3 class="mt-1 font-serif text-2xl font-bold text-primary">Chain of Custody Record</h3>
                                 </div>
-                                <span class="material-symbols-outlined rounded-lg bg-[#f6f3ed] p-2 text-secondary">admin_panel_settings</span>
+                                <span class="material-symbols-outlined rounded-lg bg-[#f0f0ec] p-2 text-secondary">admin_panel_settings</span>
                             </div>
                         </div>
 
@@ -3398,9 +3398,9 @@
                                     <p class="mt-1 text-sm text-slate-600">{{ $selectedCustodyItem['reference'] }} - {{ $selectedCustodyItem['foundLocation'] }}</p>
                                 </div>
 
-                                <div class="mt-4 rounded-lg border border-line bg-[#fdfcfa] p-4">
+                                <div class="mt-4 rounded-lg border border-line bg-[#fafaf8] p-4">
                                     <div class="flex items-center gap-3">
-                                        <span class="material-symbols-outlined flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-[#ffdeaa]">lock</span>
+                                        <span class="material-symbols-outlined flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-[#e8e8e4]">lock</span>
                                         <div>
                                             <p class="font-bold text-primary">Tamper-evident custody bag active</p>
                                             <p class="text-sm text-slate-500">{{ $selectedCustodyItem['barcode'] }}</p>
@@ -3426,7 +3426,7 @@
                                 </div>
 
                                 <a href="{{ route('housekeeping.page', 'notifications') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-primary/90">
-                                    <span class="material-symbols-outlined text-base text-[#ffdeaa]">history</span>
+                                    <span class="material-symbols-outlined text-base text-[#e8e8e4]">history</span>
                                     Open Custody Activity Log
                                 </a>
                             </div>
@@ -3475,8 +3475,8 @@
             $toneClasses = [
                 'red' => ['bar' => 'bg-red-600', 'icon' => 'bg-red-50 text-red-700', 'pill' => 'border-red-200 bg-red-50 text-red-800'],
                 'sky' => ['bar' => 'bg-sky-700', 'icon' => 'bg-sky-50 text-sky-700', 'pill' => 'border-sky-200 bg-sky-50 text-sky-800'],
-                'amber' => ['bar' => 'bg-secondary', 'icon' => 'bg-[#ffdeaa]/40 text-secondary', 'pill' => 'border-amber-200 bg-amber-50 text-secondary'],
-                'slate' => ['bar' => 'bg-slate-500', 'icon' => 'bg-[#f6f3ed] text-slate-700', 'pill' => 'border-slate-200 bg-slate-50 text-slate-700'],
+                'amber' => ['bar' => 'bg-secondary', 'icon' => 'bg-[#e8e8e4]/40 text-secondary', 'pill' => 'border-amber-200 bg-amber-50 text-secondary'],
+                'slate' => ['bar' => 'bg-slate-500', 'icon' => 'bg-[#f0f0ec] text-slate-700', 'pill' => 'border-slate-200 bg-slate-50 text-slate-700'],
             ];
         @endphp
 
@@ -3496,7 +3496,7 @@
                         Mark All Read
                     </button>
                     <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-primary/90">
-                        <span class="material-symbols-outlined text-base text-[#ffdeaa]">settings_alert</span>
+                        <span class="material-symbols-outlined text-base text-[#e8e8e4]">settings_alert</span>
                         Alert Notification Preferences
                     </button>
                 </div>
@@ -3507,8 +3507,8 @@
                     ['label' => 'All Alerts', 'count' => $dispatchAlerts->count() + $recentRoomLogs->count(), 'active' => true, 'tone' => 'bg-primary text-white'],
                     ['label' => 'Unread', 'count' => $unreadAlerts, 'active' => false, 'tone' => 'bg-red-50 text-red-800 border-red-200'],
                     ['label' => 'Priority/Emergency', 'count' => $priorityAlertCount, 'active' => false, 'tone' => 'bg-red-50 text-red-800 border-red-200'],
-                    ['label' => 'Front Desk', 'count' => $frontDeskAlertCount, 'active' => false, 'tone' => 'bg-[#f6f3ed] text-primary border-line'],
-                    ['label' => 'Maintenance', 'count' => $maintenanceQueue->count(), 'active' => false, 'tone' => 'bg-[#f6f3ed] text-primary border-line'],
+                    ['label' => 'Front Desk', 'count' => $frontDeskAlertCount, 'active' => false, 'tone' => 'bg-[#f0f0ec] text-primary border-line'],
+                    ['label' => 'Maintenance', 'count' => $maintenanceQueue->count(), 'active' => false, 'tone' => 'bg-[#f0f0ec] text-primary border-line'],
                 ] as $tab)
                     <button type="button" class="rounded-lg border px-4 py-2 text-xs font-bold transition {{ $tab['active'] ? 'border-primary '.$tab['tone'] : $tab['tone'].' hover:border-secondary' }}">
                         {{ $tab['label'] }}
@@ -3542,7 +3542,7 @@
                                 </div>
                                 <div class="flex shrink-0 flex-wrap gap-2">
                                     <a href="{{ route('rooms.show', $alert['room']) }}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white hover:bg-primary/90">
-                                        <span class="material-symbols-outlined text-base text-[#ffdeaa]">visibility</span>
+                                        <span class="material-symbols-outlined text-base text-[#e8e8e4]">visibility</span>
                                         Open Room
                                     </a>
                                     <a href="{{ route('rooms.edit', $alert['room']) }}" class="inline-flex items-center gap-2 rounded-lg border border-line px-3 py-2 text-xs font-bold text-primary hover:border-secondary">
@@ -3565,15 +3565,15 @@
                     <div class="overflow-hidden rounded-lg border border-line bg-white shadow-sm">
                         <div class="flex items-center justify-between bg-primary p-4 text-white">
                             <div class="flex items-center gap-3">
-                                <span class="material-symbols-outlined rounded-lg bg-white/10 p-2 text-[#ffdeaa]">podcasts</span>
+                                <span class="material-symbols-outlined rounded-lg bg-white/10 p-2 text-[#e8e8e4]">podcasts</span>
                                 <div>
                                     <h4 class="font-bold">Radio Broadcast Log</h4>
-                                    <p class="text-xs text-[#ffdeaa]">Subic IHMP Channel 4 Dispatch</p>
+                                    <p class="text-xs text-[#e8e8e4]">Subic IHMP Channel 4 Dispatch</p>
                                 </div>
                             </div>
                             <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
                         </div>
-                        <div class="max-h-[380px] space-y-3 overflow-y-auto bg-[#fcf9f3] p-4">
+                        <div class="max-h-[380px] space-y-3 overflow-y-auto bg-[#f5f5f2] p-4">
                             @foreach ([
                                 ['from' => 'HK Lead', 'text' => 'Priority rooms acknowledged. Dispatch linen runner and supervisor inspection after final sweep.', 'time' => now()->subMinutes(4)->format('h:i A'), 'tone' => 'text-secondary'],
                                 ['from' => 'Engineering', 'text' => 'Maintenance queue update received. Housekeeping is cleared to enter resolved units for final inspection.', 'time' => now()->subMinutes(12)->format('h:i A'), 'tone' => 'text-sky-700'],
@@ -3590,7 +3590,7 @@
                         </div>
                         <form class="flex gap-2 border-t border-line p-3" onsubmit="event.preventDefault();">
                             <input class="w-full rounded-lg border-line text-xs focus:border-secondary focus:ring-secondary" placeholder="Broadcast alert or note to Channel 4..." type="text" />
-                            <button type="submit" class="rounded-lg bg-primary p-2 text-[#ffdeaa] hover:bg-primary/90" title="Transmit Broadcast">
+                            <button type="submit" class="rounded-lg bg-primary p-2 text-[#e8e8e4] hover:bg-primary/90" title="Transmit Broadcast">
                                 <span class="material-symbols-outlined text-base">send</span>
                             </button>
                         </form>
@@ -3623,7 +3623,7 @@
             </div>
             <div class="grid gap-4 p-5 md:grid-cols-2 xl:grid-cols-3">
                 @forelse ($pageRooms as $room)
-                    <article class="rounded-lg border border-line bg-[#fdfcfa] p-4">
+                    <article class="rounded-lg border border-line bg-[#fafaf8] p-4">
                         <div class="flex items-start justify-between gap-3">
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-wider text-secondary">Room {{ $room->room_number }}</p>

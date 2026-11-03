@@ -39,29 +39,29 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        'on-primary-container': '#7f93ae',
-                        secondary: '#755a28',
-                        'secondary-container': '#fdd79a',
-                        'secondary-fixed': '#ffdeaa',
-                        surface: '#fcf9f3',
-                        background: '#fcf9f3',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        'on-primary-container': '#9aa1ab',
+                        secondary: '#5b6069',
+                        'secondary-container': '#e8e8e4',
+                        'secondary-fixed': '#e8e8e4',
+                        surface: '#f5f5f2',
+                        background: '#f5f5f2',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container-low': '#f6f3ed',
-                        'surface-container': '#f0eee8',
-                        'surface-container-high': '#ebe8e2',
-                        'surface-variant': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
-                        'on-surface': '#1c1c18',
-                        'on-surface-variant': '#44474d',
+                        'surface-container-low': '#f0f0ec',
+                        'surface-container': '#ebebe7',
+                        'surface-container-high': '#e9e9e5',
+                        'surface-variant': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
+                        'on-surface': '#161a20',
+                        'on-surface-variant': '#4a4f57',
                         error: '#ba1a1a',
                         'error-container': '#ffdad6',
                     },
                     fontFamily: {
                         body: ['Manrope', 'sans-serif'],
-                        headline: ['Noto Serif', 'serif'],
+                        headline: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -379,7 +379,7 @@
     @if ($canManageRooms)
         <div class="fixed inset-0 z-50 hidden items-center justify-center bg-primary/60 p-4 backdrop-blur-sm" id="statusModal">
             <div class="w-full max-w-lg overflow-hidden rounded-xl border border-secondary/30 bg-white shadow-2xl">
-                <div class="flex items-center justify-between bg-primary px-6 py-4 text-white">
+                <div class="lc-flip flex items-center justify-between bg-primary px-6 py-4 text-white">
                     <div class="flex items-center gap-2.5">
                         <span class="material-symbols-outlined text-secondary-fixed text-2xl">edit_attributes</span>
                         <div>

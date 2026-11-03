@@ -38,42 +38,56 @@
 
         [data-sidebar-toggle] {
             align-items: center;
-            background: #01162d;
-            border: 1px solid rgba(255, 222, 170, .65);
+            background: transparent;
+            border: 1px solid transparent;
             border-radius: 8px;
             bottom: auto;
-            box-shadow: 0 5px 16px rgba(1, 22, 45, .24);
-            color: #ffdeaa;
+            color: #5b6069;
             display: flex;
-            height: 42px;
+            height: 34px;
             justify-content: center;
             left: 12px;
             position: fixed;
-            top: 11px;
+            top: 15px;
             transition: left 220ms ease, background-color 160ms ease;
-            width: 42px;
+            width: 34px;
             z-index: 60;
         }
 
         [data-sidebar-toggle]:hover {
-            background: #172b42;
+            background: #e9e9e5;
+            color: #161a20;
+        }
+
+        body.sidebar-collapsed [data-sidebar-toggle],
+        body:not(.sidebar-mobile-open) [data-sidebar-toggle] {
+            background: #ffffff;
+            border-color: #d3d3cd;
+        }
+
+        [data-sidebar-toggle] .material-symbols-outlined {
+            font-size: 20px;
         }
 
         [data-ui-settings-toggle] {
             align-items: center;
             background: #fff;
-            border: 1px solid #c4c6cd;
+            border: 1px solid #d3d3cd;
             border-radius: 8px;
-            box-shadow: 0 5px 16px rgba(1, 22, 45, .16);
-            color: #01162d;
+            color: #5b6069;
             display: flex;
-            height: 42px;
+            height: 34px;
             justify-content: center;
             position: fixed;
             right: 16px;
-            top: 78px;
-            width: 42px;
+            bottom: 16px;
+            width: 34px;
             z-index: 58;
+        }
+
+        [data-ui-settings-toggle]:hover {
+            background: #f0f0ec;
+            color: #161a20;
         }
 
         [data-sidebar-toggle] .sidebar-close-icon,
@@ -82,7 +96,7 @@
         }
 
         body.sidebar-mobile-open [data-sidebar-toggle] {
-            left: calc(var(--universal-sidebar-width, 18rem) - 54px);
+            left: calc(var(--universal-sidebar-width, 18rem) - 48px);
         }
 
         body.sidebar-mobile-open [data-sidebar-toggle] .sidebar-close-icon {
@@ -118,7 +132,9 @@
             }
 
             body:not(.sidebar-collapsed) [data-sidebar-toggle] {
-                left: calc(var(--universal-sidebar-width, 18rem) - 54px);
+                background: transparent;
+                border-color: transparent;
+                left: calc(var(--universal-sidebar-width, 18rem) - 48px);
             }
 
             body.sidebar-collapsed [data-universal-sidebar] {
@@ -164,22 +180,22 @@
         <span class="material-symbols-outlined sidebar-menu-icon" aria-hidden="true">menu</span>
         <span class="material-symbols-outlined sidebar-close-icon" aria-hidden="true">left_panel_close</span>
     </button>
-    <button type="button" data-sidebar-backdrop aria-label="Close sidebar" class="fixed inset-0 z-[35] bg-black/45 lg:hidden"></button>
+    <button type="button" data-sidebar-backdrop aria-label="Close sidebar" class="fixed inset-0 z-[35] bg-[#161a20]/30 lg:hidden"></button>
     <button type="button" data-ui-settings-toggle aria-label="Open interface settings" title="Interface settings">
         <span class="material-symbols-outlined" aria-hidden="true">tune</span>
     </button>
-    <div data-ui-settings-panel class="fixed right-4 top-[126px] z-[70] hidden w-[min(340px,calc(100vw-2rem))] rounded-lg border border-[#c4c6cd] bg-white p-4 text-[#01162d] shadow-2xl" role="dialog" aria-modal="false" aria-labelledby="ui-settings-title">
+    <div data-ui-settings-panel class="fixed bottom-16 right-4 z-[70] hidden w-[min(340px,calc(100vw-2rem))] rounded-xl border border-[#e4e4df] bg-white p-4 text-[#161a20] shadow-[0_12px_32px_rgba(22,26,32,.14)]" role="dialog" aria-modal="false" aria-labelledby="ui-settings-title">
         <div class="flex items-start justify-between gap-4">
-            <div><p class="text-[10px] font-bold uppercase tracking-[0.16em] text-[#755a28]">User Preference</p><h2 id="ui-settings-title" class="text-base font-bold">Interface Settings</h2></div>
+            <div><h2 id="ui-settings-title" class="text-base font-semibold">Interface settings</h2><p class="text-xs text-[#5b6069]">Saved to your account</p></div>
             <button type="button" data-ui-settings-close class="flex h-8 w-8 items-center justify-center rounded hover:bg-slate-100" aria-label="Close interface settings"><span class="material-symbols-outlined text-lg">close</span></button>
         </div>
         <form data-ui-settings-form class="mt-4 space-y-3">
-            <label class="block"><span class="mb-1 block text-xs font-bold">Display density</span><select name="density" class="w-full rounded border border-[#c4c6cd] px-3 py-2 text-sm"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
-            <label class="block"><span class="mb-1 block text-xs font-bold">Text size</span><select name="font_scale" class="w-full rounded border border-[#c4c6cd] px-3 py-2 text-sm"><option value="standard">Standard</option><option value="large">Large</option></select></label>
-            <label class="block"><span class="mb-1 block text-xs font-bold">Desktop sidebar default</span><select name="sidebar_default" class="w-full rounded border border-[#c4c6cd] px-3 py-2 text-sm"><option value="expanded">Expanded</option><option value="collapsed">Collapsed</option></select></label>
+            <label class="block"><span class="mb-1 block text-xs font-semibold text-[#5b6069]">Display density</span><select name="density" class="w-full rounded-lg border border-[#d3d3cd] bg-white px-3 py-2 text-sm"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
+            <label class="block"><span class="mb-1 block text-xs font-semibold text-[#5b6069]">Text size</span><select name="font_scale" class="w-full rounded-lg border border-[#d3d3cd] bg-white px-3 py-2 text-sm"><option value="standard">Standard</option><option value="large">Large</option></select></label>
+            <label class="block"><span class="mb-1 block text-xs font-semibold text-[#5b6069]">Desktop sidebar default</span><select name="sidebar_default" class="w-full rounded-lg border border-[#d3d3cd] bg-white px-3 py-2 text-sm"><option value="expanded">Expanded</option><option value="collapsed">Collapsed</option></select></label>
             <p data-ui-settings-feedback class="hidden rounded bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800"></p>
-            <button type="submit" class="flex w-full items-center justify-center gap-2 rounded bg-[#01162d] px-4 py-2.5 text-sm font-bold text-white"><span class="material-symbols-outlined text-base text-[#ffdeaa]">save</span>Save Interface Settings</button>
-            <a href="{{ route('system-manual') }}" class="flex w-full items-center justify-center gap-2 rounded border border-[#c4c6cd] px-4 py-2.5 text-sm font-bold"><span class="material-symbols-outlined text-base text-[#755a28]">menu_book</span>Open System Flipbook</a>
+            <button type="submit" class="lc-btn lc-btn-primary w-full">Save Interface Settings</button>
+            <a href="{{ route('system-manual') }}" class="lc-btn lc-btn-quiet w-full"><span class="material-symbols-outlined" aria-hidden="true">menu_book</span>Open System Flipbook</a>
         </form>
     </div>
 

@@ -5,25 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Housekeeping Workspace - Le Charme Suites IHMP')</title>
     @include('partials.offline-assets')
-    <script>tailwind.config={theme:{extend:{colors:{primary:'#01162d',secondary:'#755a28',cream:'#fcf9f3',line:'#e5e2dc'},fontFamily:{sans:['Manrope','sans-serif'],serif:['Noto Serif','serif']}}}};</script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#161a20',secondary:'#5b6069',cream:'#f5f5f2',line:'#e4e4df'},fontFamily:{sans:['Manrope','sans-serif'],serif:['Manrope', 'sans-serif']}}}};</script>
     <style>.material-symbols-outlined{display:inline-block;vertical-align:middle;line-height:1;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}</style>
     @include('partials.favicon')
 </head>
 <body class="min-h-screen bg-cream font-sans text-primary antialiased">
     @include('partials.housekeeping-sidebar', ['active' => $active ?? 'dashboard'])
     <div class="min-h-screen lg:pl-72">
-        <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-cream/95 px-6 py-3 shadow-sm backdrop-blur">
-            <div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary">cleaning_services</span><div><h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - Housekeeping Workspace</h1><p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-secondary">Rooms &amp; Facilities Operations</p></div></div>
-            <div class="flex items-center gap-3">
-                <div class="hidden rounded-lg border border-line bg-white/80 px-3 py-2 text-right shadow-sm md:block" aria-live="polite">
-                    <p id="housekeeping-live-date" class="text-[11px] font-bold uppercase tracking-[0.14em] text-secondary">{{ now('Asia/Manila')->format('M d, Y') }}</p>
-                    <p class="flex items-center justify-end gap-1.5 font-mono text-sm font-bold text-primary">
-                        <span class="material-symbols-outlined text-sm text-secondary">schedule</span>
-                        <span id="housekeeping-live-time">{{ now('Asia/Manila')->format('h:i:s A') }}</span>
-                        <span class="text-[10px] font-sans font-bold text-slate-500">PHT</span>
-                    </p>
-                </div>
-                <div class="hidden text-right sm:block"><p class="text-xs font-bold">{{ auth()->user()?->name }}</p><p class="text-[11px] text-slate-500">Housekeeping Access</p></div><a href="{{ route('profile.edit') }}" class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#e6c185] bg-primary text-sm font-bold text-white">{{ strtoupper(substr(auth()->user()?->name ?? 'H', 0, 1)) }}</a>
+        <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-cream px-6 py-3">
+            <div><h1 class="text-base font-semibold">Housekeeping Workspace</h1><p class="text-xs text-[#5b6069]">Le Charmé Suites · Rooms &amp; facilities</p></div>
+            <div class="flex items-center gap-4">
+                <p class="hidden text-right text-xs text-[#5b6069] md:block" aria-live="polite">
+                    <span id="housekeeping-live-date">{{ now('Asia/Manila')->format('M d, Y') }}</span>
+                    <span class="ml-1 font-semibold tabular-nums text-primary" id="housekeeping-live-time">{{ now('Asia/Manila')->format('h:i:s A') }}</span>
+                    <span>PHT</span>
+                </p>
+                <a href="{{ route('profile.edit') }}" class="flex items-center gap-2.5 rounded-lg px-1.5 py-1 hover:bg-[#e9e9e5]">
+                    <span class="lc-avatar">{{ strtoupper(substr(auth()->user()?->name ?? 'H', 0, 1)) }}</span>
+                    <span class="hidden text-left sm:block"><span class="block text-sm font-semibold leading-tight">{{ auth()->user()?->name }}</span><span class="block text-xs text-[#5b6069]">Housekeeping access</span></span>
+                </a>
             </div>
         </header>
         <main class="mx-auto flex w-full max-w-[1500px] flex-col gap-6 px-6 py-8">

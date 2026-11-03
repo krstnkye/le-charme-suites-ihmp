@@ -14,23 +14,23 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        background: '#fcf9f3',
-                        surface: '#fcf9f3',
-                        'surface-container': '#f0eee8',
-                        'surface-container-low': '#f6f3ed',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        background: '#f5f5f2',
+                        surface: '#f5f5f2',
+                        'surface-container': '#ebebe7',
+                        'surface-container-low': '#f0f0ec',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container-highest': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
+                        'surface-container-highest': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
                         error: '#ba1a1a',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -45,7 +45,7 @@
         }
 
         .nav-shell {
-            background-color: #172b42;
+            background-color: #2a2f37;
             background-image: radial-gradient(rgba(255, 222, 170, 0.14) 1px, transparent 1px);
             background-size: 26px 26px;
         }

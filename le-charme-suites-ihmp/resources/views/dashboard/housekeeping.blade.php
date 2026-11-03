@@ -25,14 +25,14 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        secondary: '#755a28',
-                        cream: '#fcf9f3',
-                        line: '#e5e2dc',
+                        primary: '#161a20',
+                        secondary: '#5b6069',
+                        cream: '#f5f5f2',
+                        line: '#e4e4df',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -52,71 +52,55 @@
     @include('partials.housekeeping-sidebar', ['active' => 'dashboard'])
 
     <div class="min-h-screen lg:pl-72">
-        <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-line bg-cream/95 px-6 shadow-sm backdrop-blur">
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-secondary">cleaning_services</span>
-                <div>
-                    <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - Housekeeping Workspace</h1>
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-secondary">Rooms & Facilities Operations</p>
-                </div>
+        <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-line bg-cream px-6">
+            <div>
+                <h1 class="text-base font-semibold">Housekeeping Workspace</h1>
+                <p class="text-xs text-[#5b6069]">Le Charmé Suites · Rooms &amp; facilities</p>
             </div>
             <div class="flex items-center gap-4">
-                <span class="hidden rounded-full bg-white px-3 py-1 text-xs font-bold text-secondary shadow-sm sm:inline-flex">{{ $today->format('M d, Y - h:i A') }}</span>
-                <div class="text-right">
-                    <p class="text-xs font-bold">{{ $currentUser?->name }}</p>
-                    <p class="text-[11px] text-slate-500">Housekeeping Access</p>
-                </div>
-                <a href="{{ route('profile.edit') }}" class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#e6c185] bg-primary text-sm font-bold text-white">{{ strtoupper(substr($currentUser?->name ?? 'H', 0, 1)) }}</a>
+                <span class="hidden text-xs tabular-nums text-[#5b6069] sm:inline">{{ $today->format('M d, Y - h:i A') }}</span>
+                <a href="{{ route('profile.edit') }}" class="flex items-center gap-2.5 rounded-lg px-1.5 py-1 hover:bg-[#e9e9e5]">
+                    <span class="lc-avatar">{{ strtoupper(substr($currentUser?->name ?? 'H', 0, 1)) }}</span>
+                    <span class="hidden text-left sm:block"><span class="block text-sm font-semibold leading-tight">{{ $currentUser?->name }}</span><span class="block text-xs text-[#5b6069]">Housekeeping access</span></span>
+                </a>
             </div>
         </header>
 
         <main class="mx-auto flex w-full max-w-[1600px] flex-col gap-6 px-6 py-8">
-            <section class="rounded-xl bg-primary p-7 text-white shadow-lg">
-                <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_480px] lg:items-center">
-                    <div>
-                        <p class="text-xs font-bold uppercase tracking-[0.22em] text-[#ffdeaa]">Housekeeping Command Center</p>
-                        <h2 class="mt-3 font-serif text-4xl font-bold leading-tight">Daily Rooms Readiness & Turnover Control</h2>
-                        <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-200">Monitor cleaning queues, room inspection readiness, maintenance reports, and guest service requests from one role-specific workspace.</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-white/10 p-4">
-                        <div>
-                            <p class="text-xs font-bold uppercase text-slate-300">Ready Rooms</p>
-                            <p class="mt-1 text-2xl font-bold">{{ $availableRooms }} / {{ $totalRooms }}</p>
-                            <p class="mt-1 text-[11px] text-slate-300">Operational records · {{ $publishedRoomCount }} rooms in the property</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold uppercase text-slate-300">Readiness</p>
-                            <p class="mt-1 text-2xl font-bold">{{ $readyRate }}%</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold uppercase text-slate-300">Cleaning Tasks</p>
-                            <p class="mt-1 text-2xl font-bold">{{ $cleaningCount }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold uppercase text-slate-300">Maintenance</p>
-                            <p class="mt-1 text-2xl font-bold">{{ $maintenanceCount }}</p>
-                        </div>
-                    </div>
+            <section class="lc-page-head">
+                <div>
+                    <h2 class="text-[26px] font-semibold leading-8 tracking-tight">Daily Rooms Readiness & Turnover Control</h2>
+                    <p>Housekeeping Command Center · cleaning queues, inspections, maintenance and guest requests.</p>
                 </div>
+                <a href="{{ route('rooms.index') }}" class="lc-btn lc-btn-primary"><span class="material-symbols-outlined" aria-hidden="true">bed</span>Open Room Status</a>
             </section>
 
-            <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-                @foreach ([
-                    ['label' => 'Property Rooms', 'value' => $publishedRoomCount, 'icon' => 'domain'],
-                    ['label' => 'Ready / Available', 'value' => $availableRooms, 'icon' => 'check_circle'],
-                    ['label' => 'Occupied Rooms', 'value' => $occupiedRooms, 'icon' => 'king_bed'],
-                    ['label' => 'Cleaning Queue', 'value' => $cleaningCount, 'icon' => 'mop'],
-                    ['label' => 'Maintenance Issues', 'value' => $maintenanceCount, 'icon' => 'construction'],
-                ] as $stat)
-                    <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ $stat['label'] }}</p>
-                            <span class="material-symbols-outlined text-secondary">{{ $stat['icon'] }}</span>
+            <section class="rounded-[10px] border border-line bg-white p-5">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                    <h3 class="text-lg font-semibold">{{ $availableRooms }} of {{ $totalRooms }} rooms ready · {{ $readyRate }}%</h3>
+                    <p class="text-sm text-[#5b6069]">Operational records · {{ $publishedRoomCount }} rooms in the property</p>
+                </div>
+                @php($hkBase = max($totalRooms, 1))
+                <div class="mt-4 flex h-3 w-full gap-[3px] overflow-hidden rounded-full bg-[#f0f0ec]" role="img" aria-label="Room readiness breakdown">
+                    @if ($availableRooms > 0)<span class="h-full bg-[#17707f]" style="width: {{ round($availableRooms / $hkBase * 100, 2) }}%"></span>@endif
+                    @if ($occupiedRooms > 0)<span class="h-full bg-[#3f444c]" style="width: {{ round($occupiedRooms / $hkBase * 100, 2) }}%"></span>@endif
+                    @if ($cleaningCount > 0)<span class="h-full" style="width: {{ round($cleaningCount / $hkBase * 100, 2) }}%; background: repeating-linear-gradient(135deg,#a9aba5 0 2px,#e4e4df 2px 5px)"></span>@endif
+                    @if ($maintenanceCount > 0)<span class="h-full bg-[#c4242a]" style="width: {{ round($maintenanceCount / $hkBase * 100, 2) }}%"></span>@endif
+                </div>
+                <dl class="mt-4 grid grid-cols-2 gap-y-4 sm:grid-cols-5">
+                    @foreach ([
+                        ['label' => 'Property Rooms', 'value' => $publishedRoomCount, 'swatch' => null],
+                        ['label' => 'Ready / Available', 'value' => $availableRooms, 'swatch' => 'background:#17707f'],
+                        ['label' => 'Occupied Rooms', 'value' => $occupiedRooms, 'swatch' => 'background:#3f444c'],
+                        ['label' => 'Cleaning Queue', 'value' => $cleaningCount, 'swatch' => 'background:repeating-linear-gradient(135deg,#a9aba5 0 2px,#e4e4df 2px 5px)'],
+                        ['label' => 'Maintenance Issues', 'value' => $maintenanceCount, 'swatch' => 'background:#c4242a'],
+                    ] as $stat)
+                        <div @class(['sm:border-l sm:border-[#eeeeea] sm:pl-5' => ! $loop->first])>
+                            <dt class="flex items-center gap-2 text-sm font-medium text-[#5b6069]">@if ($stat['swatch'])<span class="h-2.5 w-2.5 rounded-sm" style="{{ $stat['swatch'] }}" aria-hidden="true"></span>@endif{{ $stat['label'] }}</dt>
+                            <dd @class(['mt-1 text-[26px] font-semibold leading-8 tracking-tight tabular-nums', 'text-[#c4242a]' => $stat['label'] === 'Maintenance Issues' && $stat['value'] > 0])>{{ $stat['value'] }}</dd>
                         </div>
-                        <p class="mt-3 font-serif text-3xl font-bold">{{ $stat['value'] }}</p>
-                        <div class="mt-3 h-1.5 rounded-full bg-slate-100"><div class="h-1.5 rounded-full bg-secondary" style="width: {{ $totalRooms > 0 ? min(100, round(((int) $stat['value'] / max($totalRooms, 1)) * 100)) : 0 }}%"></div></div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </dl>
             </section>
 
             <section class="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(360px,0.65fr)]">
@@ -127,11 +111,11 @@
                                 <h3 class="font-serif text-2xl font-bold">My Assigned Rooms</h3>
                                 <p class="mt-1 text-sm text-slate-500">Rooms needing cleaning, inspection, maintenance follow-up, or occupied-room service.</p>
                             </div>
-                            <a href="{{ route('rooms.index') }}" class="rounded-lg border border-secondary px-4 py-2 text-sm font-bold text-secondary hover:bg-secondary/10">Open Room Status</a>
+                            <a href="{{ route('rooms.index') }}" class="lc-btn lc-btn-quiet">Room status</a>
                         </div>
                         <div class="grid gap-3 p-5 md:grid-cols-2">
                             @forelse ($assignedRooms as $room)
-                                <article class="rounded-lg border border-line bg-[#fdfcfa] p-4">
+                                <article class="rounded-lg border border-line bg-[#fafaf8] p-4">
                                     <div class="flex items-start justify-between gap-3">
                                         <div>
                                             <p class="text-xs font-bold uppercase tracking-wider text-secondary">Room {{ $room->room_number }}</p>
@@ -190,7 +174,7 @@
                                     </select>
                                 </label>
                                 <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-slate-900">
-                                    <span class="material-symbols-outlined text-base text-[#ffdeaa]">assignment_add</span>
+                                    <span class="material-symbols-outlined text-base text-[#e8e8e4]">assignment_add</span>
                                     Assign Task
                                 </button>
                             </form>
@@ -295,7 +279,7 @@
 
                     <section id="maintenance-requests" class="rounded-xl border border-line bg-white p-5 shadow-sm">
                         <h3 class="font-serif text-2xl font-bold">Maintenance Requests</h3>
-                        <div id="report-issue" class="mt-4 rounded-lg border border-dashed border-secondary/40 bg-[#fff8ec] p-4 text-sm text-slate-600">To report an issue, open the room status editor and set the room to maintenance with notes.</div>
+                        <div id="report-issue" class="mt-4 rounded-lg border border-dashed border-secondary/40 bg-[#f7f7f4] p-4 text-sm text-slate-600">To report an issue, open the room status editor and set the room to maintenance with notes.</div>
                         <div id="reported-issues" class="mt-4 space-y-2">
                             @forelse ($maintenanceQueue as $room)
                                 <a href="{{ route('rooms.edit', $room) }}" class="flex items-center justify-between rounded-lg bg-red-50 px-3 py-2 text-sm text-red-900 hover:bg-red-100"><span>Room {{ $room->room_number }}</span><span>Review</span></a>

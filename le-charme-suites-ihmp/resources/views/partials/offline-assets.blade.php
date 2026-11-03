@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="{{ asset('vendor/fonts/material-symbols.css') }}">
 <script src="{{ asset('vendor/tailwindcss-3.4.17.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('css/interactions.css') }}">
+<link rel="stylesheet" href="{{ asset('css/portal.css') }}">
 <script>
     (() => {
         const updateConnectionNotice = () => {
@@ -17,7 +18,7 @@
                 notice.id = 'ihmsConnectionNotice';
                 notice.setAttribute('role', 'status');
                 notice.textContent = 'Offline local mode - hotel records remain available';
-                notice.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:9999;padding:9px 13px;border:1px solid #d6b36a;border-radius:6px;background:#fff7e6;color:#5b4313;font:700 12px Manrope,sans-serif;box-shadow:0 4px 14px rgba(1,22,45,.16)';
+                notice.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:9999;padding:9px 13px;border:1px solid #fde68a;border-radius:8px;background:#fffbeb;color:#92400e;font:600 12px Manrope,sans-serif;box-shadow:0 4px 14px rgba(22,26,32,.12)';
                 document.body.appendChild(notice);
             }
         };

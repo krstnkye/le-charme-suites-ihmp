@@ -27,7 +27,7 @@
             'department' => 'Finance & Billing',
             'scope' => 'Payment handling, guest bill payment, transaction records, and cashier reports.',
             'icon' => 'payments',
-            'accent' => 'border-[#c5a36a] bg-[#fff8ea]',
+            'accent' => 'border-[#17707f] bg-[#fff8ea]',
             'badge' => 'bg-[#8a6420] text-white',
             'modules' => ['Transactions', 'Guest Bills', 'Reports', 'Check-out billing'],
         ],
@@ -57,23 +57,23 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        'secondary-container': '#fdd79a',
-                        background: '#fcf9f3',
-                        surface: '#fcf9f3',
-                        'surface-container': '#f0eee8',
-                        'surface-container-low': '#f6f3ed',
-                        'surface-container-highest': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        'secondary-container': '#e8e8e4',
+                        background: '#f5f5f2',
+                        surface: '#f5f5f2',
+                        'surface-container': '#ebebe7',
+                        'surface-container-low': '#f0f0ec',
+                        'surface-container-highest': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
                         error: '#ba1a1a',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -88,7 +88,7 @@
         }
 
         .nav-shell {
-            background-color: #172b42;
+            background-color: #2a2f37;
             background-image: radial-gradient(rgba(255, 222, 170, 0.14) 1px, transparent 1px);
             background-size: 26px 26px;
         }
@@ -139,7 +139,7 @@
                     </div>
                     <div class="flex flex-wrap items-baseline gap-3">
                         <h1 class="font-serif text-4xl font-semibold tracking-tight">Role Directory & Access Tiers</h1>
-                        <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#5b4313]">{{ count($roleOrder) }} Role Tiers</span>
+                        <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#3f444c]">{{ count($roleOrder) }} Role Tiers</span>
                     </div>
                     <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Review each system role, department assignment, authority tier, and operational scope before tuning detailed permissions.</p>
                 </div>

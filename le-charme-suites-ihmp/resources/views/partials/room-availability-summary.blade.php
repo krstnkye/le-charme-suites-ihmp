@@ -1,47 +1,44 @@
 @php
     $summary = $roomAvailability;
     $base = max($summary['encoded'], 1);
+    // One hue for the rooms that can be sold; everything else steps through neutrals.
     $tiles = [
-        ['key' => 'available', 'label' => 'Available', 'hint' => 'Ready to sell now', 'icon' => 'check_circle', 'bar' => 'bg-emerald-600', 'text' => 'text-emerald-700'],
-        ['key' => 'reserved', 'label' => 'Reserved', 'hint' => 'Confirmed arrival due today', 'icon' => 'event_available', 'bar' => 'bg-amber-500', 'text' => 'text-amber-700'],
-        ['key' => 'occupied', 'label' => 'Occupied', 'hint' => 'Guest checked in', 'icon' => 'king_bed', 'bar' => 'bg-[#01162d]', 'text' => 'text-[#01162d]'],
-        ['key' => 'out_of_service', 'label' => 'Cleaning / Maintenance', 'hint' => 'Not sellable yet', 'icon' => 'cleaning_services', 'bar' => 'bg-slate-400', 'text' => 'text-slate-600'],
+        ['key' => 'available', 'label' => 'Available', 'hint' => 'Ready to sell now', 'swatch' => 'background:#17707f'],
+        ['key' => 'reserved', 'label' => 'Reserved', 'hint' => 'Confirmed arrival due today', 'swatch' => 'background:#9cc7cd'],
+        ['key' => 'occupied', 'label' => 'Occupied', 'hint' => 'Guest checked in', 'swatch' => 'background:#3f444c'],
+        ['key' => 'out_of_service', 'label' => 'Cleaning / Maintenance', 'hint' => 'Not sellable yet', 'swatch' => 'background:repeating-linear-gradient(135deg,#c9cac4 0 2px,#ebebe7 2px 5px)'],
     ];
 @endphp
 
-<section data-room-availability-summary class="overflow-hidden rounded-xl border border-[#e5e2dc] bg-white shadow-sm">
-    <div class="flex flex-col gap-4 border-b border-[#e5e2dc] p-5 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-            <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-[#755a28]">Room availability today</p>
-            <h2 class="mt-1 font-serif text-2xl font-bold text-[#01162d]">{{ $summary['available'] }} of {{ $summary['property_total'] }} rooms available</h2>
-            @if ($summary['encoded'] !== $summary['property_total'])
-                <p class="mt-1 text-xs font-semibold text-amber-700">{{ $summary['encoded'] }} rooms are encoded in the system; the hotel has {{ $summary['property_total'] }}.</p>
-            @endif
-        </div>
-        <div class="rounded-lg bg-[#f6f3ed] px-4 py-3 text-right">
-            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total hotel rooms</p>
-            <p class="font-serif text-3xl font-bold text-[#01162d]">{{ $summary['property_total'] }}</p>
+<section data-room-availability-summary class="rounded-[10px] border border-[#e4e4df] bg-white">
+    <div class="flex flex-col gap-1 p-5 pb-4 sm:flex-row sm:items-baseline sm:justify-between">
+        <h2 class="text-lg font-semibold text-[#161a20]">{{ $summary['available'] }} of {{ $summary['property_total'] }} rooms available today</h2>
+        <p class="text-sm text-[#5b6069]">Total hotel rooms <span class="font-semibold tabular-nums text-[#161a20]">{{ $summary['property_total'] }}</span></p>
+    </div>
+    @if ($summary['encoded'] !== $summary['property_total'])
+        <p class="-mt-2 px-5 pb-3 text-xs font-semibold text-amber-800">{{ $summary['encoded'] }} rooms are encoded in the system; the hotel has {{ $summary['property_total'] }}.</p>
+    @endif
+
+    <div class="px-5">
+        <div class="flex h-3 w-full gap-[3px] overflow-hidden rounded-full" role="img" aria-label="Room availability breakdown">
+            @foreach ($tiles as $tile)
+                @if ($summary[$tile['key']] > 0)
+                    <span class="h-full first:rounded-l-full last:rounded-r-full" style="{{ $tile['swatch'] }}; width: {{ round($summary[$tile['key']] / $base * 100, 2) }}%"></span>
+                @endif
+            @endforeach
         </div>
     </div>
 
-    <div class="flex h-2.5 w-full" role="img" aria-label="Room availability breakdown">
+    <dl class="mt-4 grid grid-cols-2 border-t border-[#eeeeea] lg:grid-cols-4">
         @foreach ($tiles as $tile)
-            @if ($summary[$tile['key']] > 0)
-                <span class="{{ $tile['bar'] }}" style="width: {{ round($summary[$tile['key']] / $base * 100, 2) }}%"></span>
-            @endif
-        @endforeach
-    </div>
-
-    <div class="grid grid-cols-2 divide-[#e5e2dc] lg:grid-cols-4 lg:divide-x">
-        @foreach ($tiles as $tile)
-            <div class="p-4">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-lg {{ $tile['text'] }}">{{ $tile['icon'] }}</span>
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ $tile['label'] }}</span>
-                </div>
-                <p class="mt-1 font-serif text-3xl font-bold {{ $tile['text'] }}">{{ $summary[$tile['key']] }}</p>
-                <p class="text-[11px] text-slate-500">{{ $tile['hint'] }} · {{ round($summary[$tile['key']] / $base * 100) }}%</p>
+            <div @class(['px-5 py-4', 'lg:border-l lg:border-[#eeeeea]' => ! $loop->first, 'border-l border-[#eeeeea]' => $loop->iteration === 2 || $loop->iteration === 4, 'border-t border-[#eeeeea] lg:border-t-0' => $loop->iteration > 2])>
+                <dt class="flex items-center gap-2 text-sm font-medium text-[#5b6069]">
+                    <span class="h-2.5 w-2.5 shrink-0 rounded-sm" style="{{ $tile['swatch'] }}" aria-hidden="true"></span>
+                    {{ $tile['label'] }}
+                </dt>
+                <dd class="mt-1.5 text-[26px] font-semibold leading-8 tracking-tight text-[#161a20] tabular-nums">{{ $summary[$tile['key']] }}</dd>
+                <dd class="text-xs text-[#6b7079]">{{ $tile['hint'] }} · {{ round($summary[$tile['key']] / $base * 100) }}%</dd>
             </div>
         @endforeach
-    </div>
+    </dl>
 </section>

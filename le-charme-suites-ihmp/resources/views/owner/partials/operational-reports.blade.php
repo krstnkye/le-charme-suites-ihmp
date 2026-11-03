@@ -32,7 +32,7 @@
     ];
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-xl border border-primary-container bg-primary-container p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
         <div class="max-w-4xl">
@@ -108,7 +108,7 @@
 <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">
     <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Staffing Advisory</p><h3 class="mt-2 font-serif text-2xl font-bold">Coverage Stable</h3><p class="mt-3 text-sm text-slate-600">Zero unscheduled absences reported in the visible owner feed.</p></div>
     <div class="owner-card rounded-xl p-5"><p class="text-xs font-bold uppercase tracking-wider text-secondary">Safety Compliance</p><h3 class="mt-2 font-serif text-2xl font-bold">SBMA Standard Verified</h3><p class="mt-3 text-sm text-slate-600">Operational safety and hygiene monitoring remains compliant through current reporting period.</p></div>
-    <div class="rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Owner Governance</p><h3 class="mt-2 font-serif text-2xl font-bold">Executive View-Only</h3><p class="mt-3 text-sm leading-6 text-blue-100">Reports can be reviewed and exported. Operational edits remain restricted to authorized department users and administrators.</p></div>
+    <div class="lc-flip rounded-xl border border-primary-container bg-primary p-5 text-white shadow-md"><p class="text-xs font-bold uppercase tracking-wider text-secondary-fixed">Owner Governance</p><h3 class="mt-2 font-serif text-2xl font-bold">Executive View-Only</h3><p class="mt-3 text-sm leading-6 text-blue-100">Reports can be reviewed and exported. Operational edits remain restricted to authorized department users and administrators.</p></div>
 </section>
 
 <script>

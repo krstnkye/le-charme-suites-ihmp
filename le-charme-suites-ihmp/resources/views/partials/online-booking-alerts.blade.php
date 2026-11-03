@@ -19,17 +19,17 @@
 
         const showAlert = (booking, pendingCount) => {
             const card = document.createElement('div');
-            card.className = 'pointer-events-auto rounded-xl border border-[#c5a36a]/60 bg-[#01162d] p-4 text-white shadow-2xl';
+            card.className = 'pointer-events-auto rounded-xl border border-[#17707f]/60 bg-[#161a20] p-4 text-white shadow-2xl';
             card.setAttribute('role', 'status');
             card.innerHTML = `
                 <div class="flex items-start gap-3">
-                    <span class="material-symbols-outlined text-[#e6c185]">notifications_active</span>
+                    <span class="material-symbols-outlined text-[#d3d3cd]">notifications_active</span>
                     <div class="min-w-0 flex-1">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-[#e6c185]">New online booking · ${escapeText(booking.source)}</p>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-[#d3d3cd]">New online booking · ${escapeText(booking.source)}</p>
                         <p class="mt-1 truncate font-bold">${escapeText(booking.guest)}</p>
                         <p class="text-xs text-slate-300">${escapeText(booking.room_type)} · Arrives ${escapeText(booking.check_in_date)} · ${escapeText(booking.booking_reference)}</p>
                         <div class="mt-3 flex gap-2 text-xs font-bold">
-                            <a class="rounded-lg bg-[#c5a36a] px-3 py-1.5 text-[#01162d]" href="${escapeText(booking.url)}">Review booking</a>
+                            <a class="rounded-lg bg-[#17707f] px-3 py-1.5 text-[#161a20]" href="${escapeText(booking.url)}">Review booking</a>
                             <a class="rounded-lg border border-white/30 px-3 py-1.5" href="${escapeText(queueUrl)}">Pending queue (${pendingCount})</a>
                         </div>
                     </div>

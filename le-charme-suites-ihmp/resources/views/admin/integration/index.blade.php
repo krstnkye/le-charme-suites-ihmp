@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Integration & Reliability Center - Le Charme Suites IHMP</title>
     @include('partials.offline-assets')
-    <script>tailwind.config={theme:{extend:{colors:{primary:'#01162d','primary-container':'#172b42',secondary:'#755a28','secondary-fixed':'#ffdeaa',surface:'#fcf9f3',line:'#e5e2dc'},fontFamily:{sans:['Manrope','sans-serif'],serif:['Noto Serif','serif']}}}};</script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#161a20','primary-container':'#2a2f37',secondary:'#5b6069','secondary-fixed':'#e8e8e4',surface:'#f5f5f2',line:'#e4e4df'},fontFamily:{sans:['Manrope','sans-serif'],serif:['Manrope', 'sans-serif']}}}};</script>
     <style>.material-symbols-outlined{display:inline-block;vertical-align:middle;line-height:1;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}</style>
     @include('partials.favicon')
 </head>
@@ -20,7 +20,7 @@
         </header>
 
         <main class="mx-auto w-full max-w-[1600px] space-y-6 p-5 lg:p-8">
-            <section class="rounded-xl bg-primary-container p-6 text-white shadow-md">
+            <section class="lc-flip rounded-xl bg-primary-container p-6 text-white shadow-md">
                 <div class="flex flex-col justify-between gap-5 xl:flex-row xl:items-center">
                     <div><span class="rounded border border-secondary-fixed/30 bg-white/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Autonomous Hotel Node</span><h2 class="mt-3 font-serif text-4xl font-bold">System Integration & Network Reliability</h2><p class="mt-2 max-w-4xl text-sm leading-6 text-blue-100">Verifiable status for shared data, local-first operation, secured API transfer, saved history, and interdepartment communication.</p></div>
                     <div class="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-white/10 p-4 sm:grid-cols-4">
@@ -66,7 +66,7 @@
                         <a class="mt-3 inline-flex items-center gap-1 text-xs font-bold text-primary underline" href="{{ $websiteConnector['booking_url'] }}" target="_blank" rel="noopener">View official booking flow <span class="material-symbols-outlined text-sm">open_in_new</span></a>
                     </article>
                 </div>
-                <div class="border-t border-line bg-[#fcf9f3] px-5 py-4 text-sm text-slate-600">
+                <div class="border-t border-line bg-[#f5f5f2] px-5 py-4 text-sm text-slate-600">
                     <strong class="text-primary">Demonstration path:</strong> guest submits through IHMP → reservation enters the Front Desk queue → staff confirms and checks in → the shared room status changes → checkout creates the housekeeping turnover workflow. A live official-site connection uses the same API only after Le Charmé supplies permission and credentials.
                 </div>
             </section>
@@ -100,7 +100,7 @@
                 <div class="flex flex-col justify-between gap-3 border-b border-line px-5 py-4 lg:flex-row lg:items-center"><div><h3 class="font-serif text-2xl font-bold">Platform File Transfer</h3><p class="text-sm text-slate-500">Export portable, server-generated datasets. Every transfer receives a SHA-256 checksum and saved audit event.</p></div><a href="{{ route('admin.integration.transfer-report') }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white"><span class="material-symbols-outlined text-secondary-fixed">description</span>Download Transfer Report</a></div>
                 <div class="grid gap-4 p-5 md:grid-cols-2 xl:grid-cols-4">
                     @foreach ($datasets as $dataset)
-                        <div class="rounded-lg border border-line bg-[#fcf9f3] p-4"><div class="flex items-center justify-between"><strong class="capitalize">{{ $dataset }}</strong><span class="material-symbols-outlined text-secondary">dataset</span></div><div class="mt-4 grid grid-cols-2 gap-2"><a href="{{ route('admin.integration.export', [$dataset, 'csv']) }}" class="rounded border border-line bg-white px-3 py-2 text-center text-xs font-bold">CSV</a><a href="{{ route('admin.integration.export', [$dataset, 'json']) }}" class="rounded bg-primary px-3 py-2 text-center text-xs font-bold text-white">JSON</a></div></div>
+                        <div class="rounded-lg border border-line bg-[#f5f5f2] p-4"><div class="flex items-center justify-between"><strong class="capitalize">{{ $dataset }}</strong><span class="material-symbols-outlined text-secondary">dataset</span></div><div class="mt-4 grid grid-cols-2 gap-2"><a href="{{ route('admin.integration.export', [$dataset, 'csv']) }}" class="rounded border border-line bg-white px-3 py-2 text-center text-xs font-bold">CSV</a><a href="{{ route('admin.integration.export', [$dataset, 'json']) }}" class="rounded bg-primary px-3 py-2 text-center text-xs font-bold text-white">JSON</a></div></div>
                     @endforeach
                 </div>
             </section>
@@ -108,7 +108,7 @@
             <section class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_520px]">
                 <div class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
                     <div class="border-b border-line px-5 py-4"><h3 class="font-serif text-2xl font-bold">Saved Transfer & Messaging History</h3><p class="text-sm text-slate-500">Latest integration events from the shared database.</p></div>
-                    <div class="overflow-x-auto"><table class="w-full min-w-[760px] text-left text-sm"><thead class="bg-[#f0eee8] text-[11px] font-bold uppercase text-slate-600"><tr><th class="px-4 py-3">Time</th><th class="px-4 py-3">Channel</th><th class="px-4 py-3">Dataset</th><th class="px-4 py-3">Records</th><th class="px-4 py-3">Checksum</th></tr></thead><tbody class="divide-y divide-line">@forelse($events as $event)<tr><td class="px-4 py-3 font-mono text-xs">{{ $event->occurred_at?->timezone(config('app.timezone'))->format('M d, h:i A') }}</td><td class="px-4 py-3">{{ str_replace('_', ' ', ucfirst($event->channel)) }}</td><td class="px-4 py-3">{{ str_replace('_', ' ', ucfirst($event->dataset)) }}</td><td class="px-4 py-3">{{ $event->record_count }}</td><td class="max-w-[180px] truncate px-4 py-3 font-mono text-[11px] text-slate-500">{{ $event->checksum ?? 'N/A' }}</td></tr>@empty<tr><td colspan="5" class="px-5 py-12 text-center text-slate-500">No transfer events yet. Export a dataset to create the first audited record.</td></tr>@endforelse</tbody></table></div>
+                    <div class="overflow-x-auto"><table class="w-full min-w-[760px] text-left text-sm"><thead class="bg-[#ebebe7] text-[11px] font-bold uppercase text-slate-600"><tr><th class="px-4 py-3">Time</th><th class="px-4 py-3">Channel</th><th class="px-4 py-3">Dataset</th><th class="px-4 py-3">Records</th><th class="px-4 py-3">Checksum</th></tr></thead><tbody class="divide-y divide-line">@forelse($events as $event)<tr><td class="px-4 py-3 font-mono text-xs">{{ $event->occurred_at?->timezone(config('app.timezone'))->format('M d, h:i A') }}</td><td class="px-4 py-3">{{ str_replace('_', ' ', ucfirst($event->channel)) }}</td><td class="px-4 py-3">{{ str_replace('_', ' ', ucfirst($event->dataset)) }}</td><td class="px-4 py-3">{{ $event->record_count }}</td><td class="max-w-[180px] truncate px-4 py-3 font-mono text-[11px] text-slate-500">{{ $event->checksum ?? 'N/A' }}</td></tr>@empty<tr><td colspan="5" class="px-5 py-12 text-center text-slate-500">No transfer events yet. Export a dataset to create the first audited record.</td></tr>@endforelse</tbody></table></div>
                 </div>
                 <div class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
                     <div class="border-b border-line px-5 py-4"><h3 class="font-serif text-2xl font-bold">Embedded System Flipbook</h3><p class="text-sm text-slate-500">Local, presentation-ready integration guide.</p></div>

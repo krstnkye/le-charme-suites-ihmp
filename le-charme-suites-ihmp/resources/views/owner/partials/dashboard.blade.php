@@ -12,7 +12,7 @@
     $latestAuditRows = $transactions->take(4);
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-secondary/20 bg-gradient-to-r from-primary via-primary-container to-[#1b344f] p-7 text-white shadow-lg">
+<section class="lc-flip relative overflow-hidden rounded-xl border border-secondary/20 bg-gradient-to-r from-primary via-primary-container to-[#2a2f37] p-7 text-white shadow-lg">
     <div class="pointer-events-none absolute -bottom-20 -right-16 opacity-[0.06]">
         <span class="material-symbols-outlined text-[220px]">shield</span>
     </div>

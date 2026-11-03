@@ -35,9 +35,8 @@ class DepartmentSidebarTest extends TestCase
                 ->assertSee('aria-label="Administrator Sidebar"', false)
                 ->assertSee('data-universal-sidebar', false)
                 ->assertSee('data-sidebar-toggle', false)
-                ->assertSee('bg-[#172b42]', false)
-                ->assertSee('border-[#ffdeaa]', false)
-                ->assertSee('bg-[#01162d]/40', false)
+                ->assertSee('lc-sidebar', false)
+                ->assertSee('lc-nav-link is-active', false)
                 ->assertSee('data-page-back', false);
         }
     }

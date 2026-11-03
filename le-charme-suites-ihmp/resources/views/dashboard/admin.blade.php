@@ -21,24 +21,24 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        background: '#fcf9f3',
-                        surface: '#fcf9f3',
-                        'surface-container': '#f0eee8',
-                        'surface-container-low': '#f6f3ed',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        background: '#f5f5f2',
+                        surface: '#f5f5f2',
+                        'surface-container': '#ebebe7',
+                        'surface-container-low': '#f0f0ec',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container-highest': '#e5e2dc',
-                        'surface-variant': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
+                        'surface-container-highest': '#e4e4df',
+                        'surface-variant': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
                         error: '#ba1a1a',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -53,15 +53,14 @@
         }
 
         .nav-shell {
-            background-color: #172b42;
+            background-color: #2a2f37;
             background-image: radial-gradient(rgba(255, 222, 170, 0.14) 1px, transparent 1px);
             background-size: 26px 26px;
         }
 
         .command-card {
-            background: #fffdfa;
-            border: 1px solid #e5e2dc;
-            box-shadow: 0 16px 42px -28px rgba(1, 22, 45, .45), 0 2px 8px rgba(117, 90, 40, .08);
+            background: #fff;
+            border: 1px solid #e4e4df;
         }
     </style>
     @include('partials.favicon')
@@ -70,26 +69,18 @@
     @include('admin.partials.sidebar')
 
     <div class="min-h-screen pl-72">
-        <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-container-highest bg-surface px-8 shadow-sm">
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">security</span>
-                <h1 class="font-serif text-xl font-bold">Le Charme Suites IHMP - System Administration Command Center</h1>
-                <span class="hidden rounded-full border border-secondary/20 bg-surface-container px-3 py-1 text-xs font-bold text-secondary lg:inline-flex">
-                    Subic Bay Freeport Zone
-                </span>
+        <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-container-highest bg-background px-8">
+            <div>
+                <h1 class="text-base font-semibold">System administration</h1>
+                <p class="text-xs text-[#5b6069]">Le Charmé Suites · Subic Bay Freeport Zone</p>
             </div>
             <div class="flex items-center gap-4">
-                <div class="hidden items-center gap-1.5 rounded border border-outline-variant/30 bg-surface-container px-3 py-1 text-xs font-semibold text-slate-600 sm:flex">
-                    <span class="material-symbols-outlined text-sm text-secondary">database</span>
-                    Shared database connected
-                </div>
+                <p class="hidden items-center gap-1.5 text-xs text-[#5b6069] sm:flex"><span class="h-1.5 w-1.5 rounded-full bg-[#247b50]"></span>Shared database connected</p>
                 <div class="text-right">
-                    <p class="text-xs font-bold text-primary">{{ $user?->name }}</p>
-                    <p id="admin-clock" class="text-[11px] text-slate-500" data-timezone="{{ config('app.timezone') }}">{{ now(config('app.timezone'))->format('M d, Y • h:i A') }}</p>
+                    <p class="text-sm font-semibold text-primary">{{ $user?->name }}</p>
+                    <p id="admin-clock" class="text-xs tabular-nums text-[#5b6069]" data-timezone="{{ config('app.timezone') }}">{{ now(config('app.timezone'))->format('M d, Y • h:i A') }}</p>
                 </div>
-                <a href="{{ route('profile.edit') }}" class="flex h-10 w-10 items-center justify-center rounded-full border border-secondary/40 bg-secondary-fixed text-sm font-bold text-primary">
-                    {{ strtoupper(substr($user?->name ?? 'A', 0, 1)) }}
-                </a>
+                <a href="{{ route('profile.edit') }}" class="lc-avatar h-9 w-9" aria-label="Open my profile">{{ strtoupper(substr($user?->name ?? 'A', 0, 1)) }}</a>
             </div>
         </header>
 
@@ -98,38 +89,19 @@
                 <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800">{{ session('status') }}</div>
             @endif
 
-            <section class="relative overflow-hidden rounded-xl border border-secondary/30 bg-primary p-6 text-white shadow-md">
-                <div class="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-secondary/10 blur-3xl"></div>
-                <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                    <div>
-                        <div class="flex items-center gap-2 text-secondary-fixed">
-                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
-                            <span class="text-xs font-bold uppercase tracking-wider">Subic Bay IHMP Master Telemetry - Live Operations</span>
-                        </div>
-                        <h2 class="mt-2 font-serif text-4xl font-bold">Property Systems Integrity & Control</h2>
-                        <p class="mt-2 text-sm leading-6 text-[#b4c8e5]">Primary hotel operations, guest bills, room inventory, and role access are monitored from this administrator workspace.</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-primary-container/80 p-3 sm:grid-cols-4">
-                        <div class="px-3 py-1.5">
-                            <p class="text-[11px] font-bold uppercase text-[#b4c8e5]">Occupancy</p>
-                            <p class="mt-1 text-lg font-bold">{{ $occupancyRate }}%</p>
-                        </div>
-                        <div class="px-3 py-1.5">
-                            <p class="text-[11px] font-bold uppercase text-[#b4c8e5]">Rooms Managed</p>
-                            <p class="mt-1 text-lg font-bold">{{ $publishedRoomCount }}</p>
-                            <p class="text-[10px] text-[#b4c8e5]">{{ $totalRooms }} operational records</p>
-                        </div>
-                        <div class="px-3 py-1.5">
-                            <p class="text-[11px] font-bold uppercase text-[#b4c8e5]">Staff Accounts</p>
-                            <p class="mt-1 text-lg font-bold">{{ $totalUsers }}</p>
-                        </div>
-                        <div class="px-3 py-1.5">
-                            <p class="text-[11px] font-bold uppercase text-[#b4c8e5]">Alerts</p>
-                            <p class="mt-1 text-lg font-bold text-secondary-fixed">{{ $maintenanceRooms }}</p>
-                        </div>
-                    </div>
+            <section class="lc-page-head">
+                <div>
+                    <h2 class="text-[26px] font-semibold leading-8 tracking-tight">Property Systems Integrity & Control</h2>
+                    <p>Hotel operations, guest bills, room inventory and role access for the administrator.</p>
                 </div>
             </section>
+
+            <dl class="lc-stat-strip">
+                <div class="lc-stat"><dt>Occupancy</dt><dd>{{ $occupancyRate }}%</dd><p class="lc-stat-note">{{ $occupiedRooms }} of {{ $totalRooms }} rooms occupied</p></div>
+                <div class="lc-stat"><dt>Rooms managed</dt><dd>{{ $publishedRoomCount }}</dd><p class="lc-stat-note">{{ $totalRooms }} operational records</p></div>
+                <div class="lc-stat"><dt>Staff accounts</dt><dd>{{ $totalUsers }}</dd><p class="lc-stat-note">Across four departments</p></div>
+                <div class="lc-stat"><dt>Rooms out of service</dt><dd @class(['text-[#c4242a]' => $maintenanceRooms > 0])>{{ $maintenanceRooms }}</dd><p class="lc-stat-note">Cleaning or maintenance</p></div>
+            </dl>
 
             @include('partials.room-availability-summary')
 

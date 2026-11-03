@@ -24,7 +24,7 @@
     ]);
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-secondary/30 bg-primary p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-xl border border-secondary/30 bg-primary p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -bottom-24 -right-20 h-96 w-96 rounded-full bg-secondary/10 blur-3xl"></div>
     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
         <div class="max-w-4xl">

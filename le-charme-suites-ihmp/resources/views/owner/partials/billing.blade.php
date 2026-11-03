@@ -18,7 +18,7 @@
     $auditHash = substr(strtoupper(hash('sha256', 'owner-transactions-'.$transactions->count().'-'.$recordedLedgerTotal)), 0, 4).'-'.substr(strtoupper(hash('sha256', 'settled-'.$settledLedgerTotal)), 0, 4).'-'.substr(strtoupper(hash('sha256', 'pending-'.$pendingLedgerTotal)), 0, 4);
 @endphp
 
-<section class="relative overflow-hidden rounded-xl border border-secondary-fixed/20 bg-primary p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-xl border border-secondary-fixed/20 bg-primary p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -bottom-20 -right-16 h-64 w-64 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
     <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
         <div class="max-w-4xl">

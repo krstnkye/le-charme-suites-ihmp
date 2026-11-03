@@ -95,16 +95,16 @@
     @include('partials.offline-assets')
     <script>
         tailwind.config = { theme: { extend: {
-            colors: { primary: '#01162d', 'primary-container': '#172b42', secondary: '#755a28', 'secondary-container': '#fdd79a', 'secondary-fixed': '#ffdeaa', surface: '#fcf9f3', 'surface-low': '#f6f3ed', 'surface-mid': '#f0eee8', line: '#e5e2dc', error: '#ba1a1a' },
-            fontFamily: { sans: ['Manrope', 'sans-serif'], serif: ['Noto Serif', 'serif'] },
+            colors: { primary: '#161a20', 'primary-container': '#2a2f37', secondary: '#5b6069', 'secondary-container': '#e8e8e4', 'secondary-fixed': '#e8e8e4', surface: '#f5f5f2', 'surface-low': '#f0f0ec', 'surface-mid': '#ebebe7', line: '#e4e4df', error: '#ba1a1a' },
+            fontFamily: { sans: ['Manrope', 'sans-serif'], serif: ['Manrope', 'sans-serif'] },
         } } };
     </script>
     <style>
         .material-symbols-outlined { display: inline-block; vertical-align: middle; line-height: 1; font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24; }
-        .owner-card { background: #fdfcfa; border: 1px solid #ede8df; box-shadow: 0 4px 16px -2px rgba(23, 43, 66, .05), 0 1px 3px rgba(197, 163, 106, .08); }
+        .owner-card { background: #fafaf8; border: 1px solid #e9e9e5; box-shadow: 0 4px 16px -2px rgba(23, 43, 66, .05), 0 1px 3px rgba(197, 163, 106, .08); }
         .owner-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-        .owner-scroll::-webkit-scrollbar-track { background: #f0eee8; }
-        .owner-scroll::-webkit-scrollbar-thumb { background: #c4c6cd; border-radius: 999px; }
+        .owner-scroll::-webkit-scrollbar-track { background: #ebebe7; }
+        .owner-scroll::-webkit-scrollbar-thumb { background: #d3d3cd; border-radius: 999px; }
     </style>
     @include('partials.favicon')
 </head>
@@ -166,7 +166,7 @@
             @elseif ($activePage === 'profile')
                 @include('owner.partials.profile')
             @else
-            <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
+            <section class="lc-flip relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
                 <div class="pointer-events-none absolute -bottom-20 -right-16 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
                 <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
                     <div>

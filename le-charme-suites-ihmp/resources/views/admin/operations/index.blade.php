@@ -60,25 +60,25 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-fixed': '#ffdeaa',
-                        'secondary-container': '#fdd79a',
-                        background: '#fcf9f3',
-                        surface: '#fcf9f3',
-                        'surface-container': '#f0eee8',
-                        'surface-container-low': '#f6f3ed',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-fixed': '#e8e8e4',
+                        'secondary-container': '#e8e8e4',
+                        background: '#f5f5f2',
+                        surface: '#f5f5f2',
+                        'surface-container': '#ebebe7',
+                        'surface-container-low': '#f0f0ec',
                         'surface-container-lowest': '#ffffff',
-                        'surface-container-high': '#ebe8e2',
-                        'surface-container-highest': '#e5e2dc',
-                        outline: '#74777e',
-                        'outline-variant': '#c4c6cd',
+                        'surface-container-high': '#e9e9e5',
+                        'surface-container-highest': '#e4e4df',
+                        outline: '#6b7079',
+                        'outline-variant': '#d3d3cd',
                         error: '#ba1a1a',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -93,14 +93,14 @@
         }
 
         .nav-shell {
-            background: #172b42;
+            background: #2a2f37;
             background-image: radial-gradient(rgba(255, 222, 170, .14) 1px, transparent 1px);
             background-size: 26px 26px;
         }
 
         .parchment-card {
-            background-color: #fdfcfa;
-            border: 1px solid #ede8df;
+            background-color: #fafaf8;
+            border: 1px solid #e9e9e5;
             box-shadow: 0 4px 16px -2px rgba(23, 43, 66, .05), 0 1px 3px rgba(197, 163, 106, .08);
         }
     </style>
@@ -810,7 +810,7 @@
                         <h2 class="font-serif text-4xl font-semibold tracking-tight">{{ $title }}</h2>
                         <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{{ $subtitle }}</p>
                     </div>
-                    <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#5b4313]">Administrator-only workspace</span>
+                    <span class="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-[#3f444c]">Administrator-only workspace</span>
                 </section>
                 @isset($roomAvailability)
                     @include('partials.room-availability-summary')

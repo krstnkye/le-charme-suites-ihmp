@@ -1,7 +1,7 @@
 :root {
     --ihms-motion-fast: 150ms;
     --ihms-motion-base: 220ms;
-    --ihms-focus: rgba(117, 90, 40, 0.32);
+    --ihms-focus: rgba(23, 112, 127, 0.35);
 }
 
 html {
@@ -52,14 +52,14 @@ button:disabled,
 input:not([type="checkbox"]):not([type="radio"]):hover,
 select:hover,
 textarea:hover {
-    border-color: rgba(117, 90, 40, 0.6);
+    border-color: #a9aba5;
 }
 
 input:not([type="checkbox"]):not([type="radio"]):focus,
 select:focus,
 textarea:focus {
-    border-color: #755a28;
-    box-shadow: 0 0 0 3px rgba(117, 90, 40, 0.12);
+    border-color: #17707f;
+    box-shadow: 0 0 0 3px rgba(23, 112, 127, 0.14);
 }
 
 main {
@@ -74,8 +74,7 @@ main section[class*="shadow"] {
 
 main article:hover,
 main .ihms-card:hover {
-    border-color: rgba(117, 90, 40, 0.35);
-    box-shadow: 0 10px 24px -12px rgba(1, 22, 45, 0.28);
+    border-color: #cfd0ca;
 }
 
 main article img {
@@ -84,7 +83,6 @@ main article img {
 
 main article:hover img {
     filter: saturate(1.04);
-    transform: scale(1.015);
 }
 
 tbody tr {
@@ -98,7 +96,7 @@ tbody tr {
 
 [data-universal-sidebar] a:hover .material-symbols-outlined,
 [data-universal-sidebar] button:hover .material-symbols-outlined {
-    transform: translateX(2px);
+    color: inherit;
 }
 
 #ihmsConnectionNotice {

@@ -21,19 +21,19 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#01162d',
-                        'primary-container': '#172b42',
-                        secondary: '#755a28',
-                        'secondary-container': '#fdd79a',
-                        'secondary-fixed': '#ffdeaa',
-                        surface: '#fcf9f3',
-                        'surface-low': '#f6f3ed',
-                        'surface-mid': '#f0eee8',
-                        line: '#e5e2dc',
+                        primary: '#161a20',
+                        'primary-container': '#2a2f37',
+                        secondary: '#5b6069',
+                        'secondary-container': '#e8e8e4',
+                        'secondary-fixed': '#e8e8e4',
+                        surface: '#f5f5f2',
+                        'surface-low': '#f0f0ec',
+                        'surface-mid': '#ebebe7',
+                        line: '#e4e4df',
                     },
                     fontFamily: {
                         sans: ['Manrope', 'sans-serif'],
-                        serif: ['Noto Serif', 'serif'],
+                        serif: ['Manrope', 'sans-serif'],
                     },
                 },
             },
@@ -51,30 +51,14 @@
     @include('partials.billing-sidebar', ['active' => 'dashboard'])
 
     <div class="flex min-h-screen flex-col lg:ml-72">
-        <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-white/90 px-5 py-3 shadow-sm backdrop-blur lg:px-8">
+        <header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-4 border-b border-line bg-surface px-5 py-3 lg:px-8">
             <div>
-                <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                    <span>Billing Operations</span>
-                    <span>/</span>
-                    <span class="text-secondary">Command Dashboard</span>
-                </div>
-                <h1 class="mt-1 font-serif text-xl font-bold text-primary">Le Charmé Suites IHMP <span class="font-sans font-normal text-slate-400">|</span> <span class="font-sans text-sm font-semibold text-slate-600">Subic Bay Freeport Zone</span></h1>
+                <h1 class="text-base font-semibold text-primary">Billing operations</h1>
+                <p class="text-xs text-[#5b6069]">Le Charmé Suites · Subic Bay Freeport Zone · {{ $pendingDepartures }} active guest bills</p>
             </div>
-            <div class="flex flex-wrap items-center justify-end gap-3">
-                <div class="hidden items-center gap-2 rounded-full border border-line bg-surface-low px-3 py-1.5 text-xs font-semibold text-primary xl:flex">
-                    <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                    <span>{{ auth()->user()->name }}</span>
-                    <span class="text-slate-300">|</span>
-                    <span class="text-slate-600">{{ $pendingDepartures }} active guest bills</span>
-                </div>
-                <div class="rounded-lg border border-line bg-white px-4 py-2 text-right shadow-sm">
-                    <p id="billing-date" class="text-[11px] font-bold uppercase tracking-[0.16em] text-secondary">Loading date</p>
-                    <p id="billing-clock" class="font-mono text-sm font-bold text-primary">--:--:-- PHT</p>
-                </div>
-                <a href="{{ route('check-outs.create') }}" class="hidden items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-slate-900 md:flex">
-                    <span class="material-symbols-outlined text-secondary-fixed">post_add</span>
-                    Add Charge / Guest Bill
-                </a>
+            <div class="flex items-center gap-4">
+                <p class="hidden text-right text-xs text-[#5b6069] sm:block"><span id="billing-date">Loading date</span> <span id="billing-clock" class="ml-1 font-semibold tabular-nums text-primary">--:--:-- PHT</span></p>
+                <a href="{{ route('check-outs.create') }}" class="lc-btn lc-btn-quiet hidden md:inline-flex"><span class="material-symbols-outlined" aria-hidden="true">post_add</span>Add Charge / Guest Bill</a>
             </div>
         </header>
 
@@ -85,84 +69,49 @@
                 </div>
             @endif
 
-            <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-primary-container p-7 text-white shadow-md">
-                <div class="pointer-events-none absolute -bottom-16 -right-12 h-96 w-96 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
-                <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
-                    <div class="max-w-3xl">
-                        <div class="mb-2 flex flex-wrap items-center gap-2">
-                            <span class="rounded border border-secondary-fixed/30 bg-secondary-container/20 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Authorized Billing Dashboard</span>
-                            <span class="text-xs font-semibold text-blue-100/70">Shared database records</span>
-                        </div>
-                        <h2 class="font-serif text-4xl font-bold leading-tight">Cashier &amp; Billing Dashboard</h2>
-                        <p class="mt-2 text-sm leading-6 text-blue-100">Review guest bills, verify payments, add charges, and monitor hotel income for the Billing department.</p>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-3">
-                        <a href="{{ route('check-outs.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-secondary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-amber-700">
-                            <span class="material-symbols-outlined">payments</span>
-                        Pay Guest Bill / Check Out
-                        </a>
-                        <a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20">
-                            <span class="material-symbols-outlined text-secondary-fixed">receipt_long</span>
-                            View Transactions
-                        </a>
-                        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-primary/40 px-3.5 py-2.5 text-sm font-semibold text-blue-100 transition hover:bg-primary hover:text-white">
-                            <span class="material-symbols-outlined">print</span>
-                        Print Cashier Report
-                        </button>
-                    </div>
+            <section class="lc-page-head">
+                <div>
+                    <h2 class="text-[26px] font-semibold leading-8 tracking-tight">Cashier &amp; Billing Dashboard</h2>
+                    <p>Review guest bills, verify payments, add charges, and monitor hotel income for the Billing department.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="window.print()" class="lc-btn lc-btn-quiet"><span class="material-symbols-outlined" aria-hidden="true">print</span>Print Cashier Report</button>
+                    <a href="{{ route('check-outs.index') }}" class="lc-btn lc-btn-quiet"><span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>View Transactions</a>
+                    <a href="{{ route('check-outs.create') }}" class="lc-btn lc-btn-primary"><span class="material-symbols-outlined" aria-hidden="true">payments</span>Pay Guest Bill / Check Out</a>
                 </div>
             </section>
 
-            <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
-                <div class="rounded-xl border border-line bg-white p-5 shadow-sm xl:col-span-2">
-                    <div class="mb-3 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <span class="rounded-lg bg-secondary-container/40 p-2 text-secondary"><span class="material-symbols-outlined">monetization_on</span></span>
-                            <div>
-                                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Daily Collections</p>
-                            <p class="text-xs font-semibold text-secondary">Payments saved today</p>
-                            </div>
-                        </div>
-                        <span class="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700">Live</span>
-                    </div>
-                    <p class="font-serif text-3xl font-bold text-primary">PHP {{ number_format($collectedToday, 2) }}</p>
-                    <div class="mt-4 grid gap-2 border-t border-line pt-3 text-xs sm:grid-cols-3">
-                        <div class="rounded border border-line bg-surface-low p-2"><span class="block text-slate-500">Paid receipts</span><strong>{{ $paidToday }}</strong></div>
-                        <div class="rounded border border-line bg-surface-low p-2"><span class="block text-slate-500">Partial payments</span><strong>{{ $partialToday }}</strong></div>
-                        <div class="rounded border border-line bg-surface-low p-2"><span class="block text-slate-500">Unpaid records</span><strong>{{ $unpaidToday }}</strong></div>
-                    </div>
+            <dl class="lc-stat-strip" style="--lc-cols: 4">
+                <div class="lc-stat">
+                    <dt>Total daily collections</dt>
+                    <dd>PHP {{ number_format($collectedToday, 2) }}</dd>
+                    <p class="lc-stat-note">{{ $paidToday }} paid · {{ $partialToday }} partial · {{ $unpaidToday }} unpaid today</p>
                 </div>
-
-                <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
-                    <div class="mb-2 flex items-center justify-between"><span class="rounded-lg bg-surface-mid p-2 text-primary"><span class="material-symbols-outlined">folder_shared</span></span><span class="rounded bg-surface-mid px-2 py-1 text-xs text-slate-600">In-House</span></div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Active Guest Bills</p>
-                    <p class="mt-2 font-serif text-2xl font-bold text-primary">{{ $pendingDepartures }} Active Guest Bills</p>
-                    <p class="mt-3 border-t border-line pt-3 text-xs text-slate-500">Outstanding: <strong class="text-secondary">PHP {{ number_format($totalOpenExposure, 2) }}</strong></p>
+                <div class="lc-stat">
+                    <dt>Active guest bills</dt>
+                    <dd>{{ $pendingDepartures }}</dd>
+                    <p class="lc-stat-note">Outstanding PHP {{ number_format($totalOpenExposure, 2) }}</p>
                 </div>
-
-                <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
-                    <div class="mb-2 flex items-center justify-between"><span class="rounded-lg border border-secondary/20 bg-amber-50 p-2 text-secondary"><span class="material-symbols-outlined">luggage</span></span><span class="rounded bg-amber-100 px-2 py-1 text-xs font-bold text-secondary">Action Required</span></div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Pending Payments</p>
-                    <p class="mt-2 font-serif text-2xl font-bold text-secondary">{{ $departuresToday }} Departures</p>
-                    <p class="mt-3 border-t border-line pt-3 text-xs text-slate-500">Ready for check-out bill clearing</p>
+                <div class="lc-stat">
+                    <dt>Pending payments</dt>
+                    <dd>{{ $departuresToday }}<small>{{ \Illuminate\Support\Str::plural('departure', $departuresToday) }}</small></dd>
+                    <p class="lc-stat-note">Ready for check-out bill clearing</p>
                 </div>
-
-                <div class="rounded-xl border border-line bg-white p-5 shadow-sm">
-                    <div class="mb-2 flex items-center justify-between"><span class="rounded-lg bg-emerald-50 p-2 text-emerald-700"><span class="material-symbols-outlined">receipt_long</span></span><span class="rounded bg-emerald-100 px-2 py-1 text-xs font-bold text-emerald-800">Database</span></div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Recorded Charges Today</p>
-                    <p class="mt-2 font-serif text-2xl font-bold text-emerald-700">PHP {{ number_format($recordedRevenue, 2) }}</p>
-                    <p class="mt-3 border-t border-line pt-3 text-xs text-slate-500">Saved hotel transaction records</p>
+                <div class="lc-stat">
+                    <dt>Recorded charges today</dt>
+                    <dd>PHP {{ number_format($recordedRevenue, 2) }}</dd>
+                    <p class="lc-stat-note">Saved hotel transaction records</p>
                 </div>
-            </section>
+            </dl>
 
             <section class="grid grid-cols-1 items-start gap-6 xl:grid-cols-12">
                 <div class="space-y-6 xl:col-span-8">
                     <div class="overflow-hidden rounded-xl border border-line bg-white shadow-sm">
-                        <div class="flex flex-col justify-between gap-4 border-b border-line bg-surface-low/60 p-5 sm:flex-row sm:items-center">
+                        <div class="flex flex-col justify-between gap-4 border-b border-line p-5 sm:flex-row sm:items-center">
                             <div>
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <h3 class="font-serif text-2xl font-bold text-primary">Departures &amp; Guest Bills for Payment</h3>
-                                    <span class="rounded-full bg-secondary-fixed px-2 py-1 text-xs font-bold text-primary">{{ $settlementQueue->count() }} Today</span>
+                                    <h3 class="text-lg font-semibold text-primary">Departures &amp; Guest Bills for Payment</h3>
+                                    <span class="rounded-full bg-[#f0f0ec] px-2 py-0.5 text-xs font-semibold text-[#3f444c]">{{ $settlementQueue->count() }} today</span>
                                 </div>
                                 <p class="mt-1 text-sm text-slate-600">Guest bills waiting for payment or receipt printing.</p>
                             </div>

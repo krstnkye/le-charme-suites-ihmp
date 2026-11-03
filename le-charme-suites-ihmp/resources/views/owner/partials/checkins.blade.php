@@ -9,7 +9,7 @@
     $guaranteedCheckout = $primaryCheckIn?->reservation?->check_out_date?->format('M d, Y').' @ 12:00 PHT';
 @endphp
 
-<section class="relative overflow-hidden rounded-2xl border border-secondary/20 bg-primary-container p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-2xl border border-secondary/20 bg-primary-container p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute -bottom-10 -right-8 opacity-[0.06]">
         <span class="material-symbols-outlined text-[240px]">hotel_class</span>
     </div>

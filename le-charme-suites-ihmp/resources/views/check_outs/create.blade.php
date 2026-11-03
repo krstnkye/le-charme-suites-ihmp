@@ -45,15 +45,15 @@
     @include('partials.offline-assets')
     <script>
         tailwind.config = { theme: { extend: {
-            colors: { primary: '#01162d', 'primary-container': '#172b42', secondary: '#755a28', 'secondary-container': '#fdd79a', 'secondary-fixed': '#ffdeaa', surface: '#fcf9f3', 'surface-low': '#f6f3ed', 'surface-mid': '#f0eee8', line: '#e5e2dc', error: '#ba1a1a' },
-            fontFamily: { sans: ['Manrope', 'sans-serif'], serif: ['Noto Serif', 'serif'] },
+            colors: { primary: '#161a20', 'primary-container': '#2a2f37', secondary: '#5b6069', 'secondary-container': '#e8e8e4', 'secondary-fixed': '#e8e8e4', surface: '#f5f5f2', 'surface-low': '#f0f0ec', 'surface-mid': '#ebebe7', line: '#e4e4df', error: '#ba1a1a' },
+            fontFamily: { sans: ['Manrope', 'sans-serif'], serif: ['Manrope', 'sans-serif'] },
         } } };
     </script>
     <style>
         .material-symbols-outlined { display:inline-block; vertical-align:middle; line-height:1; font-variation-settings:'FILL' 0,'wght' 450,'GRAD' 0,'opsz' 24; }
         .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f0eee8; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #c4c6cd; border-radius: 999px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #ebebe7; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #d3d3cd; border-radius: 999px; }
         @media print { aside, header, .no-print { display:none!important; } body { background:white!important; } }
     </style>
     @include('partials.favicon')
@@ -85,7 +85,7 @@
                 </div>
             @endif
 
-            <section class="relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-gradient-to-r from-primary via-primary-container to-[#002c48] p-7 text-white shadow-md">
+            <section class="lc-flip relative overflow-hidden rounded-xl border border-secondary-fixed/30 bg-gradient-to-r from-primary via-primary-container to-[#20252c] p-7 text-white shadow-md">
                 <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-secondary-fixed to-transparent"></div>
                 <div class="pointer-events-none absolute -bottom-16 -right-12 h-80 w-80 rounded-full bg-secondary/10 blur-3xl"></div>
                 <div class="relative z-10 flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
@@ -183,7 +183,7 @@
                         </div>
                     </form>
 
-                    <section class="rounded-xl border border-line bg-primary-container p-5 text-white shadow-sm"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed">cleaning_services</span><h3 class="font-serif text-xl font-bold">Room Cleaning Notice</h3></div><p class="mt-2 text-sm leading-6 text-blue-100">Completing the payment ends the stay, marks the room for cleaning, saves the room status, and records the transaction.</p></section>
+                    <section class="lc-flip rounded-xl border border-line bg-primary-container p-5 text-white shadow-sm"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed">cleaning_services</span><h3 class="font-serif text-xl font-bold">Room Cleaning Notice</h3></div><p class="mt-2 text-sm leading-6 text-blue-100">Completing the payment ends the stay, marks the room for cleaning, saves the room status, and records the transaction.</p></section>
                 </aside>
             </div>
         </main>

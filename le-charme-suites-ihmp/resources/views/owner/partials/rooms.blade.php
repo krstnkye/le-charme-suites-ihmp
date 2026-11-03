@@ -30,7 +30,7 @@
     ];
 @endphp
 
-<section class="relative overflow-hidden rounded-2xl border border-primary-container bg-primary p-7 text-white shadow-xl">
+<section class="lc-flip relative overflow-hidden rounded-2xl border border-primary-container bg-primary p-7 text-white shadow-xl">
     <div class="pointer-events-none absolute right-0 top-0 flex h-full w-1/3 items-center justify-center opacity-[0.06]">
         <span class="material-symbols-outlined text-[220px]">layers</span>
     </div>
@@ -244,7 +244,7 @@
         </div>
     </section>
 
-    <section id="room-status" class="rounded-xl border border-primary-container bg-gradient-to-br from-primary to-[#07111f] p-5 text-white shadow-md">
+    <section id="room-status" class="lc-flip rounded-xl border border-primary-container bg-gradient-to-br from-primary to-[#161a20] p-5 text-white shadow-md">
         <div>
             <div class="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-secondary-fixed">
                 <span class="material-symbols-outlined text-base">verified_user</span>
