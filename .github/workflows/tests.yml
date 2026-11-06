@@ -34,3 +34,15 @@ jobs:
 
       - name: Run tests
         run: php artisan test --compact
+
+  windows-batch-safety:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test Windows update and setup scripts
+        shell: powershell
+        run: >-
+          powershell -NoProfile -ExecutionPolicy Bypass
+          -File .\le-charme-suites-ihmp\tests\Windows\BatchScriptSafetyTest.ps1
