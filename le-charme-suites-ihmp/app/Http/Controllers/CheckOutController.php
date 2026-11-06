@@ -77,11 +77,16 @@ class CheckOutController extends Controller
 
     public function create(): View
     {
+        $checkIns = CheckIn::with(['guest', 'room', 'reservation'])
+            ->where('status', 'active')
+            ->latest('checked_in_at')
+            ->get();
+
         return view('check_outs.create', [
-            'checkIns' => CheckIn::with(['guest', 'room', 'reservation'])
-                ->where('status', 'active')
-                ->latest('checked_in_at')
-                ->get(),
+            'checkIns' => $checkIns,
+            'bills' => $checkIns->mapWithKeys(fn (CheckIn $checkIn): array => [
+                $checkIn->id => $this->folio($checkIn->reservation, $checkIn->room),
+            ]),
         ]);
     }
 
