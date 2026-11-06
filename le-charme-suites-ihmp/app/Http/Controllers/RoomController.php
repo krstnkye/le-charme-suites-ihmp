@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\RoomAvailabilityService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
 class RoomController extends Controller
@@ -134,6 +135,16 @@ class RoomController extends Controller
         $data = $this->validatedData($request, $room);
         $oldStatus = $room->status;
 
+        if ($request->user()->role !== 'admin') {
+            if ($this->changesRoomDetails($request, $room)) {
+                return back()->withInput()->withErrors([
+                    'room_number' => 'Only an administrator can change the room number, type, rate, or capacity.',
+                ]);
+            }
+
+            $data = Arr::only($data, ['status', 'description']);
+        }
+
         $hasActiveStay = $room->checkIns()->where('status', 'active')->exists();
 
         if ($hasActiveStay && $data['status'] !== 'occupied') {
@@ -168,6 +179,18 @@ class RoomController extends Controller
         $room->delete();
 
         return redirect()->route('rooms.index')->with('status', 'Room deleted.');
+    }
+
+    /**
+     * Whether the submitted form changes the room's master data rather than
+     * just its status or notes.
+     */
+    private function changesRoomDetails(Request $request, Room $room): bool
+    {
+        return (string) $request->input('room_number') !== (string) $room->room_number
+            || (string) $request->input('room_type') !== (string) $room->room_type
+            || round((float) $request->input('rate'), 2) !== round((float) $room->rate, 2)
+            || (int) $request->input('capacity') !== (int) $room->capacity;
     }
 
     private function validatedData(Request $request, ?Room $room = null): array
