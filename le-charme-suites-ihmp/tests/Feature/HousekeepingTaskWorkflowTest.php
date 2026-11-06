@@ -31,6 +31,14 @@ class HousekeepingTaskWorkflowTest extends TestCase
         $this->assertSame($housekeeper->id, $task->assigned_to);
         $this->assertSame('queued', $task->status);
 
+        foreach (['in_progress', 'inspection'] as $status) {
+            $this->actingAs($housekeeper)->patch(route('housekeeping-tasks.update', $task), [
+                'status' => $status,
+                'assigned_to' => $housekeeper->id,
+            ])->assertSessionHasNoErrors();
+            $this->assertSame('cleaning', $room->fresh()->status);
+        }
+
         $response = $this->actingAs($housekeeper)->patch(route('housekeeping-tasks.update', $task), [
             'status' => 'completed',
             'assigned_to' => $housekeeper->id,
