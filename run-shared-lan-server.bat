@@ -6,10 +6,24 @@ cd /d "%~dp0le-charme-suites-ihmp"
 if errorlevel 1 goto :wrong_folder
 
 where php >nul 2>nul
-if errorlevel 1 goto :missing_php
+if errorlevel 1 goto :debug_enabled
+echo ERROR: Debug mode is on. Debug error pages would show file paths, database
+echo queries and settings to every device on the network.
+echo Open le-charme-suites-ihmp\.env, set APP_DEBUG=false, save it, then run this again.
+pause
+exit /b 1
+
+:missing_php
 
 if not exist .env goto :not_configured
-if not exist database\database.sqlite goto :not_configured
+
+rem Only the SQLite setup needs the local database file.
+php -r "$s=file_get_contents('.env'); exit(preg_match('/^DB_CONNECTION\s*=\s*\W?(pgsql|mysql|mariadb|sqlsrv)/mi', $s) || file_exists('database/database.sqlite') ? 0 : 1);"
+if errorlevel 1 goto :not_configured
+
+rem Debug pages show file paths, queries and settings, so never share them on the network.
+php -r "$s=file_get_contents('.env'); exit(preg_match('/^APP_DEBUG\s*=\s*\W?(true|1|on|yes)\W?\s*$/mi', $s) ? 1 : 0);"
+if errorlevel 1 goto :debug_enabled
 
 echo.
 echo Le Charme Suites IHMP - Shared Offline / LAN Mode
