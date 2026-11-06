@@ -14,8 +14,24 @@ class DatabaseSeeder extends Seeder
 
     /**
      * Seed the application's database.
+     *
+     * Seeding only adds records that are missing. Existing accounts and rooms
+     * are never overwritten, so re-running setup cannot reset passwords or
+     * undo an administrator's room changes on a shared database.
      */
     public function run(): void
+    {
+        if (! app()->environment('production')) {
+            $this->seedDemoAccounts();
+        }
+
+        $this->seedMissingSampleRooms();
+    }
+
+    /**
+     * Create the demonstration staff accounts that do not exist yet.
+     */
+    private function seedDemoAccounts(): void
     {
         foreach ([
             ['Hotel Administrator', 'admin@lecharmehotel.com', 'admin'],
@@ -23,7 +39,7 @@ class DatabaseSeeder extends Seeder
             ['Billing Staff', 'billing@lecharmehotel.com', 'cashier'],
             ['Housekeeping Staff', 'housekeeping@lecharmehotel.com', 'housekeeping'],
         ] as [$name, $email, $role]) {
-            User::updateOrCreate([
+            User::firstOrCreate([
                 'email' => $email,
             ], [
                 'name' => $name,
@@ -32,13 +48,19 @@ class DatabaseSeeder extends Seeder
                 'approved_at' => now(),
             ]);
         }
+    }
 
+    /**
+     * Create the official sample rooms that do not exist yet.
+     */
+    private function seedMissingSampleRooms(): void
+    {
         foreach (config('hotel.sample_room_layout') as $number => $type) {
-            $number = (string) $number;
             $specification = config("hotel.room_types.{$type}");
-            $room = Room::firstOrNew(['room_number' => $number]);
 
-            $room->fill([
+            Room::firstOrCreate([
+                'room_number' => (string) $number,
+            ], [
                 'room_type' => $type,
                 'rate' => $specification['rate'],
                 'capacity' => $specification['capacity'],
@@ -50,13 +72,8 @@ class DatabaseSeeder extends Seeder
                 'amenities' => $specification['amenities'],
                 'non_smoking' => true,
                 'description' => $specification['description'],
+                'status' => 'available',
             ]);
-
-            if (! $room->exists) {
-                $room->status = 'available';
-            }
-
-            $room->save();
         }
     }
 }

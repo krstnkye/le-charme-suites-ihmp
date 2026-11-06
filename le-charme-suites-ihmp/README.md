@@ -6,7 +6,7 @@ It uses a local SQLite database by default, so XAMPP and MySQL are not required.
 
 ## Requirements
 
-- PHP 8.3 or newer with `pdo_sqlite`, `sqlite3`, `mbstring`, `openssl`, and `fileinfo`
+- PHP 8.4 or newer with `pdo_sqlite`, `sqlite3`, `mbstring`, `openssl`, and `fileinfo`
 - Composer 2
 - Git
 - Visual Studio Code or another code editor
@@ -38,7 +38,11 @@ Open <http://127.0.0.1:8000>.
 
 ## Demo Accounts
 
-All seeded accounts use the password `password`.
+Seeding creates these accounts with the password `password` the first time
+only. Running setup or update again never resets an existing account's
+password, role, or approval, and never overwrites rooms an administrator has
+edited. On a shared or hosted database, change these passwords right after the
+first setup. No demo accounts are created when `APP_ENV=production`.
 
 | Department | Email |
 | --- | --- |
