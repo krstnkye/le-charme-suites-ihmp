@@ -23,12 +23,12 @@ inner folder.
 ## Required Software
 
 1. Git for Windows
-2. PHP 8.3 or newer
+2. PHP 8.4 or newer
 3. Composer 2
 4. Visual Studio Code
 
 XAMPP is optional and is not required by this project. The default database is
-SQLite. If XAMPP is installed, its PHP version must still be 8.3 or newer and
+SQLite. If XAMPP is installed, its PHP version must still be 8.4 or newer and
 the SQLite extensions must be enabled.
 
 ## Working Without Internet
@@ -163,7 +163,7 @@ pages.
 
 ### `php` is not recognized
 
-Install PHP 8.3 or newer and add the PHP directory to the Windows `PATH`, then
+Install PHP 8.4 or newer and add the PHP directory to the Windows `PATH`, then
 restart VS Code.
 
 ### `composer` is not recognized

@@ -4,7 +4,7 @@ The Laravel application is inside the `le-charme-suites-ihmp` folder.
 
 ## Windows Quick Start
 
-1. Install Git, PHP 8.3 or newer, and Composer.
+1. Install Git, PHP 8.4 or newer, and Composer.
 2. Clone this repository.
 3. Open the cloned repository folder in Visual Studio Code.
 4. Double-click `setup-and-run.bat`, or run it from the VS Code terminal.

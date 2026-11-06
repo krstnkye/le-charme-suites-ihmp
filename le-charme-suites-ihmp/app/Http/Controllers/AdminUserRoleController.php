@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class AdminUserRoleController extends Controller
@@ -36,7 +37,7 @@ class AdminUserRoleController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', new WorkEmail, Rule::unique('users', 'email')],
             'role' => ['required', 'in:receptionist,cashier,housekeeping'],
-            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::min(8)],
+            'password' => ['required', 'confirmed', Password::min(8)],
         ], [
             'password.confirmed' => 'Passwords do not match.',
         ]);

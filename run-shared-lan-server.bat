@@ -33,7 +33,7 @@ pause
 exit /b 1
 
 :missing_php
-echo ERROR: PHP was not found. Install PHP 8.3 or newer and add it to PATH.
+echo ERROR: PHP was not found. Install PHP 8.4 or newer and add it to PATH.
 pause
 exit /b 1
 

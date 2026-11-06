@@ -8,7 +8,7 @@ if errorlevel 1 goto :wrong_folder
 where php >nul 2>nul
 if errorlevel 1 goto :missing_php
 
-php -r "exit(PHP_VERSION_ID >= 80300 ? 0 : 1);"
+php -r "exit(PHP_VERSION_ID >= 80400 ? 0 : 1);"
 if errorlevel 1 goto :old_php
 
 where composer >nul 2>nul
@@ -64,11 +64,11 @@ echo ERROR: The le-charme-suites-ihmp application folder was not found.
 goto :help
 
 :missing_php
-echo ERROR: PHP was not found. Install PHP 8.3 or newer and add it to PATH.
+echo ERROR: PHP was not found. Install PHP 8.4 or newer and add it to PATH.
 goto :help
 
 :old_php
-echo ERROR: This project requires PHP 8.3 or newer.
+echo ERROR: This project requires PHP 8.4 or newer.
 php -v
 goto :help
 

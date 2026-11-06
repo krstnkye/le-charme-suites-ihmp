@@ -6,7 +6,7 @@ It uses a local SQLite database by default, so XAMPP and MySQL are not required.
 
 ## Requirements
 
-- PHP 8.3 or newer with `pdo_sqlite`, `sqlite3`, `mbstring`, `openssl`, and `fileinfo`
+- PHP 8.4 or newer with `pdo_sqlite`, `sqlite3`, `mbstring`, `openssl`, and `fileinfo`
 - Composer 2
 - Git
 - Visual Studio Code or another code editor
