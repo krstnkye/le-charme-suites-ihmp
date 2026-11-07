@@ -1,6 +1,7 @@
 *.log
 .DS_Store
 .env
+.env.local-demo
 .env.backup
 .env.production
 .phpactor.json
@@ -10,6 +11,7 @@
 /.idea
 /.nova
 /.phpunit.cache
+/.playwright-cli
 /.vscode
 /.zed
 /auth.json
@@ -21,6 +23,7 @@
 /storage/*.key
 /storage/pail
 /vendor
+/database/local-demo.sqlite
 _ide_helper.php
 Homestead.json
 Homestead.yaml

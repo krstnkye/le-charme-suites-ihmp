@@ -3,35 +3,21 @@
 namespace Tests\Feature;
 
 use App\Models\Room;
-use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class DatabaseSeederTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_reseeding_keeps_an_existing_account_password_role_and_approval(): void
+    public function test_general_seeder_does_not_create_accounts_with_shared_credentials(): void
     {
         $this->seed(DatabaseSeeder::class);
-
-        $administrator = User::where('email', 'admin@lecharmehotel.com')->firstOrFail();
-        $approvedAt = now()->subMonth()->startOfSecond();
-        $administrator->update([
-            'password' => 'a-changed-secret-123',
-            'approved_at' => $approvedAt,
-        ]);
-        User::where('email', 'receptionist@lecharmehotel.com')->update(['role' => 'cashier']);
-
         $this->seed(DatabaseSeeder::class);
 
-        $administrator->refresh();
-        $this->assertTrue(Hash::check('a-changed-secret-123', $administrator->password));
-        $this->assertFalse(Hash::check('password', $administrator->password));
-        $this->assertTrue($approvedAt->equalTo($administrator->approved_at));
-        $this->assertSame('cashier', User::where('email', 'receptionist@lecharmehotel.com')->value('role'));
+        $this->assertDatabaseCount('users', 0);
+        $this->assertDatabaseCount('rooms', 45);
     }
 
     public function test_reseeding_keeps_rooms_edited_by_an_administrator(): void
