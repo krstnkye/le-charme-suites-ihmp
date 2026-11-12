@@ -105,6 +105,23 @@
         }
 
         @media (min-width: 1024px) {
+            body:not(.sidebar-collapsed) > [class~="pl-72"],
+            body:not(.sidebar-collapsed) > [class~="lg:pl-72"] {
+                padding-left: 18rem !important;
+            }
+
+            body:not(.sidebar-collapsed) > [class~="lg:pl-64"] {
+                padding-left: 16rem !important;
+            }
+
+            body:not(.sidebar-collapsed) > [class~="lg:ml-72"] {
+                margin-left: 18rem !important;
+            }
+
+            body:not(.sidebar-collapsed) > [class~="lg:ml-64"] {
+                margin-left: 16rem !important;
+            }
+
             body [class~="pl-72"],
             body [class~="lg:pl-72"],
             body [class~="lg:pl-64"],
