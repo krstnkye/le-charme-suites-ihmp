@@ -1,0 +1,12 @@
+digraph G { rankdir=TB; graph[fontname="Liberation Sans" fontsize=12 nodesep=0.3 ranksep=0.35 pad=0.2]; node[fontname="Liberation Sans" fontsize=11 shape=box style="rounded,filled" fillcolor="#F5F7FA" color="#4A5568"]; edge[fontname="Liberation Sans" fontsize=9 color="#4A5568"];
+subgraph cluster_c { label="Client tier (web browser)"; style="rounded,dashed"; color="#7A8699";
+ staff[label="Staff browsers\nAdministrator · Receptionist · Billing · Housekeeping"]; pub[label="Public booking pages\n/book · /website-booking"]; ext[label="Approved API client\n(integration key or JWT)"]; }
+subgraph cluster_a { label="Laravel 13 application (PHP 8.4)"; style="rounded"; color="#2D3748";
+ routes[label="Routes\nweb.php · api.php"]; mw[label="Middleware\nauth · role · permission · jwt.auth · integration.key · throttle · CSRF"];
+ ctrl[label="Controllers (28)\nReservations, Check-in, Check-out, Rooms, Housekeeping, Admin, API"];
+ svc[label="Services\nCreateOnlineReservation · RoomAvailabilityService · PermissionService\nJwtService · DataExchangeService"];
+ model[label="Eloquent models (14)\nGuest, Room, Reservation, CheckIn, CheckOut, HotelTransaction, ..."];
+ views[label="Blade views (101)\nTailwind CSS 3.4.17 (local copy) · app.js"]; }
+db[label="Relational database\nSQLite file (default, used in the demo)\nPostgreSQL/Supabase supported by configuration (paused, not used)" shape=cylinder fillcolor="#EDF2F7"];
+staff->routes[label="HTTPS/HTTP form posts"]; pub->routes; ext->routes[label="JSON over HTTP"];
+routes->mw->ctrl; ctrl->svc; ctrl->model; svc->model; model->db[label="SQL via PDO"]; ctrl->views[label="render"]; views->staff[style=dashed label="HTML response"]; }

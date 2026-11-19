@@ -1,0 +1,8 @@
+digraph G { rankdir=TB; graph[fontname="Liberation Sans" fontsize=11 nodesep=0.35 ranksep=0.5 pad=0.2]; node[fontname="Liberation Sans" fontsize=9.5 shape=box style="rounded,filled" fillcolor="#F7FAFC"]; edge[fontname="Liberation Sans" fontsize=8 color="#4A5568"];
+subgraph cluster_lan { label="Private Wi-Fi / classroom LAN (no internet required)"; style="rounded,dashed";
+ subgraph cluster_host { label="Host laptop (Windows 10/11)"; style="rounded"; color="#2D3748";
+  srv[label="PHP 8.4 built-in server\nphp artisan serve (port 8000)\nrun-local-demo.bat [--lan]"]; app[label="Laravel 13 IHMP\n(vendor folder included)"]; db[label="database/local-demo.sqlite\n(fictional data only)" shape=cylinder]; srv->app->db; }
+ c1[label="Staff browser on host\nhttp://127.0.0.1:8000"]; c2[label="Other laptops / phones\nhttp://<host IPv4>:8000"]; c1->srv; c2->srv[label="LAN only, debug off"]; }
+subgraph cluster_off { label="Not connected in the defended build"; style="rounded,dotted"; color="#A0AEC0"; fontcolor="#718096";
+ sb[label="Supabase PostgreSQL\n(paused; optional DB_CONNECTION=pgsql)" fontcolor="#718096" color="#A0AEC0"]; web[label="lecharmehotels.com booking\n(no API access granted)" fontcolor="#718096" color="#A0AEC0"]; pg[label="Payment gateway / SMS / e-mail\n(not implemented; mail goes to log)" fontcolor="#718096" color="#A0AEC0"]; }
+app->sb[style=dotted arrowhead=none color="#A0AEC0"]; app->web[style=dotted arrowhead=none color="#A0AEC0"]; app->pg[style=dotted arrowhead=none color="#A0AEC0"]; }

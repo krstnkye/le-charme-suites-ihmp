@@ -1,0 +1,5 @@
+digraph G { rankdir=LR; graph[fontname="Liberation Sans" fontsize=11 nodesep=0.15 ranksep=0.9 pad=0.2]; node[fontname="Liberation Sans" fontsize=9]; edge[color="#4A5568" arrowhead=none];
+node[shape=box style=""]; G[label="Guest"]; R[label="Receptionist"]; B[label="Billing"]; H[label="Housekeeping"]; A[label="Administrator"]; X[label="External client"];
+subgraph cluster_s { label="Le Charme Suites IHMP"; style=rounded; node[shape=ellipse style=filled fillcolor="#F7FAFC"];
+ u1[label="UC-01 Sign in / out"]; u2[label="UC-02 Submit online booking"]; u3[label="UC-03 Confirm online booking"]; u4[label="UC-04 Create reservation"]; u5[label="UC-05 Check in guest"]; u6[label="UC-06 Settle bill and check out"]; u7[label="UC-07 Print receipt / registration card"]; u8[label="UC-08 Process housekeeping task"]; u9[label="UC-09 Update room status"]; u10[label="UC-10 Approve and manage accounts"]; u11[label="UC-11 Edit permission matrix"]; u12[label="UC-12 Export dataset / API exchange"]; }
+G->u2; X->u2; X->u12; R->u1; R->u3; R->u4; R->u5; R->u6; R->u7; R->u9; B->u1; B->u6; B->u7; H->u1; H->u8; H->u9; A->u1; A->u10; A->u11; A->u12; }

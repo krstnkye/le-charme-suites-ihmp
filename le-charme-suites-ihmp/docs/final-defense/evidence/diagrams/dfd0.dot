@@ -1,0 +1,8 @@
+digraph G { rankdir=LR; graph[fontname="Liberation Sans" fontsize=11 nodesep=0.4 ranksep=1.0 pad=0.2]; node[fontname="Liberation Sans" fontsize=10]; edge[fontname="Liberation Sans" fontsize=8 color="#4A5568"];
+sys[label="0\nLe Charme Suites IHMP" shape=circle style=filled fillcolor="#D9EAF7" width=1.8 fixedsize=true];
+g[label="Guest / public visitor" shape=box]; r[label="Receptionist" shape=box]; b[label="Billing staff" shape=box]; h[label="Housekeeping staff" shape=box]; a[label="Administrator" shape=box]; x[label="External booking client\n(simulated / API key)" shape=box];
+g->sys[label="booking request"]; sys->g[label="booking reference"]; x->sys[label="JSON booking"]; sys->x[label="201 + reference / datasets"];
+r->sys[label="guest, reservation, check-in data"]; sys->r[label="arrivals, availability,\nregistration card"];
+b->sys[label="payment amount, status"]; sys->b[label="guest bill, receipt, reports"];
+h->sys[label="task status, room status"]; sys->h[label="task queue, room list"];
+a->sys[label="accounts, permissions, rooms"]; sys->a[label="dashboards, audit views, exports"]; }

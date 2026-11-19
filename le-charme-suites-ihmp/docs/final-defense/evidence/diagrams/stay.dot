@@ -1,0 +1,15 @@
+digraph G { rankdir=TB; graph[fontname="Liberation Sans" fontsize=11 nodesep=0.3 ranksep=0.28 pad=0.2]; node[fontname="Liberation Sans" fontsize=9.5 shape=box style="rounded,filled" fillcolor="#F7FAFC"]; edge[fontname="Liberation Sans" fontsize=8 color="#4A5568"];
+s[label="Start" shape=oval fillcolor="#D9EAF7"];
+o[label="Online request saved\nreservation = pending"]; f[label="Front desk creates booking\nreservation = reserved"];
+c1[label="Receptionist confirms?\n(room still free for dates)" shape=diamond style=filled fillcolor="#FFFFFF"];
+r[label="reservation = reserved"]; x[label="reservation = cancelled"];
+ci[label="Arrival date reached, room not occupied\nor under maintenance?" shape=diamond style=filled fillcolor="#FFFFFF"];
+in[label="Check-in: check_ins row (active)\nreservation = checked_in · room = occupied\nstatus log + transaction"];
+bill[label="Billing reviews server bill\nroom rate × nights + recorded charges"];
+pay[label="Payment status matches amount?\npaid = full · partial = between · unpaid = 0" shape=diamond style=filled fillcolor="#FFFFFF"];
+out[label="Check-out: check_outs row · reservation = completed\nroom = cleaning · status log · transaction\nturnover task (queued, high)"];
+hk[label="Housekeeping: queued → in progress → inspection → completed"];
+rel[label="Room cleaning, no guest, no other open blocking task?" shape=diamond style=filled fillcolor="#FFFFFF"];
+av[label="room = available + status log"]; e[label="End" shape=oval fillcolor="#D9EAF7"];
+s->o[label="/book, /website-booking, API"]; s->f[label="walk-in / phone"]; o->c1; c1->r[label="yes"]; c1->x[label="no / cancel"]; f->ci; r->ci; ci->in[label="yes"]; ci->ci[label="no: error shown" dir=back style=dashed];
+in->bill->pay; pay->out[label="yes"]; pay->bill[label="no: validation error" style=dashed]; out->hk->rel; rel->av[label="yes"]; rel->e[label="no: room stays blocked" style=dashed]; av->e; x->e; }

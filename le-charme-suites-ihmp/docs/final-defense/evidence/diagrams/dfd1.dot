@@ -1,0 +1,11 @@
+digraph G { rankdir=TB; graph[fontname="Liberation Sans" fontsize=11 nodesep=0.3 ranksep=0.55 pad=0.2]; node[fontname="Liberation Sans" fontsize=9]; edge[fontname="Liberation Sans" fontsize=7.5 color="#4A5568"];
+node[shape=box style="rounded,filled" fillcolor="#D9EAF7"];
+p1[label="1.0\nManage bookings"]; p2[label="2.0\nCheck in guest"]; p3[label="3.0\nSettle bill and\ncheck out"]; p4[label="4.0\nHousekeeping\nturnover"]; p5[label="5.0\nAdminister accounts,\nrooms, permissions"]; p6[label="6.0\nExchange data\n(API / export)"];
+node[shape=record style=filled fillcolor="#F7FAFC"];
+d1[label="D1 | guests"]; d2[label="D2 | reservations"]; d3[label="D3 | rooms + room_status_logs"]; d4[label="D4 | check_ins / check_outs"]; d5[label="D5 | hotel_transactions"]; d6[label="D6 | housekeeping_tasks"]; d7[label="D7 | users / role_permissions"]; d8[label="D8 | integration_events"];
+node[shape=box style="" ]; G[label="Guest / website"]; R[label="Receptionist"]; B[label="Billing"]; H[label="Housekeeping"]; A[label="Administrator"];
+G->p1[label="request"]; R->p1[label="booking details"]; p1->d1; p1->d2; p1->d5[label="reservation record"]; p1->d8[label="inbound event"]; d3->p1[label="availability"];
+R->p2; d2->p2; p2->d4[label="active stay"]; p2->d3[label="occupied + log"]; p2->d5;
+B->p3[label="amount, status"]; d4->p3; d5->p3[label="recorded charges"]; p3->d4[label="checkout"]; p3->d3[label="cleaning + log"]; p3->d6[label="turnover task"]; p3->B[label="receipt"];
+H->p4[label="status change"]; d6->p4; p4->d6; p4->d3[label="available (rules)"];
+A->p5; p5->d7; p5->d3; p6->d8; d2->p6; d1->p6; p6->A[label="CSV / JSON"]; }

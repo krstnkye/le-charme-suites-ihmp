@@ -1,0 +1,9 @@
+digraph G { rankdir=LR; graph[fontname="Liberation Sans" fontsize=11 nodesep=0.12 ranksep=0.5 pad=0.2]; node[fontname="Liberation Sans" fontsize=9 shape=box style="rounded,filled" fillcolor="#F7FAFC"]; edge[color="#4A5568" arrowsize=0.6];
+L[label="/login (staff)\n/admin (administrator)" fillcolor="#D9EAF7"];
+A[label="Administrator\n/dashboard" fillcolor="#D9EAF7"]; R[label="Receptionist\n/dashboard" fillcolor="#D9EAF7"]; B[label="Billing\n/dashboard" fillcolor="#D9EAF7"]; H[label="Housekeeping\n/dashboard" fillcolor="#D9EAF7"];
+L->A; L->R; L->B; L->H;
+A->{a1[label="Users, Create Account, Roles"]; a2[label="Permissions matrix"]; a3[label="Operations views"]; a4[label="Rooms (add / edit all fields)"]; a5[label="Integration Center + exports"]; a6[label="Audit logs*, Settings*"]; a7[label="All front-desk, billing,\nhousekeeping pages"]};
+R->{r1[label="Guests"]; r2[label="Reservations + registration card"]; r3[label="Online booking requests"]; r4[label="Check-in"]; r5[label="Check-out / guest bills"]; r6[label="Rooms (status, notes)"]};
+B->{b1[label="Guest bills / check-out"]; b2[label="Bill preview, receipt"]; b3[label="Transaction history"]; b4[label="Reports"]};
+H->{h1[label="Housekeeping pages (/housekeeping/*)"]; h2[label="Tasks: start, inspect, complete"]; h3[label="Rooms (status, notes)"]};
+S[label="All roles: Messages, Profile,\nSystem Manual, Logout"]; }

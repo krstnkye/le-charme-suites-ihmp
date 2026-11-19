@@ -1,0 +1,3 @@
+digraph G { rankdir=LR; graph[fontname="Liberation Sans" fontsize=11 pad=0.2 nodesep=0.5]; node[fontname="Liberation Sans" fontsize=10 shape=box style="rounded,filled" fillcolor="#F7FAFC"]; edge[fontname="Liberation Sans" fontsize=8 color="#4A5568"];
+q[label="queued"]; p[label="in_progress"]; i[label="inspection"]; c[label="completed\n(final)" fillcolor="#D9EAF7"]; x[label="cancelled\n(final)" fillcolor="#EDF2F7"];
+q->p[label="start*"]; p->q[label="return"]; p->i[label="send for inspection*"]; i->p[label="rework*"]; p->c[label="complete* (quick tasks only)"]; i->c[label="complete*"]; q->c[label="complete* (stayover, guest request,\nmaintenance follow-up only)" style=dashed]; q->x; p->x; i->x; }
