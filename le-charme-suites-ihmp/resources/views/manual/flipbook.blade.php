@@ -10,7 +10,7 @@
 </head>
 <body class="min-h-screen bg-[#e5e2dc] font-sans text-primary antialiased">
     <main class="mx-auto flex min-h-screen max-w-5xl flex-col p-3 sm:p-6">
-        <div class="mb-3 flex items-center justify-between rounded-lg bg-primary px-4 py-3 text-white"><div><p class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#ffdeaa]">IPT101 Development Phase</p><h1 class="font-serif text-lg font-bold">IHMP Integration Flipbook</h1></div><span id="pageIndicator" class="font-mono text-xs">1 / 10</span></div>
+        <div class="mb-3 flex items-center justify-between gap-3 rounded-lg bg-primary px-4 py-3 text-white"><div><p class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#ffdeaa]">IPT101 Development Phase</p><h1 class="font-serif text-lg font-bold">IHMP Integration Flipbook</h1></div><div class="flex items-center gap-3"><a class="rounded border border-white/30 px-3 py-2 text-xs font-bold hover:bg-white/10" href="{{ asset('user-manual-flipbook/index.html') }}">Open Full Offline Manual</a><span id="pageIndicator" class="font-mono text-xs">1 / 10</span></div></div>
         <div class="relative min-h-[430px] flex-1 overflow-hidden rounded-lg border border-white/50 bg-paper shadow-xl">
             @foreach ([
                 ['System Overview', 'Le Charmé Suites IHMP is a role-based, local-first Laravel platform for four operating departments: Administration, Front Desk, Billing, and Housekeeping.', ['One application server', 'One shared hotel database', 'Four department workspaces', 'Internet-independent daily operation']],

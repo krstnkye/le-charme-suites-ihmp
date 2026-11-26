@@ -55,6 +55,12 @@ class ApiAuthController extends Controller
             return response()->json(['message' => 'The refresh token is invalid, expired, or revoked.'], 401);
         }
 
+        if (! $refreshToken->user->isApproved()) {
+            $jwt->revoke($refreshToken);
+
+            return response()->json(['message' => 'This account is not approved for API access.'], 403);
+        }
+
         if (! $jwt->revokeIfActive($refreshToken)) {
             return response()->json(['message' => 'The refresh token is invalid, expired, or revoked.'], 401);
         }

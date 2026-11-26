@@ -89,7 +89,7 @@ class IntegrationReliabilityTest extends TestCase
 
     public function test_api_requires_a_key_and_records_successful_data_transfer(): void
     {
-        config(['integrations.api_key' => 'test-integration-key']);
+        config(['integrations.credentials.export' => 'test-integration-key']);
         Room::create([
             'room_number' => '910',
             'room_type' => 'Deluxe King',
@@ -116,11 +116,11 @@ class IntegrationReliabilityTest extends TestCase
 
     public function test_api_is_disabled_when_no_integration_key_is_configured(): void
     {
-        config(['integrations.api_key' => null]);
+        config(['integrations.credentials.export' => null]);
 
         $this->getJson('/api/v1/status')
             ->assertStatus(503)
-            ->assertJsonPath('message', 'The IHMP integration API is disabled until IHMP_API_KEY is configured.');
+            ->assertJsonPath('message', 'The IHMP export integration is disabled until its scoped credential is configured.');
 
         $this->assertSame(0, IntegrationEvent::count());
     }

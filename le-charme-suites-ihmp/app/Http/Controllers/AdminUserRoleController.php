@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\RolePermission;
 use App\Models\User;
 use App\Rules\WorkEmail;
+use App\Services\AuditService;
+use App\Services\CredentialRevocationService;
 use App\Services\PermissionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class AdminUserRoleController extends Controller
@@ -28,7 +31,7 @@ class AdminUserRoleController extends Controller
         ]);
     }
 
-    public function storeAccount(Request $request): RedirectResponse
+    public function storeAccount(Request $request, AuditService $audit): RedirectResponse
     {
         $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
 
@@ -36,13 +39,14 @@ class AdminUserRoleController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', new WorkEmail, Rule::unique('users', 'email')],
             'role' => ['required', 'in:receptionist,cashier,housekeeping'],
-            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::min(8)],
+            'password' => ['required', 'confirmed', Password::min(8)],
         ], [
             'password.confirmed' => 'Passwords do not match.',
         ]);
 
         // Accounts created by an administrator are approved immediately.
         $user = User::create($validated + ['approved_at' => now()]);
+        $audit->record($request, 'USER_ACCOUNT_CREATED', $user, [], $user->only(['name', 'email', 'role', 'approved_at']));
 
         return to_route('admin.accounts.create')
             ->with('status', "Staff account created for {$user->name} ({$user->email}).");
@@ -53,7 +57,7 @@ class AdminUserRoleController extends Controller
         return view('admin.users.roles', $this->viewData());
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, AuditService $audit): RedirectResponse
     {
         $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
 
@@ -64,13 +68,18 @@ class AdminUserRoleController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        User::create($validated + ['approved_at' => now()]);
+        $user = User::create($validated + ['approved_at' => now()]);
+        $audit->record($request, 'USER_ACCOUNT_CREATED', $user, [], $user->only(['name', 'email', 'role', 'approved_at']));
 
         return to_route('admin.users.index')->with('status', 'User account provisioned.');
     }
 
-    public function update(Request $request, User $user): RedirectResponse
-    {
+    public function update(
+        Request $request,
+        User $user,
+        CredentialRevocationService $revocation,
+        AuditService $audit,
+    ): RedirectResponse {
         $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
 
         $validated = $request->validate([
@@ -84,25 +93,41 @@ class AdminUserRoleController extends Controller
             return back()->withErrors(['role' => 'At least one system admin account must remain active.']);
         }
 
-        if (blank($validated['password'] ?? null)) {
+        $passwordChanged = filled($validated['password'] ?? null);
+
+        if (! $passwordChanged) {
             unset($validated['password']);
         }
 
+        $before = $user->only(['name', 'email', 'role', 'approved_at']);
         $user->update($validated);
+
+        if ($passwordChanged) {
+            $revocation->revokeFor(
+                $user,
+                $request->user()->is($user) ? $request->session()->getId() : null,
+            );
+        }
+
+        $audit->record($request, 'USER_ACCOUNT_UPDATED', $user, $before, [
+            ...$user->only(['name', 'email', 'role', 'approved_at']),
+            'password_changed' => $passwordChanged,
+        ]);
 
         return to_route('admin.users.index')->with('status', 'User account updated.');
     }
 
-    public function approve(User $user): RedirectResponse
+    public function approve(Request $request, User $user, AuditService $audit): RedirectResponse
     {
         if (! $user->isApproved()) {
             $user->update(['approved_at' => now()]);
+            $audit->record($request, 'USER_ACCOUNT_APPROVED', $user, ['approved_at' => null], ['approved_at' => $user->approved_at]);
         }
 
         return to_route('admin.users.index')->with('status', "{$user->name} can now sign in.");
     }
 
-    public function destroy(Request $request, User $user): RedirectResponse
+    public function destroy(Request $request, User $user, AuditService $audit): RedirectResponse
     {
         if ($request->user()->is($user)) {
             return back()->withErrors(['user' => 'You cannot delete the account you are currently using.']);
@@ -112,6 +137,8 @@ class AdminUserRoleController extends Controller
             return back()->withErrors(['user' => 'At least one system admin account must remain active.']);
         }
 
+        $before = $user->only(['name', 'email', 'role', 'approved_at']);
+        $audit->record($request, 'USER_ACCOUNT_DELETED', $user, $before);
         $user->delete();
 
         return to_route('admin.users.index')->with('status', 'User account deleted.');
@@ -136,7 +163,7 @@ class AdminUserRoleController extends Controller
         ]);
     }
 
-    public function savePermissions(Request $request): RedirectResponse
+    public function savePermissions(Request $request, AuditService $audit): RedirectResponse
     {
         $validated = $request->validate([
             'role' => ['required', Rule::in(config('rbac.roles'))],
@@ -162,17 +189,23 @@ class AdminUserRoleController extends Controller
             }
         });
 
+        $audit->record($request, 'ROLE_PERMISSIONS_UPDATED', null, [], [
+            'role' => $validated['role'],
+            'permissions' => $validated['permissions'] ?? [],
+        ]);
+
         return to_route('admin.permissions.index', ['role' => $validated['role']])
             ->with('status', 'Permission changes saved for this role.');
     }
 
-    public function resetPermissions(Request $request): RedirectResponse
+    public function resetPermissions(Request $request, AuditService $audit): RedirectResponse
     {
         $role = $request->validate([
             'role' => ['required', Rule::in(config('rbac.roles'))],
         ])['role'];
 
         RolePermission::where('role', $role)->delete();
+        $audit->record($request, 'ROLE_PERMISSIONS_RESET', null, ['role' => $role], ['defaults_restored' => true]);
 
         return to_route('admin.permissions.index', ['role' => $role])
             ->with('status', 'Permission changes reset to the standard defaults.');

@@ -1,17 +1,18 @@
 @php
     $currentUser = auth()->user();
-    $activeCheckIns = $checkIns->map(function ($checkIn) {
+    $activeCheckIns = $checkIns->map(function ($checkIn) use ($folios) {
         $reservation = $checkIn->reservation;
         $room = $checkIn->room;
         $guest = $checkIn->guest;
         $checkInDate = $reservation?->check_in_date ?? $checkIn->checked_in_at;
         $checkOutDate = $reservation?->check_out_date ?? now();
-        $nights = max(1, $checkInDate && $checkOutDate ? $checkInDate->diffInDays($checkOutDate) : 1);
-        $roomTotal = (float) ($room?->rate ?? 0) * $nights;
-        $incidentals = round($roomTotal * 0.12, 2);
-        $tax = round(($roomTotal + $incidentals) * 0.05, 2);
-        $deposit = round($roomTotal * 0.35, 2);
-        $balance = max(0, $roomTotal + $incidentals + $tax - $deposit);
+        $folio = $folios->get($checkIn->id);
+        $nights = $folio['nights'];
+        $roomTotal = $folio['roomCharges'];
+        $incidentals = $folio['extraGuestCharges'] + $folio['additionalTotal'];
+        $tax = 0;
+        $deposit = 0;
+        $balance = $folio['totalCharges'];
 
         return [
             'id' => $checkIn->id,
@@ -92,7 +93,7 @@
                     <div class="max-w-4xl">
                         <div class="mb-2 flex flex-wrap items-center gap-2"><span class="rounded border border-secondary-fixed/30 bg-secondary/30 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-secondary-fixed">Executive Grandeur IHMP</span><span class="text-xs font-semibold text-blue-100/70">Front Desk &amp; Night Audit Certified</span></div>
                         <h2 class="font-serif text-4xl font-bold leading-tight">Guest Bills &amp; Checkout</h2>
-                        <p class="mt-2 text-sm leading-6 text-blue-100">Review active guest bills, extra charges, taxes, deposits, payments, and checkout records.</p>
+                        <p class="mt-2 text-sm leading-6 text-blue-100">Review agreed room rates, extra-guest charges, recorded folio items, payments, and checkout records.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <button id="printSelectedBillButton" type="button" class="inline-flex items-center gap-2 rounded-lg border border-secondary-fixed/40 bg-white/10 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-white/20"><span class="material-symbols-outlined text-secondary-fixed">print</span>Print Selected Guest Bill</button>
@@ -105,14 +106,14 @@
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Active In-House Guest Bills</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-primary">hotel</span></div><div class="mt-3 flex items-baseline gap-2"><span class="font-serif text-3xl font-bold">{{ $activeCheckIns->count() }}</span><span class="text-sm font-semibold text-secondary">Suites Occupied</span></div><p class="mt-1 text-sm text-slate-500">Outstanding: <strong class="text-primary">PHP {{ number_format($activeBalance, 2) }}</strong></p></div>
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Ready for Payment</span><span class="material-symbols-outlined rounded-lg bg-secondary-container/40 p-2 text-secondary">luggage</span></div><div class="mt-3 flex items-baseline gap-2"><span class="font-serif text-3xl font-bold">{{ $activeCheckIns->count() }}</span><span class="rounded-full bg-secondary-fixed px-2 py-0.5 text-xs font-bold text-primary">Today</span></div><p class="mt-1 text-sm text-slate-500">Guest bills waiting for checkout</p></div>
                 <div class="rounded-xl border border-line bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Room Charges</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-primary">corporate_fare</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($roomDebitTotal, 2) }}</p><p class="mt-1 text-sm text-slate-500">Calculated from active room rates</p></div>
-                <div class="rounded-xl border border-line bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Estimated Extra Charges</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-secondary">room_service</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($incidentalsTotal, 2) }}</p><p class="mt-1 text-sm text-slate-500">Estimated extra and service charges</p></div>
+                <div class="rounded-xl border border-line bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">Recorded Extra Charges</span><span class="material-symbols-outlined rounded-lg bg-surface-low p-2 text-secondary">room_service</span></div><p class="mt-3 font-serif text-3xl font-bold">PHP {{ number_format($incidentalsTotal, 2) }}</p><p class="mt-1 text-sm text-slate-500">Extra guests and posted folio items</p></div>
             </section>
 
             <div class="grid gap-6 xl:grid-cols-12">
                 <section class="rounded-xl border border-line bg-white shadow-sm xl:col-span-8">
                     <div class="border-b border-line p-5">
                         <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                            <div><h3 class="font-serif text-2xl font-bold">Guest Billing Records</h3><p class="text-sm text-slate-500">Review room charges, confirm deposits, and prepare official receipts.</p></div>
+                            <div><h3 class="font-serif text-2xl font-bold">Guest Billing Records</h3><p class="text-sm text-slate-500">Review server-calculated charges and prepare official receipts.</p></div>
                             <div class="flex flex-wrap items-center gap-2"><button id="printSelectedBillHeaderButton" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-base">print</span>Print Selected Guest Bill</button><a href="{{ route('check-outs.index') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-xs font-bold text-primary shadow-sm transition hover:bg-surface-low"><span class="material-symbols-outlined text-base">tune</span>Full Transaction Filter</a></div>
                         </div>
                     </div>
@@ -120,7 +121,7 @@
                     <div class="custom-scroll overflow-x-auto">
                         <table class="w-full min-w-[980px] text-left text-sm">
                             <thead class="border-b border-line bg-surface-mid text-xs font-bold uppercase tracking-wider text-slate-600">
-                                <tr><th class="px-4 py-3">Bill / Reference</th><th class="px-4 py-3">Guest &amp; Room</th><th class="px-3 py-3 text-right">Room Charges</th><th class="px-3 py-3 text-right">Extra Charges</th><th class="px-3 py-3 text-right">SBMA Tax</th><th class="px-3 py-3 text-right">Deposits</th><th class="px-4 py-3 text-right">Balance Due</th><th class="px-3 py-3 text-center">Status</th><th class="px-4 py-3 text-center">Actions</th></tr>
+                                <tr><th class="px-4 py-3">Bill / Reference</th><th class="px-4 py-3">Guest &amp; Room</th><th class="px-3 py-3 text-right">Room Charges</th><th class="px-3 py-3 text-right">Extra Charges</th><th class="px-4 py-3 text-right">Balance Due</th><th class="px-3 py-3 text-center">Status</th><th class="px-4 py-3 text-center">Actions</th></tr>
                             </thead>
                             <tbody class="divide-y divide-line">
                                 @forelse ($activeCheckIns as $stay)
@@ -129,14 +130,12 @@
                                         <td class="px-4 py-3.5"><div class="flex items-center gap-1.5 font-bold text-primary"><span>Room {{ $stay['room'] }}</span><span class="h-1.5 w-1.5 rounded-full bg-secondary"></span><span class="text-xs font-normal">{{ $stay['room_type'] }}</span></div><div class="text-xs text-slate-500">{{ $stay['guest'] }}</div></td>
                                         <td class="px-3 py-3.5 text-right font-mono font-semibold">PHP {{ number_format($stay['room_total'], 2) }}</td>
                                         <td class="px-3 py-3.5 text-right font-mono font-semibold">PHP {{ number_format($stay['incidentals'], 2) }}</td>
-                                        <td class="px-3 py-3.5 text-right font-mono text-slate-600">PHP {{ number_format($stay['tax'], 2) }}</td>
-                                        <td class="px-3 py-3.5 text-right font-mono font-semibold text-emerald-800">-PHP {{ number_format($stay['deposit'], 2) }}</td>
                                         <td class="px-4 py-3.5 text-right"><div class="font-mono text-base font-bold text-primary">PHP {{ number_format($stay['balance'], 2) }}</div><span class="text-[10px] font-bold uppercase text-secondary">Payment Pending</span></td>
                                         <td class="px-3 py-3.5 text-center"><span class="rounded-full bg-secondary-fixed px-2 py-1 text-xs font-bold text-primary">Pre-Auth</span></td>
                                         <td class="px-4 py-3.5 text-center"><div class="flex items-center justify-center gap-1 text-slate-500"><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-primary" data-stay-id="{{ $stay['id'] }}" title="View detailed guest bill"><span class="material-symbols-outlined text-base">visibility</span></button><button type="button" class="select-folio rounded p-1 hover:bg-surface-mid hover:text-secondary" data-stay-id="{{ $stay['id'] }}" title="Post payment"><span class="material-symbols-outlined text-base">payments</span></button><a href="{{ $stay['bill_preview_url'] }}" target="_blank" rel="noopener" class="inline-flex rounded p-1 hover:bg-surface-mid hover:text-primary" title="Print guest bill"><span class="material-symbols-outlined text-base">print</span></a></div></td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="9" class="px-4 py-12 text-center font-semibold text-slate-500">No active guest bills are waiting for Billing right now.</td></tr>
+                                    <tr><td colspan="7" class="px-4 py-12 text-center font-semibold text-slate-500">No active guest bills are waiting for Billing right now.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -166,7 +165,7 @@
                         <div class="mb-4 space-y-2 rounded-lg border border-line bg-surface-low p-4">
                             <div class="flex justify-between text-sm"><span class="text-slate-500">Room debit</span><span id="roomChargesPreview" class="font-mono font-bold">PHP 0.00</span></div>
                             <div class="flex justify-between text-sm"><span class="text-slate-500">Extra Charges</span><span id="incidentalsPreview" class="font-mono font-bold">PHP 0.00</span></div>
-                            <div class="flex justify-between text-sm"><span class="text-slate-500">SBMA tax</span><span id="taxPreview" class="font-mono font-bold">PHP 0.00</span></div>
+                            <div class="flex justify-between text-sm"><span class="text-slate-500">Automatic tax</span><span id="taxPreview" class="font-mono font-bold">Not configured</span></div>
                             <div class="flex justify-between border-t border-line pt-3"><span class="font-bold">Balance due</span><span id="balanceDuePreview" class="font-serif text-2xl font-bold">PHP 0.00</span></div>
                         </div>
 

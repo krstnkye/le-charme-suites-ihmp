@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuthActivityLog;
-use App\Models\HotelTransaction;
-use App\Models\RoomStatusLog;
+use App\Models\JwtToken;
 use App\Models\User;
+use App\Services\AuditService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -35,84 +39,22 @@ class AdminAuditLogController extends Controller
                 'severity' => $log->successful ? 'Verified' : 'Blocked',
             ]);
 
-        $transactionEvents = HotelTransaction::with(['guest', 'room'])
-            ->latest('transaction_date')
-            ->limit(8)
-            ->get()
-            ->map(fn (HotelTransaction $transaction): array => [
-                'timestamp' => $transaction->transaction_date ?? $transaction->created_at,
-                'actor' => 'Front Office Ledger',
-                'role' => 'System Recorded',
-                'event' => strtoupper((string) str_replace(' ', '_', $transaction->transaction_type)),
-                'icon' => 'receipt_long',
-                'target' => 'Guest Bill #'.str_pad((string) $transaction->id, 5, '0', STR_PAD_LEFT),
-                'context' => 'Room '.($transaction->room?->room_number ?? 'N/A'),
-                'terminal' => 'IHMP Ledger',
-                'ip' => '127.0.0.1',
-                'details' => $transaction->description ?: 'Hotel transaction recorded.',
-                'severity' => $transaction->status === 'paid' ? 'Verified' : 'Review',
-            ]);
-
-        $roomEvents = RoomStatusLog::with('room')
-            ->latest('changed_at')
-            ->limit(8)
-            ->get()
-            ->map(fn (RoomStatusLog $log): array => [
-                'timestamp' => $log->changed_at ?? $log->created_at,
-                'actor' => 'Room Operations',
-                'role' => 'Housekeeping / Front Desk',
-                'event' => 'ROOM_STATUS_UPDATED',
-                'icon' => 'cleaning_services',
-                'target' => 'Room '.($log->room?->room_number ?? 'N/A'),
-                'context' => ucfirst((string) $log->status),
-                'terminal' => 'Room Status Grid',
-                'ip' => '192.168.2.'.str_pad((string) (($log->id % 90) + 10), 2, '0', STR_PAD_LEFT),
-                'details' => $log->notes ?: 'Room status changed in the availability grid.',
-                'severity' => 'Verified',
-            ]);
-
-        $userEvents = User::latest()
-            ->limit(8)
-            ->get()
-            ->map(fn (User $user): array => [
-                'timestamp' => $user->created_at,
-                'actor' => $user->name,
-                'role' => ucfirst((string) $user->role),
-                'event' => 'USER_ACCOUNT_PROVISIONED',
-                'icon' => 'admin_panel_settings',
-                'target' => 'EMP-'.str_pad((string) $user->id, 3, '0', STR_PAD_LEFT),
-                'context' => $user->email,
-                'terminal' => 'Admin Console',
-                'ip' => '192.168.10.'.str_pad((string) (($user->id % 80) + 10), 2, '0', STR_PAD_LEFT),
-                'details' => 'User account exists in the role-based access control registry.',
-                'severity' => $user->role === 'admin' ? 'Privileged' : 'Verified',
-            ]);
-
-        $auditEvents = $transactionEvents
-            ->concat($roomEvents)
-            ->concat($userEvents)
-            ->concat($authEvents)
-            ->sortByDesc('timestamp')
+        $auditEvents = $authEvents
             ->take(50)
             ->values();
 
-        $activeSessions = AuthActivityLog::with('user')
-            ->whereNotNull('user_id')
-            ->where('occurred_at', '>=', now()->subMinutes((int) config('session.lifetime')))
-            ->latest('occurred_at')
-            ->get()
-            ->groupBy('user_id')
-            ->map->first()
-            ->filter(fn (AuthActivityLog $log): bool => $log->event_type === 'LOGIN_SUCCESS' && $log->successful)
-            ->pluck('user')
-            ->filter()
-            ->values();
+        $sessionTable = (string) config('session.table', 'sessions');
+        $activeSessions = config('session.driver') === 'database' && Schema::hasTable($sessionTable)
+            ? User::whereIn('id', DB::table($sessionTable)->whereNotNull('user_id')->pluck('user_id'))->get()
+            : collect();
 
         return view('admin.audit-logs.index', [
             'auditEvents' => $auditEvents,
             'activeSessions' => $activeSessions,
-            'totalAuditEvents' => HotelTransaction::count() + RoomStatusLog::count() + User::count() + AuthActivityLog::count(),
-            'privilegedActions' => User::where('role', 'admin')->count(),
+            'totalAuditEvents' => AuthActivityLog::count(),
+            'privilegedActions' => AuthActivityLog::where('event_type', 'like', 'USER_%')
+                ->orWhere('event_type', 'like', 'ROLE_%')
+                ->count(),
             'registeredAccounts' => AuthActivityLog::where('event_type', 'ACCOUNT_REGISTERED')->count(),
             'successfulLogins' => AuthActivityLog::where('event_type', 'LOGIN_SUCCESS')->where('successful', true)->count(),
             'blockedAttempts' => AuthActivityLog::where('event_type', 'LOGIN_FAILED')->where('successful', false)->count(),
@@ -121,7 +63,30 @@ class AdminAuditLogController extends Controller
                 $event['actor'],
                 $event['event'],
                 $event['target'],
-            ]))->implode(';') ?: Str::uuid()->toString()),
+            ]))->implode(';')),
         ]);
+    }
+
+    public function terminateRemoteSessions(Request $request, AuditService $audit): RedirectResponse
+    {
+        $sessionTable = (string) config('session.table', 'sessions');
+
+        if (config('session.driver') !== 'database' || ! Schema::hasTable($sessionTable)) {
+            return back()->withErrors([
+                'sessions' => 'Remote session termination requires the database session driver.',
+            ]);
+        }
+
+        $terminated = DB::table($sessionTable)
+            ->where('id', '!=', $request->session()->getId())
+            ->delete();
+        $revokedTokens = JwtToken::whereNull('revoked_at')->update(['revoked_at' => now()]);
+
+        $audit->record($request, 'REMOTE_SESSIONS_TERMINATED', null, [], [
+            'web_sessions_terminated' => $terminated,
+            'jwt_tokens_revoked' => $revokedTokens,
+        ]);
+
+        return back()->with('status', "Terminated {$terminated} remote web sessions and revoked {$revokedTokens} API tokens.");
     }
 }

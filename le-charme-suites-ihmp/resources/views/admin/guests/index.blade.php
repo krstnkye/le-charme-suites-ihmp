@@ -143,7 +143,7 @@
                 <form method="GET" action="{{ route('admin.guests.index') }}" class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                     <div class="relative flex-1">
                         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-500">search</span>
-                        <input name="search" value="{{ $search }}" class="w-full rounded-lg border-outline-variant bg-white py-2.5 pl-9 pr-3 text-sm focus:border-secondary focus:ring-secondary/20" placeholder="Search name, email, phone, guest ID, or government ID..." type="search">
+                        <input name="search" value="{{ $search }}" class="w-full rounded-lg border-outline-variant bg-white py-2.5 pl-9 pr-3 text-sm focus:border-secondary focus:ring-secondary/20" placeholder="Search name, email, phone, or guest ID..." type="search">
                     </div>
                     <div class="flex flex-wrap gap-2">
                         <select class="rounded-lg border-outline-variant bg-surface-container-low text-sm focus:border-secondary focus:ring-secondary/20">
@@ -210,7 +210,7 @@
                                                 'bg-emerald-50 text-emerald-800 border border-emerald-200' => $hasIdentity,
                                                 'bg-amber-50 text-amber-900 border border-amber-200' => ! $hasIdentity,
                                             ])>{{ $hasIdentity ? 'Verified ID' : 'Needs ID Review' }}</span>
-                                            <span class="text-xs text-slate-500">{{ $hasIdentity ? $guest->identification_type . ' - ' . $guest->identification_number : 'Identification not complete' }}</span>
+                                            <span class="text-xs text-slate-500">{{ $hasIdentity ? $guest->identification_type . ' - ' . $guest->masked_identification_number : 'Identification not complete' }}</span>
                                             @unless ($hasContact)
                                                 <span class="text-xs font-bold text-error">Contact details incomplete</span>
                                             @endunless
@@ -269,7 +269,12 @@
                 csvRows.push(cells);
             });
 
-            const csv = csvRows.map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(',')).join('\n');
+            const safeCell = (value) => {
+                const text = String(value);
+                const neutralized = /^[=+\-@\t\r]/.test(text) ? `'${text}` : text;
+                return `"${neutralized.replaceAll('"', '""')}"`;
+            };
+            const csv = csvRows.map((row) => row.map(safeCell).join(',')).join('\n');
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);

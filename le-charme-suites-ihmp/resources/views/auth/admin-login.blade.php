@@ -132,8 +132,8 @@
                             class="w-full rounded-lg border border-outline-variant bg-surface py-2.5 pl-10 pr-10 font-body-md text-body-md text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary"
                             required
                         >
-                        <button class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-primary" id="toggle-password" type="button">
-                            <span class="material-symbols-outlined text-lg" id="password-icon">visibility</span>
+                        <button aria-controls="password" aria-label="Show password" aria-pressed="false" class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-primary" id="toggle-password" type="button">
+                            <span aria-hidden="true" class="material-symbols-outlined text-lg" id="password-icon">visibility</span>
                         </button>
                     </div>
                 </div>
@@ -164,12 +164,14 @@
     </main>
 
     <script>
-        document.getElementById('toggle-password').addEventListener('click', () => {
+        document.getElementById('toggle-password').addEventListener('click', (event) => {
             const password = document.getElementById('password');
             const icon = document.getElementById('password-icon');
             const isHidden = password.type === 'password';
             password.type = isHidden ? 'text' : 'password';
             icon.textContent = isHidden ? 'visibility_off' : 'visibility';
+            event.currentTarget.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
+            event.currentTarget.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
         });
 
         const loginForm = document.getElementById('login-form');

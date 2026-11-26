@@ -1605,9 +1605,9 @@
                         <form action="{{ route('housekeeping.page', 'report-issue') }}" method="GET" class="mt-4 space-y-4">
                             <label class="block">
                                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Target Room</span>
-                                <select class="mt-1 w-full rounded-lg border-line text-sm text-primary focus:border-secondary focus:ring-secondary">
+                                <select name="room_id" class="mt-1 w-full rounded-lg border-line text-sm text-primary focus:border-secondary focus:ring-secondary" required>
                                     @forelse ($allRooms as $room)
-                                        <option>Room {{ $room->room_number }} - {{ $room->room_type }} ({{ ucfirst($room->status) }})</option>
+                                        <option value="{{ $room->id }}">Room {{ $room->room_number }} - {{ $room->room_type }} ({{ ucfirst($room->status) }})</option>
                                     @empty
                                         <option>No rooms encoded</option>
                                     @endforelse
@@ -1618,7 +1618,7 @@
                                 <div class="mt-2 grid gap-2 sm:grid-cols-2">
                                     @foreach (['HVAC', 'Plumbing', 'Door Lock', 'Electrical'] as $category)
                                         <label class="flex items-center gap-2 rounded-lg border border-line bg-[#f6f3ed] px-3 py-2 text-sm font-semibold text-primary">
-                                            <input type="radio" name="category" class="border-line text-secondary focus:ring-secondary" @checked($loop->first)>
+                                            <input type="radio" name="category" value="{{ $category }}" class="border-line text-secondary focus:ring-secondary" @checked($loop->first)>
                                             {{ $category }}
                                         </label>
                                     @endforeach
@@ -1626,11 +1626,11 @@
                             </div>
                             <label class="block">
                                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Defect Telemetry / Staff Note</span>
-                                <textarea rows="4" class="mt-1 w-full rounded-lg border-line text-sm focus:border-secondary focus:ring-secondary" placeholder="Describe issue, affected fixture, guest impact, and urgency..."></textarea>
+                                <textarea name="notes" rows="4" maxlength="2000" class="mt-1 w-full rounded-lg border-line text-sm focus:border-secondary focus:ring-secondary" placeholder="Describe issue, affected fixture, guest impact, and urgency..."></textarea>
                             </label>
                             <label class="flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-primary">
                                 Immediate PMS Room Freeze
-                                <input type="checkbox" class="rounded border-line text-secondary focus:ring-secondary" checked>
+                                <input name="freeze" value="1" type="checkbox" class="rounded border-line text-secondary focus:ring-secondary" checked>
                             </label>
                             <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-[#0d2238]">
                                 <span class="material-symbols-outlined text-base">send</span>
@@ -1673,7 +1673,7 @@
     @elseif ($pageKey === 'report-issue')
         @php
             $reportRooms = $allRooms->values();
-            $selectedReportRoom = $reportRooms->first();
+            $selectedReportRoom = $reportRooms->firstWhere('id', $incidentContext['room_id']) ?? $reportRooms->first();
             $reportAction = $selectedReportRoom ? route('rooms.update', $selectedReportRoom) : route('rooms.index');
             $categories = [
                 ['label' => 'HVAC & Climate', 'hint' => 'Aircon, thermostat, air', 'icon' => 'mode_fan', 'active' => true],
@@ -1725,7 +1725,7 @@
                                 <div class="relative">
                                     <select id="reportRoomSelect" class="w-full rounded-lg border-line bg-white py-2.5 pl-10 pr-10 text-sm focus:border-secondary focus:ring-secondary">
                                         @forelse ($reportRooms as $room)
-                                            <option value="{{ $room->id }}"
+                                             <option value="{{ $room->id }}" @selected($selectedReportRoom?->id === $room->id)
                                                 data-action="{{ route('rooms.update', $room) }}"
                                                 data-room-number="{{ $room->room_number }}"
                                                 data-room-type="{{ $room->room_type }}"
@@ -1808,7 +1808,7 @@
                                         <button type="button" class="issue-preset rounded-full border border-line bg-[#f6f3ed] px-2.5 py-1 text-xs text-slate-600 hover:border-secondary hover:text-secondary" data-preset="{{ $preset }}">+ {{ $preset }}</button>
                                     @endforeach
                                 </div>
-                                <textarea id="defectDescription" name="description" rows="4" required class="w-full rounded-lg border-line bg-white p-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="Specify observations, readings, sounds, error codes, and guest interaction notes...">Maintenance issue reported by housekeeping: HVAC/climate defect affecting guest comfort. Please dispatch Engineering for inspection.</textarea>
+                                <textarea id="defectDescription" name="description" rows="4" required class="w-full rounded-lg border-line bg-white p-3 text-sm focus:border-secondary focus:ring-secondary" placeholder="Specify observations, readings, sounds, error codes, and guest interaction notes...">{{ $incidentContext['notes'] ?: 'Maintenance issue reported by housekeeping: '.($incidentContext['category'] ?: 'room defect').' affecting guest comfort. Please dispatch Engineering for inspection.' }}</textarea>
                             </div>
 
                             <div class="mt-5">
@@ -2385,6 +2385,7 @@
                             <span class="material-symbols-outlined rounded-lg bg-[#f6f3ed] p-2 text-secondary">summarize</span>
                         </div>
                         <form class="mt-5 space-y-4" onsubmit="event.preventDefault();">
+                            <p class="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs font-semibold text-amber-900">Custom report generation is not implemented. Use the printable live summary on this page.</p>
                             <div>
                                 <label class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-600">Report Type</label>
                                 <select class="w-full rounded-lg border-line text-sm focus:border-secondary focus:ring-secondary">
@@ -2404,7 +2405,7 @@
                                     <input class="w-full rounded-lg border-line text-sm focus:border-secondary focus:ring-secondary" type="date" value="{{ now()->toDateString() }}" />
                                 </div>
                             </div>
-                            <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90">
+                            <button type="button" disabled class="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-slate-400 px-4 py-3 text-sm font-bold text-white">
                                 <span class="material-symbols-outlined text-base text-[#ffdeaa]">analytics</span>
                                 Generate Report Preview
                             </button>
@@ -3567,11 +3568,11 @@
                             <div class="flex items-center gap-3">
                                 <span class="material-symbols-outlined rounded-lg bg-white/10 p-2 text-[#ffdeaa]">podcasts</span>
                                 <div>
-                                    <h4 class="font-bold">Radio Broadcast Log</h4>
-                                    <p class="text-xs text-[#ffdeaa]">Subic IHMP Channel 4 Dispatch</p>
+                                    <h4 class="font-bold">Reference Broadcast Examples</h4>
+                                    <p class="text-xs text-[#ffdeaa]">Radio integration is not connected</p>
                                 </div>
                             </div>
-                            <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+                            <span class="h-2.5 w-2.5 rounded-full bg-slate-400"></span>
                         </div>
                         <div class="max-h-[380px] space-y-3 overflow-y-auto bg-[#fcf9f3] p-4">
                             @foreach ([
@@ -3589,8 +3590,8 @@
                             @endforeach
                         </div>
                         <form class="flex gap-2 border-t border-line p-3" onsubmit="event.preventDefault();">
-                            <input class="w-full rounded-lg border-line text-xs focus:border-secondary focus:ring-secondary" placeholder="Broadcast alert or note to Channel 4..." type="text" />
-                            <button type="submit" class="rounded-lg bg-primary p-2 text-[#ffdeaa] hover:bg-primary/90" title="Transmit Broadcast">
+                            <input disabled class="w-full cursor-not-allowed rounded-lg border-line bg-slate-100 text-xs" placeholder="Broadcast integration is unavailable" type="text" />
+                            <button type="button" disabled class="cursor-not-allowed rounded-lg bg-slate-400 p-2 text-white" title="Broadcast integration is not implemented">
                                 <span class="material-symbols-outlined text-base">send</span>
                             </button>
                         </form>

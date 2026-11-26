@@ -29,7 +29,7 @@ class OfficialWebsiteSimulationTest extends TestCase
         $response = $this->post(route('website-simulation.store'), $this->bookingPayload());
 
         $reservation = Reservation::firstOrFail();
-        $response->assertRedirect(route('booking.confirmation', $reservation->booking_reference));
+        $response->assertRedirectToSignedRoute('booking.confirmation', ['reference' => $reservation->booking_reference]);
         $this->assertSame('pending', $reservation->status);
         $this->assertSame('official_website_simulation', $reservation->source);
         $this->assertDatabaseHas('integration_events', [

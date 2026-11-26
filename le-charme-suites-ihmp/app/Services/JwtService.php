@@ -71,7 +71,7 @@ class JwtService
                 ->where('expires_at', '>', now())
                 ->first();
 
-            if (! $record?->user) {
+            if (! $record?->user || ! $record->user->isApproved()) {
                 throw new AuthenticationException('Invalid or revoked token.');
             }
 

@@ -4,6 +4,7 @@ use App\Http\Middleware\AuthenticateJwt;
 use App\Http\Middleware\EnsureIntegrationApiKey;
 use App\Http\Middleware\EnsureUserPermission;
 use App\Http\Middleware\EnsureUserRole;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->append(SecurityHeaders::class);
+
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('admin', 'admin/*')
             ? route('admin.login')
             : route('login'));

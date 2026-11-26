@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Permanent offline user manual for the Le Charme Suites Integrated Hotel Management Portal">
+  <title>Le Charme Suites IHMP Offline User Manual</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #01162d;
+      --navy-2: #102a46;
+      --gold: #b58a43;
+      --gold-soft: #f1dfbd;
+      --paper: #fffdf8;
+      --ink: #162033;
+      --muted: #647084;
+      --line: #d9d4c9;
+      --surface: #eeeae2;
+      --success: #28765b;
+      --danger: #a43e45;
+    }
+
+    * { box-sizing: border-box; }
+    html { height: 100%; background: var(--navy); }
+    body {
+      min-height: 100%;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(181,138,67,.22), transparent 28rem),
+        linear-gradient(145deg, #071c35, #01162d 58%, #000d1c);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+    button, a { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible { outline: 3px solid #f0c879; outline-offset: 3px; }
+
+    .shell { width: min(1180px, 100%); min-height: 100vh; margin: auto; padding: 18px; display: grid; grid-template-rows: auto 1fr auto; gap: 14px; }
+    .toolbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      border: 1px solid rgba(255,255,255,.16); border-radius: 16px;
+      background: rgba(4,21,42,.84); color: white; padding: 12px 14px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.2); backdrop-filter: blur(10px);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand-mark { width: 44px; height: 44px; flex: 0 0 auto; border: 2px solid var(--gold-soft); border-radius: 50%; display: grid; place-items: center; color: var(--gold-soft); font: 700 16px Georgia, serif; }
+    .eyebrow { margin: 0 0 3px; color: #e9c98f; font-size: 10px; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
+    .brand h1 { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 700 clamp(16px,2vw,21px) Georgia, serif; }
+    .toolbar-actions { display: flex; align-items: center; gap: 8px; }
+    .tool-button { border: 1px solid rgba(255,255,255,.25); border-radius: 10px; background: rgba(255,255,255,.08); color: white; padding: 9px 12px; font-size: 12px; font-weight: 700; }
+    .tool-button:hover { background: rgba(255,255,255,.15); }
+    .page-count { min-width: 66px; text-align: center; color: #f5e4c3; font: 700 12px Consolas, monospace; }
+
+    .stage { position: relative; min-height: 640px; perspective: 1800px; }
+    .book {
+      position: absolute; inset: 0; overflow: hidden; border-radius: 20px;
+      background: var(--paper); box-shadow: 0 30px 70px rgba(0,0,0,.34), inset 0 0 0 1px rgba(255,255,255,.75);
+    }
+    .book::before { content: ""; position: absolute; z-index: 4; top: 0; bottom: 0; left: 50%; width: 36px; transform: translateX(-50%); pointer-events: none; background: linear-gradient(90deg, transparent, rgba(34,25,16,.09), rgba(255,255,255,.45), rgba(34,25,16,.08), transparent); opacity: .45; }
+    .page { position: absolute; inset: 0; display: none; overflow: auto; background: var(--paper); }
+    .page.active { display: block; animation: turn-in .34s ease both; }
+    .page.leaving-left { display: block; animation: turn-left .28s ease both; }
+    .page.leaving-right { display: block; animation: turn-right .28s ease both; }
+    @keyframes turn-in { from { opacity: .4; transform: rotateY(-4deg) scale(.992); } to { opacity: 1; transform: none; } }
+    @keyframes turn-left { to { opacity: 0; transform: translateX(-3%) rotateY(7deg); } }
+    @keyframes turn-right { to { opacity: 0; transform: translateX(3%) rotateY(-7deg); } }
+
+    .sheet { min-height: 100%; padding: clamp(28px,5vw,62px); display: grid; grid-template-rows: auto 1fr auto; gap: 24px; background: linear-gradient(90deg, rgba(181,138,67,.035), transparent 18%, transparent 82%, rgba(181,138,67,.035)); }
+    .chapter { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+    .chapter-number { color: var(--gold); font-size: 11px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+    .section-tag { color: var(--muted); font-size: 11px; font-weight: 700; }
+    h2 { margin: 0; color: var(--navy); font: 700 clamp(32px,5vw,58px)/1.03 Georgia, serif; letter-spacing: -.025em; }
+    h3 { margin: 0 0 8px; color: var(--navy); font: 700 18px Georgia, serif; }
+    p { margin: 0; line-height: 1.65; }
+    .lead { max-width: 850px; margin-top: 18px; color: #3d495c; font-size: clamp(15px,2vw,19px); line-height: 1.7; }
+    .grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin-top: 26px; }
+    .card { border: 1px solid var(--line); border-radius: 14px; padding: 18px; background: white; box-shadow: 0 8px 18px rgba(1,22,45,.045); }
+    .card p, .card li { color: #4f5a6b; font-size: 14px; line-height: 1.55; }
+    .icon { width: 34px; height: 34px; margin-bottom: 14px; display: grid; place-items: center; border-radius: 10px; background: #f2e5cd; color: #775821; font-weight: 900; }
+    ul, ol { margin: 10px 0 0; padding-left: 20px; }
+    li + li { margin-top: 7px; }
+    .steps { counter-reset: steps; display: grid; gap: 12px; margin-top: 25px; }
+    .step { counter-increment: steps; display: grid; grid-template-columns: 38px 1fr; gap: 13px; align-items: start; border-bottom: 1px solid var(--line); padding: 0 0 13px; }
+    .step::before { content: counter(steps); width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: var(--navy); color: white; font-weight: 800; }
+    .step strong { color: var(--navy); }
+    .step p { color: #566174; font-size: 14px; }
+    .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 30px; }
+    .flow span { border: 1px solid #d8c49e; border-radius: 999px; background: #fff7e8; padding: 10px 14px; color: #684d1f; font-size: 13px; font-weight: 800; }
+    .flow b { color: var(--gold); }
+    .note { margin-top: 22px; border-left: 4px solid var(--gold); background: #fff7e8; padding: 14px 16px; color: #5e4a27; font-size: 14px; line-height: 1.6; }
+    .warning { border-left-color: var(--danger); background: #fff1f1; color: #71343a; }
+    .success { border-left-color: var(--success); background: #edf8f3; color: #245a47; }
+    .footer { display: flex; justify-content: space-between; gap: 15px; border-top: 1px solid var(--line); padding-top: 14px; color: var(--muted); font-size: 11px; }
+    .cover .sheet { color: white; background: radial-gradient(circle at 76% 24%, rgba(240,200,121,.2), transparent 18rem), linear-gradient(135deg,var(--navy),var(--navy-2)); }
+    .cover .chapter, .cover .footer { border-color: rgba(255,255,255,.2); color: #d7dfeb; }
+    .cover h2 { max-width: 790px; color: white; font-size: clamp(44px,7vw,80px); }
+    .cover .lead { color: #d7dfeb; }
+    .cover-seal { width: 110px; height: 110px; margin-top: 36px; display: grid; place-items: center; border: 2px solid #e7c783; border-radius: 50%; color: #f0d6a2; font: 700 34px Georgia,serif; box-shadow: 0 0 0 9px rgba(231,199,131,.08); }
+    .toc { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px 20px; margin-top: 28px; }
+    .toc button { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--ink); padding: 11px 2px; text-align: left; }
+    .toc button:hover { color: #805f28; border-color: var(--gold); }
+    .toc small { color: var(--muted); font-weight: 700; }
+
+    .navigation { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; }
+    .nav-button { border: 1px solid rgba(255,255,255,.2); border-radius: 12px; background: rgba(255,255,255,.09); color: white; padding: 12px 16px; font-weight: 800; }
+    .nav-button:last-child { justify-self: end; }
+    .nav-button:disabled { cursor: not-allowed; opacity: .35; }
+    .progress { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+    .dot { width: 8px; height: 8px; border: 0; border-radius: 50%; background: rgba(255,255,255,.28); padding: 0; }
+    .dot.active { width: 24px; border-radius: 999px; background: #e6bf77; }
+
+    .kbd { border: 1px solid #cbc5b9; border-bottom-width: 2px; border-radius: 5px; background: #fff; padding: 1px 5px; color: #3b4554; font: 700 11px Consolas,monospace; }
+    .only-print { display: none; }
+    @media (max-width: 700px) {
+      .shell { padding: 8px; }
+      .toolbar { border-radius: 12px; }
+      .tool-button span { display: none; }
+      .stage { min-height: 690px; }
+      .book::before { display: none; }
+      .grid, .toc { grid-template-columns: 1fr; }
+      .sheet { padding: 27px 22px; }
+      .footer { flex-direction: column; }
+      .navigation { grid-template-columns: 1fr 1fr; }
+      .progress { display: none; }
+    }
+    @media print {
+      html, body { background: white; }
+      .shell { display: block; width: auto; padding: 0; }
+      .toolbar, .navigation { display: none; }
+      .stage, .book { position: static; min-height: 0; box-shadow: none; overflow: visible; }
+      .book::before { display: none; }
+      .page, .page.active { position: static; display: block !important; min-height: 100vh; page-break-after: always; animation: none; }
+      .sheet { min-height: 100vh; }
+      .only-print { display: inline; }
+    }
+    @media (prefers-reduced-motion: reduce) { .page.active, .page.leaving-left, .page.leaving-right { animation: none; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="toolbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">LC</div>
+        <div><p class="eyebrow">Permanent offline edition</p><h1>Le Charme Suites IHMP User Manual</h1></div>
+      </div>
+      <div class="toolbar-actions">
+        <button class="tool-button" id="contentsButton" type="button" title="Open contents"><span>Contents</span> ☰</button>
+        <button class="tool-button" id="printButton" type="button" title="Print or save as PDF"><span>Print / PDF</span> ⎙</button>
+        <button class="tool-button" id="fullscreenButton" type="button" title="Toggle full screen"><span>Full screen</span> ⛶</button>
+        <span class="page-count" id="pageCount" aria-live="polite">1 / 15</span>
+      </div>
+    </header>
+
+    <section class="stage" aria-label="IHMP user manual flipbook">
+      <div class="book" id="book">
+        <article class="page cover active" data-title="Cover">
+          <div class="sheet">
+            <div class="chapter"><span class="chapter-number">IPT101 Integrative Programming Technologies</span><span class="section-tag">Offline User Manual</span></div>
+            <div>
+              <div class="cover-seal" aria-hidden="true">IHMP</div>
+              <h2>Integrated Hotel Management Portal</h2>
+              <p class="lead">A permanent, self-contained operating guide for administrators, front-desk staff, billing staff and housekeeping personnel.</p>
+              <div class="note success">This flipbook works without internet, an account, a subscription or an expiration date. Open this file in any modern browser.</div>
+            </div>
+            <div class="footer"><span>Le Charme Suites Subic academic prototype</span><span>First Semester 2026–2027</span></div>
+          </div>
+        </article>
+
+        <article class="page" data-title="Contents">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Contents</span><span class="section-tag">Choose a chapter</span></div><div><h2>User Manual Contents</h2><p class="lead">Use the buttons below, the navigation controls, the arrow keys or a swipe gesture.</p><div class="toc" id="toc"></div></div><div class="footer"><span>Keyboard: <span class="kbd">←</span> previous · <span class="kbd">→</span> next · <span class="kbd">Home</span> cover</span><span>Page 2</span></div></div>
+        </article>
+
+        <article class="page" data-title="Quick Start">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 01</span><span class="section-tag">Getting started</span></div><div><h2>Quick Start</h2><p class="lead">Start the local server, open the portal and sign in with an approved staff account.</p><div class="steps"><div class="step"><p><strong>Start the application.</strong><br>On the host computer, run <code>setup-and-run.bat</code> for first-time setup. For shared private-LAN use, run <code>run-shared-lan-server.bat</code>.</p></div><div class="step"><p><strong>Open the portal.</strong><br>Use <code>http://127.0.0.1:8000</code> on the host or the address displayed by the LAN launcher on another authorized device.</p></div><div class="step"><p><strong>Choose your department.</strong><br>Select Administrator, Receptionist, Billing or Housekeeping, then enter your approved work email and password.</p></div><div class="step"><p><strong>Confirm the workspace.</strong><br>The sidebar and dashboard should match your assigned role.</p></div></div><div class="note warning">Never place the real <code>.env</code> file, passwords, API keys or guest database on a public repository.</div></div><div class="footer"><span>Host computer and local network must remain available during shared operation.</span><span>Page 3</span></div></div>
+        </article>
+
+        <article class="page" data-title="Accounts and Sign In">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 02</span><span class="section-tag">Access control</span></div><div><h2>Accounts and Sign In</h2><p class="lead">Each person uses an individual account. The selected department must match the role assigned by an administrator.</p><div class="grid"><div class="card"><div class="icon">A</div><h3>Administrator</h3><p>Approves accounts, manages permissions and rooms, reviews audit history, operates the Integration Center and views reports.</p></div><div class="card"><div class="icon">F</div><h3>Front Desk</h3><p>Manages guests, reservations, confirmations, room assignments, arrivals, check-ins and front-desk records.</p></div><div class="card"><div class="icon">B</div><h3>Billing</h3><p>Reviews guest folios, records charges and payments, completes check-out and prints bills or receipts.</p></div><div class="card"><div class="icon">H</div><h3>Housekeeping</h3><p>Receives turnover tasks, updates cleaning status, records inspection and releases rooms when work is complete.</p></div></div><div class="note">Newly registered staff must wait for administrator approval. Administrators use the separate <code>/admin</code> sign-in page.</div></div><div class="footer"><span>Use Forgot password? when an account cannot sign in.</span><span>Page 4</span></div></div>
+        </article>
+
+        <article class="page" data-title="Front Desk Workflow">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 03</span><span class="section-tag">Guest and reservation operations</span></div><div><h2>Front Desk Workflow</h2><p class="lead">The front desk turns a booking request into a confirmed stay while keeping guest, room and reservation records connected.</p><div class="flow"><span>Guest record</span><b>→</b><span>Reservation</span><b>→</b><span>Confirmation</span><b>→</b><span>Room assignment</span><b>→</b><span>Check-in</span></div><div class="grid"><div class="card"><h3>Create a reservation</h3><ol><li>Open Reservations and select New Reservation.</li><li>Choose or create the guest.</li><li>Select dates, guests and an available room.</li><li>Review the agreed rate and save.</li></ol></div><div class="card"><h3>Confirm an online request</h3><ol><li>Open the online request from the alert or reservation list.</li><li>Verify availability and guest details.</li><li>Confirm the request.</li><li>Print the registration card when needed.</li></ol></div></div><div class="note">Only fictional demonstration data should be used unless the institution and hotel have approved real-data processing.</div></div><div class="footer"><span>Availability checks prevent overlapping bookings.</span><span>Page 5</span></div></div>
+        </article>
+
+        <article class="page" data-title="Check In">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 04</span><span class="section-tag">Arrival procedure</span></div><div><h2>Check In</h2><p class="lead">Check-in moves a confirmed reservation into an active stay and marks the assigned room occupied.</p><div class="steps"><div class="step"><p><strong>Open the arrival queue.</strong><br>Select Check-ins and locate the confirmed reservation.</p></div><div class="step"><p><strong>Verify the guest and stay.</strong><br>Check the guest, dates, room, party size and agreed rate.</p></div><div class="step"><p><strong>Confirm room readiness.</strong><br>Do not check a guest into a room still marked cleaning or maintenance.</p></div><div class="step"><p><strong>Complete check-in.</strong><br>Submit the record and confirm that the room becomes occupied.</p></div></div><div class="note warning">If the selected room is not ready, assign another available room or wait for Housekeeping to complete the release procedure.</div></div><div class="footer"><span>The system records the operational event in shared history.</span><span>Page 6</span></div></div>
+        </article>
+
+        <article class="page" data-title="Billing and Check Out">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 05</span><span class="section-tag">Folio and payment</span></div><div><h2>Billing and Check Out</h2><p class="lead">The server calculates the guest folio from the agreed room rate, extra-guest charges and recorded transactions.</p><div class="grid"><div class="card"><h3>Before settlement</h3><ul><li>Choose the active guest bill.</li><li>Review room and extra charges.</li><li>Add authorized transaction charges.</li><li>Open the printable bill for review.</li></ul></div><div class="card"><h3>Complete settlement</h3><ul><li>Enter the amount paid or use Pay in full.</li><li>Select Paid, Partial or Unpaid correctly.</li><li>Submit Settle Guest Bill / Check-out.</li><li>Print the saved receipt.</li></ul></div></div><div class="flow"><span>Active stay</span><b>→</b><span>Guest folio</span><b>→</b><span>Payment</span><b>→</b><span>Receipt snapshot</span><b>→</b><span>Turnover task</span></div><div class="note">A remaining balance can be recorded later from the completed check-out record. Refund and void rules require the hotel’s approved policy.</div></div><div class="footer"><span>Receipts use saved check-out amounts instead of recalculating current room rates.</span><span>Page 7</span></div></div>
+        </article>
+
+        <article class="page" data-title="Housekeeping">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 06</span><span class="section-tag">Room readiness</span></div><div><h2>Housekeeping</h2><p class="lead">Check-out creates a turnover task. Housekeeping follows the approved task sequence before the room becomes available again.</p><div class="flow"><span>Queued</span><b>→</b><span>In progress</span><b>→</b><span>Inspection</span><b>→</b><span>Completed</span><b>→</b><span>Room available</span></div><div class="grid"><div class="card"><h3>Daily procedure</h3><ol><li>Open Housekeeping Tasks.</li><li>Choose the assigned room task.</li><li>Update the status in order.</li><li>Add useful operational notes.</li><li>Complete the required inspection.</li></ol></div><div class="card"><h3>Exceptions</h3><ul><li>Record maintenance defects instead of releasing the room.</li><li>Do not skip required status transitions.</li><li>Stayover and simple requests may use their permitted direct completion path.</li><li>Ask an administrator when access is incorrect.</li></ul></div></div></div><div class="footer"><span>The final cleaning task controls room release.</span><span>Page 8</span></div></div>
+        </article>
+
+        <article class="page" data-title="Messages and Shared History">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 07</span><span class="section-tag">Department coordination</span></div><div><h2>Messages and Shared History</h2><p class="lead">Department Messages provides persistent internal notices while the shared database keeps authorized workspaces synchronized.</p><div class="grid"><div class="card"><h3>Send a message</h3><ol><li>Open Messages.</li><li>Choose a department or All Departments.</li><li>Set the priority.</li><li>Write a clear subject and message.</li><li>Send and verify it in history.</li></ol></div><div class="card"><h3>Read history</h3><ul><li>Opening a message records acknowledgement.</li><li>Sender, recipient, priority and time remain visible.</li><li>Audit Logs record important account and operational events.</li><li>Authorized reports summarize shared records.</li></ul></div></div><div class="note success">For the defense, send a Front Desk message to Housekeeping, acknowledge it from Housekeeping and show the saved read history.</div></div><div class="footer"><span>Messages are stored locally in the shared database.</span><span>Page 9</span></div></div>
+        </article>
+
+        <article class="page" data-title="Administration">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 08</span><span class="section-tag">System control</span></div><div><h2>Administration</h2><p class="lead">Administrators maintain accounts, permissions, rooms, operational settings and traceable system history.</p><div class="grid"><div class="card"><h3>Accounts and permissions</h3><ul><li>Approve or reject new staff accounts.</li><li>Assign the correct role.</li><li>Use the permission matrix for capabilities.</li><li>Revoke access promptly when responsibilities change.</li></ul></div><div class="card"><h3>Rooms and records</h3><ul><li>Add or edit room master data.</li><li>Use maintenance status when a room is unavailable.</li><li>Review guest and operational records.</li><li>Use Audit Logs to trace account activity.</li></ul></div><div class="card"><h3>Integration Center</h3><p>Check database and runtime health, API state, transfer history, exports and the embedded system guide.</p></div><div class="card"><h3>Reports</h3><p>Review operational and transaction reports without granting unnecessary edit access.</p></div></div></div><div class="footer"><span>Administrative actions must use an approved individual account.</span><span>Page 10</span></div></div>
+        </article>
+
+        <article class="page" data-title="API and File Transfer">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 09</span><span class="section-tag">Integration operations</span></div><div><h2>API and File Transfer</h2><p class="lead">The Integration Center supports controlled CSV/JSON exports and protected API access for approved demonstrations.</p><div class="grid"><div class="card"><h3>Export a dataset</h3><ol><li>Open Admin → Integration Center.</li><li>Select Guests, Rooms, Reservations or Transactions.</li><li>Choose CSV or JSON.</li><li>Download and verify the transfer-history row.</li></ol></div><div class="card"><h3>API access</h3><ul><li>Use a scoped key or JWT as required.</li><li>Keep credentials outside source control.</li><li>Use the versioned <code>/api/v1</code> endpoints.</li><li>Review the recorded checksum and result.</li></ul></div></div><div class="note warning">The official hotel website and production systems are not connected. The website booking flow is an academic simulation unless written authorization and credentials are provided.</div></div><div class="footer"><span>Exports exclude passwords and protected credentials.</span><span>Page 11</span></div></div>
+        </article>
+
+        <article class="page" data-title="Security and Privacy">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 10</span><span class="section-tag">Responsible operation</span></div><div><h2>Security and Privacy</h2><p class="lead">Use the minimum access needed, protect credentials and keep demonstration data fictional.</p><div class="grid"><div class="card"><h3>Account safety</h3><ul><li>Use a unique password for every account.</li><li>Never share administrator credentials.</li><li>Sign out from shared computers.</li><li>Report repeated failed sign-ins.</li></ul></div><div class="card"><h3>Data safety</h3><ul><li>Do not enter real guest data without approval.</li><li>Keep <code>.env</code> and database files private.</li><li>Use approved offline backups.</li><li>Do not publish API keys or exported records.</li></ul></div></div><div class="note">The application is an academic prototype. A real deployment requires hotel validation, privacy review, HTTPS, managed backups, monitoring and independent security testing.</div></div><div class="footer"><span>Follow the Data Privacy Act of 2012 and institutional policy.</span><span>Page 12</span></div></div>
+        </article>
+
+        <article class="page" data-title="Troubleshooting">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 11</span><span class="section-tag">Common problems</span></div><div><h2>Troubleshooting</h2><div class="grid"><div class="card"><h3>Cannot sign in</h3><p>Choose the correct department, confirm administrator approval, check the work email and use Forgot password? if needed.</p></div><div class="card"><h3>Page or menu is missing</h3><p>Role-based navigation hides unauthorized modules. Sign in with the correct approved role or ask an administrator to review permissions.</p></div><div class="card"><h3>Server will not start</h3><p>Confirm PHP and Composer are installed, verify port 8000 is free, then run <code>php artisan optimize:clear</code>.</p></div><div class="card"><h3>Database or table error</h3><p>Stop the server, confirm the SQLite file exists, then run <code>php artisan migrate --seed</code>.</p></div><div class="card"><h3>Another laptop cannot connect</h3><p>Use the host IPv4 address, remain on the same private network and allow PHP through the Windows firewall for private networks.</p></div><div class="card"><h3>Integration API returns 503</h3><p>The API is intentionally disabled until its scoped credential is configured on the host.</p></div></div></div><div class="footer"><span>Detailed setup instructions are in GROUPMATES_SETUP.md.</span><span>Page 13</span></div></div>
+        </article>
+
+        <article class="page" data-title="Sign Out and Shutdown">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Chapter 12</span><span class="section-tag">End of session</span></div><div><h2>Sign Out and Shutdown</h2><p class="lead">Close each work session safely and stop the host only after active users have finished.</p><div class="steps"><div class="step"><p><strong>Finish pending records.</strong><br>Confirm that reservations, payments, room tasks and messages were saved.</p></div><div class="step"><p><strong>Sign out.</strong><br>Use Logout at the bottom of the sidebar. Do not simply close a shared browser window.</p></div><div class="step"><p><strong>Confirm other users have finished.</strong><br>Stopping the host disconnects every department device.</p></div><div class="step"><p><strong>Stop the server.</strong><br>Press <span class="kbd">Ctrl</span> + <span class="kbd">C</span> in the host terminal and confirm when prompted.</p></div><div class="step"><p><strong>Back up approved data.</strong><br>Create an offline backup only through the approved procedure and store it securely.</p></div></div></div><div class="footer"><span>Never leave a shared workstation signed in.</span><span>Page 14</span></div></div>
+        </article>
+
+        <article class="page" data-title="Defense Demonstration">
+          <div class="sheet"><div class="chapter"><span class="chapter-number">Defense Guide</span><span class="section-tag">30–45 minute presentation</span></div><div><h2>Suggested Demonstration Order</h2><div class="steps"><div class="step"><p><strong>Introduce the real-world process.</strong><br>Explain the connected guest-stay workflow and the four authorized departments.</p></div><div class="step"><p><strong>Show role boundaries.</strong><br>Sign in as each role and demonstrate that unauthorized pages are refused.</p></div><div class="step"><p><strong>Complete one guest journey.</strong><br>Booking → confirmation → check-in → billing → check-out → housekeeping release.</p></div><div class="step"><p><strong>Show integration.</strong><br>Send a department message, export a dataset, show its checksum and explain the protected API.</p></div><div class="step"><p><strong>Show evidence.</strong><br>Present test results, audit history, deployment procedure, limitations and future production requirements.</p></div></div><div class="note success">Keep this file and the final PDF manual on the card-type flash drive attached to the hardbound documentation.</div></div><div class="footer"><span>End of permanent offline user manual</span><span>Page 15</span></div></div>
+        </article>
+      </div>
+    </section>
+
+    <nav class="navigation" aria-label="Flipbook navigation">
+      <button class="nav-button" id="previousButton" type="button">← Previous</button>
+      <div class="progress" id="progress" aria-hidden="true"></div>
+      <button class="nav-button" id="nextButton" type="button">Next →</button>
+    </nav>
+  </main>
+
+  <script>
+    (() => {
+      const pages = Array.from(document.querySelectorAll('.page'));
+      const previous = document.getElementById('previousButton');
+      const next = document.getElementById('nextButton');
+      const pageCount = document.getElementById('pageCount');
+      const progress = document.getElementById('progress');
+      const toc = document.getElementById('toc');
+      let current = 0;
+      let startX = null;
+
+      pages.forEach((page, index) => {
+        const dot = document.createElement('button');
+        dot.className = 'dot';
+        dot.type = 'button';
+        dot.title = `Page ${index + 1}: ${page.dataset.title}`;
+        dot.addEventListener('click', () => show(index));
+        progress.appendChild(dot);
+        if (index > 1) {
+          const item = document.createElement('button');
+          item.type = 'button';
+          item.innerHTML = `<span>${page.dataset.title}</span><small>${String(index + 1).padStart(2, '0')}</small>`;
+          item.addEventListener('click', () => show(index));
+          toc.appendChild(item);
+        }
+      });
+
+      function show(index) {
+        const target = Math.max(0, Math.min(pages.length - 1, index));
+        if (target === current) return;
+        const old = pages[current];
+        old.classList.remove('active');
+        old.classList.add(target > current ? 'leaving-left' : 'leaving-right');
+        const previousIndex = current;
+        current = target;
+        pages[current].classList.add('active');
+        pages[current].scrollTop = 0;
+        setTimeout(() => pages[previousIndex].classList.remove('leaving-left', 'leaving-right'), 320);
+        update();
+      }
+
+      function update() {
+        pageCount.textContent = `${current + 1} / ${pages.length}`;
+        previous.disabled = current === 0;
+        next.disabled = current === pages.length - 1;
+        Array.from(progress.children).forEach((dot, index) => dot.classList.toggle('active', index === current));
+        document.title = `${pages[current].dataset.title} · Le Charme Suites IHMP Manual`;
+      }
+
+      previous.addEventListener('click', () => show(current - 1));
+      next.addEventListener('click', () => show(current + 1));
+      document.getElementById('contentsButton').addEventListener('click', () => show(1));
+      document.getElementById('printButton').addEventListener('click', () => window.print());
+      document.getElementById('fullscreenButton').addEventListener('click', async () => {
+        if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.();
+        else await document.exitFullscreen?.();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'ArrowLeft' || event.key === 'PageUp') show(current - 1);
+        if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') show(current + 1);
+        if (event.key === 'Home') show(0);
+        if (event.key === 'End') show(pages.length - 1);
+      });
+      document.getElementById('book').addEventListener('pointerdown', event => { startX = event.clientX; });
+      document.getElementById('book').addEventListener('pointerup', event => {
+        if (startX === null) return;
+        const distance = event.clientX - startX;
+        if (distance > 70) show(current - 1);
+        if (distance < -70) show(current + 1);
+        startX = null;
+      });
+      update();
+    })();
+  </script>
+</body>
+</html>

@@ -23,7 +23,6 @@ class AdminGuestController extends Controller
                         ->orWhere('last_name', 'like', $term)
                         ->orWhere('email', 'like', $term)
                         ->orWhere('phone', 'like', $term)
-                        ->orWhere('identification_number', 'like', $term)
                         ->orWhere('id', 'like', $term);
                 });
             })

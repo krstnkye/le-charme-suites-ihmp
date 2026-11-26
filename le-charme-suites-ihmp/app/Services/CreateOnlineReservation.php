@@ -52,20 +52,16 @@ class CreateOnlineReservation
                 ]);
             }
 
-            $guest = Guest::query()->firstOrCreate(
-                ['email' => Str::lower($data['email'])],
-                [
-                    'first_name' => $data['first_name'],
-                    'last_name' => $data['last_name'],
-                    'phone' => $data['phone'],
-                    'address' => $data['address'] ?? null,
-                ],
-            );
-
-            $guest->fill(array_filter([
-                'phone' => blank($guest->phone) ? $data['phone'] : null,
-                'address' => blank($guest->address) ? ($data['address'] ?? null) : null,
-            ]))->save();
+            // Email addresses are contact data, not a safe identity key. A new
+            // booking receives its own profile so shared/family email accounts
+            // cannot silently attach a stay to the wrong person.
+            $guest = Guest::create([
+                'email' => Str::lower($data['email']),
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'phone' => $data['phone'],
+                'address' => $data['address'] ?? null,
+            ]);
 
             $reservation = Reservation::create([
                 'booking_reference' => $this->reference(),
@@ -75,6 +71,9 @@ class CreateOnlineReservation
                 'check_in_date' => $data['check_in_date'],
                 'check_out_date' => $data['check_out_date'],
                 'number_of_guests' => $data['number_of_guests'],
+                'agreed_room_rate' => $room->rate,
+                'agreed_base_occupancy' => $room->base_occupancy,
+                'agreed_extra_guest_rate' => $room->extra_guest_rate,
                 'status' => 'pending',
                 'source' => $source,
                 'notes' => $data['notes'] ?? null,

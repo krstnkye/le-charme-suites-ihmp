@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AuthActivityLog;
 use App\Models\User;
 use App\Rules\WorkEmail;
+use App\Services\CredentialRevocationService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -72,7 +73,7 @@ class AuthController extends Controller
         );
     }
 
-    public function resetPassword(Request $request): RedirectResponse
+    public function resetPassword(Request $request, CredentialRevocationService $revocation): RedirectResponse
     {
         $request->merge([
             'email' => Str::lower(trim((string) $request->input('email'))),
@@ -88,11 +89,12 @@ class AuthController extends Controller
 
         $status = PasswordBroker::reset(
             $credentials,
-            function (User $user, string $password): void {
+            function (User $user, string $password) use ($revocation): void {
                 $user->forceFill([
                     'password' => $password,
-                    'remember_token' => Str::random(60),
                 ])->save();
+
+                $revocation->revokeFor($user);
 
                 event(new PasswordReset($user));
             }

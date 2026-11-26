@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CheckIn;
 use App\Models\HousekeepingTask;
+use App\Models\HousekeepingTaskStatusLog;
 use App\Models\RoomStatusLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,6 +13,15 @@ use Illuminate\Validation\Rule;
 
 class HousekeepingTaskController extends Controller
 {
+    /** @var array<string, list<string>> */
+    private const STATUS_TRANSITIONS = [
+        'queued' => ['in_progress', 'cancelled'],
+        'in_progress' => ['inspection', 'cancelled'],
+        'inspection' => ['in_progress', 'completed', 'cancelled'],
+        'completed' => [],
+        'cancelled' => [],
+    ];
+
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
@@ -42,7 +52,7 @@ class HousekeepingTaskController extends Controller
     public function update(Request $request, HousekeepingTask $housekeepingTask): RedirectResponse
     {
         $data = $request->validate([
-            'status' => ['required', 'in:queued,in_progress,inspection,completed,cancelled'],
+            'status' => ['required', Rule::in(self::STATUS_TRANSITIONS[$housekeepingTask->status] ?? [])],
             'assigned_to' => [
                 'nullable',
                 Rule::exists('users', 'id')->where(fn ($query) => $query->where('role', 'housekeeping')),
@@ -54,30 +64,52 @@ class HousekeepingTaskController extends Controller
             $data['assigned_to'] = $housekeepingTask->assigned_to;
         }
 
-        DB::transaction(function () use ($data, $housekeepingTask): void {
-            if ($data['status'] === 'in_progress' && $housekeepingTask->started_at === null) {
+        DB::transaction(function () use ($data, $housekeepingTask, $request): void {
+            $task = HousekeepingTask::with('room')->lockForUpdate()->findOrFail($housekeepingTask->id);
+            $fromStatus = $task->status;
+
+            if ($data['status'] === 'in_progress' && $task->started_at === null) {
                 $data['started_at'] = now();
             }
 
             $roomHasGuest = CheckIn::query()
-                ->where('room_id', $housekeepingTask->room_id)
+                ->where('room_id', $task->room_id)
                 ->where('status', 'active')
                 ->exists();
 
-            if ($data['status'] === 'completed' && $housekeepingTask->status !== 'completed' && ! $roomHasGuest) {
+            $hasBlockingTasks = HousekeepingTask::query()
+                ->where('room_id', $task->room_id)
+                ->whereKeyNot($task->id)
+                ->whereIn('status', ['queued', 'in_progress', 'inspection'])
+                ->whereIn('task_type', ['turnover', 'inspection', 'deep_cleaning', 'maintenance_follow_up'])
+                ->exists();
+            $canReleaseRoom = in_array($task->task_type, ['turnover', 'inspection', 'deep_cleaning'], true)
+                && ! $roomHasGuest
+                && ! $hasBlockingTasks
+                && $task->room->status !== 'maintenance';
+
+            if ($data['status'] === 'completed' && $canReleaseRoom) {
                 $data['completed_at'] = now();
-                $housekeepingTask->room()->update(['status' => 'available']);
+                $task->room()->update(['status' => 'available']);
                 RoomStatusLog::create([
-                    'room_id' => $housekeepingTask->room_id,
+                    'room_id' => $task->room_id,
                     'status' => 'available',
-                    'notes' => 'Housekeeping task #'.$housekeepingTask->id.' completed: '.($data['completion_notes'] ?? $housekeepingTask->title),
+                    'notes' => 'Housekeeping task #'.$task->id.' completed: '.($data['completion_notes'] ?? $task->title),
                     'changed_at' => now(),
                 ]);
-            } elseif ($data['status'] === 'completed' && $housekeepingTask->completed_at === null) {
+            } elseif ($data['status'] === 'completed' && $task->completed_at === null) {
                 $data['completed_at'] = now();
             }
 
-            $housekeepingTask->update($data);
+            $task->update($data);
+            HousekeepingTaskStatusLog::create([
+                'housekeeping_task_id' => $task->id,
+                'changed_by' => $request->user()->id,
+                'from_status' => $fromStatus,
+                'to_status' => $data['status'],
+                'notes' => $data['completion_notes'] ?? null,
+                'changed_at' => now(),
+            ]);
         });
 
         return back()->with('status', 'Housekeeping task updated.');

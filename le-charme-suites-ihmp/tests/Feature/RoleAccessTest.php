@@ -696,7 +696,7 @@ class RoleAccessTest extends TestCase
             ->assertOk()
             ->assertSee('Housekeeping Dispatch Notifications &amp; Operational Alerts', false)
             ->assertSee('Live Dispatch Center')
-            ->assertSee('Radio Broadcast Log')
+            ->assertSee('Reference Broadcast Examples')
             ->assertSee('Supervisor Dispatch Summary');
 
         foreach (['linen-supplies', 'linen-records', 'housekeeping-supplies'] as $removedPage) {

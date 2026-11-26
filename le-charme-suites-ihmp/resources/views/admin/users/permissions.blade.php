@@ -278,7 +278,7 @@
                             </div>
                         </div>
                         <div class="mt-6 space-y-2.5 border-t border-surface-container-highest pt-5">
-                            <button class="flex w-full items-center justify-center gap-2 rounded-lg border border-outline-variant/60 bg-white px-4 py-2.5 text-sm font-bold text-primary shadow-sm transition hover:bg-surface-container" type="button" onclick="alert('Access simulation uses the selected role and current matrix settings.')">
+                            <button class="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg border border-outline-variant/60 bg-slate-100 px-4 py-2.5 text-sm font-bold text-slate-500 opacity-70" type="button" disabled title="Role impersonation simulation is not implemented.">
                                 <span class="material-symbols-outlined text-base text-secondary">terminal</span>
                                 Simulate Role Access
                             </button>

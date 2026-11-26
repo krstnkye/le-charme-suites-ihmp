@@ -36,21 +36,17 @@ php artisan serve --host=127.0.0.1 --port=8000
 
 Open <http://127.0.0.1:8000>.
 
-## Demo Accounts
+## Bootstrap Account
 
-All seeded accounts use the password `password`.
+Seeding creates the administrator account `admin@lecharmehotel.com` only when it
+does not already exist. A random one-time password is printed once in the
+terminal; store it securely and change it immediately. Re-running the seeder
+never resets an existing secure password.
 
-| Department | Email |
-| --- | --- |
-| Administrator | `admin@lecharmehotel.com` |
-| Receptionist | `receptionist@lecharmehotel.com` |
-| Billing | `billing@lecharmehotel.com` |
-| Housekeeping | `housekeeping@lecharmehotel.com` |
-| Owner / Management | `owner@lecharmehotel.com` |
-
-Each account intentionally sees only the pages authorized for its role. For
-example, owner pages are view-only and housekeeping accounts cannot open guest
-management or billing pages.
+Optional receptionist, billing, and housekeeping demo accounts are created only
+when `IHMP_SEED_DEMO_USERS=true`. They also receive independent random
+passwords. The old shared `password` credential is automatically rotated when
+found on an installation upgraded from an earlier version.
 
 ## Getting the Latest Pages
 

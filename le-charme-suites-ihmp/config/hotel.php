@@ -12,6 +12,7 @@ return [
     'published_room_count' => 45,
     'published_room_type_count' => 5,
     'room_inventory_note' => 'Le Charmé Suites has 45 rooms across five published room types. Room numbers and the quantity per type follow a sample layout until hotel management confirms the actual assignment.',
+    'seed_demo_users' => (bool) env('IHMP_SEED_DEMO_USERS', false),
 
     /*
     | Sample 45-room layout (5 floors x 9 rooms) used for the academic prototype:

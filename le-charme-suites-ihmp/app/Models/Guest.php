@@ -23,9 +23,27 @@ class Guest extends Model
         'notes',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'identification_number' => 'encrypted',
+        ];
+    }
+
     public function getFullNameAttribute(): string
     {
         return trim($this->first_name.' '.$this->last_name);
+    }
+
+    public function getMaskedIdentificationNumberAttribute(): ?string
+    {
+        if (blank($this->identification_number)) {
+            return null;
+        }
+
+        $number = (string) $this->identification_number;
+
+        return str_repeat('•', max(0, mb_strlen($number) - 4)).mb_substr($number, -4);
     }
 
     public function reservations(): HasMany

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Rules\WorkEmail;
+use App\Services\AuditService;
+use App\Services\CredentialRevocationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -27,8 +29,11 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(Request $request): RedirectResponse
-    {
+    public function update(
+        Request $request,
+        CredentialRevocationService $revocation,
+        AuditService $audit,
+    ): RedirectResponse {
         $user = $request->user();
         $request->merge(['email' => Str::lower(trim((string) $request->input('email')))]);
 
@@ -51,7 +56,9 @@ class ProfileController extends Controller
 
         unset($data['current_password']);
 
-        if (blank($data['password'] ?? null)) {
+        $passwordChanged = filled($data['password'] ?? null);
+
+        if (! $passwordChanged) {
             unset($data['password']);
         }
 
@@ -72,7 +79,17 @@ class ProfileController extends Controller
             $data['profile_photo_path'] = null;
         }
 
+        $before = $user->only(['name', 'email', 'profile_photo_path']);
         $user->update($data);
+
+        if ($passwordChanged) {
+            $revocation->revokeFor($user, $request->session()->getId());
+        }
+
+        $audit->record($request, 'PROFILE_UPDATED', $user, $before, [
+            ...$user->only(['name', 'email', 'profile_photo_path']),
+            'password_changed' => $passwordChanged,
+        ]);
 
         return back()->with('status', 'Your profile was updated successfully.');
     }

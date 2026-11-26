@@ -242,7 +242,7 @@
                 <div class="flex flex-col justify-between gap-3 border-t border-surface-container-highest bg-surface-container-low p-4 text-sm text-slate-600 lg:flex-row lg:items-center">
                     <div class="flex min-w-0 items-center gap-2 font-mono text-xs">
                         <span class="material-symbols-outlined text-sm text-secondary">lock</span>
-                        <span>Current Merkle Root:</span>
+                        <span>Current export checksum:</span>
                         <span class="truncate font-bold text-primary">{{ $ledgerRoot }}</span>
                     </div>
                     <span id="auditVisibleCount" class="rounded bg-white px-3 py-1 text-xs font-bold text-primary">Showing {{ $auditEvents->count() }} entries</span>
@@ -304,10 +304,13 @@
                             <p class="py-6 text-center text-sm font-semibold text-slate-500">No active users to display.</p>
                         @endforelse
                     </div>
-                    <button id="terminateRemoteSessions" class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-error px-3 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-red-800" type="button">
-                        <span class="material-symbols-outlined">emergency</span>
-                        Terminate All Remote Sessions
-                    </button>
+                    <form method="POST" action="{{ route('admin.audit-logs.terminate-sessions') }}" onsubmit="return confirm('Terminate every other web session and revoke all API tokens now?')">
+                        @csrf
+                        <button class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-error px-3 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-red-800" type="submit">
+                            <span class="material-symbols-outlined">emergency</span>
+                            Terminate All Remote Sessions
+                        </button>
+                    </form>
                     <p class="mt-1.5 text-center text-[11px] text-slate-500">Requires master administrator confirmation.</p>
                 </div>
             </section>
@@ -327,7 +330,12 @@
                 csvRows.push(cells);
             });
 
-            const csv = csvRows.map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(',')).join('\n');
+            const safeCell = (value) => {
+                const text = String(value);
+                const neutralized = /^[=+\-@\t\r]/.test(text) ? `'${text}` : text;
+                return `"${neutralized.replaceAll('"', '""')}"`;
+            };
+            const csv = csvRows.map((row) => row.map(safeCell).join(',')).join('\n');
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -341,12 +349,6 @@
                 const proof = JSON.parse(button.dataset.proofJson || '{}');
                 alert(JSON.stringify(proof, null, 2));
             });
-        });
-
-        document.getElementById('terminateRemoteSessions')?.addEventListener('click', () => {
-            if (confirm('Terminate all remote sessions in this admin simulation?')) {
-                alert('Remote session termination request recorded for administrator review.');
-            }
         });
 
         const auditRows = Array.from(document.querySelectorAll('[data-audit-row]'));

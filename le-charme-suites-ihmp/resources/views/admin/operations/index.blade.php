@@ -942,6 +942,15 @@
                 });
 
                 document.querySelectorAll('[data-report-action], [data-report-row-action]').forEach((button) => {
+                    const configuredAction = button.dataset.reportAction || button.dataset.reportRowAction;
+
+                    if (['email', 'run'].includes(configuredAction)) {
+                        button.disabled = true;
+                        button.title = 'This operation is not implemented.';
+                        button.classList.add('cursor-not-allowed', 'opacity-50');
+                        return;
+                    }
+
                     button.addEventListener('click', () => {
                         const action = button.dataset.reportAction || button.dataset.reportRowAction;
                         const reportTitle = button.dataset.reportTitle || "Daily Manager's Operational Flash & Revenue Ledger";
@@ -951,13 +960,8 @@
                             return;
                         }
 
-                        if (action === 'preview' || action === 'run') {
-                            alert(`${reportTitle} is ready for preview using the current live database values.`);
-                            return;
-                        }
-
-                        if (action === 'email') {
-                            alert('Report email queued for Board and General Manager review.');
+                        if (action === 'preview') {
+                            window.print();
                             return;
                         }
 
@@ -972,16 +976,13 @@
                     });
                 });
 
-                document.getElementById('reportFormatButton')?.addEventListener('click', () => {
-                    alert('Report export format is set to PDF for this admin session.');
-                });
-
-                document.getElementById('scheduleReportRun')?.addEventListener('click', () => {
-                    alert('Scheduled report run staged for the next night audit cycle.');
-                });
-
-                document.getElementById('generateCustomReport')?.addEventListener('click', () => {
-                    alert('Custom report generated from the selected date, scope, currency, and options.');
+                ['reportFormatButton', 'scheduleReportRun', 'generateCustomReport'].forEach((id) => {
+                    const button = document.getElementById(id);
+                    if (button) {
+                        button.disabled = true;
+                        button.title = 'This report operation is not implemented.';
+                        button.classList.add('cursor-not-allowed', 'opacity-50');
+                    }
                 });
             }
 

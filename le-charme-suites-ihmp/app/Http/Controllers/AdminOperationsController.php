@@ -93,7 +93,7 @@ class AdminOperationsController extends Controller
 
         return [
             'title' => 'Transactions & Billing Administration', 'subtitle' => 'Inspect hotel charges, settlements, guest bills, and financial activity across all departments.', 'icon' => 'receipt_long',
-            'stats' => [['label' => 'Recorded transactions', 'value' => HotelTransaction::count()], ['label' => 'Collected amount', 'value' => 'PHP '.number_format((float) HotelTransaction::sum('amount'), 2)], ['label' => 'Reservation entries', 'value' => HotelTransaction::where('transaction_type', 'reservation')->count()], ['label' => 'Check-out entries', 'value' => HotelTransaction::where('transaction_type', 'check_out')->count()]],
+            'stats' => [['label' => 'Recorded transactions', 'value' => HotelTransaction::count()], ['label' => 'Collected amount', 'value' => 'PHP '.number_format((float) CheckOut::sum('amount_paid'), 2)], ['label' => 'Reservation entries', 'value' => HotelTransaction::where('transaction_type', 'reservation')->count()], ['label' => 'Payment entries', 'value' => HotelTransaction::where('transaction_type', 'payment')->count()]],
             'records' => $records->map(fn ($record) => [$record->id, $record->guest?->full_name ?? 'Unknown guest', ucfirst(str_replace('_', ' ', $record->transaction_type)), 'PHP '.number_format((float) $record->amount, 2), optional($record->transaction_date)->format('M d, Y h:i A')]),
             'headers' => ['Transaction', 'Guest', 'Type', 'Amount', 'Date'],
         ];
@@ -191,7 +191,7 @@ class AdminOperationsController extends Controller
 
         return [
             'title' => 'Reports Administration', 'subtitle' => 'Review room, reservation, and financial summaries from the administrator command sidebar.', 'icon' => 'monitoring',
-            'stats' => [['label' => 'Rooms tracked', 'value' => Room::count()], ['label' => 'Reservations tracked', 'value' => Reservation::count()], ['label' => 'Transaction records', 'value' => HotelTransaction::count()], ['label' => 'Ledger total', 'value' => 'PHP '.number_format((float) HotelTransaction::sum('amount'), 2)]],
+            'stats' => [['label' => 'Rooms tracked', 'value' => Room::count()], ['label' => 'Reservations tracked', 'value' => Reservation::count()], ['label' => 'Transaction records', 'value' => HotelTransaction::count()], ['label' => 'Billed total', 'value' => 'PHP '.number_format((float) CheckOut::sum('total_charges'), 2)]],
             'records' => $records->map(fn ($record) => [optional($record->transaction_date)->format('M d, Y h:i A'), ucfirst(str_replace('_', ' ', $record->transaction_type)), $record->guest?->full_name ?? 'N/A', $record->room?->room_number ?? 'N/A', 'PHP '.number_format((float) $record->amount, 2)]),
             'headers' => ['Date', 'Type', 'Guest', 'Room', 'Amount'],
         ];

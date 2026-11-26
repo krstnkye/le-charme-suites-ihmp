@@ -330,7 +330,7 @@
                                                 <span class="block text-[11px] text-outline">Identification</span>
                                                 <span class="font-bold text-primary">
                                                     {{ $selectedGuest?->identification_type ?: 'Not provided' }}
-                                                    {{ $selectedGuest?->identification_number ? '- ' . $selectedGuest->identification_number : '' }}
+                                                    {{ $selectedGuest?->masked_identification_number ? '- ' . $selectedGuest->masked_identification_number : '' }}
                                                 </span>
                                             </div>
                                         </div>

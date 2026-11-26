@@ -3,14 +3,12 @@
     $guest = $activeCheckIn?->guest;
     $room = $activeCheckIn?->room;
     $reservation = $activeCheckIn?->reservation;
-    $nights = $reservation && $reservation->check_in_date && $reservation->check_out_date
-        ? max(1, $reservation->check_in_date->diffInDays($reservation->check_out_date))
-        : 1;
-    $roomCharges = $room ? $room->rate * $nights : 0;
-    $incidentals = $activeCheckIn ? round($roomCharges * 0.12, 2) : 0;
-    $taxes = $activeCheckIn ? round(($roomCharges + $incidentals) * 0.12, 2) : 0;
-    $deposit = $activeCheckIn ? round($roomCharges * 0.35, 2) : 0;
-    $balance = max(0, $roomCharges + $incidentals + $taxes - $deposit);
+    $nights = $activeFolio['nights'] ?? 1;
+    $roomCharges = $activeFolio['roomCharges'] ?? 0;
+    $incidentals = ($activeFolio['extraGuestCharges'] ?? 0) + ($activeFolio['additionalTotal'] ?? 0);
+    $taxes = 0;
+    $deposit = 0;
+    $balance = $activeFolio['totalCharges'] ?? 0;
     $paymentLabels = ['paid' => 'Paid', 'partial' => 'Partial', 'unpaid' => 'Unpaid'];
     $paymentClasses = [
         'paid' => 'border-emerald-200 bg-emerald-50 text-emerald-800',
@@ -95,7 +93,7 @@
                     <span class="material-symbols-outlined text-base">cancel</span>
                     Cancel Transaction
                 </button>
-                <button type="button" onclick="alert('Cash drawer access has been recorded for audit review.')" class="hidden items-center gap-2 rounded-lg border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary shadow-sm transition hover:bg-secondary-container/30 md:flex">
+                <button type="button" disabled title="Hardware cash-drawer control is not implemented" class="hidden cursor-not-allowed items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-400 shadow-sm md:flex">
                     <span class="material-symbols-outlined text-base">lock_open</span>
                     Open Cash Drawer
                 </button>
@@ -276,7 +274,7 @@
                                                         <span class="material-symbols-outlined text-base">print</span>
                                                     </span>
                                                 @endif
-                                                <button type="button" onclick="alert('Void request noted for audit review: TXN-{{ str_pad($transaction->id, 5, '0', STR_PAD_LEFT) }}')" class="rounded p-1 text-rose-700 hover:bg-rose-50" title="Void or adjust">
+                                                <button type="button" disabled class="cursor-not-allowed rounded p-1 text-slate-300" title="Transaction voiding is not implemented">
                                                     <span class="material-symbols-outlined text-base">cancel</span>
                                                 </button>
                                             </div>
@@ -308,16 +306,16 @@
                                     <span class="mt-1 block font-mono text-lg font-bold">PHP {{ number_format($roomCharges, 2) }}</span>
                                 </div>
                                 <div class="rounded-lg bg-surface-low p-3">
-                                    <span class="block text-xs font-bold uppercase text-slate-500">Estimated Extra Charges</span>
+                                    <span class="block text-xs font-bold uppercase text-slate-500">Recorded Extra Charges</span>
                                     <span class="mt-1 block font-mono text-lg font-bold">PHP {{ number_format($incidentals, 2) }}</span>
                                 </div>
                                 <div class="rounded-lg bg-surface-low p-3">
-                                    <span class="block text-xs font-bold uppercase text-slate-500">Taxes</span>
-                                    <span class="mt-1 block font-mono text-lg font-bold">PHP {{ number_format($taxes, 2) }}</span>
+                                    <span class="block text-xs font-bold uppercase text-slate-500">Automatic Tax</span>
+                                    <span class="mt-1 block font-mono text-lg font-bold">Not configured</span>
                                 </div>
                                 <div class="rounded-lg bg-surface-low p-3">
-                                    <span class="block text-xs font-bold uppercase text-slate-500">Deposit</span>
-                                    <span class="mt-1 block font-mono text-lg font-bold text-secondary">-PHP {{ number_format($deposit, 2) }}</span>
+                                    <span class="block text-xs font-bold uppercase text-slate-500">Recorded Deposit</span>
+                                    <span class="mt-1 block font-mono text-lg font-bold text-secondary">PHP {{ number_format($deposit, 2) }}</span>
                                 </div>
                             </div>
                             <div class="mt-4 rounded-lg border border-secondary/30 bg-secondary-container/25 p-4">

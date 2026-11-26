@@ -10,3 +10,6 @@ Le-Charme-Suites-IHMP-share-*/
 /.requirements-render-*/
 /doc-review-*/
 /tmp/
+/.docx-format-work/
+/output/
+~$*.docx

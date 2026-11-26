@@ -1,7 +1,10 @@
 <?php
 
 return [
-    'api_key' => env('IHMP_API_KEY', env('IHMS_API_KEY')),
+    'credentials' => [
+        'export' => env('IHMP_EXPORT_API_KEY', env('IHMP_API_KEY', env('IHMS_API_KEY'))),
+        'booking' => env('IHMP_BOOKING_API_KEY'),
+    ],
     'max_export_records' => (int) env('IHMP_MAX_EXPORT_RECORDS', env('IHMS_MAX_EXPORT_RECORDS', 200)),
     'official_website' => [
         'url' => 'https://lecharmehotels.com/',

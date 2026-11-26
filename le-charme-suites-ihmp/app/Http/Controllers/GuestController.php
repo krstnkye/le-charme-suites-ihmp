@@ -28,6 +28,10 @@ class GuestController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $guests->getCollection()->each(function (Guest $guest): void {
+            $guest->identification_number = $guest->masked_identification_number;
+        });
+
         $today = now(config('app.timezone'))->toDateString();
 
         return view('guests.index', [

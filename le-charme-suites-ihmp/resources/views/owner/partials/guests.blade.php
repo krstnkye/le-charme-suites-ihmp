@@ -171,7 +171,7 @@
                             </td>
                             <td class="px-3 py-3">
                                 <span class="block font-bold text-primary">{{ $guest->identification_type ?? 'ID pending' }}</span>
-                                <span class="text-[11px] text-slate-500">{{ $guest->identification_number ?? 'No ID number' }}</span>
+                                <span class="text-[11px] text-slate-500">{{ $guest->masked_identification_number ?? 'No ID number' }}</span>
                             </td>
                             <td class="px-3 py-3 text-center">
                                 <span class="font-bold text-primary">{{ $guest->reservations_count }}</span> stays

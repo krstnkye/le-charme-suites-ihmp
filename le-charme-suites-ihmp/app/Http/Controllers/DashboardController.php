@@ -153,7 +153,7 @@ class DashboardController extends Controller
                     ->count(),
                 'settledToday' => $completedToday->count(),
                 'collectedToday' => $completedToday->sum('amount_paid'),
-                'recordedRevenue' => HotelTransaction::whereDate('transaction_date', $today)->sum('amount'),
+                'recordedRevenue' => CheckOut::whereDate('checked_out_at', $today)->sum('amount_paid'),
                 'unpaidFolios' => CheckOut::where('payment_status', 'unpaid')->count(),
                 'partialFolios' => CheckOut::where('payment_status', 'partial')->count(),
                 'paidToday' => $completedToday->where('payment_status', 'paid')->count(),

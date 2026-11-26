@@ -119,6 +119,9 @@ class ReservationController extends Controller
 
             $reservation = Reservation::create($data + [
                 'booking_reference' => 'LCS-'.now()->format('ymd').'-'.Str::upper(Str::random(6)),
+                'agreed_room_rate' => $room->rate,
+                'agreed_base_occupancy' => $room->base_occupancy,
+                'agreed_extra_guest_rate' => $room->extra_guest_rate,
                 'status' => 'reserved',
                 'source' => 'front_desk',
                 'created_by' => auth()->id(),
@@ -190,6 +193,19 @@ class ReservationController extends Controller
         ], [
             'status.in' => 'Use the check-in and check-out screens to move a stay into or out of the hotel.',
         ])['status'];
+
+        if ($reservation->status === 'checked_in') {
+            $immutableChanges = (int) $data['guest_id'] !== $reservation->guest_id
+                || $data['check_in_date'] !== $reservation->check_in_date->toDateString()
+                || $data['check_out_date'] !== $reservation->check_out_date->toDateString()
+                || (int) $data['number_of_guests'] !== $reservation->number_of_guests;
+
+            if ($immutableChanges) {
+                throw ValidationException::withMessages([
+                    'reservation' => 'Guest, stay dates, and party size are locked after check-in. Use the room field only for an authorized room transfer.',
+                ]);
+            }
+        }
 
         DB::transaction(function () use ($reservation, $data) {
             $oldRoomId = $reservation->room_id;

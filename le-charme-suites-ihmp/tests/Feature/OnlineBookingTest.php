@@ -35,7 +35,7 @@ class OnlineBookingTest extends TestCase
         $response = $this->post(route('booking.store'), $this->bookingPayload());
 
         $reservation = Reservation::with('guest')->firstOrFail();
-        $response->assertRedirect(route('booking.confirmation', $reservation->booking_reference));
+        $response->assertRedirectToSignedRoute('booking.confirmation', ['reference' => $reservation->booking_reference]);
         $this->assertSame('pending', $reservation->status);
         $this->assertSame('public_website', $reservation->source);
         $this->assertSame($room->id, $reservation->room_id);
@@ -67,7 +67,7 @@ class OnlineBookingTest extends TestCase
 
     public function test_hotel_website_api_requires_key_and_creates_booking(): void
     {
-        config(['integrations.api_key' => 'booking-secret']);
+        config(['integrations.credentials.booking' => 'booking-secret']);
         Room::factory()->create([
             'room_number' => '103',
             'room_type' => 'Deluxe King',
@@ -87,7 +87,7 @@ class OnlineBookingTest extends TestCase
 
     public function test_hotel_website_api_retries_are_idempotent(): void
     {
-        config(['integrations.api_key' => 'booking-secret']);
+        config(['integrations.credentials.booking' => 'booking-secret']);
         Room::factory()->create([
             'room_number' => '104',
             'room_type' => 'Deluxe King',
@@ -109,7 +109,7 @@ class OnlineBookingTest extends TestCase
 
     public function test_online_booking_flows_through_front_desk_and_into_housekeeping(): void
     {
-        config(['integrations.api_key' => 'booking-secret']);
+        config(['integrations.credentials.booking' => 'booking-secret']);
         $receptionist = User::factory()->create([
             'role' => 'receptionist',
             'email' => 'integration.frontdesk@lecharmehotel.com',
@@ -160,7 +160,7 @@ class OnlineBookingTest extends TestCase
         $response = $this->actingAs($receptionist)
             ->post(route('check-outs.store'), [
                 'check_in_id' => $checkIn->id,
-                'amount_paid' => 27500,
+                'amount_paid' => 17528,
                 'payment_status' => 'paid',
             ]);
 
@@ -173,7 +173,7 @@ class OnlineBookingTest extends TestCase
             ->assertSeeText('GUEST CHECKOUT RECEIPT')
             ->assertSeeText('Online Guest')
             ->assertSeeText('Room 105')
-            ->assertSeeText('PHP 27,500.00')
+            ->assertSeeText('PHP 17,528.00')
             ->assertSee('@page { size: A4 portrait;', false)
             ->assertDontSeeText('Folio')
             ->assertDontSeeText('POS');
@@ -181,7 +181,7 @@ class OnlineBookingTest extends TestCase
         $this->actingAs($receptionist)
             ->post(route('check-outs.store'), [
                 'check_in_id' => $checkIn->id,
-                'amount_paid' => 27500,
+                'amount_paid' => 17528,
                 'payment_status' => 'paid',
             ])
             ->assertRedirect(route('check-outs.receipt', ['checkOut' => $checkOut, 'print' => 1]))

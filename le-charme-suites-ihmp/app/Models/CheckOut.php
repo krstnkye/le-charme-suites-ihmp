@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CheckOut extends Model
 {
@@ -15,6 +16,12 @@ class CheckOut extends Model
         'checked_out_at',
         'amount_paid',
         'payment_status',
+        'room_charges',
+        'extra_guest_charges',
+        'additional_charges',
+        'total_charges',
+        'balance_due',
+        'folio_snapshot',
         'notes',
     ];
 
@@ -22,6 +29,12 @@ class CheckOut extends Model
     {
         return [
             'checked_out_at' => 'datetime',
+            'room_charges' => 'decimal:2',
+            'extra_guest_charges' => 'decimal:2',
+            'additional_charges' => 'decimal:2',
+            'total_charges' => 'decimal:2',
+            'balance_due' => 'decimal:2',
+            'folio_snapshot' => 'array',
         ];
     }
 
@@ -43,5 +56,10 @@ class CheckOut extends Model
     public function reservation(): BelongsTo
     {
         return $this->belongsTo(Reservation::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(CheckOutPayment::class);
     }
 }

@@ -125,13 +125,13 @@ class HousekeepingController extends Controller
         abort_unless(array_key_exists($page, self::PAGES), 404);
 
         return view('housekeeping.page', [
-            ...$this->data(),
+            ...$this->data($request),
             'pageKey' => $page,
             'page' => self::PAGES[$page],
         ]);
     }
 
-    private function data(): array
+    private function data(Request $request): array
     {
         $allRooms = Room::orderBy('room_number')->get();
         $availability = app(RoomAvailabilityService::class)->summary();
@@ -176,6 +176,12 @@ class HousekeepingController extends Controller
                 ->latest()
                 ->get(),
             'housekeepingStaff' => User::where('role', 'housekeeping')->orderBy('name')->get(),
+            'incidentContext' => [
+                'room_id' => $request->integer('room_id') ?: null,
+                'category' => $request->string('category')->limit(100)->toString(),
+                'notes' => $request->string('notes')->limit(2000)->toString(),
+                'freeze' => $request->boolean('freeze', true),
+            ],
         ];
     }
 }

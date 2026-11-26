@@ -73,11 +73,11 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <button class="inline-flex items-center gap-1.5 rounded-lg border border-outline-variant bg-white px-4 py-2 text-sm font-bold text-primary shadow-sm transition hover:bg-surface-container" type="reset" form="settings-form">
+                <button class="cursor-not-allowed inline-flex items-center gap-1.5 rounded-lg border border-outline-variant bg-white px-4 py-2 text-sm font-bold text-slate-400 shadow-sm" type="button" disabled>
                     <span class="material-symbols-outlined text-[18px]">undo</span>
                     Discard Drafts
                 </button>
-                <button class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-primary-container" type="submit" form="settings-form">
+                <button class="cursor-not-allowed inline-flex items-center gap-1.5 rounded-lg bg-slate-400 px-4 py-2 text-sm font-bold text-white shadow-sm" type="button" disabled>
                     <span class="material-symbols-outlined text-[18px] text-secondary-fixed">save</span>
                     Quick Save Changes
                 </button>
@@ -100,7 +100,7 @@
                         <span class="text-secondary">System Settings</span>
                     </div>
                     <h2 class="font-serif text-4xl font-semibold tracking-tight">Global System Settings & Operational Parameters</h2>
-                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Manage property identity, front desk operating rules, billing policies, device integrations, room turnover logic, and backup schedules.</p>
+                    <p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">Read-only reference values for property identity and operating policies. Persistent configuration management is not implemented on this screen.</p>
                 </div>
                 <span class="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800">
                     <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
@@ -141,7 +141,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="rounded bg-white px-2.5 py-1 text-xs font-bold text-slate-600">Last synced: {{ now(config('app.timezone'))->format('M d, Y h:i A') }}</span>
-                        <button data-settings-action="sync" class="inline-flex items-center gap-1 text-sm font-bold text-secondary hover:text-primary" type="button">
+                        <button class="cursor-not-allowed inline-flex items-center gap-1 text-sm font-bold text-slate-400" type="button" disabled>
                             Force Re-check
                             <span class="material-symbols-outlined text-[16px]">sync</span>
                         </button>
@@ -149,9 +149,9 @@
                 </div>
             </div>
 
-            <form id="settings-form" class="space-y-6" onsubmit="event.preventDefault(); document.getElementById('save-feedback').classList.remove('hidden');">
-                <div id="save-feedback" class="hidden rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
-                    Settings draft saved in this demo interface. Database persistence can be added once the settings table is finalized.
+            <form id="settings-form" class="space-y-6" onsubmit="event.preventDefault()">
+                <div id="save-feedback" class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
+                    Reference only: changes on this page are disabled and are not saved.
                 </div>
 
                 <div class="grid grid-cols-12 gap-6">
@@ -269,7 +269,7 @@
                                 <span class="material-symbols-outlined text-secondary">developer_board</span>
                                 <h3 class="font-serif text-2xl font-semibold">Hardware Peripheral Interfaces</h3>
                             </div>
-                            <button data-settings-action="poll" class="inline-flex items-center gap-1 text-sm font-bold text-secondary hover:text-primary" type="button">
+                            <button class="cursor-not-allowed inline-flex items-center gap-1 text-sm font-bold text-slate-400" type="button" disabled>
                                 <span class="material-symbols-outlined text-[16px]">refresh</span>
                                 Poll Status
                             </button>
@@ -345,7 +345,7 @@
                         </div>
                         <div class="mt-4 flex items-center justify-between gap-3">
                             <span class="text-sm text-slate-600">Backup archive policy: <strong class="text-primary">7 years</strong></span>
-                            <button data-settings-action="backup" class="inline-flex items-center gap-1.5 rounded-lg border border-secondary px-3 py-2 text-sm font-bold text-secondary transition hover:bg-secondary-fixed/30" type="button">
+                            <button class="cursor-not-allowed inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold text-slate-400" type="button" disabled>
                                 <span class="material-symbols-outlined text-[16px]">download</span>
                                 Manual Backup Now
                             </button>
@@ -374,21 +374,8 @@
         refreshClock();
         setInterval(refreshClock, 1000);
 
-        document.querySelectorAll('[data-settings-action]').forEach((button) => {
-            button.addEventListener('click', () => {
-                const feedback = document.getElementById('save-feedback');
-                const messages = {
-                    sync: 'Regulatory configuration re-check completed using the current local IHMP values.',
-                    poll: 'Peripheral status poll completed. All listed devices remain online.',
-                    backup: 'Manual backup snapshot prepared for the current local development data.',
-                };
-
-                if (feedback) {
-                    feedback.textContent = messages[button.dataset.settingsAction] || 'Settings action completed.';
-                    feedback.classList.remove('hidden');
-                    feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            });
+        document.querySelectorAll('#settings-form input, #settings-form select, #settings-form textarea').forEach((control) => {
+            control.disabled = true;
         });
     </script>
 </body>

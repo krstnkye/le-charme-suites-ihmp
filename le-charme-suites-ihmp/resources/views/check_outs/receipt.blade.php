@@ -175,7 +175,7 @@
                 <tbody>
                     <tr>
                         <td>{{ $reservation?->check_in_date?->format('M d, Y') ?? 'Not recorded' }}</td>
-                        <td><div class="description">Room accommodation</div><div class="subdescription">Room {{ $checkOut->room?->room_number ?? 'Not recorded' }} at PHP {{ number_format((float) ($checkOut->room?->rate ?? 0), 2) }} for {{ $nights }} {{ $nights === 1 ? 'night' : 'nights' }}</div></td>
+                        <td><div class="description">Room accommodation</div><div class="subdescription">Room {{ $checkOut->room?->room_number ?? 'Not recorded' }} at PHP {{ number_format($nights > 0 ? $roomCharges / $nights : 0, 2) }} agreed nightly rate for {{ $nights }} {{ $nights === 1 ? 'night' : 'nights' }}</div></td>
                         <td>{{ $bookingReference }}</td>
                         <td class="amount">PHP {{ number_format($roomCharges, 2) }}</td>
                         <td class="amount">-</td>
@@ -212,12 +212,28 @@
             </div>
             <div class="summary">
                 <div class="summary-row"><span>Room charges</span><strong>PHP {{ number_format($roomCharges, 2) }}</strong></div>
+                <div class="summary-row"><span>Extra guest charges</span><strong>PHP {{ number_format($extraGuestCharges, 2) }}</strong></div>
                 <div class="summary-row"><span>Additional recorded charges</span><strong>PHP {{ number_format($additionalTotal, 2) }}</strong></div>
                 <div class="summary-row total"><span>Total recorded charges</span><strong>PHP {{ number_format($totalCharges, 2) }}</strong></div>
                 <div class="summary-row"><span>Payment received</span><strong>- PHP {{ number_format($amountPaid, 2) }}</strong></div>
                 <div class="summary-row balance {{ $balance <= 0 ? 'zero' : '' }}"><span>Remaining balance</span><strong>PHP {{ number_format($balance, 2) }}</strong></div>
             </div>
         </section>
+
+        @if ($balance > 0 && auth()->user()?->hasPermissionTo('guest_bills.execute'))
+            <section class="section no-print">
+                <h2 class="section-title">Record balance payment <span>Overpayments are rejected and every tender is retained.</span></h2>
+                <form method="POST" action="{{ route('check-outs.payments.store', $checkOut) }}" class="info-card">
+                    @csrf
+                    <div class="detail-grid">
+                        <label class="detail"><span class="label">Payment amount</span><input name="amount" type="number" min="0.01" max="{{ number_format($balance, 2, '.', '') }}" step="0.01" required></label>
+                        <label class="detail"><span class="label">Payment method</span><select name="payment_method" required><option value="cash">Cash</option><option value="card">Card</option><option value="digital_wallet">Digital wallet</option><option value="bank_transfer">Bank transfer</option><option value="other">Other</option></select></label>
+                        <label class="detail"><span class="label">Reference (optional)</span><input name="reference" type="text" maxlength="100"></label>
+                    </div>
+                    <button class="button primary" type="submit">Record payment</button>
+                </form>
+            </section>
+        @endif
 
         <section class="signatures">
             <div><div class="signature"></div><div class="signature-label">Guest signature over printed name</div></div>

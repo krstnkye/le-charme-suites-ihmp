@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,20 +18,59 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach ([
+        $bootstrapAccounts = [
             ['Hotel Administrator', 'admin@lecharmehotel.com', 'admin'],
-            ['Front Desk Receptionist', 'receptionist@lecharmehotel.com', 'receptionist'],
-            ['Billing Staff', 'billing@lecharmehotel.com', 'cashier'],
-            ['Housekeeping Staff', 'housekeeping@lecharmehotel.com', 'housekeeping'],
-        ] as [$name, $email, $role]) {
-            User::updateOrCreate([
+        ];
+
+        if (config('hotel.seed_demo_users')) {
+            $bootstrapAccounts = [
+                ...$bootstrapAccounts,
+                ['Front Desk Receptionist', 'receptionist@lecharmehotel.com', 'receptionist'],
+                ['Billing Staff', 'billing@lecharmehotel.com', 'cashier'],
+                ['Housekeeping Staff', 'housekeeping@lecharmehotel.com', 'housekeeping'],
+            ];
+        }
+
+        foreach ($bootstrapAccounts as [$name, $email, $role]) {
+            $temporaryPassword = Str::password(20);
+            $user = User::firstOrCreate([
                 'email' => $email,
             ], [
                 'name' => $name,
                 'role' => $role,
-                'password' => Hash::make('password'),
+                'password' => $temporaryPassword,
                 'approved_at' => now(),
             ]);
+
+            $rotatedKnownPassword = ! $user->wasRecentlyCreated && Hash::check('password', $user->password);
+
+            if ($rotatedKnownPassword) {
+                $user->forceFill([
+                    'password' => $temporaryPassword,
+                    'remember_token' => Str::random(60),
+                ])->save();
+            }
+
+            if ($user->wasRecentlyCreated || $rotatedKnownPassword) {
+                $this->command?->warn("Temporary credentials created for {$email}: {$temporaryPassword}");
+                $this->command?->warn('Store this password securely and change it immediately after sign-in. It will not be shown again.');
+            }
+        }
+
+        // Clean up installations seeded by older versions without recreating
+        // optional demo accounts when demo seeding is disabled.
+        foreach (['receptionist@lecharmehotel.com', 'billing@lecharmehotel.com', 'housekeeping@lecharmehotel.com', 'owner@lecharmehotel.com'] as $email) {
+            $user = User::where('email', $email)->first();
+
+            if ($user && Hash::check('password', $user->password)) {
+                $temporaryPassword = Str::password(20);
+                $user->forceFill([
+                    'password' => $temporaryPassword,
+                    'remember_token' => Str::random(60),
+                ])->save();
+                $this->command?->warn("Legacy demo password rotated for {$email}: {$temporaryPassword}");
+                $this->command?->warn('Store this password securely and change it immediately after sign-in. It will not be shown again.');
+            }
         }
 
         foreach (config('hotel.sample_room_layout') as $number => $type) {

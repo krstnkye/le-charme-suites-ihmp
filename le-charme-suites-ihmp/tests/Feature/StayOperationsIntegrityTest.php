@@ -94,10 +94,12 @@ class StayOperationsIntegrityTest extends TestCase
             'assigned_to' => $housekeeper->id,
         ]);
 
-        $response = $this->actingAs($housekeeper)->patch(route('housekeeping-tasks.update', $task), [
-            'status' => 'completed',
-            'assigned_to' => $housekeeper->id,
-        ]);
+        foreach (['in_progress', 'inspection', 'completed'] as $status) {
+            $response = $this->actingAs($housekeeper)->patch(route('housekeeping-tasks.update', $task), [
+                'status' => $status,
+                'assigned_to' => $housekeeper->id,
+            ]);
+        }
 
         $response->assertRedirect();
         $this->assertSame('completed', $task->fresh()->status);
@@ -176,6 +178,12 @@ class StayOperationsIntegrityTest extends TestCase
         $this->assertSame('Maria', $guest->first_name);
         $this->assertSame('Santos', $guest->last_name);
         $this->assertSame('+639170000001', $guest->phone);
+        $this->assertDatabaseCount('guests', 2);
+        $this->assertDatabaseHas('guests', [
+            'first_name' => 'Someone',
+            'last_name' => 'Else',
+            'email' => 'maria@example.com',
+        ]);
     }
 
     public function test_changing_the_password_requires_the_current_password(): void

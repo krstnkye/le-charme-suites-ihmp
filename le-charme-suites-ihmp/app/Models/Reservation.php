@@ -21,6 +21,9 @@ class Reservation extends Model
         'check_in_date',
         'check_out_date',
         'number_of_guests',
+        'agreed_room_rate',
+        'agreed_base_occupancy',
+        'agreed_extra_guest_rate',
         'status',
         'source',
         'created_by',
@@ -35,6 +38,8 @@ class Reservation extends Model
             'check_in_date' => 'date',
             'check_out_date' => 'date',
             'confirmed_at' => 'datetime',
+            'agreed_room_rate' => 'decimal:2',
+            'agreed_extra_guest_rate' => 'decimal:2',
         ];
     }
 

@@ -27,27 +27,27 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login')->name('home');
 Route::get('/book', [PublicBookingController::class, 'create'])->name('booking.create');
-Route::post('/book', [PublicBookingController::class, 'store'])->middleware('throttle:10,1')->name('booking.store');
+Route::post('/book', [PublicBookingController::class, 'store'])->middleware('throttle:booking')->name('booking.store');
 Route::get('/website-booking', [PublicBookingController::class, 'createWebsiteSimulation'])->name('website-simulation.create');
-Route::post('/website-booking', [PublicBookingController::class, 'storeWebsiteSimulation'])->middleware('throttle:10,1')->name('website-simulation.store');
+Route::post('/website-booking', [PublicBookingController::class, 'storeWebsiteSimulation'])->middleware('throttle:booking')->name('website-simulation.store');
 Route::get('/book/confirmation/{reference}', [PublicBookingController::class, 'confirmation'])
-    ->middleware('throttle:30,1')
+    ->middleware(['signed', 'throttle:booking'])
     ->name('booking.confirmation');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login')->name('login.store');
     Route::get('/admin', [AuthController::class, 'showAdminLogin'])->name('admin.login');
-    Route::post('/admin', [AuthController::class, 'adminLogin'])->middleware('throttle:10,1')->name('admin.login.store');
+    Route::post('/admin', [AuthController::class, 'adminLogin'])->middleware('throttle:login')->name('admin.login.store');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1')->name('register.store');
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:registration')->name('register.store');
     Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendPasswordResetLink'])
-        ->middleware('throttle:5,1')
+        ->middleware('throttle:password-reset')
         ->name('password.email');
     Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
     Route::post('/reset-password', [AuthController::class, 'resetPassword'])
-        ->middleware('throttle:5,1')
+        ->middleware('throttle:password-reset')
         ->name('password.update');
 });
 
@@ -88,6 +88,8 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/audit-logs', [AdminAuditLogController::class, 'index'])->name('admin.audit-logs.index');
+        Route::post('/admin/audit-logs/terminate-sessions', [AdminAuditLogController::class, 'terminateRemoteSessions'])
+            ->name('admin.audit-logs.terminate-sessions');
         Route::get('/admin/guests', [AdminGuestController::class, 'index'])->name('admin.guests.index');
         Route::get('/admin/create-account', [AdminUserRoleController::class, 'createAccount'])->name('admin.accounts.create');
         Route::post('/admin/create-account', [AdminUserRoleController::class, 'storeAccount'])->name('admin.accounts.store');
@@ -133,6 +135,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/check-outs/check-ins/{checkIn}/bill-preview', [CheckOutController::class, 'billPreview'])->middleware('permission:guest_bills.read')->name('check-outs.bill-preview');
         Route::get('/check-outs/{checkOut}/receipt', [CheckOutController::class, 'receipt'])->middleware('permission:guest_bills.export')->name('check-outs.receipt');
         Route::post('/check-outs', [CheckOutController::class, 'store'])->middleware('permission:guest_bills.execute')->name('check-outs.store');
+        Route::post('/check-outs/{checkOut}/payments', [CheckOutController::class, 'payment'])->middleware('permission:guest_bills.execute')->name('check-outs.payments.store');
     });
 
     Route::middleware('role:cashier')->group(function () {

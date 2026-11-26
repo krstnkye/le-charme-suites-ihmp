@@ -31,15 +31,18 @@ class HousekeepingTaskWorkflowTest extends TestCase
         $this->assertSame($housekeeper->id, $task->assigned_to);
         $this->assertSame('queued', $task->status);
 
-        $response = $this->actingAs($housekeeper)->patch(route('housekeeping-tasks.update', $task), [
-            'status' => 'completed',
-            'assigned_to' => $housekeeper->id,
-            'completion_notes' => 'Room cleaned, restocked, and inspected.',
-        ]);
+        foreach (['in_progress', 'inspection', 'completed'] as $status) {
+            $response = $this->actingAs($housekeeper)->patch(route('housekeeping-tasks.update', $task), [
+                'status' => $status,
+                'assigned_to' => $housekeeper->id,
+                'completion_notes' => $status === 'completed' ? 'Room cleaned, restocked, and inspected.' : null,
+            ]);
+        }
 
         $response->assertRedirect();
         $this->assertSame('completed', $task->fresh()->status);
         $this->assertSame('available', $room->fresh()->status);
+        $this->assertDatabaseCount('housekeeping_task_status_logs', 3);
         $this->assertDatabaseHas('room_status_logs', [
             'room_id' => $room->id,
             'status' => 'available',

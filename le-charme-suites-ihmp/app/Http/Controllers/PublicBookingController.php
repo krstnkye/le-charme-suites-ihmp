@@ -7,7 +7,9 @@ use App\Models\Room;
 use App\Services\CreateOnlineReservation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 
 class PublicBookingController extends Controller
@@ -30,23 +32,35 @@ class PublicBookingController extends Controller
     {
         $reservation = $creator->handle($this->validated($request), 'public_website', $request->ip());
 
-        return redirect()->route('booking.confirmation', $reservation->booking_reference);
+        return redirect(URL::temporarySignedRoute(
+            'booking.confirmation',
+            now()->addDay(),
+            ['reference' => $reservation->booking_reference],
+        ));
     }
 
     public function storeWebsiteSimulation(Request $request, CreateOnlineReservation $creator): RedirectResponse
     {
         $reservation = $creator->handle($this->validated($request), 'official_website_simulation', $request->ip());
 
-        return redirect()->route('booking.confirmation', $reservation->booking_reference);
+        return redirect(URL::temporarySignedRoute(
+            'booking.confirmation',
+            now()->addDay(),
+            ['reference' => $reservation->booking_reference],
+        ));
     }
 
-    public function confirmation(string $reference): View
+    public function confirmation(string $reference): Response
     {
         $reservation = Reservation::with(['guest', 'room'])
             ->where('booking_reference', $reference)
             ->firstOrFail();
 
-        return view('public.booking-confirmation', compact('reservation'));
+        return response()->view('public.booking-confirmation', compact('reservation'))
+            ->withHeaders([
+                'Cache-Control' => 'no-store, private',
+                'Referrer-Policy' => 'no-referrer',
+            ]);
     }
 
     /**
