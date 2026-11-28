@@ -20,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(SecurityHeaders::class);
 
+        // Trust forwarded headers only from a proxy/tunnel on this machine (e.g. cloudflared),
+        // so the app builds https links when served through a public tunnel.
+        $middleware->trustProxies(at: ['127.0.0.1', '::1']);
+
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('admin', 'admin/*')
             ? route('admin.login')
             : route('login'));
